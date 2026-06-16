@@ -1,9 +1,10 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import About from "@/components/About";
+import PainProfiles from "@/components/PainProfiles";
 import ValueProps from "@/components/ValueProps";
 import Segments from "@/components/Segments";
 import ParcelSimulator from "@/components/ParcelSimulator";
-import About from "@/components/About";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
@@ -14,6 +15,7 @@ export default function Home() {
       <main>
         <Hero />
         <About />
+        <PainProfiles />
         <ValueProps />
         <Segments />
         <ParcelSimulator />
@@ -23,4 +25,3 @@ export default function Home() {
     </>
   );
 }
-

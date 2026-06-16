@@ -1,40 +1,36 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Titanium Consultoria | Cartas Contempladas de Elite",
+  title: "Titanium Consultoria | Crédito sem banco para quem está construindo",
   description:
-    "Especialistas em cartas contempladas para imóveis e veículos. Segurança jurídica, transparência total e as melhores taxas do mercado.",
+    "Consultoria financeira para produtores rurais, empresários e profissionais liberais que querem expandir patrimônio sem pagar juros bancários. Cartas contempladas auditadas. CNPJ 46.640.755/0001-51.",
   keywords: [
-    "cartas contempladas",
+    "carta contemplada",
     "consórcio contemplado",
-    "crédito imobiliário",
-    "carta de crédito veículo",
-    "titanium consultoria",
-    "consórcio sem juros",
+    "crédito sem juros",
+    "consórcio agro",
     "carta contemplada imóvel",
     "carta contemplada veículo",
+    "titanium consultoria",
+    "crédito rural",
+    "consórcio empresário",
+    "carta de crédito aprovada",
   ],
   authors: [{ name: "Titanium Consultoria" }],
   openGraph: {
-    title: "Titanium Consultoria | Cartas Contempladas de Elite",
+    title: "Titanium Consultoria | Crédito sem banco para quem está construindo",
     description:
-      "Seu imóvel ou veículo sem financiamento, sem juros e com segurança jurídica. Cartas contempladas auditadas com as menores taxas do mercado.",
+      "Do agro ao imóvel. Da frota à clínica. Crédito aprovado sem financiamento bancário. Segurança jurídica, CNPJ ativo, regulamentado pelo Banco Central.",
     url: "https://titaniumconsultoria.com.br",
     siteName: "Titanium Consultoria",
     locale: "pt_BR",
@@ -44,15 +40,15 @@ export const metadata: Metadata = {
         url: "https://titaniumconsultoria.com.br/cartas/titanium-logo.png",
         width: 800,
         height: 600,
-        alt: "Titanium Consultoria — Cartas Contempladas de Elite",
+        alt: "Titanium Consultoria — Crédito inteligente para construtores de patrimônio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Titanium Consultoria | Cartas Contempladas de Elite",
+    title: "Titanium Consultoria | Crédito sem banco",
     description:
-      "Seu imóvel ou veículo sem financiamento, sem juros e com segurança jurídica.",
+      "Do agro ao imóvel. Crédito aprovado sem juros bancários.",
     images: ["https://titaniumconsultoria.com.br/cartas/titanium-logo.png"],
   },
   robots: {
@@ -72,7 +68,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6f6f6",
+  themeColor: "#F8F7F4",
   width: "device-width",
   initialScale: 1,
 };
@@ -85,7 +81,7 @@ const jsonLd = [
     "name": "Titanium Consultoria",
     "url": "https://titaniumconsultoria.com.br",
     "logo": "https://titaniumconsultoria.com.br/cartas/titanium-logo.png",
-    "description": "Especialistas em cartas contempladas para imóveis e veículos com segurança jurídica total.",
+    "description": "Consultoria financeira especializada em cartas contempladas para produtores rurais, empresários e profissionais liberais.",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+55-11-95101-4269",
@@ -102,11 +98,9 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": "https://titaniumconsultoria.com.br/#service-imovel",
-    "name": "Cartas Contempladas de Imóveis",
-    "provider": {
-      "@id": "https://titaniumconsultoria.com.br/#organization"
-    },
-    "description": "Cotas pré-aprovadas destinadas a aquisição ou incorporação de imóveis residenciais premium e galpões comerciais sem juros e com segurança jurídica total.",
+    "name": "Carta Contemplada de Imóveis",
+    "provider": { "@id": "https://titaniumconsultoria.com.br/#organization" },
+    "description": "Crédito aprovado para aquisição de imóveis residenciais e comerciais sem juros bancários.",
     "areaServed": "BR",
     "serviceType": "FinancialService"
   },
@@ -114,11 +108,9 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": "https://titaniumconsultoria.com.br/#service-veiculo",
-    "name": "Cartas Contempladas de Veículos",
-    "provider": {
-      "@id": "https://titaniumconsultoria.com.br/#organization"
-    },
-    "description": "Acesso à liquidez imediata para aquisição de frotas executivas ou veículos de alta performance com planejamento inteligente, sem juros.",
+    "name": "Carta Contemplada de Veículos e Frota",
+    "provider": { "@id": "https://titaniumconsultoria.com.br/#organization" },
+    "description": "Crédito aprovado para aquisição de veículos, caminhões e frota sem financiamento bancário.",
     "areaServed": "BR",
     "serviceType": "FinancialService"
   }
@@ -130,14 +122,59 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${montserrat.variable} ${inter.variable} antialiased`}>
+    <html lang="pt-BR" className={`${jakarta.variable} antialiased`}>
       <head>
+        {/* Schema.org JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+
+        {/* Google Ads */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18226518834"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-18226518834');
+            `,
+          }}
+        />
+
+        {/* Meta Pixel */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '1667309107949808');
+              fbq('track', 'PageView');
+            `,
+          }}
+        />
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=1667309107949808&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
       </head>
-      <body className="min-h-full flex flex-col bg-white-bg text-green-dark">
+      <body className="min-h-full flex flex-col" style={{ background: "var(--bg)", color: "var(--ink)" }}>
         {children}
       </body>
     </html>

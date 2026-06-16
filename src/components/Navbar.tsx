@@ -163,7 +163,7 @@ export default function Navbar() {
     const btn = document.querySelector(".sm-toggle") as HTMLElement;
     if (btn) {
       btn.style.transition = "color 0.35s ease";
-      btn.style.color = onDark ? "#ffffff" : "#00382e";
+      btn.style.color = onDark ? "#ffffff" : "var(--green, #0A7B3E)";
     }
   }, [onDark]);
 
@@ -175,11 +175,11 @@ export default function Navbar() {
       displaySocials={true}
       displayItemNumbering={true}
       logoUrl="https://titaniumconsultoria.com.br/cartas/titanium-logo.png"
-      menuButtonColor="#00382e"
-      openMenuButtonColor="#00382e"
+      menuButtonColor="#0A7B3E"
+      openMenuButtonColor="#0A7B3E"
       changeMenuColorOnOpen={true}
-      colors={["#e8f5e9", "#c8ff00"]}
-      accentColor="#00382e"
+      colors={["#E8F5EE", "#D1ECDD"]}
+      accentColor="#0A7B3E"
       isFixed={true}
       closeOnClickAway={true}
     />

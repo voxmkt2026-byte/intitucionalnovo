@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import StatsSection from "./StatsSection";
 
-/* ── Animated Counter Hook ── */
 function useCountUp(end: number, duration = 2000, startOnView = true) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -11,7 +10,6 @@ function useCountUp(end: number, duration = 2000, startOnView = true) {
 
   useEffect(() => {
     if (!startOnView || !ref.current) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -21,7 +19,6 @@ function useCountUp(end: number, duration = 2000, startOnView = true) {
             const animate = (now: number) => {
               const elapsed = now - startTime;
               const progress = Math.min(elapsed / duration, 1);
-              // easeOutExpo
               const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
               setCount(Math.floor(eased * end));
               if (progress < 1) requestAnimationFrame(animate);
@@ -32,7 +29,6 @@ function useCountUp(end: number, duration = 2000, startOnView = true) {
       },
       { threshold: 0.3 }
     );
-
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, [end, duration, startOnView]);
@@ -40,47 +36,41 @@ function useCountUp(end: number, duration = 2000, startOnView = true) {
   return { count, ref };
 }
 
-/* ── Stats Data (ABAC 2024) ── */
-const MAX_BAR_VALUE = 307; // Largest bar value — all bars normalize to this
+const MAX_BAR_VALUE = 307;
 
 const stats = [
   {
     value: 2,
     suffix: " mi",
     prefix: "",
-    multiplier: 1,
     label: "consorciados ativos",
     description:
       "Mais de 2 milhões de consorciados ativos no mercado. Com a carta contemplada, você acessa o crédito na hora.",
   },
   {
     value: 307,
-    suffix: " mi",
+    suffix: " bi",
     prefix: "R$ ",
-    multiplier: 1,
     label: "em créditos comercializados",
     description:
-      "R$ 307 milhões em créditos já comercializados. Um mercado sólido, regulamentado e em crescimento constante.",
+      "R$ 307 bilhões em créditos comercializados em 12 meses. Um mercado sólido, regulamentado e em crescimento.",
   },
   {
     value: 20,
     suffix: "%",
     prefix: "",
-    multiplier: 1,
     label: "de contemplação",
     description:
-      "Taxa de 20% de contemplação. Com a carta contemplada, você elimina a espera e tem crédito liberado na hora.",
+      "Taxa de 20% de contemplação. Com a carta contemplada você elimina a espera e tem crédito liberado imediatamente.",
   },
 ] as const;
 
-/* ── Stat Chart — No card, raw chart ── */
 function StatChart({ stat, index }: { stat: typeof stats[number]; index: number }) {
   const target = stat.value;
   const { count, ref } = useCountUp(target, 2200 + index * 400);
-  const countProgress = target > 0 ? count / target : 0; // 0→1 animation progress
+  const countProgress = target > 0 ? count / target : 0;
 
   if (stat.suffix === "%") {
-    // ── Donut Ring ──
     const radius = 70;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference - countProgress * circumference;
@@ -89,74 +79,65 @@ function StatChart({ stat, index }: { stat: typeof stats[number]; index: number 
       <div ref={ref} className="flex flex-col items-center text-center">
         <div className="relative w-48 h-48 md:w-52 md:h-52 mb-6">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
-            {/* Track */}
             <circle cx="80" cy="80" r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="14" />
-            {/* Progress */}
             <circle
               cx="80" cy="80" r={radius} fill="none"
-              stroke="#c8ff00" strokeWidth="14" strokeLinecap="round"
+              stroke="var(--green-vivid)" strokeWidth="14" strokeLinecap="round"
               strokeDasharray={circumference}
               strokeDashoffset={offset}
-              style={{ transition: 'stroke-dashoffset 0.06s linear' }}
+              style={{ transition: "stroke-dashoffset 0.06s linear" }}
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-[family-name:var(--font-montserrat)] font-black text-5xl md:text-6xl text-white">
-              {count}<span className="text-3xl text-[#c8ff00]">%</span>
+            <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "3rem", color: "white" }}>
+              {count}<span style={{ fontSize: "1.75rem", color: "var(--green-vivid)" }}>%</span>
             </span>
           </div>
         </div>
-        <span className="font-[family-name:var(--font-montserrat)] font-bold text-sm uppercase tracking-wider text-white/70 mb-2">
+        <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: "0.5rem", display: "block" }}>
           {stat.label}
         </span>
-        <p className="font-sans text-sm text-white/40 leading-relaxed max-w-[260px]">
+        <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.6, maxWidth: "260px" }}>
           {stat.description}
         </p>
       </div>
     );
   }
 
-  // ── Vertical Bar ──
   const barHeight = 200;
-
   return (
     <div ref={ref} className="flex flex-col items-center text-center">
-      {/* Value */}
       <div className="mb-6">
-        <span className="font-[family-name:var(--font-montserrat)] font-black text-5xl md:text-6xl text-white leading-none">
+        <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "3.5rem", color: "white", lineHeight: 1 }}>
           {stat.prefix}{count}
         </span>
-        <span className="font-[family-name:var(--font-montserrat)] font-black text-2xl md:text-3xl text-[#c8ff00] ml-1">
+        <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.5rem", color: "var(--green-vivid)", marginLeft: "0.25rem" }}>
           {stat.suffix}
         </span>
       </div>
-
-      {/* Vertical Bar */}
       <div
         className="w-20 md:w-24 rounded-xl overflow-hidden mb-6 flex items-end"
-        style={{ height: barHeight, backgroundColor: 'rgba(255,255,255,0.06)' }}
+        style={{ height: barHeight, backgroundColor: "rgba(255,255,255,0.06)" }}
       >
         <div
           className="w-full rounded-xl"
           style={{
             height: `${countProgress * Math.max(20, (target / MAX_BAR_VALUE) * 100)}%`,
-            backgroundColor: '#c8ff00',
-            transition: 'height 0.06s linear',
+            backgroundColor: "var(--green-vivid)",
+            transition: "height 0.06s linear",
           }}
         />
       </div>
-
-      <span className="font-[family-name:var(--font-montserrat)] font-bold text-sm uppercase tracking-wider text-white/70 mb-2">
+      <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: "0.5rem", display: "block" }}>
         {stat.label}
       </span>
-      <p className="font-sans text-sm text-white/40 leading-relaxed max-w-[260px]">
+      <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.6, maxWidth: "260px" }}>
         {stat.description}
       </p>
     </div>
   );
 }
 
-/* ── Mobile Stats Carousel ── */
 function StatsCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -164,22 +145,17 @@ function StatsCarousel() {
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-
     const handleScroll = () => {
-      const scrollLeft = el.scrollLeft;
-      const slideWidth = el.offsetWidth;
-      const idx = Math.round(scrollLeft / slideWidth);
-      setActiveSlide(idx);
+      setActiveSlide(Math.round(el.scrollLeft / el.offsetWidth));
     };
-
-    el.addEventListener('scroll', handleScroll, { passive: true });
-    return () => el.removeEventListener('scroll', handleScroll);
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
   }, []);
 
   const goToSlide = (idx: number) => {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollTo({ left: idx * el.offsetWidth, behavior: 'smooth' });
+    el.scrollTo({ left: idx * el.offsetWidth, behavior: "smooth" });
   };
 
   return (
@@ -187,33 +163,24 @@ function StatsCarousel() {
       <div
         ref={scrollRef}
         className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch',
-        }}
+        style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
         {stats.map((stat, i) => (
-          <div
-            key={stat.label}
-            className="flex-none w-full snap-center px-4"
-          >
+          <div key={stat.label} className="flex-none w-full snap-center px-4">
             <StatChart stat={stat} index={i} />
           </div>
         ))}
       </div>
-
-      {/* Pagination dots */}
       <div className="flex justify-center gap-2 mt-8">
         {stats.map((_, i) => (
           <button
             key={i}
             onClick={() => goToSlide(i)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              activeSlide === i
-                ? 'w-6 bg-[#c8ff00]'
-                : 'w-2 bg-white/20 hover:bg-white/40'
-            }`}
+            className="h-2 rounded-full transition-all duration-300"
+            style={{
+              width: activeSlide === i ? "1.5rem" : "0.5rem",
+              backgroundColor: activeSlide === i ? "var(--green-vivid)" : "rgba(255,255,255,0.2)",
+            }}
             aria-label={`Ir para gráfico ${i + 1}`}
           />
         ))}
@@ -225,46 +192,81 @@ function StatsCarousel() {
 export default function About() {
   return (
     <>
-    <section id="sobre" className="relative bg-white-pure py-14 md:py-20">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 space-y-16">
-        
-        {/* ── Section 1: Statement copy ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-          <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="text-label text-green-dark/60">Sobre Nós</span>
+      {/* ── Seção Sobre — nova narrativa ── */}
+      <section id="sobre" className="relative py-16 md:py-24" style={{ backgroundColor: "var(--bg)" }}>
+        <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 items-start">
 
+            {/* Esquerda */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="flex items-center gap-3">
+                <span className="inline-block w-6 h-px" style={{ backgroundColor: "var(--green)" }} />
+                <span className="kicker">Sobre a Titanium</span>
+              </div>
+              <h2
+                style={{
+                  fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+                  fontSize: "clamp(1.8rem, 3.8vw, 2.8rem)",
+                  fontWeight: 800,
+                  lineHeight: 1.1,
+                  letterSpacing: "-0.02em",
+                  color: "var(--ink)",
+                }}
+              >
+                A consultoria de quem está{" "}
+                <span className="text-gradient">construindo patrimônio</span>
+              </h2>
             </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-[family-name:var(--font-montserrat)] font-bold text-green-dark leading-tight">
-              Seu crédito
-              <br />
-              contemplado
-            </h2>
-          </div>
 
-          <div className="lg:col-span-7 space-y-6 pt-2 lg:pt-8">
-            <h3 className="font-[family-name:var(--font-montserrat)] font-bold text-xl md:text-2xl text-green-dark">
-              O custo de não ter uma carta contemplada
-            </h3>
-            <p className="font-sans text-base text-gray-text leading-relaxed">
-              Enquanto você espera pelo consórcio tradicional ou paga juros de financiamento, outros já estão usando o crédito. Trabalhamos exclusivamente com cartas já contempladas — crédito liberado, sem sorteio, sem espera.
-            </p>
-            <p className="font-sans text-base text-gray-text leading-relaxed">
-              Cada carta é auditada pela nossa equipe jurídica. CNPJ ativo, regulamentação do Banco Central, e um time que entende que neste mercado, confiança não se promete — se comprova.
-            </p>
-            
-            {/* CNPJ */}
-            <div className="pt-4 flex items-center gap-2 text-xs font-semibold text-green-dark/50 font-sans">
-              <span>CNPJ 46.640.755/0001-51</span>
+            {/* Direita */}
+            <div className="lg:col-span-7 space-y-6 pt-0 lg:pt-10">
+              <h3
+                style={{
+                  fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+                  fontWeight: 700,
+                  fontSize: "clamp(1.1rem, 1.8vw, 1.35rem)",
+                  color: "var(--ink)",
+                  lineHeight: 1.4,
+                }}
+              >
+                O que o banco não te conta sobre expansão
+              </h3>
+
+              <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
+                Quando você financia equipamento, veículo ou imóvel pelo banco, você paga o valor do bem <strong style={{ color: "var(--ink)", fontWeight: 600 }}>mais 12% a 24% ao ano em juros</strong>. Em 5 anos, um crédito de R$300 mil pode custar R$700 mil. Esse é o negócio do banco.
+              </p>
+
+              <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
+                Trabalhamos com cartas contempladas — crédito já aprovado, sem sorteio, sem espera, sem juros bancários. Cada carta é auditada juridicamente pela nossa equipe antes de chegar até você.
+              </p>
+
+              {/* Credenciais */}
+              <div
+                className="flex flex-wrap gap-6 pt-4 mt-2"
+                style={{ borderTop: "1px solid var(--bg-3)" }}
+              >
+                {[
+                  { value: "CNPJ 46.640.755/0001-51", label: "Empresa regulamentada" },
+                  { value: "Banco Central", label: "Fiscalização ativa" },
+                  { value: "4 anos", label: "de operação" },
+                ].map((item) => (
+                  <div key={item.value}>
+                    <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.8rem", color: "var(--green)", marginBottom: "2px" }}>
+                      {item.value}
+                    </div>
+                    <div style={{ fontSize: "0.7rem", color: "var(--ink-mute)", fontWeight: 500 }}>
+                      {item.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-
-    {/* ── Section 3: Stats — Desktop grid / Mobile swipe carousel ── */}
-    <StatsSection />
+      {/* Stats */}
+      <StatsSection />
     </>
   );
 }

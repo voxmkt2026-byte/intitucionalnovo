@@ -57,7 +57,7 @@ function StatCard({
           isRight ? "md:text-right" : ""
         }`}
       >
-        <span className="font-black text-[clamp(5rem,18vw,12rem)] leading-[0.85] text-[#c8ff00] block">
+        <span className="font-black text-[clamp(5rem,18vw,12rem)] leading-[0.85] block" style={{ color: "var(--green-vivid)" }}>
           {stat.prefix && (
             <span className="text-[0.35em] text-white/50 align-top mr-1">
               {stat.prefix}
@@ -114,28 +114,25 @@ export default function StatsSection() {
   return (
     <section
       className="relative py-20 md:py-44 overflow-hidden"
-      style={{ backgroundColor: "#00382e" }}
+      style={{ backgroundColor: "var(--bg-dark)" }}
     >
-      {/* Background — Desktop */}
+      {/* Background — gradiente CSS puro (sem imagens pesadas) */}
       <div
-        className="absolute inset-0 z-0 hidden md:block"
+        className="absolute inset-0 z-0"
         style={{
-          backgroundImage: "url('/stats-bg-desktop.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center bottom",
-          opacity: 0.35,
+          background:
+            "radial-gradient(ellipse 70% 50% at 15% 50%, rgba(10,123,62,0.14) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 85% 50%, rgba(6,83,42,0.10) 0%, transparent 60%)",
         }}
       />
-      {/* Background — Mobile */}
-      <div
-        className="absolute inset-0 z-0 block md:hidden"
-        style={{
-          backgroundImage: "url('/stats-bg-mobile.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center bottom",
-          opacity: 0.35,
-        }}
-      />
+      {/* Grid de pontos sutil */}
+      <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.04 }}>
+        <defs>
+          <pattern id="stats-dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="1" fill="#ffffff" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#stats-dots)" />
+      </svg>
 
       {/* ════ DESKTOP: Grid rows — number + text side by side ════ */}
       <div className="relative z-10 hidden md:block max-w-[1400px] mx-auto px-12 lg:px-16 space-y-64">
@@ -143,7 +140,7 @@ export default function StatsSection() {
         <div className="grid grid-cols-12 gap-8 items-end">
           <div className="col-span-6">
             <h3 className="font-[family-name:var(--font-montserrat)]">
-              <span className="font-black text-[clamp(5rem,12vw,12rem)] leading-[0.85] text-[#c8ff00] block">
+              <span className="font-black text-[clamp(5rem,12vw,12rem)] leading-[0.85] block" style={{ color: "var(--green-vivid)" }}>
                 2<span className="text-[0.45em] text-white">mi</span>
               </span>
               <span className="font-bold text-2xl md:text-3xl text-white/80 block -mt-1">
@@ -168,7 +165,7 @@ export default function StatsSection() {
           </div>
           <div className="col-span-6">
             <h3 className="font-[family-name:var(--font-montserrat)] text-right">
-              <span className="font-black text-[clamp(4rem,11vw,11rem)] leading-[0.85] text-[#c8ff00] block">
+              <span className="font-black text-[clamp(4rem,11vw,11rem)] leading-[0.85] block" style={{ color: "var(--green-vivid)" }}>
                 <span className="text-[0.35em] text-white/50 align-top mr-1">R$</span>307<span className="text-[0.45em] text-white">bi+</span>
               </span>
               <span className="font-bold text-2xl md:text-3xl text-white/80 block -mt-1">
@@ -233,10 +230,9 @@ export default function StatsSection() {
               key={i}
               onClick={() => goTo(i)}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                i === current
-                  ? "bg-[#c8ff00] scale-125"
-                  : "bg-white/25 hover:bg-white/40"
+                i === current ? "scale-125" : "bg-white/25 hover:bg-white/40"
               }`}
+              style={i === current ? { backgroundColor: "var(--green-vivid)" } : {}}
               aria-label={`Stat ${i + 1}`}
             />
           ))}
