@@ -10,58 +10,64 @@ const WHATSAPP_BASE =
 
 const segments = [
   {
-    title: "Carros",
-    description:
-      "Carta contemplada pronta para você sair dirigindo. Crédito liberado para o carro que você escolher, sem financiamento.",
-    price: "R$ 503,61",
-    tag: "carros",
-    image: "/seg-carros.png",
-    featured: true,
-  },
-  {
     title: "Imóveis",
     description:
-      "Crédito aprovado para seu imóvel, seja para morar ou investir. Carta contemplada com as melhores condições do mercado.",
+      "Crédito aprovado para imóvel residencial, rural ou comercial. Sem financiamento bancário, sem espera por sorteio. A carta já está contemplada.",
     price: "R$ 912,34",
     tag: "imóveis",
     image: "/seg-imoveis.png",
     featured: true,
+    ticket: "R$100k–R$2M",
   },
   {
-    title: "Motos",
+    title: "Veículos",
     description:
-      "Carta contemplada para a moto que você precisa. Crédito na mão, sem burocracia e sem juros de financiamento.",
-    price: "Sob consulta",
-    tag: "motos",
-    image: "/seg-motos.png",
-    featured: false,
+      "Do carro de uso pessoal ao veículo alto padrão. Carta contemplada com crédito liberado — sem juros de banco, parcela menor que financiamento.",
+    price: "R$ 503,61",
+    tag: "carros",
+    image: "/seg-carros.png",
+    featured: true,
+    ticket: "R$30k–R$300k",
   },
   {
     title: "Pesados",
     description:
-      "Caminhões, carretas e máquinas. Carta contemplada com crédito liberado para renovar ou ampliar sua frota.",
+      "Caminhões, carretas e máquinas pesadas. Crédito aprovado para renovar ou ampliar frota sem comprometer o caixa da operação.",
     price: "R$ 915,22",
     tag: "pesados",
     image: "/seg-pesados.png",
     featured: false,
+    ticket: "R$80k–R$500k",
   },
   {
     title: "Serviços",
     description:
-      "Carta contemplada para reformas, viagens, cursos e eventos. Crédito pronto para tirar seus planos do papel.",
+      "Carta contemplada para reformas, capital de giro, cursos profissionais e outros serviços. Crédito que vai além do imóvel e do veículo.",
     price: "R$ 66,39",
     tag: "serviços",
     image: "/seg-servicos.png",
     featured: false,
+    ticket: "R$15k–R$100k",
   },
   {
-    title: "Eletroeletrônicos",
+    title: "Motos",
     description:
-      "Crédito contemplado para equipar sua casa ou renovar seus eletrônicos. Sem juros, sem espera.",
+      "Para quem trabalha e para quem quer mobilidade. Carta contemplada de moto com crédito liberado na hora, sem sorteio.",
+    price: "Sob consulta",
+    tag: "motos",
+    image: "/seg-motos.png",
+    featured: false,
+    ticket: "R$10k–R$50k",
+  },
+  {
+    title: "Eletro",
+    description:
+      "Equipamentos, eletrônicos e tecnologia. Crédito aprovado para modernizar sem comprometer o fluxo de caixa.",
     price: "R$ 88,44",
     tag: "eletroeletrônicos",
     image: "/seg-eletro.png",
     featured: true,
+    ticket: "R$15k–R$80k",
   },
 ] as const;
 
@@ -75,7 +81,6 @@ const menuItems = segments.map((seg) => ({
 export default function Segments() {
   const [popupIndex, setPopupIndex] = useState<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-
   const pointerStart = useRef<{ x: number; y: number; t: number } | null>(null);
 
   const handleActiveIndex = useCallback((index: number) => {
@@ -92,38 +97,55 @@ export default function Segments() {
     <section
       id="segmentos"
       className="relative overflow-hidden"
-      style={{ backgroundColor: "#00382e" }}
+      style={{ backgroundColor: "var(--bg-dark)" }}
     >
-      {/* ── Header (absolute over globe) ── */}
+      {/* ── Header ── */}
       <div className="absolute top-0 left-0 right-0 z-10 px-6 md:px-12 lg:px-16 pt-14 md:pt-20 pointer-events-none">
-        <div className="mx-auto max-w-[1400px]">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="font-[family-name:var(--font-montserrat)] font-bold text-xs uppercase tracking-wider text-white/50">
-              Cartas disponíveis
+        <div className="mx-auto max-w-[1200px]">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="inline-block w-6 h-px" style={{ backgroundColor: "var(--green-vivid)" }} />
+            <span
+              style={{
+                fontFamily: "var(--font-jakarta)",
+                fontWeight: 600,
+                fontSize: "0.7rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--green-vivid)",
+              }}
+            >
+              Do caminhão ao imóvel
             </span>
-
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-[family-name:var(--font-montserrat)] font-black text-white leading-tight">
-            Escolha sua
+          <h2
+            style={{
+              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+              fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              letterSpacing: "-0.025em",
+              color: "white",
+            }}
+          >
+            O que você pode adquirir
             <br />
-            carta contemplada
+            <span style={{ color: "var(--green-vivid)" }}>sem banco</span>
           </h2>
         </div>
       </div>
 
-      {/* ── Full-bleed Globe ── */}
+      {/* ── Globe ── */}
       <div
         className="relative w-full"
-        style={{
-          height: "100vh",
-          minHeight: "600px",
-          maxHeight: "900px",
-        }}
+        style={{ height: "100vh", minHeight: "600px", maxHeight: "900px" }}
       >
         <div
-          className={`absolute inset-0 ${popupIndex === null ? 'cursor-grab active:cursor-grabbing' : ''}`}
+          className={`absolute inset-0 ${popupIndex === null ? "cursor-grab active:cursor-grabbing" : ""}`}
           style={{ pointerEvents: popupIndex !== null ? "none" : "auto" }}
-          onPointerDown={(e) => { if (popupIndex !== null) return; pointerStart.current = { x: e.clientX, y: e.clientY, t: Date.now() }; }}
+          onPointerDown={(e) => {
+            if (popupIndex !== null) return;
+            pointerStart.current = { x: e.clientX, y: e.clientY, t: Date.now() };
+          }}
           onPointerUp={(e) => {
             if (popupIndex !== null || !pointerStart.current) return;
             const dx = e.clientX - pointerStart.current.x;
@@ -141,13 +163,17 @@ export default function Segments() {
           />
         </div>
 
-        {/* Mobile: explicit CTA button */}
+        {/* Mobile CTA */}
         <button
           onClick={() => setPopupIndex(activeIndex)}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 md:hidden flex items-center gap-2 px-6 py-3 rounded-full font-[family-name:var(--font-montserrat)] font-bold text-sm uppercase tracking-wider transition-all duration-300 active:scale-95"
-          style={{ backgroundColor: "#c8ff00", color: "#00382e" }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 md:hidden flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 active:scale-95"
+          style={{
+            fontFamily: "var(--font-jakarta)",
+            backgroundColor: "var(--green)",
+            color: "white",
+          }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
             <circle cx="12" cy="12" r="3" />
           </svg>
@@ -155,77 +181,87 @@ export default function Segments() {
         </button>
       </div>
 
-      {/* ── Pop-up Overlay ── */}
+      {/* ── Modal ── */}
       {activeSeg && popupIndex !== null && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           onClick={closePopup}
         >
-          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-fadeIn" />
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fadeIn"
-          />
-
-          {/* Modal */}
-          <div
-            className="relative z-10 w-full max-w-md bg-[#00382e] border border-white/15 rounded-3xl overflow-hidden shadow-2xl animate-popUp"
+            className="relative z-10 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-popUp"
+            style={{
+              backgroundColor: "var(--bg-dark)",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close */}
             <button
               onClick={closePopup}
-              className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+              className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+              style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
               aria-label="Fechar"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M18 6L6 18" />
                 <path d="M6 6l12 12" />
               </svg>
             </button>
 
-            {/* Image header */}
-            <div className="relative h-48 md:h-56 overflow-hidden">
+            {/* Image */}
+            <div className="relative h-48 md:h-52 overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={segments[popupIndex].image}
                 alt={activeSeg.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#00382e] via-[#00382e]/40 to-transparent" />
-
-              {/* Badge */}
-              {activeSeg.featured && (
-                <div className="absolute top-4 left-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#c8ff00]/20 text-[#c8ff00] backdrop-blur-sm border border-[#c8ff00]/30 font-[family-name:var(--font-montserrat)]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                  Crédito imediato
-                </div>
-              )}
-
-              {/* Title over image */}
-              <h3 className="absolute bottom-4 left-6 font-[family-name:var(--font-montserrat)] font-black text-3xl md:text-4xl text-white">
+              <div
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(to top, var(--bg-dark) 0%, rgba(26,31,28,0.4) 60%, transparent 100%)" }}
+              />
+              {/* Badge ticket */}
+              <div
+                className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                style={{
+                  fontFamily: "var(--font-jakarta)",
+                  backgroundColor: "rgba(10,123,62,0.25)",
+                  color: "var(--green-vivid)",
+                  border: "1px solid rgba(21,184,92,0.3)",
+                  backdropFilter: "blur(8px)",
+                }}
+              >
+                {activeSeg.ticket}
+              </div>
+              <h3
+                className="absolute bottom-4 left-6"
+                style={{
+                  fontFamily: "var(--font-jakarta)",
+                  fontWeight: 800,
+                  fontSize: "1.8rem",
+                  color: "white",
+                }}
+              >
                 {activeSeg.title}
               </h3>
             </div>
 
             {/* Content */}
             <div className="px-6 pb-6 pt-4 space-y-5">
-              <p className="font-sans text-sm text-white/60 leading-relaxed">
+              <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.55)", lineHeight: 1.7 }}>
                 {activeSeg.description}
               </p>
 
               {/* Price */}
-              <div className="flex items-center justify-between py-4 border-t border-b border-white/10">
-                <span className="font-sans text-xs text-white/40">
+              <div
+                className="flex items-center justify-between py-4"
+                style={{ borderTop: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+              >
+                <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.75rem", color: "rgba(255,255,255,0.35)" }}>
                   Parcelas a partir de:
                 </span>
-                <span className="font-[family-name:var(--font-montserrat)] font-extrabold text-xl text-[#c8ff00]">
+                <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.25rem", color: "var(--green-vivid)" }}>
                   {activeSeg.price}
                 </span>
               </div>
@@ -235,18 +271,17 @@ export default function Segments() {
                 href={`${WHATSAPP_BASE}${activeSeg.tag}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-full font-[family-name:var(--font-montserrat)] font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-xl"
-                style={{ backgroundColor: "#c8ff00", color: "#00382e" }}
+                className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  fontFamily: "var(--font-jakarta)",
+                  backgroundColor: "var(--whatsapp)",
+                  color: "white",
+                }}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
-                Quero minha carta
+                Quero minha carta agora
               </a>
             </div>
           </div>
