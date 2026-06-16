@@ -160,25 +160,25 @@ export default function Timeline() {
       {/* ═══ Hero ═══ */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #00382e 0%, #004d3e 40%, #002e24 100%)" }}
+        style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--green-deep) 60%, var(--bg-dark) 100%)" }}
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#c8ff00]/8" />
-          <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#c8ff00]/5" />
+          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-green-vivid/5" />
+          <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-green-vivid/3" />
         </div>
         <div className="relative z-10 text-center px-6 py-24 max-w-4xl mx-auto">
-          <span className="inline-block text-[#c8ff00] text-xs font-[family-name:var(--font-montserrat)] font-bold uppercase tracking-[0.25em] mb-6">
+          <span className="inline-block text-green-vivid text-xs font-[family-name:var(--font-jakarta)] font-bold uppercase tracking-[0.25em] mb-6">
             Nossa Trajetória
           </span>
-          <h1 className="font-[family-name:var(--font-montserrat)] text-[clamp(2rem,6vw,4.5rem)] font-black leading-[1.05] text-white uppercase tracking-tight">
+          <h1 className="font-[family-name:var(--font-jakarta)] text-[clamp(2rem,6vw,4.5rem)] font-black leading-[1.05] text-white uppercase tracking-tight">
             Linha do Tempo
           </h1>
-          <p className="mt-6 text-white/60 text-lg md:text-xl font-[family-name:var(--font-inter)] max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-white/60 text-lg md:text-xl font-[family-name:var(--font-jakarta)] max-w-2xl mx-auto leading-relaxed">
             De 2005 a 2026 — cada marco que construiu a Titanium Consultoria.
           </p>
           {/* Scroll indicator */}
           <div className="mt-12 flex flex-col items-center gap-2 animate-bounce">
-            <span className="text-white/40 text-xs font-[family-name:var(--font-montserrat)] uppercase tracking-widest">Scroll</span>
+            <span className="text-white/40 text-xs font-[family-name:var(--font-jakarta)] uppercase tracking-widest">Scroll</span>
             <svg width="20" height="28" viewBox="0 0 20 28" fill="none" className="text-white/40">
               <rect x="1" y="1" width="18" height="26" rx="9" stroke="currentColor" strokeWidth="2"/>
               <circle cx="10" cy="9" r="2" fill="currentColor" className="animate-pulse"/>
@@ -196,8 +196,8 @@ export default function Timeline() {
               speed={0.25}
               squareSize={45}
               direction="up"
-              borderColor="#365900"
-              hoverFillColor="#066800"
+              borderColor="rgba(10,123,62,0.08)"
+              hoverFillColor="rgba(21,184,92,0.06)"
               shape="hexagon"
               hoverTrailAmount={5}
             />
@@ -208,11 +208,11 @@ export default function Timeline() {
           {/* Timeline vertical line */}
           <div ref={timelineRef} className="relative">
             {/* Background line */}
-            <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-[2px] bg-[#00382e]/10" />
+            <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-[2px] bg-green/10" />
             {/* Progress line */}
             <div
               ref={progressRef}
-              className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 w-[2px] bg-gradient-to-b from-[#00382e] via-[#c8ff00] to-[#00382e] transition-[height] duration-100 ease-out"
+              className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 w-[2px] bg-gradient-to-b from-green via-green-vivid to-green transition-[height] duration-100 ease-out"
               style={{ height: "0%" }}
             />
 
@@ -232,8 +232,8 @@ export default function Timeline() {
                       <div
                         className={`w-5 h-5 rounded-full border-[3px] transition-all duration-500 ${
                           m.accent
-                            ? "border-[#c8ff00] bg-[#00382e] scale-125 shadow-[0_0_24px_rgba(200,255,0,0.4)]"
-                            : "border-[#00382e] bg-white"
+                            ? "border-green-vivid bg-bg-dark scale-125 shadow-[0_0_24px_rgba(21,184,92,0.4)]"
+                            : "border-green bg-white"
                         }`}
                       />
                     </div>
@@ -247,14 +247,14 @@ export default function Timeline() {
                       <div
                         className={`group relative p-8 md:p-10 rounded-3xl border transition-all duration-700 overflow-hidden ${
                           m.accent
-                            ? "bg-[#00382e] border-[#00382e] hover:shadow-[0_20px_60px_rgba(0,56,46,0.3)]"
-                            : "bg-white border-[#00382e]/8 hover:border-[#00382e]/15 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+                            ? "bg-bg-dark border-green/20 hover:shadow-[0_20px_60px_rgba(10,123,62,0.15)]"
+                            : "bg-white border-green/10 hover:border-green/20 hover:shadow-[0_20px_60px_rgba(0,0,0,0.05)]"
                         }`}
                       >
                         {/* Giant background year — parallax */}
                         <span
-                          className={`tl-year-bg absolute -top-6 ${isLeft ? '-right-4' : '-left-4'} font-[family-name:var(--font-montserrat)] text-[clamp(10rem,22vw,18rem)] font-black leading-none tracking-tighter select-none pointer-events-none will-change-transform ${
-                            m.accent ? "text-white/[0.04]" : "text-[#00382e]/[0.03]"
+                          className={`tl-year-bg absolute -top-6 ${isLeft ? '-right-4' : '-left-4'} font-[family-name:var(--font-jakarta)] text-[clamp(10rem,22vw,18rem)] font-black leading-none tracking-tighter select-none pointer-events-none will-change-transform ${
+                            m.accent ? "text-white/[0.04]" : "text-green/[0.03]"
                           }`}
                           aria-hidden="true"
                         >
@@ -263,8 +263,8 @@ export default function Timeline() {
 
                         {/* Year — visible */}
                         <span
-                          className={`relative block font-[family-name:var(--font-montserrat)] text-[clamp(3.5rem,7vw,6rem)] font-black leading-none tracking-tight ${
-                            m.accent ? "text-[#c8ff00]" : "text-[#00382e]/12"
+                          className={`relative block font-[family-name:var(--font-jakarta)] text-[clamp(3.5rem,7vw,6rem)] font-black leading-none tracking-tight ${
+                            m.accent ? "text-green-vivid" : "text-green/15"
                           }`}
                         >
                           {m.year}
@@ -272,20 +272,20 @@ export default function Timeline() {
 
                         {/* Title */}
                         <h3
-                          className={`relative mt-4 font-[family-name:var(--font-montserrat)] text-xl md:text-2xl font-extrabold uppercase tracking-tight ${
-                            m.accent ? "text-white" : "text-[#00382e]"
+                          className={`relative mt-4 font-[family-name:var(--font-jakarta)] text-xl md:text-2xl font-extrabold uppercase tracking-tight ${
+                            m.accent ? "text-white" : "text-green"
                           }`}
                         >
                           {m.title}
                         </h3>
 
                         {/* Separator */}
-                        <div className={`relative mt-4 w-12 h-[3px] rounded-full ${m.accent ? "bg-[#c8ff00]/40" : "bg-[#00382e]/10"}`} />
+                        <div className={`relative mt-4 w-12 h-[3px] rounded-full ${m.accent ? "bg-green-vivid/40" : "bg-green/10"}`} />
 
                         {/* Text */}
                         <p
-                          className={`relative mt-4 text-base md:text-lg leading-relaxed font-[family-name:var(--font-inter)] ${
-                            m.accent ? "text-white/70" : "text-[#00382e]/55"
+                          className={`relative mt-4 text-base md:text-lg leading-relaxed font-[family-name:var(--font-jakarta)] ${
+                            m.accent ? "text-white/70" : "text-ink-soft"
                           }`}
                         >
                           {m.text}
@@ -303,13 +303,13 @@ export default function Timeline() {
       {/* ═══ CTA ═══ */}
       <section
         className="py-20 md:py-28"
-        style={{ background: "linear-gradient(135deg, #00382e 0%, #003d30 100%)" }}
+        style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--green-deep) 100%)" }}
       >
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="font-[family-name:var(--font-montserrat)] text-[clamp(1.5rem,4vw,3rem)] font-black text-white uppercase tracking-tight leading-tight">
+          <h2 className="font-[family-name:var(--font-jakarta)] text-[clamp(1.5rem,4vw,3rem)] font-black text-white uppercase tracking-tight leading-tight">
             Faça parte dessa<br />história
           </h2>
-          <p className="mt-5 text-white/60 text-lg font-[family-name:var(--font-inter)] max-w-xl mx-auto">
+          <p className="mt-5 text-white/60 text-lg font-[family-name:var(--font-jakarta)] max-w-xl mx-auto">
             Conquiste seu próximo bem com quem entende do mercado há mais de 20 anos.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
@@ -317,13 +317,13 @@ export default function Timeline() {
               href="https://wa.me/5511951014269"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#c8ff00] text-[#00382e] font-[family-name:var(--font-montserrat)] font-extrabold text-sm uppercase tracking-wider rounded-full hover:brightness-110 transition-all duration-300 hover:scale-105"
+              className="btn-primary"
             >
               Falar no WhatsApp →
             </a>
             <a
               href="/"
-              className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/20 text-white font-[family-name:var(--font-montserrat)] font-extrabold text-sm uppercase tracking-wider rounded-full hover:bg-white/10 transition-all duration-300"
+              className="btn-outline-white"
             >
               Voltar ao site
             </a>

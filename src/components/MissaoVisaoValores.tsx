@@ -20,9 +20,9 @@ const visao = {
 const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: number, size: number) => void> = {
   eye: (ctx, cx, cy, s) => {
     // Refined eye with lash detail and iris ring
-    ctx.strokeStyle = "#c8ff00"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.strokeStyle = "#15B85C"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
     // Outer glow
-    ctx.shadowColor = "#c8ff0040"; ctx.shadowBlur = 8;
+    ctx.shadowColor = "#15B85C40"; ctx.shadowBlur = 8;
     // Upper lid
     ctx.beginPath();
     ctx.moveTo(cx - s * 0.45, cy);
@@ -36,15 +36,15 @@ const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: n
     // Iris ring
     ctx.beginPath(); ctx.arc(cx, cy, s * 0.15, 0, Math.PI * 2); ctx.stroke();
     // Pupil
-    ctx.beginPath(); ctx.arc(cx, cy, s * 0.06, 0, Math.PI * 2); ctx.fillStyle = "#c8ff00"; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, s * 0.06, 0, Math.PI * 2); ctx.fillStyle = "#15B85C"; ctx.fill();
     // Catchlight
     ctx.beginPath(); ctx.arc(cx + s * 0.05, cy - s * 0.05, s * 0.025, 0, Math.PI * 2); ctx.fillStyle = "#ffffff"; ctx.fill();
     ctx.shadowBlur = 0;
   },
   shield: (ctx, cx, cy, s) => {
     // Elegant shield with inner check
-    ctx.strokeStyle = "#c8ff00"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
-    ctx.shadowColor = "#c8ff0040"; ctx.shadowBlur = 8;
+    ctx.strokeStyle = "#15B85C"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.shadowColor = "#15B85C40"; ctx.shadowBlur = 8;
     ctx.beginPath();
     ctx.moveTo(cx, cy - s * 0.42);
     ctx.lineTo(cx + s * 0.32, cy - s * 0.28);
@@ -64,8 +64,8 @@ const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: n
   },
   handshake: (ctx, cx, cy, s) => {
     // Two hands meeting — refined partnership symbol
-    ctx.strokeStyle = "#c8ff00"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
-    ctx.shadowColor = "#c8ff0040"; ctx.shadowBlur = 8;
+    ctx.strokeStyle = "#15B85C"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.shadowColor = "#15B85C40"; ctx.shadowBlur = 8;
     // Left hand base
     ctx.beginPath();
     ctx.moveTo(cx - s * 0.45, cy - s * 0.05);
@@ -88,8 +88,8 @@ const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: n
   },
   bolt: (ctx, cx, cy, s) => {
     // Sleek lightning bolt — outlined, not filled
-    ctx.strokeStyle = "#c8ff00"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
-    ctx.shadowColor = "#c8ff0040"; ctx.shadowBlur = 10;
+    ctx.strokeStyle = "#15B85C"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.shadowColor = "#15B85C40"; ctx.shadowBlur = 10;
     ctx.beginPath();
     ctx.moveTo(cx + s * 0.08, cy - s * 0.42);
     ctx.lineTo(cx - s * 0.15, cy - s * 0.02);
@@ -98,13 +98,13 @@ const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: n
     ctx.stroke();
     // Glow accent dot
     ctx.beginPath(); ctx.arc(cx - s * 0.08, cy + s * 0.42, s * 0.03, 0, Math.PI * 2);
-    ctx.fillStyle = "#c8ff00"; ctx.fill();
+    ctx.fillStyle = "#15B85C"; ctx.fill();
     ctx.shadowBlur = 0;
   },
   lightbulb: (ctx, cx, cy, s) => {
     // Elegant lightbulb with filament
-    ctx.strokeStyle = "#c8ff00"; ctx.lineWidth = 1.5; ctx.lineCap = "round";
-    ctx.shadowColor = "#c8ff0040"; ctx.shadowBlur = 10;
+    ctx.strokeStyle = "#15B85C"; ctx.lineWidth = 1.5; ctx.lineCap = "round";
+    ctx.shadowColor = "#15B85C40"; ctx.shadowBlur = 10;
     // Bulb globe
     ctx.beginPath();
     ctx.arc(cx, cy - s * 0.12, s * 0.22, Math.PI * 0.85, Math.PI * 0.15, true);
@@ -120,7 +120,7 @@ const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: n
     ctx.moveTo(cx - s * 0.1, cy + s * 0.22); ctx.lineTo(cx + s * 0.1, cy + s * 0.22);
     ctx.stroke();
     // Tip
-    ctx.beginPath(); ctx.arc(cx, cy + s * 0.26, s * 0.02, 0, Math.PI * 2); ctx.fillStyle = "#c8ff00"; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy + s * 0.26, s * 0.02, 0, Math.PI * 2); ctx.fillStyle = "#15B85C"; ctx.fill();
     // Filament rays
     ctx.lineWidth = 1; ctx.globalAlpha = 0.4;
     for (let i = 0; i < 3; i++) {
@@ -135,8 +135,8 @@ const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: n
   },
   diamond: (ctx, cx, cy, s) => {
     // Faceted gem with inner cut lines
-    ctx.strokeStyle = "#c8ff00"; ctx.lineWidth = 1.5; ctx.lineJoin = "round"; ctx.lineCap = "round";
-    ctx.shadowColor = "#c8ff0040"; ctx.shadowBlur = 10;
+    ctx.strokeStyle = "#15B85C"; ctx.lineWidth = 1.5; ctx.lineJoin = "round"; ctx.lineCap = "round";
+    ctx.shadowColor = "#15B85C40"; ctx.shadowBlur = 10;
     // Crown
     ctx.beginPath();
     ctx.moveTo(cx - s * 0.3, cy - s * 0.12);
@@ -163,8 +163,8 @@ const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: n
   },
   target: (ctx, cx, cy, s) => {
     // Concentric crosshair — precision feel
-    ctx.strokeStyle = "#c8ff00"; ctx.lineWidth = 1.5;
-    ctx.shadowColor = "#c8ff0040"; ctx.shadowBlur = 8;
+    ctx.strokeStyle = "#15B85C"; ctx.lineWidth = 1.5;
+    ctx.shadowColor = "#15B85C40"; ctx.shadowBlur = 8;
     // Outer ring
     ctx.beginPath(); ctx.arc(cx, cy, s * 0.38, 0, Math.PI * 2); ctx.stroke();
     // Inner ring
@@ -179,13 +179,13 @@ const svgIcons: Record<string, (ctx: CanvasRenderingContext2D, cx: number, cy: n
     ctx.stroke();
     ctx.globalAlpha = 1;
     // Center dot
-    ctx.beginPath(); ctx.arc(cx, cy, s * 0.04, 0, Math.PI * 2); ctx.fillStyle = "#c8ff00"; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, s * 0.04, 0, Math.PI * 2); ctx.fillStyle = "#15B85C"; ctx.fill();
     ctx.shadowBlur = 0;
   },
   telescope: (ctx, cx, cy, s) => {
     // Refined spyglass with lens flare
-    ctx.strokeStyle = "#c8ff00"; ctx.lineWidth = 1.5; ctx.lineCap = "round";
-    ctx.shadowColor = "#c8ff0040"; ctx.shadowBlur = 8;
+    ctx.strokeStyle = "#15B85C"; ctx.lineWidth = 1.5; ctx.lineCap = "round";
+    ctx.shadowColor = "#15B85C40"; ctx.shadowBlur = 8;
     // Lens (large circle)
     ctx.beginPath(); ctx.arc(cx + s * 0.2, cy - s * 0.2, s * 0.18, 0, Math.PI * 2); ctx.stroke();
     // Tube body
@@ -314,8 +314,8 @@ async function generateCardImage(iconKey: string, title: string, text: string): 
 
   // Background gradient
   const grad = ctx.createLinearGradient(0, 0, W, H);
-  grad.addColorStop(0, "#012a22");
-  grad.addColorStop(1, "#003d30");
+  grad.addColorStop(0, "#1A1F1C"); // var(--bg-dark)
+  grad.addColorStop(1, "#0A7B3E"); // var(--green)
   ctx.fillStyle = grad;
 
   // Rounded rect
@@ -334,14 +334,14 @@ async function generateCardImage(iconKey: string, title: string, text: string): 
   ctx.fill();
 
   // Subtle border
-  ctx.strokeStyle = "rgba(200, 255, 0, 0.15)";
+  ctx.strokeStyle = "rgba(21, 184, 92, 0.15)";
   ctx.lineWidth = 2;
   ctx.stroke();
 
   // Lime accent dot top-right
   ctx.beginPath();
   ctx.arc(W - 50, 50, 6, 0, Math.PI * 2);
-  ctx.fillStyle = "#c8ff00";
+  ctx.fillStyle = "#15B85C";
   ctx.fill();
 
   // Draw icon from SVG image
@@ -354,7 +354,7 @@ async function generateCardImage(iconKey: string, title: string, text: string): 
     } catch {
       ctx.beginPath();
       ctx.arc(W / 2, 170, 40, 0, Math.PI * 2);
-      ctx.strokeStyle = "#c8ff00";
+      ctx.strokeStyle = "#15B85C";
       ctx.lineWidth = 2;
       ctx.stroke();
     }
@@ -390,7 +390,7 @@ async function generateCardImage(iconKey: string, title: string, text: string): 
   ctx.beginPath();
   ctx.moveTo(W / 2 - 40, y);
   ctx.lineTo(W / 2 + 40, y);
-  ctx.strokeStyle = "#c8ff00";
+  ctx.strokeStyle = "#15B85C";
   ctx.lineWidth = 3;
   ctx.stroke();
   y += 36;
@@ -448,16 +448,16 @@ function ValoresGallery() {
   return (
     <section
       className="py-10 md:py-14 overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #00382e 0%, #004d3e 100%)" }}
+      style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--green) 100%)" }}
     >
       <div className="text-center mb-4 px-6">
-        <span className="inline-block text-[#c8ff00] text-xs font-[family-name:var(--font-montserrat)] font-bold uppercase tracking-[0.25em] mb-2">
+        <span className="inline-block text-green-vivid text-xs font-[family-name:var(--font-jakarta)] font-bold uppercase tracking-[0.25em] mb-2">
           O que nos move
         </span>
-        <h2 className="font-[family-name:var(--font-montserrat)] text-[clamp(1.8rem,4vw,3.5rem)] font-black text-white uppercase tracking-tight">
+        <h2 className="font-[family-name:var(--font-jakarta)] text-[clamp(1.8rem,4vw,3.5rem)] font-black text-white uppercase tracking-tight">
           Nossos Valores
         </h2>
-        <p className="mt-2 text-white/50 text-base md:text-lg font-[family-name:var(--font-inter)] max-w-xl mx-auto">
+        <p className="mt-2 text-white/50 text-base md:text-lg font-[family-name:var(--font-jakarta)] max-w-xl mx-auto">
           Arraste para explorar os princípios que guiam cada decisão da Titanium.
         </p>
       </div>
@@ -465,11 +465,11 @@ function ValoresGallery() {
         <CircularGallery
           items={cardImages}
           bend={0}
-          textColor="#c8ff00"
+          textColor="#15B85C"
           borderRadius={0.05}
           scrollEase={0.03}
-          font="bold 22px Montserrat"
-          fontUrl="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+          font="bold 22px 'Plus Jakarta Sans'"
+          fontUrl="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap"
         />
       </div>
     </section>
@@ -512,17 +512,17 @@ const faqs = [
 function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-[#00382e]/10">
+    <div className="border-b border-green/10">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-5 md:py-6 text-left gap-4 group cursor-pointer"
       >
-        <span className="font-[family-name:var(--font-montserrat)] text-base md:text-lg font-semibold text-[#00382e] group-hover:text-[#004d3e] transition-colors">
+        <span className="font-[family-name:var(--font-jakarta)] text-base md:text-lg font-semibold text-green group-hover:text-green-mid transition-colors">
           {q}
         </span>
         <span
           className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
-            open ? "bg-[#00382e] border-[#00382e] rotate-45" : "border-[#00382e]/20"
+            open ? "bg-green border-green rotate-45" : "border-green/20"
           }`}
         >
           <svg
@@ -530,7 +530,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
             height="14"
             viewBox="0 0 14 14"
             fill="none"
-            stroke={open ? "#ffffff" : "#00382e"}
+            stroke={open ? "#ffffff" : "var(--green)"}
             strokeWidth="2"
             strokeLinecap="round"
           >
@@ -543,7 +543,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
         className="overflow-hidden transition-all duration-300"
         style={{ maxHeight: open ? "300px" : "0", opacity: open ? 1 : 0 }}
       >
-        <p className="pb-6 text-[#00382e]/60 text-sm md:text-base font-[family-name:var(--font-inter)] leading-relaxed max-w-3xl">
+        <p className="pb-6 text-ink-soft text-sm md:text-base font-[family-name:var(--font-jakarta)] leading-relaxed max-w-3xl">
           {a}
         </p>
       </div>
@@ -557,14 +557,14 @@ function FAQSection() {
     <section className="py-16 md:py-24 bg-white">
       <div className="max-w-[900px] mx-auto px-6 md:px-12">
         <div className="text-center mb-10">
-          <span className="inline-block text-[#00382e] text-xs font-[family-name:var(--font-montserrat)] font-bold uppercase tracking-[0.25em] mb-3">
+          <span className="inline-block text-green text-xs font-[family-name:var(--font-jakarta)] font-bold uppercase tracking-[0.25em] mb-3">
             Tire suas dúvidas
           </span>
-          <h2 className="font-[family-name:var(--font-montserrat)] text-[clamp(1.8rem,4vw,3rem)] font-black text-[#00382e] uppercase tracking-tight">
+          <h2 className="font-[family-name:var(--font-jakarta)] text-[clamp(1.8rem,4vw,3rem)] font-black text-green uppercase tracking-tight">
             Perguntas Frequentes
           </h2>
         </div>
-        <div className="border-t border-[#00382e]/10">
+        <div className="border-t border-green/10">
           {faqs.map((faq, i) => (
             <FAQItem key={i} q={faq.q} a={faq.a} index={i} />
           ))}
@@ -606,28 +606,28 @@ export default function MissaoVisaoValores() {
   }, []);
 
   return (
-    <main className="bg-white-pure">
+    <main className="bg-bg">
 
       {/* ═══ Hero Banner ═══ */}
       <section
         className="relative min-h-[60vh] flex items-center justify-center overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #00382e 0%, #004d3e 40%, #002e24 100%)" }}
+        style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--green-deep) 60%, var(--bg-dark) 100%)" }}
       >
         {/* Decorative circles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#c8ff00]/8" />
-          <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#c8ff00]/5" />
+          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-green-vivid/5" />
+          <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-green-vivid/3" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white/5" />
         </div>
 
         <div className="relative z-10 text-center px-6 py-24 max-w-4xl mx-auto">
-          <span className="inline-block text-[#c8ff00] text-xs font-[family-name:var(--font-montserrat)] font-bold uppercase tracking-[0.25em] mb-6">
+          <span className="inline-block text-green-vivid text-xs font-[family-name:var(--font-jakarta)] font-bold uppercase tracking-[0.25em] mb-6">
             Quem Somos
           </span>
-          <h1 className="font-[family-name:var(--font-montserrat)] text-[clamp(2rem,6vw,4.5rem)] font-black leading-[1.05] text-white uppercase tracking-tight">
+          <h1 className="font-[family-name:var(--font-jakarta)] text-[clamp(2rem,6vw,4.5rem)] font-black leading-[1.05] text-white uppercase tracking-tight">
             Missão, Visão<br />e Valores
           </h1>
-          <p className="mt-6 text-white/60 text-lg md:text-xl font-[family-name:var(--font-inter)] max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-white/60 text-lg md:text-xl font-[family-name:var(--font-jakarta)] max-w-2xl mx-auto leading-relaxed">
             Os princípios que guiam cada decisão e cada atendimento da Titanium Consultoria.
           </p>
         </div>
@@ -647,10 +647,10 @@ export default function MissaoVisaoValores() {
         <div className="relative z-[2] max-w-[1300px] mx-auto px-4 md:px-12 lg:px-16">
           {/* Section eyebrow */}
           <div className="text-center mb-16 md:mb-24 mv-reveal">
-            <span className="inline-block px-4 py-1.5 rounded-full text-[10px] uppercase tracking-[0.25em] font-[family-name:var(--font-montserrat)] font-bold text-[#00382e]/60 border border-[#00382e]/10 mb-6">
+            <span className="inline-block px-4 py-1.5 rounded-full text-xs uppercase tracking-[0.25em] font-[family-name:var(--font-jakarta)] font-bold text-green/60 border border-green/10 mb-6">
               O que nos guia
             </span>
-            <h2 className="font-[family-name:var(--font-montserrat)] text-[clamp(1.6rem,4vw,3rem)] font-black text-[#00382e] uppercase tracking-tight">
+            <h2 className="font-[family-name:var(--font-jakarta)] text-[clamp(1.6rem,4vw,3rem)] font-black text-green uppercase tracking-tight">
               Propósito & Direção
             </h2>
           </div>
@@ -662,43 +662,43 @@ export default function MissaoVisaoValores() {
               {/* Outer shell */}
               <div
                 className="rounded-[2rem] p-[3px]"
-                style={{ background: 'linear-gradient(135deg, rgba(0,56,46,0.06), rgba(200,255,0,0.08))' }}
+                style={{ background: 'linear-gradient(135deg, rgba(10,123,62,0.08), rgba(21,184,92,0.05))' }}
               >
                 {/* Inner core */}
                 <div className="rounded-[calc(2rem-3px)] bg-white p-8 md:p-12 relative overflow-hidden group"
-                  style={{ boxShadow: '0 1px 2px rgba(0,56,46,0.04), 0 24px 60px -12px rgba(0,56,46,0.06)' }}
+                  style={{ boxShadow: '0 1px 2px rgba(10,123,62,0.04), 0 24px 60px -12px rgba(10,123,62,0.06)' }}
                 >
                   {/* Lime accent line */}
-                  <div className="absolute top-0 left-8 md:left-12 w-12 h-[3px] bg-[#c8ff00] rounded-full" />
+                  <div className="absolute top-0 left-8 md:left-12 w-12 h-[3px] bg-green-vivid rounded-full" />
 
                   {/* Icon */}
-                  <div className="w-14 h-14 rounded-2xl bg-[#00382e] flex items-center justify-center mt-4 mb-8 group-hover:scale-105 transition-transform duration-700"
+                  <div className="w-14 h-14 rounded-2xl bg-green flex items-center justify-center mt-4 mb-8 group-hover:scale-105 transition-transform duration-700"
                     style={{ transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)' }}
                   >
                     <img src="/icons/eye.svg" alt="" className="w-7 h-7 brightness-0 invert" />
                   </div>
 
                   {/* Eyebrow */}
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-[family-name:var(--font-montserrat)] font-bold text-[#00382e]/40 block mb-3">
+                  <span className="text-xs uppercase tracking-[0.2em] font-[family-name:var(--font-jakarta)] font-bold text-green/50 block mb-3">
                     01 — Nossa Missão
                   </span>
 
                   {/* Title */}
-                  <h3 className="font-[family-name:var(--font-montserrat)] text-2xl md:text-3xl font-black text-[#00382e] uppercase tracking-tight mb-6 leading-[1.1]">
+                  <h3 className="font-[family-name:var(--font-jakarta)] text-2xl md:text-3xl font-black text-green uppercase tracking-tight mb-6 leading-[1.1]">
                     {missao.title}
                   </h3>
 
                   {/* Text */}
-                  <p className="text-[15px] md:text-[17px] text-[#00382e]/55 font-[family-name:var(--font-inter)] leading-[1.8]">
+                  <p className="text-sm md:text-base text-ink-soft font-[family-name:var(--font-jakarta)] leading-[1.8]">
                     {missao.text}
                   </p>
 
                   {/* Bottom accent */}
                   <div className="mt-10 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#c8ff00] flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="#00382e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <div className="w-8 h-8 rounded-full bg-green-tint border border-green-tint-2 flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="var(--green)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
-                    <span className="text-[11px] uppercase tracking-[0.15em] font-[family-name:var(--font-montserrat)] font-bold text-[#00382e]/30">
+                    <span className="text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">
                       Nosso compromisso diário
                     </span>
                   </div>
@@ -711,43 +711,43 @@ export default function MissaoVisaoValores() {
               {/* Outer shell */}
               <div
                 className="rounded-[2rem] p-[3px]"
-                style={{ background: 'linear-gradient(135deg, rgba(200,255,0,0.08), rgba(0,56,46,0.06))' }}
+                style={{ background: 'linear-gradient(135deg, rgba(21,184,92,0.08), rgba(10,123,62,0.05))' }}
               >
                 {/* Inner core */}
                 <div className="rounded-[calc(2rem-3px)] bg-white p-8 md:p-12 relative overflow-hidden group"
-                  style={{ boxShadow: '0 1px 2px rgba(0,56,46,0.04), 0 24px 60px -12px rgba(0,56,46,0.06)' }}
+                  style={{ boxShadow: '0 1px 2px rgba(10,123,62,0.04), 0 24px 60px -12px rgba(10,123,62,0.06)' }}
                 >
                   {/* Lime accent line */}
-                  <div className="absolute top-0 left-8 md:left-12 w-12 h-[3px] bg-[#c8ff00] rounded-full" />
+                  <div className="absolute top-0 left-8 md:left-12 w-12 h-[3px] bg-green-vivid rounded-full" />
 
                   {/* Icon */}
-                  <div className="w-14 h-14 rounded-2xl bg-[#00382e] flex items-center justify-center mt-4 mb-8 group-hover:scale-105 transition-transform duration-700"
+                  <div className="w-14 h-14 rounded-2xl bg-green flex items-center justify-center mt-4 mb-8 group-hover:scale-105 transition-transform duration-700"
                     style={{ transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)' }}
                   >
                     <img src="/icons/lightbulb.svg" alt="" className="w-7 h-7 brightness-0 invert" />
                   </div>
 
                   {/* Eyebrow */}
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-[family-name:var(--font-montserrat)] font-bold text-[#00382e]/40 block mb-3">
+                  <span className="text-xs uppercase tracking-[0.2em] font-[family-name:var(--font-jakarta)] font-bold text-green/50 block mb-3">
                     02 — Nossa Visão
                   </span>
 
                   {/* Title */}
-                  <h3 className="font-[family-name:var(--font-montserrat)] text-2xl md:text-3xl font-black text-[#00382e] uppercase tracking-tight mb-6 leading-[1.1]">
+                  <h3 className="font-[family-name:var(--font-jakarta)] text-2xl md:text-3xl font-black text-green uppercase tracking-tight mb-6 leading-[1.1]">
                     {visao.title}
                   </h3>
 
                   {/* Text */}
-                  <p className="text-[15px] md:text-[17px] text-[#00382e]/55 font-[family-name:var(--font-inter)] leading-[1.8]">
+                  <p className="text-sm md:text-base text-ink-soft font-[family-name:var(--font-jakarta)] leading-[1.8]">
                     {visao.text}
                   </p>
 
                   {/* Bottom accent */}
                   <div className="mt-10 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#c8ff00] flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M3 5l3-3 3 3" stroke="#00382e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <div className="w-8 h-8 rounded-full bg-green-tint border border-green-tint-2 flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M3 5l3-3 3 3" stroke="var(--green)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </div>
-                    <span className="text-[11px] uppercase tracking-[0.15em] font-[family-name:var(--font-montserrat)] font-bold text-[#00382e]/30">
+                    <span className="text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">
                       Onde queremos chegar
                     </span>
                   </div>
@@ -760,16 +760,16 @@ export default function MissaoVisaoValores() {
           {/* ── Stats strip ── */}
           <div className="mt-16 md:mt-24 grid grid-cols-3 gap-4 md:gap-8 max-w-3xl mx-auto mv-reveal mv-reveal-delay-3">
             <div className="text-center">
-              <span ref={numRef1} className="block font-[family-name:var(--font-montserrat)] text-3xl md:text-5xl font-black text-[#00382e] tabular-nums">0</span>
-              <span className="block mt-1 text-[10px] md:text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-montserrat)] font-bold text-[#00382e]/30">Anos de mercado</span>
+              <span ref={numRef1} className="block font-[family-name:var(--font-jakarta)] text-3xl md:text-5xl font-black text-green tabular-nums">0</span>
+              <span className="block mt-1 text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">Anos de mercado</span>
             </div>
             <div className="text-center">
-              <span className="block font-[family-name:var(--font-montserrat)] text-3xl md:text-5xl font-black text-[#00382e] tabular-nums">+<span ref={numRef2}>0</span></span>
-              <span className="block mt-1 text-[10px] md:text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-montserrat)] font-bold text-[#00382e]/30">Clientes atendidos</span>
+              <span className="block font-[family-name:var(--font-jakarta)] text-3xl md:text-5xl font-black text-green tabular-nums">+<span ref={numRef2}>0</span></span>
+              <span className="block mt-1 text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">Clientes atendidos</span>
             </div>
             <div className="text-center">
-              <span className="block font-[family-name:var(--font-montserrat)] text-3xl md:text-5xl font-black text-[#00382e] tabular-nums">R$<span ref={numRef3}>0</span>M</span>
-              <span className="block mt-1 text-[10px] md:text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-montserrat)] font-bold text-[#00382e]/30">Em crédito negociado</span>
+              <span className="block font-[family-name:var(--font-jakarta)] text-3xl md:text-5xl font-black text-green tabular-nums">R$<span ref={numRef3}>0</span>M</span>
+              <span className="block mt-1 text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">Em crédito negociado</span>
             </div>
           </div>
         </div>
@@ -786,13 +786,13 @@ export default function MissaoVisaoValores() {
       {/* ═══ CTA Section ═══ */}
       <section
         className="py-20 md:py-28"
-        style={{ background: "linear-gradient(135deg, #00382e 0%, #003d30 100%)" }}
+        style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--green-deep) 100%)" }}
       >
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="font-[family-name:var(--font-montserrat)] text-[clamp(1.5rem,4vw,3rem)] font-black text-white uppercase tracking-tight leading-tight">
+          <h2 className="font-[family-name:var(--font-jakarta)] text-[clamp(1.5rem,4vw,3rem)] font-black text-white uppercase tracking-tight leading-tight">
             Pronto para conquistar<br />seu próximo bem?
           </h2>
-          <p className="mt-5 text-white/60 text-lg font-[family-name:var(--font-inter)] max-w-xl mx-auto">
+          <p className="mt-5 text-white/60 text-lg font-[family-name:var(--font-jakarta)] max-w-xl mx-auto">
             Fale com um consultor Titanium e descubra a carta contemplada ideal para você.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
@@ -800,13 +800,13 @@ export default function MissaoVisaoValores() {
               href="https://wa.me/5511951014269"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#c8ff00] text-[#00382e] font-[family-name:var(--font-montserrat)] font-extrabold text-sm uppercase tracking-wider rounded-full hover:brightness-110 transition-all duration-300 hover:scale-105"
+              className="btn-primary"
             >
               Falar no WhatsApp →
             </a>
             <a
               href="/"
-              className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/20 text-white font-[family-name:var(--font-montserrat)] font-extrabold text-sm uppercase tracking-wider rounded-full hover:bg-white/10 transition-all duration-300"
+              className="btn-outline-white"
             >
               Voltar ao site
             </a>

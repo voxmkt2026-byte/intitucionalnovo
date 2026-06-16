@@ -223,7 +223,7 @@ export default function Segments() {
               />
               {/* Badge ticket */}
               <div
-                className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"
                 style={{
                   fontFamily: "var(--font-jakarta)",
                   backgroundColor: "rgba(10,123,62,0.25)",

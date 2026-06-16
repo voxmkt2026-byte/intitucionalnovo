@@ -49,7 +49,7 @@ export default function Footer() {
                     key={badge.label}
                     style={{
                       fontFamily: "var(--font-jakarta)",
-                      fontSize: "0.65rem",
+                      fontSize: "0.75rem",
                       fontWeight: 600,
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
@@ -68,7 +68,7 @@ export default function Footer() {
 
             {/* Links: Empresa */}
             <div className="lg:col-span-3 space-y-4">
-              <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", display: "block" }}>
+              <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", display: "block" }}>
                 Empresa
               </span>
               <ul className="space-y-2.5">
@@ -89,7 +89,7 @@ export default function Footer() {
 
             {/* Links: Serviços */}
             <div className="lg:col-span-4 space-y-4">
-              <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", display: "block" }}>
+              <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", display: "block" }}>
                 Serviços
               </span>
               <ul className="space-y-2.5 mb-6">
@@ -139,7 +139,7 @@ export default function Footer() {
             "Nunca solicitamos depósitos antecipados, pagamentos de taxas de liberação ou qualquer transferência sem formalização contratual prévia. Em caso de contato suspeito em nome da Titanium, interrompa imediatamente e acione nossos canais oficiais.",
             "Informações e privacidade: todas as condições são apresentadas antes de qualquer negociação. Dados tratados conforme LGPD (Lei nº 13.709/2018).",
           ].map((text, i) => (
-            <p key={i} style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.65rem", color: "rgba(255,255,255,0.2)", lineHeight: 1.7 }}>
+            <p key={i} style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.75rem", color: "rgba(255,255,255,0.2)", lineHeight: 1.7 }}>
               {text}
             </p>
           ))}

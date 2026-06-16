@@ -58,18 +58,18 @@ export default function InstitucionalPage() {
   return (
     <>
       <Navbar />
-      <main className="bg-white-bg min-h-screen">
+      <main className="bg-bg min-h-screen">
         {/* ── Hero ── */}
-        <section className="bg-white-bg pt-36 pb-20 border-b border-green-dark/5">
+        <section className="bg-bg pt-36 pb-20 border-b border-green/5">
           <div className="max-w-[900px] mx-auto px-6">
             <div className="flex items-center gap-2 mb-6">
-              <span className="text-label text-green-dark/60">Institucional</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-green-bright" />
+              <span className="text-label text-green/60">Institucional</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-vivid" />
             </div>
-            <h1 className="text-massive font-[family-name:var(--font-montserrat)] text-green-dark mb-8 leading-tight">
+            <h1 className="text-massive font-[family-name:var(--font-jakarta)] text-green mb-8 leading-tight">
               Quem está por trás<br />da sua próxima conquista
             </h1>
-            <p className="text-lg md:text-xl text-gray-text font-[family-name:var(--font-inter)] leading-relaxed max-w-2xl">
+            <p className="text-lg md:text-xl text-ink-soft font-[family-name:var(--font-jakarta)] leading-relaxed max-w-2xl">
               A Titanium Consultoria nasceu da convicção de que adquirir um imóvel ou veículo
               não deveria envolver juros abusivos, burocracia excessiva ou insegurança jurídica.
             </p>
@@ -77,7 +77,7 @@ export default function InstitucionalPage() {
         </section>
 
         {/* ── Missão, Visão, Valores ── */}
-        <section className="py-20 bg-white-pure border-b border-green-dark/5">
+        <section className="py-20 bg-bg-white border-b border-green/5">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
@@ -96,10 +96,10 @@ export default function InstitucionalPage() {
               ].map((item, i) => (
                 <div
                   key={item.label}
-                  className="p-8 bg-white-bg border border-green-dark/5 shadow-sm rounded-3xl transition-all duration-300 hover:shadow-md"
+                  className="p-8 bg-bg border border-green/5 shadow-sm rounded-3xl transition-all duration-300 hover:shadow-md"
                 >
-                  <span className="text-label text-green-dark/60 block mb-4 font-bold">{item.label}</span>
-                  <p className="font-[family-name:var(--font-montserrat)] font-bold text-lg text-green-dark leading-relaxed">
+                  <span className="text-label text-green/60 block mb-4 font-bold">{item.label}</span>
+                  <p className="font-[family-name:var(--font-jakarta)] font-bold text-lg text-green leading-relaxed">
                     {item.text}
                   </p>
                 </div>
@@ -109,28 +109,28 @@ export default function InstitucionalPage() {
         </section>
 
         {/* ── Como Funciona (Processo) ── */}
-        <section className="py-20 bg-white-bg border-b border-green-dark/5">
+        <section className="py-20 bg-bg border-b border-green/5">
           <div className="max-w-[900px] mx-auto px-6">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-label text-green-dark/60">Processo</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-green-bright" />
+              <span className="text-label text-green/60">Processo</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-vivid" />
             </div>
-            <h2 className="text-display font-[family-name:var(--font-montserrat)] text-green-dark mb-16">
+            <h2 className="text-display font-[family-name:var(--font-jakarta)] text-green mb-16">
               Como funciona
             </h2>
 
             <div className="flex flex-col gap-6">
-              {steps.map((step, i) => (
-                <div key={step.num} className="bg-white-pure border border-green-dark/5 p-8 rounded-3xl shadow-sm">
+               {steps.map((step, i) => (
+                <div key={step.num} className="bg-bg-white border border-green/5 p-8 rounded-3xl shadow-sm">
                   <div className="flex gap-6 items-start">
-                    <span className="font-[family-name:var(--font-montserrat)] text-3xl text-green-bright font-black shrink-0 w-12">
+                    <span className="font-[family-name:var(--font-jakarta)] text-3xl text-green-vivid font-black shrink-0 w-12">
                       {step.num}
                     </span>
                     <div>
-                      <h3 className="text-xl font-[family-name:var(--font-montserrat)] text-green-dark font-bold mb-2">
+                      <h3 className="text-xl font-[family-name:var(--font-jakarta)] text-green font-bold mb-2">
                         {step.title}
                       </h3>
-                      <p className="text-base text-gray-text font-[family-name:var(--font-inter)] leading-relaxed">
+                      <p className="text-base text-ink-soft font-[family-name:var(--font-jakarta)] leading-relaxed">
                         {step.desc}
                       </p>
                     </div>
@@ -142,13 +142,13 @@ export default function InstitucionalPage() {
         </section>
 
         {/* ── Parceiros ── */}
-        <section className="bg-white-pure py-20 border-b border-green-dark/5">
+        <section className="bg-bg-white py-20 border-b border-green/5">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-label text-green-dark/60">Parceiros</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-green-bright" />
+              <span className="text-label text-green/60">Parceiros</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-vivid" />
             </div>
-            <h2 className="text-display font-[family-name:var(--font-montserrat)] text-green-dark mb-16">
+            <h2 className="text-display font-[family-name:var(--font-jakarta)] text-green mb-16">
               Administradoras<br />de confiança
             </h2>
 
@@ -156,9 +156,9 @@ export default function InstitucionalPage() {
               {partners.map((partner, i) => (
                 <div
                   key={partner}
-                  className="p-6 flex items-center justify-center bg-white-bg border border-green-dark/5 rounded-2xl shadow-sm"
+                  className="p-6 flex items-center justify-center bg-bg border border-green/5 rounded-2xl shadow-sm"
                 >
-                  <span className="text-xs font-[family-name:var(--font-inter)] text-green-dark font-bold text-center uppercase tracking-wider">
+                  <span className="text-xs font-[family-name:var(--font-jakarta)] text-green font-bold text-center uppercase tracking-wider">
                     {partner}
                   </span>
                 </div>
@@ -168,13 +168,13 @@ export default function InstitucionalPage() {
         </section>
 
         {/* ── FAQ ── */}
-        <section className="py-20 bg-white-bg border-b border-green-dark/5">
+        <section className="py-20 bg-bg border-b border-green/5">
           <div className="max-w-[900px] mx-auto px-6">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-label text-green-dark/60">FAQ</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-green-bright" />
+              <span className="text-label text-green/60">FAQ</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-vivid" />
             </div>
-            <h2 className="text-display font-[family-name:var(--font-montserrat)] text-green-dark mb-16">
+            <h2 className="text-display font-[family-name:var(--font-jakarta)] text-green mb-16">
               Perguntas frequentes
             </h2>
 
@@ -182,18 +182,18 @@ export default function InstitucionalPage() {
               {faqs.map((faq, i) => (
                 <details
                   key={i}
-                  className="group bg-white-pure border border-green-dark/5 p-6 rounded-3xl shadow-sm"
+                  className="group bg-bg-white border border-green/5 p-6 rounded-3xl shadow-sm"
                 >
                   <summary className="flex items-center justify-between cursor-pointer list-none">
-                    <span className="text-lg font-[family-name:var(--font-montserrat)] text-green-dark pr-8 font-bold">
+                    <span className="text-lg font-[family-name:var(--font-jakarta)] text-green pr-8 font-bold">
                       {faq.q}
                     </span>
-                    <span className="text-green-dark/50 group-open:rotate-45 transition-transform duration-200 text-2xl shrink-0 font-bold">
+                    <span className="text-green/50 group-open:rotate-45 transition-transform duration-200 text-2xl shrink-0 font-bold">
                       +
                     </span>
                   </summary>
-                  <div className="mt-4 pt-4 border-t border-green-dark/5">
-                    <p className="text-base text-gray-text font-[family-name:var(--font-inter)] leading-relaxed">
+                  <div className="mt-4 pt-4 border-t border-green/5">
+                    <p className="text-base text-ink-soft font-[family-name:var(--font-jakarta)] leading-relaxed">
                       {faq.a}
                     </p>
                   </div>
@@ -203,13 +203,13 @@ export default function InstitucionalPage() {
           </div>
         </section>
 
-        {/* ── CTA Final ── */}
-        <section className="bg-white-pure py-24 text-center">
+        {/* ── Final CTA ── */}
+        <section className="bg-bg-white py-24 text-center">
           <div className="max-w-[900px] mx-auto px-6">
-            <h2 className="text-display font-[family-name:var(--font-montserrat)] text-green-dark mb-6">
+            <h2 className="text-display font-[family-name:var(--font-jakarta)] text-green mb-6">
               Pronto para começar?
             </h2>
-            <p className="text-lg text-gray-text font-[family-name:var(--font-inter)] mb-10 max-w-xl mx-auto">
+            <p className="text-lg text-ink-soft font-[family-name:var(--font-jakarta)] mb-10 max-w-xl mx-auto">
               Fale com um consultor Titanium e descubra a melhor carta contemplada
               para o seu perfil. Sem compromisso.
             </p>
@@ -217,11 +217,11 @@ export default function InstitucionalPage() {
               href="https://wa.me/5511951014269"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-evoy px-12 py-4"
+              className="btn-primary"
             >
               Falar com Consultor
             </a>
-            <p className="mt-8 text-xs text-green-dark/50 font-[family-name:var(--font-inter)] font-semibold">
+            <p className="mt-8 text-xs text-green/50 font-[family-name:var(--font-jakarta)] font-semibold">
               CNPJ 46.640.755/0001-51
             </p>
           </div>

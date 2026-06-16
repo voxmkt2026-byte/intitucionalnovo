@@ -179,7 +179,7 @@ export default function StatsSection() {
         <div className="grid grid-cols-12 gap-8 items-end">
           <div className="col-span-6">
             <h3 className="font-[family-name:var(--font-montserrat)]">
-              <span className="font-black text-[clamp(5rem,12vw,12rem)] leading-[0.85] text-[#c8ff00] block">
+              <span className="font-black text-[clamp(5rem,12vw,12rem)] leading-[0.85] block" style={{ color: "var(--green-vivid)" }}>
                 20<span className="text-[0.45em] text-white">%</span>
               </span>
               <span className="font-bold text-2xl md:text-3xl text-white/80 block -mt-1">
@@ -194,7 +194,7 @@ export default function StatsSection() {
           </div>
         </div>
 
-        <p className="text-[10px] text-white/20 font-sans italic leading-relaxed pt-8">
+        <p className="text-xs text-white/20 font-sans italic leading-relaxed pt-8">
           *Fonte: Anuário ABAC 2024. Dados referentes ao exercício de 2024.
         </p>
       </div>
@@ -238,7 +238,7 @@ export default function StatsSection() {
           ))}
         </div>
 
-        <p className="text-[10px] text-white/20 font-sans italic px-6 mt-6">
+        <p className="text-xs text-white/20 font-sans italic px-6 mt-6">
           *Fonte: Anuário ABAC 2024. Dados referentes ao exercício de 2024.
         </p>
       </div>

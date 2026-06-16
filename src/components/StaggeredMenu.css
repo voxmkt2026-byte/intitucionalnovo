@@ -56,14 +56,14 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #00382e;
+  color: var(--green);
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 1px;
   text-transform: uppercase;
   line-height: 1;
   overflow: visible;
-  font-family: var(--font-montserrat), system-ui, sans-serif;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
 }
 
 .sm-toggle:focus-visible {
@@ -133,7 +133,7 @@
   right: 0;
   width: clamp(280px, 38vw, 440px);
   height: 100%;
-  background: white;
+  background: var(--bg-dark);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display: flex;
@@ -195,7 +195,7 @@
   margin: 0;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--sm-accent, #c8ff00);
+  color: var(--sm-accent, var(--green-vivid));
   text-transform: uppercase;
   letter-spacing: 2px;
 }
@@ -224,7 +224,7 @@
 }
 
 .sm-socials-link:focus-visible {
-  outline: 2px solid var(--sm-accent, #c8ff00);
+  outline: 2px solid var(--sm-accent, var(--green-vivid));
   outline-offset: 3px;
 }
 
@@ -239,7 +239,7 @@
 .sm-socials-link {
   font-size: 1.1rem;
   font-weight: 500;
-  color: #00382e;
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
   position: relative;
   padding: 2px 0;
@@ -248,7 +248,7 @@
 }
 
 .sm-socials-link:hover {
-  color: var(--sm-accent, #c8ff00);
+  color: var(--sm-accent, var(--green-vivid));
 }
 
 .sm-panel-list {
@@ -262,7 +262,7 @@
 
 .sm-panel-item {
   position: relative;
-  color: #00382e;
+  color: var(--ink-white);
   font-weight: 800;
   font-size: clamp(1.6rem, 3vw, 2.8rem);
   cursor: pointer;
@@ -273,7 +273,7 @@
   display: inline-block;
   text-decoration: none;
   padding-right: 1.4em;
-  font-family: var(--font-montserrat), system-ui, sans-serif;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
 }
 
 .sm-panel-itemLabel {
@@ -283,7 +283,7 @@
 }
 
 .sm-panel-item:hover {
-  color: var(--sm-accent, #c8ff00);
+  color: var(--sm-accent, var(--green-vivid));
 }
 
 .sm-panel-list[data-numbering] {
@@ -298,7 +298,7 @@
   right: 2.8em;
   font-size: 14px;
   font-weight: 400;
-  color: var(--sm-accent, #c8ff00);
+  color: var(--sm-accent, var(--green-vivid));
   letter-spacing: 0;
   pointer-events: none;
   user-select: none;

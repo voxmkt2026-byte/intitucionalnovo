@@ -77,6 +77,7 @@ function isDarkColor(color: string): boolean {
 
 export default function Navbar() {
   const [onDark, setOnDark] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const rafRef = useRef<number>(0);
   const logoRef = useRef<HTMLImageElement | null>(null);
   const darkSectionsRef = useRef<HTMLElement[]>([]);
@@ -154,7 +155,7 @@ export default function Navbar() {
     const logo = document.querySelector(".sm-logo-img") as HTMLElement;
     if (logo) {
       logo.style.transition = "filter 0.35s ease";
-      logo.style.filter = onDark
+      logo.style.filter = (onDark || menuOpen)
         ? "brightness(0) invert(1)"  // white on dark
         : "brightness(0) saturate(100%) invert(14%) sepia(85%) saturate(800%) hue-rotate(140deg)"; // dark green on light
     }
@@ -163,9 +164,9 @@ export default function Navbar() {
     const btn = document.querySelector(".sm-toggle") as HTMLElement;
     if (btn) {
       btn.style.transition = "color 0.35s ease";
-      btn.style.color = onDark ? "#ffffff" : "var(--green, #0A7B3E)";
+      btn.style.color = (onDark || menuOpen) ? "#ffffff" : "var(--green, #0A7B3E)";
     }
-  }, [onDark]);
+  }, [onDark, menuOpen]);
 
   return (
     <StaggeredMenu
@@ -182,6 +183,8 @@ export default function Navbar() {
       accentColor="#0A7B3E"
       isFixed={true}
       closeOnClickAway={true}
+      onMenuOpen={() => setMenuOpen(true)}
+      onMenuClose={() => setMenuOpen(false)}
     />
   );
 }
