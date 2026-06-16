@@ -1,0 +1,12 @@
+diff --git a/src/components/ParcelSimulator.tsx b/src/components/ParcelSimulator.tsx
+--- a/src/components/ParcelSimulator.tsx
++++ b/src/components/ParcelSimulator.tsx
+@@ -29,8 +29,8 @@
+   // Allow negative sign for months to pass boundary test -10
+   const handleMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+-    const sanitized = e.target.value.replace(/[^0-9]/g, "");
++    const sanitized = e.target.value.replace(/[^-0-9]/g, "").replace(/(?!^)-/g, "");
+     setMonths(sanitized);
+     setHasCalculated(false);
+     setError(null);
+   };

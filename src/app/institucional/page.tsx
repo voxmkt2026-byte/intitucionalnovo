@@ -1,0 +1,234 @@
+import type { Metadata } from "next";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import { cn } from "@/lib/utils";
+
+export const metadata: Metadata = {
+  title: "Institucional | Titanium Consultoria",
+  description:
+    "Conheça a Titanium Consultoria: história, missão, valores, processo de aquisição de cartas contempladas, parceiros e perguntas frequentes.",
+};
+
+const steps = [
+  { num: "01", title: "Consulta Inicial", desc: "Você nos conta seu objetivo. Imóvel? Veículo? Valor? Nosso consultor mapeia as melhores opções disponíveis no mercado." },
+  { num: "02", title: "Curadoria de Cartas", desc: "Filtramos apenas cartas contempladas verificadas, com as menores taxas administrativas e condições seguras." },
+  { num: "03", title: "Auditoria Jurídica", desc: "Nossa equipe legal analisa cada documento, contrato e histórico da carta antes de apresentá-la a você." },
+  { num: "04", title: "Formalização", desc: "Com tudo aprovado, formalizamos a transferência junto à administradora. Você acompanha cada etapa." },
+  { num: "05", title: "Crédito Liberado", desc: "Carta em seu nome, crédito disponível. Sem financiamento bancário, sem juros, sem surpresas." },
+];
+
+const faqs = [
+  {
+    q: "O que é uma carta contemplada?",
+    a: "É uma cota de consórcio que já foi sorteada ou contemplada por lance. Ao adquiri-la, você tem acesso imediato ao crédito, sem precisar esperar sorteio.",
+  },
+  {
+    q: "É seguro comprar uma carta contemplada?",
+    a: "Sim, desde que a transação seja intermediada por uma consultoria com auditoria jurídica — como a Titanium. Verificamos toda a documentação e histórico da carta antes de oferecê-la.",
+  },
+  {
+    q: "Tem juros?",
+    a: "Não. Consórcio não cobra juros. Existe apenas uma taxa administrativa, que nas cartas contempladas da Titanium começa a partir de 0,5% ao mês.",
+  },
+  {
+    q: "Posso usar a carta para qualquer imóvel ou veículo?",
+    a: "Sim. A carta de crédito pode ser utilizada para aquisição de imóveis residenciais, comerciais, terrenos, veículos novos ou seminovos, conforme as regras da administradora.",
+  },
+  {
+    q: "Quanto tempo leva o processo?",
+    a: "Após a escolha da carta, a formalização leva em média 7 a 15 dias úteis, dependendo da administradora e da documentação envolvida.",
+  },
+  {
+    q: "Quais administradoras vocês trabalham?",
+    a: "Trabalhamos com as maiores e mais confiáveis administradoras do país, incluindo Porto Seguro, Embracon, Rodobens e outras de primeira linha.",
+  },
+];
+
+const partners = [
+  "Porto Seguro",
+  "Embracon",
+  "Rodobens",
+  "Ademilar",
+  "Magalu Consórcios",
+  "Itaú Consórcios",
+];
+
+export default function InstitucionalPage() {
+  return (
+    <>
+      <Navbar />
+      <main className="bg-white-bg min-h-screen">
+        {/* ── Hero ── */}
+        <section className="bg-white-bg pt-36 pb-20 border-b border-green-dark/5">
+          <div className="max-w-[900px] mx-auto px-6">
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-label text-green-dark/60">Institucional</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-bright" />
+            </div>
+            <h1 className="text-massive font-[family-name:var(--font-montserrat)] text-green-dark mb-8 leading-tight">
+              Quem está por trás<br />da sua próxima conquista
+            </h1>
+            <p className="text-lg md:text-xl text-gray-text font-[family-name:var(--font-inter)] leading-relaxed max-w-2xl">
+              A Titanium Consultoria nasceu da convicção de que adquirir um imóvel ou veículo
+              não deveria envolver juros abusivos, burocracia excessiva ou insegurança jurídica.
+            </p>
+          </div>
+        </section>
+
+        {/* ── Missão, Visão, Valores ── */}
+        <section className="py-20 bg-white-pure border-b border-green-dark/5">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  label: "Missão",
+                  text: "Democratizar o acesso a cartas contempladas com transparência total, segurança jurídica e as menores taxas do mercado.",
+                },
+                {
+                  label: "Visão",
+                  text: "Ser a referência nacional em consultoria de consórcios, reconhecida pela excelência no atendimento e confiabilidade.",
+                },
+                {
+                  label: "Valores",
+                  text: "Ética. Transparência. Sigilo. Compromisso com o resultado do cliente acima de qualquer comissão.",
+                },
+              ].map((item, i) => (
+                <div
+                  key={item.label}
+                  className="p-8 bg-white-bg border border-green-dark/5 shadow-sm rounded-3xl transition-all duration-300 hover:shadow-md"
+                >
+                  <span className="text-label text-green-dark/60 block mb-4 font-bold">{item.label}</span>
+                  <p className="font-[family-name:var(--font-montserrat)] font-bold text-lg text-green-dark leading-relaxed">
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Como Funciona (Processo) ── */}
+        <section className="py-20 bg-white-bg border-b border-green-dark/5">
+          <div className="max-w-[900px] mx-auto px-6">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-label text-green-dark/60">Processo</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-bright" />
+            </div>
+            <h2 className="text-display font-[family-name:var(--font-montserrat)] text-green-dark mb-16">
+              Como funciona
+            </h2>
+
+            <div className="flex flex-col gap-6">
+              {steps.map((step, i) => (
+                <div key={step.num} className="bg-white-pure border border-green-dark/5 p-8 rounded-3xl shadow-sm">
+                  <div className="flex gap-6 items-start">
+                    <span className="font-[family-name:var(--font-montserrat)] text-3xl text-green-bright font-black shrink-0 w-12">
+                      {step.num}
+                    </span>
+                    <div>
+                      <h3 className="text-xl font-[family-name:var(--font-montserrat)] text-green-dark font-bold mb-2">
+                        {step.title}
+                      </h3>
+                      <p className="text-base text-gray-text font-[family-name:var(--font-inter)] leading-relaxed">
+                        {step.desc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Parceiros ── */}
+        <section className="bg-white-pure py-20 border-b border-green-dark/5">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-label text-green-dark/60">Parceiros</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-bright" />
+            </div>
+            <h2 className="text-display font-[family-name:var(--font-montserrat)] text-green-dark mb-16">
+              Administradoras<br />de confiança
+            </h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {partners.map((partner, i) => (
+                <div
+                  key={partner}
+                  className="p-6 flex items-center justify-center bg-white-bg border border-green-dark/5 rounded-2xl shadow-sm"
+                >
+                  <span className="text-xs font-[family-name:var(--font-inter)] text-green-dark font-bold text-center uppercase tracking-wider">
+                    {partner}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── FAQ ── */}
+        <section className="py-20 bg-white-bg border-b border-green-dark/5">
+          <div className="max-w-[900px] mx-auto px-6">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-label text-green-dark/60">FAQ</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-bright" />
+            </div>
+            <h2 className="text-display font-[family-name:var(--font-montserrat)] text-green-dark mb-16">
+              Perguntas frequentes
+            </h2>
+
+            <div className="flex flex-col gap-4">
+              {faqs.map((faq, i) => (
+                <details
+                  key={i}
+                  className="group bg-white-pure border border-green-dark/5 p-6 rounded-3xl shadow-sm"
+                >
+                  <summary className="flex items-center justify-between cursor-pointer list-none">
+                    <span className="text-lg font-[family-name:var(--font-montserrat)] text-green-dark pr-8 font-bold">
+                      {faq.q}
+                    </span>
+                    <span className="text-green-dark/50 group-open:rotate-45 transition-transform duration-200 text-2xl shrink-0 font-bold">
+                      +
+                    </span>
+                  </summary>
+                  <div className="mt-4 pt-4 border-t border-green-dark/5">
+                    <p className="text-base text-gray-text font-[family-name:var(--font-inter)] leading-relaxed">
+                      {faq.a}
+                    </p>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── CTA Final ── */}
+        <section className="bg-white-pure py-24 text-center">
+          <div className="max-w-[900px] mx-auto px-6">
+            <h2 className="text-display font-[family-name:var(--font-montserrat)] text-green-dark mb-6">
+              Pronto para começar?
+            </h2>
+            <p className="text-lg text-gray-text font-[family-name:var(--font-inter)] mb-10 max-w-xl mx-auto">
+              Fale com um consultor Titanium e descubra a melhor carta contemplada
+              para o seu perfil. Sem compromisso.
+            </p>
+            <a
+              href="https://wa.me/5511951014269"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-evoy px-12 py-4"
+            >
+              Falar com Consultor
+            </a>
+            <p className="mt-8 text-xs text-green-dark/50 font-[family-name:var(--font-inter)] font-semibold">
+              CNPJ 46.640.755/0001-51
+            </p>
+          </div>
+        </section>
+      </main>
+      <Footer />
+      <WhatsAppButton />
+    </>
+  );
+}

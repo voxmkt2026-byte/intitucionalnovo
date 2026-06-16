@@ -1,0 +1,134 @@
+#infinite-grid-menu-canvas {
+  cursor: grab;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  outline: none;
+}
+
+#infinite-grid-menu-canvas:active {
+  cursor: grabbing;
+}
+
+.action-button {
+  position: absolute;
+  left: 50%;
+  z-index: 10;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  background: #c8ff00;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 4px solid #00382e;
+}
+
+.action-button-icon {
+  user-select: none;
+  position: relative;
+  color: #00382e;
+  top: 2px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.face-title {
+  user-select: none;
+  position: absolute;
+  font-weight: 900;
+  font-size: 2.5rem;
+  color: #fff;
+  left: 1.2em;
+  top: 50%;
+  transform: translate(0, -50%);
+  font-family: var(--font-montserrat), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.face-title.active {
+  opacity: 1;
+  transform: translate(0, -50%);
+  pointer-events: auto;
+  transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.face-title.inactive {
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-20%, -50%);
+  transition: 0.15s ease;
+}
+
+.face-description {
+  user-select: none;
+  position: absolute;
+  max-width: 14ch;
+  top: 50%;
+  font-size: 1rem;
+  right: 2%;
+  color: rgba(255, 255, 255, 0.6);
+  transform: translate(0, -50%);
+  line-height: 1.5;
+}
+
+.face-description.active {
+  opacity: 1;
+  transform: translate(-60%, -50%);
+  pointer-events: auto;
+  transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.face-description.inactive {
+  pointer-events: none;
+  transform: translate(-30%, -50%);
+  opacity: 0;
+  transition: 0.15s ease;
+}
+
+.action-button.active {
+  bottom: 2.5em;
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+  transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.action-button.inactive {
+  bottom: -60px;
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.15s ease;
+}
+
+@media (max-width: 1024px) {
+  .face-title {
+    font-size: 1.5rem;
+    left: 0.8em;
+  }
+  .face-description {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .face-title {
+    font-size: 1.2rem;
+    left: 0.5em;
+    top: auto;
+    bottom: 5em;
+    transform: none;
+  }
+  .face-title.active {
+    transform: none;
+    opacity: 1;
+  }
+  .face-title.inactive {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,616 @@
+
+> titanium-landing@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.5.0.2:3000
+✓ Ready in 424ms
+
+[browser] ⨯ unhandledRejection: ChunkLoadError: Failed to load chunk /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js from module [turbopack]/browser/dev/hmr-client/hmr-client.ts [app-client] (ecmascript, async loader)
+ GET / 200 in 1105ms (next.js: 433ms, application-code: 673ms)
+ GET / 200 in 1122ms (next.js: 532ms, application-code: 589ms)
+ GET / 200 in 264ms (next.js: 8ms, application-code: 256ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 102ms (next.js: 5ms, application-code: 98ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 581ms (next.js: 12ms, application-code: 570ms)
+ GET / 200 in 407ms (next.js: 36ms, application-code: 372ms)
+ GET / 200 in 274ms (next.js: 10ms, application-code: 265ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 559ms (next.js: 7ms, application-code: 551ms)
+ GET / 200 in 434ms (next.js: 15ms, application-code: 419ms)
+ GET / 200 in 337ms (next.js: 21ms, application-code: 316ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 468ms (next.js: 7ms, application-code: 461ms)
+ GET / 200 in 355ms (next.js: 7ms, application-code: 348ms)
+ GET / 200 in 369ms (next.js: 59ms, application-code: 310ms)
+ GET /?segmento=invalid&credit=abc&months=-100&hacked=%27or+1=1-- 200 in 311ms (next.js: 13ms, application-code: 298ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 331ms (next.js: 4ms, application-code: 326ms)
+ GET / 200 in 279ms (next.js: 5ms, application-code: 274ms)
+ GET / 200 in 283ms (next.js: 23ms, application-code: 260ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 263ms (next.js: 3ms, application-code: 261ms)
+ GET / 200 in 221ms (next.js: 6ms, application-code: 215ms)
+ GET / 200 in 224ms (next.js: 22ms, application-code: 202ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 331ms (next.js: 6ms, application-code: 325ms)
+ GET / 200 in 238ms (next.js: 7ms, application-code: 231ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 288ms (next.js: 6ms, application-code: 282ms)
+ GET / 200 in 191ms (next.js: 9ms, application-code: 182ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 78ms (next.js: 5ms, application-code: 73ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 181ms (next.js: 5ms, application-code: 176ms)
+ GET / 200 in 132ms (next.js: 5ms, application-code: 128ms)
+ GET / 200 in 130ms (next.js: 6ms, application-code: 124ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 96ms (next.js: 6ms, application-code: 91ms)
+ GET / 200 in 174ms (next.js: 7ms, application-code: 167ms)
+ GET / 200 in 221ms (next.js: 6ms, application-code: 215ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 167ms (next.js: 4ms, application-code: 163ms)
+ GET / 200 in 189ms (next.js: 11ms, application-code: 178ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 198ms (next.js: 12ms, application-code: 186ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 97ms (next.js: 7ms, application-code: 90ms)
+ GET / 200 in 205ms (next.js: 4ms, application-code: 201ms)
+ GET / 200 in 140ms (next.js: 7ms, application-code: 133ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 138ms (next.js: 4ms, application-code: 134ms)
+ GET / 200 in 275ms (next.js: 10ms, application-code: 265ms)
+ GET / 200 in 190ms (next.js: 9ms, application-code: 181ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 326ms (next.js: 5ms, application-code: 321ms)
+ GET / 200 in 249ms (next.js: 6ms, application-code: 243ms)
+ GET / 200 in 254ms (next.js: 33ms, application-code: 221ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 399ms (next.js: 10ms, application-code: 389ms)
+ GET / 200 in 404ms (next.js: 109ms, application-code: 294ms)
+ GET / 200 in 235ms (next.js: 11ms, application-code: 224ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 362ms (next.js: 7ms, application-code: 355ms)
+ GET / 200 in 300ms (next.js: 12ms, application-code: 288ms)
+ GET / 200 in 300ms (next.js: 31ms, application-code: 269ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 377ms (next.js: 6ms, application-code: 371ms)
+ GET / 200 in 284ms (next.js: 10ms, application-code: 273ms)
+ GET / 200 in 210ms (next.js: 13ms, application-code: 197ms)
+ GET / 200 in 113ms (next.js: 4ms, application-code: 108ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 319ms (next.js: 6ms, application-code: 313ms)
+ GET / 200 in 260ms (next.js: 6ms, application-code: 253ms)
+ GET / 200 in 208ms (next.js: 10ms, application-code: 198ms)
+ GET / 200 in 152ms (next.js: 10ms, application-code: 141ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 468ms (next.js: 11ms, application-code: 457ms)
+ GET / 200 in 356ms (next.js: 8ms, application-code: 349ms)
+ GET / 200 in 241ms (next.js: 21ms, application-code: 220ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 280ms (next.js: 3ms, application-code: 277ms)
+ GET / 200 in 242ms (next.js: 4ms, application-code: 237ms)
+ GET / 200 in 224ms (next.js: 36ms, application-code: 187ms)
+ GET / 200 in 107ms (next.js: 8ms, application-code: 100ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 727ms (next.js: 6ms, application-code: 721ms)
+ GET / 200 in 730ms (next.js: 4ms, application-code: 726ms)
+ GET / 200 in 719ms (next.js: 34ms, application-code: 686ms)
+ GET / 200 in 199ms (next.js: 10ms, application-code: 189ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 373ms (next.js: 6ms, application-code: 367ms)
+ GET / 200 in 304ms (next.js: 8ms, application-code: 296ms)
+ GET / 200 in 308ms (next.js: 26ms, application-code: 282ms)
+ GET / 200 in 233ms (next.js: 11ms, application-code: 222ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 415ms (next.js: 6ms, application-code: 409ms)
+ GET / 200 in 311ms (next.js: 42ms, application-code: 269ms)
+ GET / 200 in 315ms (next.js: 16ms, application-code: 299ms)
+ GET / 200 in 315ms (next.js: 58ms, application-code: 257ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 390ms (next.js: 4ms, application-code: 386ms)
+ GET / 200 in 313ms (next.js: 7ms, application-code: 306ms)
+ GET / 200 in 313ms (next.js: 26ms, application-code: 287ms)
+ GET / 200 in 320ms (next.js: 97ms, application-code: 224ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 356ms (next.js: 5ms, application-code: 351ms)
+ GET / 200 in 302ms (next.js: 7ms, application-code: 295ms)
+ GET / 200 in 215ms (next.js: 11ms, application-code: 204ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 298ms (next.js: 6ms, application-code: 292ms)
+ GET / 200 in 216ms (next.js: 7ms, application-code: 208ms)
+ GET / 200 in 167ms (next.js: 7ms, application-code: 160ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 328ms (next.js: 4ms, application-code: 324ms)
+ GET / 200 in 281ms (next.js: 21ms, application-code: 260ms)
+ GET / 200 in 282ms (next.js: 39ms, application-code: 243ms)
+ GET / 200 in 284ms (next.js: 5ms, application-code: 278ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 335ms (next.js: 5ms, application-code: 331ms)
+ GET / 200 in 305ms (next.js: 14ms, application-code: 291ms)
+ GET / 200 in 218ms (next.js: 9ms, application-code: 210ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 356ms (next.js: 5ms, application-code: 351ms)
+ GET / 200 in 303ms (next.js: 6ms, application-code: 297ms)
+ GET / 200 in 304ms (next.js: 23ms, application-code: 282ms)
+ GET / 200 in 305ms (next.js: 40ms, application-code: 265ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 375ms (next.js: 4ms, application-code: 371ms)
+ GET / 200 in 331ms (next.js: 23ms, application-code: 308ms)
+ GET / 200 in 333ms (next.js: 5ms, application-code: 328ms)
+ GET / 200 in 337ms (next.js: 41ms, application-code: 297ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 306ms (next.js: 6ms, application-code: 301ms)
+ GET / 200 in 309ms (next.js: 79ms, application-code: 230ms)
+ GET / 200 in 227ms (next.js: 15ms, application-code: 212ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 106ms (next.js: 5ms, application-code: 101ms)
+ GET / 200 in 228ms (next.js: 13ms, application-code: 214ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 201ms (next.js: 6ms, application-code: 194ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 132ms (next.js: 7ms, application-code: 125ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 173ms (next.js: 6ms, application-code: 167ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 230ms (next.js: 3ms, application-code: 227ms)
+ GET / 200 in 241ms (next.js: 49ms, application-code: 192ms)
+ GET / 200 in 135ms (next.js: 4ms, application-code: 131ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 95ms (next.js: 7ms, application-code: 88ms)
+ GET / 200 in 102ms (next.js: 6ms, application-code: 96ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 109ms (next.js: 5ms, application-code: 104ms)
+ GET / 200 in 90ms (next.js: 5ms, application-code: 86ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 222ms (next.js: 5ms, application-code: 218ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 272ms (next.js: 6ms, application-code: 266ms)
+ GET / 200 in 170ms (next.js: 7ms, application-code: 163ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 303ms (next.js: 4ms, application-code: 300ms)
+ GET / 200 in 287ms (next.js: 61ms, application-code: 226ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 70ms (next.js: 5ms, application-code: 65ms)
+ GET / 200 in 130ms (next.js: 9ms, application-code: 121ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 79ms (next.js: 7ms, application-code: 73ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 157ms (next.js: 6ms, application-code: 151ms)
+ GET / 200 in 194ms (next.js: 6ms, application-code: 188ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 211ms (next.js: 3ms, application-code: 208ms)
+ GET / 200 in 163ms (next.js: 9ms, application-code: 154ms)
+ GET / 200 in 186ms (next.js: 5ms, application-code: 181ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 131ms (next.js: 4ms, application-code: 126ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 115ms (next.js: 4ms, application-code: 111ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 344ms (next.js: 8ms, application-code: 336ms)
+ GET / 200 in 280ms (next.js: 7ms, application-code: 273ms)
+ GET / 200 in 150ms (next.js: 5ms, application-code: 145ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 125ms (next.js: 5ms, application-code: 120ms)
+ GET / 200 in 253ms (next.js: 7ms, application-code: 246ms)
+ GET / 200 in 185ms (next.js: 15ms, application-code: 170ms)
+ GET / 200 in 222ms (next.js: 6ms, application-code: 217ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 344ms (next.js: 8ms, application-code: 336ms)
+ GET / 200 in 206ms (next.js: 11ms, application-code: 195ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /sitemap.xml 200 in 67ms (next.js: 52ms, application-code: 15ms)
+ GET / 200 in 120ms (next.js: 16ms, application-code: 104ms)
+ GET / 200 in 153ms (next.js: 8ms, application-code: 145ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 227ms (next.js: 4ms, application-code: 223ms)
+ GET / 200 in 167ms (next.js: 26ms, application-code: 140ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 222ms (next.js: 2ms, application-code: 220ms)
+ GET / 200 in 172ms (next.js: 14ms, application-code: 158ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 132ms (next.js: 4ms, application-code: 128ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 242ms (next.js: 5ms, application-code: 236ms)
+ GET / 200 in 168ms (next.js: 11ms, application-code: 157ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 232ms (next.js: 6ms, application-code: 226ms)
+ GET / 200 in 189ms (next.js: 9ms, application-code: 180ms)
+ GET / 200 in 331ms (next.js: 93ms, application-code: 238ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 505ms (next.js: 4ms, application-code: 501ms)
+ GET / 200 in 475ms (next.js: 13ms, application-code: 461ms)
+ GET / 200 in 410ms (next.js: 12ms, application-code: 398ms)
+ GET / 200 in 346ms (next.js: 47ms, application-code: 300ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 252ms (next.js: 6ms, application-code: 246ms)
+ GET / 200 in 170ms (next.js: 8ms, application-code: 162ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 214ms (next.js: 7ms, application-code: 208ms)
+ GET / 200 in 158ms (next.js: 8ms, application-code: 149ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 62ms (next.js: 3ms, application-code: 59ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 353ms (next.js: 5ms, application-code: 348ms)
+ GET / 200 in 291ms (next.js: 11ms, application-code: 279ms)
+ GET / 200 in 293ms (next.js: 38ms, application-code: 255ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 67ms (next.js: 3ms, application-code: 64ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 265ms (next.js: 7ms, application-code: 259ms)
+ GET / 200 in 190ms (next.js: 8ms, application-code: 182ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 84ms (next.js: 4ms, application-code: 80ms)
+ GET /sitemap.xml 200 in 13ms (next.js: 5ms, application-code: 8ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 355ms (next.js: 5ms, application-code: 350ms)
+ GET / 200 in 254ms (next.js: 16ms, application-code: 239ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 1207ms (next.js: 24ms, application-code: 1183ms)
+ GET / 200 in 305ms (next.js: 14ms, application-code: 292ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 91ms (next.js: 4ms, application-code: 86ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 346ms (next.js: 6ms, application-code: 340ms)
+ GET / 200 in 262ms (next.js: 12ms, application-code: 250ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 307ms (next.js: 5ms, application-code: 302ms)
+ GET / 200 in 207ms (next.js: 9ms, application-code: 198ms)
+ GET /sitemap.xml 200 in 14ms (next.js: 4ms, application-code: 10ms)
+ GET / 200 in 132ms (next.js: 5ms, application-code: 127ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 178ms (next.js: 10ms, application-code: 168ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 313ms (next.js: 7ms, application-code: 306ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 451ms (next.js: 6ms, application-code: 445ms)
+ GET / 200 in 302ms (next.js: 10ms, application-code: 292ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 408ms (next.js: 6ms, application-code: 403ms)
+ GET / 200 in 289ms (next.js: 11ms, application-code: 278ms)
+ GET / 200 in 201ms (next.js: 14ms, application-code: 187ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 490ms (next.js: 83ms, application-code: 407ms)
+ GET / 200 in 500ms (next.js: 140ms, application-code: 360ms)
+ GET / 200 in 209ms (next.js: 15ms, application-code: 194ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 332ms (next.js: 8ms, application-code: 324ms)
+ GET / 200 in 214ms (next.js: 11ms, application-code: 204ms)
+ GET / 200 in 151ms (next.js: 8ms, application-code: 143ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 291ms (next.js: 6ms, application-code: 285ms)
+ GET / 200 in 204ms (next.js: 8ms, application-code: 196ms)
+ GET / 200 in 178ms (next.js: 6ms, application-code: 171ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 176ms (next.js: 7ms, application-code: 169ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 230ms (next.js: 6ms, application-code: 224ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 333ms (next.js: 10ms, application-code: 323ms)
+ GET / 200 in 305ms (next.js: 22ms, application-code: 284ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 186ms (next.js: 6ms, application-code: 179ms)
+ GET / 200 in 548ms (next.js: 7ms, application-code: 542ms)
+ GET / 200 in 456ms (next.js: 15ms, application-code: 441ms)
+ GET / 200 in 331ms (next.js: 11ms, application-code: 320ms)
+ GET / 200 in 300ms (next.js: 12ms, application-code: 288ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /robots.txt 200 in 80ms (next.js: 71ms, application-code: 9ms)
+ GET /sitemap.xml 200 in 15ms (next.js: 10ms, application-code: 5ms)
+ GET / 200 in 788ms (next.js: 10ms, application-code: 778ms)
+ GET / 200 in 549ms (next.js: 15ms, application-code: 535ms)
+ GET / 200 in 435ms (next.js: 80ms, application-code: 356ms)
+ GET / 200 in 274ms (next.js: 11ms, application-code: 263ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 427ms (next.js: 6ms, application-code: 421ms)
+ GET / 200 in 354ms (next.js: 8ms, application-code: 346ms)
+ GET / 200 in 334ms (next.js: 19ms, application-code: 315ms)
+ GET / 200 in 280ms (next.js: 5ms, application-code: 275ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 415ms (next.js: 6ms, application-code: 409ms)
+ GET / 200 in 322ms (next.js: 9ms, application-code: 313ms)
+ GET / 200 in 296ms (next.js: 10ms, application-code: 286ms)
+ GET / 200 in 454ms (next.js: 14ms, application-code: 439ms)
+ GET / 200 in 328ms (next.js: 14ms, application-code: 314ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 907ms (next.js: 7ms, application-code: 900ms)
+ GET / 200 in 687ms (next.js: 34ms, application-code: 653ms)
+ GET / 200 in 405ms (next.js: 14ms, application-code: 391ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /sitemap.xml 200 in 14ms (next.js: 5ms, application-code: 9ms)
+ GET / 200 in 526ms (next.js: 7ms, application-code: 519ms)
+ GET / 200 in 386ms (next.js: 20ms, application-code: 366ms)
+ GET / 200 in 410ms (next.js: 91ms, application-code: 319ms)
+ GET / 200 in 333ms (next.js: 13ms, application-code: 320ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 139ms (next.js: 6ms, application-code: 133ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 462ms (next.js: 8ms, application-code: 454ms)
+ GET / 200 in 368ms (next.js: 13ms, application-code: 355ms)
+ GET / 200 in 332ms (next.js: 12ms, application-code: 320ms)
+ GET / 200 in 298ms (next.js: 7ms, application-code: 291ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 548ms (next.js: 5ms, application-code: 543ms)
+ GET / 200 in 447ms (next.js: 13ms, application-code: 435ms)
+ GET /?segmento=invalid&credit=abc&months=-100&hacked=%27or+1=1-- 200 in 473ms (next.js: 88ms, application-code: 385ms)
+ GET / 200 in 351ms (next.js: 12ms, application-code: 339ms)
+ GET / 200 in 318ms (next.js: 9ms, application-code: 309ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /robots.txt 200 in 13ms (next.js: 8ms, application-code: 5ms)
+ GET /sitemap.xml 200 in 21ms (next.js: 12ms, application-code: 8ms)
+ GET / 200 in 444ms (next.js: 5ms, application-code: 439ms)
+ GET / 200 in 356ms (next.js: 14ms, application-code: 342ms)
+ GET / 200 in 362ms (next.js: 37ms, application-code: 325ms)
+ GET / 200 in 263ms (next.js: 15ms, application-code: 248ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 366ms (next.js: 6ms, application-code: 360ms)
+ GET / 200 in 291ms (next.js: 6ms, application-code: 285ms)
+ GET / 200 in 294ms (next.js: 23ms, application-code: 271ms)
+ GET / 200 in 206ms (next.js: 11ms, application-code: 195ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /robots.txt 200 in 14ms (next.js: 8ms, application-code: 6ms)
+ GET /sitemap.xml 200 in 13ms (next.js: 8ms, application-code: 4ms)
+ GET / 200 in 384ms (next.js: 4ms, application-code: 380ms)
+ GET / 200 in 305ms (next.js: 7ms, application-code: 298ms)
+ GET / 200 in 292ms (next.js: 12ms, application-code: 280ms)
+ GET / 200 in 265ms (next.js: 13ms, application-code: 251ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 451ms (next.js: 7ms, application-code: 443ms)
+ GET / 200 in 370ms (next.js: 8ms, application-code: 361ms)
+ GET / 200 in 306ms (next.js: 9ms, application-code: 296ms)
+ GET / 200 in 268ms (next.js: 8ms, application-code: 261ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 429ms (next.js: 6ms, application-code: 423ms)
+ GET / 200 in 338ms (next.js: 11ms, application-code: 327ms)
+ GET / 200 in 336ms (next.js: 8ms, application-code: 328ms)
+ GET / 200 in 154ms (next.js: 12ms, application-code: 142ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 479ms (next.js: 9ms, application-code: 470ms)
+ GET / 200 in 361ms (next.js: 17ms, application-code: 343ms)
+ GET / 200 in 244ms (next.js: 9ms, application-code: 235ms)
+ GET / 200 in 221ms (next.js: 8ms, application-code: 212ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 406ms (next.js: 8ms, application-code: 398ms)
+ GET /?segmento=invalid&credit=abc&months=-100&hacked=%27or+1=1-- 200 in 278ms (next.js: 9ms, application-code: 269ms)
+ GET / 200 in 216ms (next.js: 9ms, application-code: 207ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 158ms (next.js: 4ms, application-code: 153ms)
+ GET / 200 in 92ms (next.js: 5ms, application-code: 87ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /?segmento=invalid&credit=abc&months=-100&hacked=%27or+1=1-- 200 in 118ms (next.js: 5ms, application-code: 113ms)
+ GET / 200 in 92ms (next.js: 8ms, application-code: 84ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 102ms (next.js: 2ms, application-code: 100ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 86ms (next.js: 5ms, application-code: 81ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 68ms (next.js: 2ms, application-code: 66ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 67ms (next.js: 3ms, application-code: 63ms)
+ GET / 200 in 83ms (next.js: 3ms, application-code: 80ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 95ms (next.js: 5ms, application-code: 90ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 72ms (next.js: 3ms, application-code: 69ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 86ms (next.js: 2ms, application-code: 84ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 102ms (next.js: 5ms, application-code: 97ms)
+ GET / 200 in 94ms (next.js: 4ms, application-code: 90ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 107ms (next.js: 3ms, application-code: 104ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 85ms (next.js: 4ms, application-code: 81ms)
+ GET / 200 in 116ms (next.js: 4ms, application-code: 112ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 53ms (next.js: 3ms, application-code: 50ms)
+ GET / 200 in 70ms (next.js: 4ms, application-code: 67ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 53ms (next.js: 2ms, application-code: 51ms)
+ GET /robots.txt 200 in 6ms (next.js: 1652µs, application-code: 4ms)
+ GET /sitemap.xml 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET / 200 in 52ms (next.js: 2ms, application-code: 49ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 150ms (next.js: 3ms, application-code: 147ms)
+ GET / 200 in 109ms (next.js: 5ms, application-code: 104ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 61ms (next.js: 3ms, application-code: 58ms)
+ GET / 200 in 61ms (next.js: 1914µs, application-code: 59ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 70ms (next.js: 3ms, application-code: 67ms)
+ GET / 200 in 64ms (next.js: 1924µs, application-code: 62ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 58ms (next.js: 1989µs, application-code: 56ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 55ms (next.js: 2ms, application-code: 53ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 71ms (next.js: 3ms, application-code: 69ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 74ms (next.js: 4ms, application-code: 70ms)
+ GET / 200 in 71ms (next.js: 4ms, application-code: 67ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /?segmento=invalid&credit=abc&months=-100&hacked=%27or+1=1-- 200 in 69ms (next.js: 3ms, application-code: 66ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 58ms (next.js: 2ms, application-code: 56ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 51ms (next.js: 2ms, application-code: 49ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 106ms (next.js: 3ms, application-code: 103ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET / 200 in 58ms (next.js: 1946µs, application-code: 56ms)
+[browser] Image with src "https://titaniumconsultoria.com.br/cartas/titanium-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[?25h
