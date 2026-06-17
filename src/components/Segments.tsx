@@ -12,7 +12,7 @@ const segments = [
   {
     title: "Imóveis",
     description:
-      "Crédito aprovado para imóvel residencial, rural ou comercial. Sem financiamento bancário, sem espera por sorteio. A carta já está contemplada.",
+      "Mansões, apartamentos de alto padrão, fazendas e terrenos. Carta contemplada para patrimônio sólido — sem juros bancários, sem espera por sorteio.",
     price: "R$ 912,34",
     tag: "imóveis",
     image: "/img/seg-imoveis.webp",
@@ -20,54 +20,54 @@ const segments = [
     ticket: "R$100k–R$2M",
   },
   {
-    title: "Veículos",
+    title: "Veículos Premium",
     description:
-      "Do carro de uso pessoal ao veículo alto padrão. Carta contemplada com crédito liberado — sem juros de banco, parcela menor que financiamento.",
+      "BMW, Mercedes, Porsche, Audi. O carro que comunica resultado — com parcela menor que financiamento e sem juros abusivos.",
     price: "R$ 503,61",
-    tag: "carros",
+    tag: "carros de luxo",
     image: "/img/seg-carros.webp",
     featured: true,
-    ticket: "R$30k–R$300k",
+    ticket: "R$100k–R$500k",
   },
   {
-    title: "Pesados",
+    title: "Pesados & Frota",
     description:
-      "Caminhões, carretas e máquinas pesadas. Crédito aprovado para renovar ou ampliar frota sem comprometer o caixa da operação.",
+      "Caminhões, carretas e implementos. Crédito aprovado para renovar ou expandir frota sem comprometer o caixa da operação.",
     price: "R$ 915,22",
     tag: "pesados",
     image: "/img/seg-pesados.webp",
-    featured: false,
+    featured: true,
     ticket: "R$80k–R$500k",
   },
   {
-    title: "Serviços",
+    title: "Agronegócio",
     description:
-      "Carta contemplada para reformas, capital de giro, cursos profissionais e outros serviços. Crédito que vai além do imóvel e do veículo.",
-    price: "R$ 66,39",
-    tag: "serviços",
-    image: "/img/seg-servicos.webp",
-    featured: false,
-    ticket: "R$15k–R$100k",
-  },
-  {
-    title: "Motos",
-    description:
-      "Para quem trabalha e para quem quer mobilidade. Carta contemplada de moto com crédito liberado na hora, sem sorteio.",
-    price: "Sob consulta",
-    tag: "motos",
-    image: "/img/seg-motos.webp",
-    featured: false,
-    ticket: "R$10k–R$50k",
-  },
-  {
-    title: "Eletro",
-    description:
-      "Equipamentos, eletrônicos e tecnologia. Crédito aprovado para modernizar sem comprometer o fluxo de caixa.",
-    price: "R$ 88,44",
-    tag: "eletroeletrônicos",
-    image: "/img/seg-eletro.webp",
+      "Colheitadeiras, tratores e máquinas agrícolas. Renove o maquinário da safra com crédito inteligente — sem depender de banco.",
+    price: "R$ 1.200,00",
+    tag: "agronegócio",
+    image: "/img/seg-agro.webp",
     featured: true,
-    ticket: "R$15k–R$80k",
+    ticket: "R$150k–R$1.5M",
+  },
+  {
+    title: "Aeronaves",
+    description:
+      "Jatos executivos, turboélices e helicópteros. Carta contemplada viabiliza o que o financiamento bancário recusa.",
+    price: "Sob consulta",
+    tag: "aeronaves",
+    image: "/img/seg-aeronaves.webp",
+    featured: true,
+    ticket: "R$500k–R$5M",
+  },
+  {
+    title: "Embarcações",
+    description:
+      "Lanchas, iates e embarcações de luxo. Crédito para quem navega com inteligência financeira.",
+    price: "Sob consulta",
+    tag: "embarcações",
+    image: "/img/seg-embarcacao.webp",
+    featured: true,
+    ticket: "R$200k–R$3M",
   },
 ] as const;
 
