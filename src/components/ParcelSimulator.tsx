@@ -74,10 +74,12 @@ export default function ParcelSimulator() {
       plan,
       origin: typeof window !== "undefined" ? window.location.pathname : "simulador",
     };
+    // Google Apps Script requires no-cors from browser
     fetch(SHEETS_WEBHOOK, {
       method: "POST",
+      mode: "no-cors",
       body: JSON.stringify(payload),
-    }).catch(() => {/* silently ignore – lead capture should never block UX */});
+    }).catch(() => {/* silently ignore */});
   };
 
   const calculateScenarios = (e: React.FormEvent) => {
