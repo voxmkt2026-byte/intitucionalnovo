@@ -60,9 +60,7 @@ export default function ParcelSimulator() {
     setError(null);
   };
 
-  // ── Google Sheets webhook (fire-and-forget) ──
-  const SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycby_VBHU7fH0xlZuGZ-RiE5_jUXxJ0gE7TmgY0D5MSjTvF19a_Jjn_JkEaJi0m7RJFh7VQ/exec";
-
+  // ── Google Sheets via server-side proxy (avoids CORS) ──
   const sendToGoogleSheets = (plan: string) => {
     const payload = {
       name: name.trim(),
@@ -74,10 +72,9 @@ export default function ParcelSimulator() {
       plan,
       origin: typeof window !== "undefined" ? window.location.pathname : "simulador",
     };
-    // Google Apps Script requires no-cors from browser
-    fetch(SHEETS_WEBHOOK, {
+    fetch("/api/leads", {
       method: "POST",
-      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     }).catch(() => {/* silently ignore */});
   };
