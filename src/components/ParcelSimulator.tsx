@@ -70,7 +70,7 @@ export default function ParcelSimulator() {
       credit: Number(credit),
       months: Number(months),
       plan,
-      origin: typeof window !== "undefined" ? window.location.pathname : "simulador",
+      origin: typeof window !== "undefined" ? window.location.href : "simulador",
     };
     fetch("/api/leads", {
       method: "POST",
