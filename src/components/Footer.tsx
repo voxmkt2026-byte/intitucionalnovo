@@ -1,6 +1,6 @@
 "use client";
 
-const LOGO_URL = "https://titaniumconsultoria.com.br/cartas/titanium-logo.png";
+const LOGO_URL = "/img/logo-white.webp";
 
 const navLinks = [
   { label: "Segmentos", href: "/#segmentos" },

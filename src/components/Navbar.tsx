@@ -175,7 +175,7 @@ export default function Navbar() {
       socialItems={socialItems}
       displaySocials={true}
       displayItemNumbering={true}
-      logoUrl="https://titaniumconsultoria.com.br/cartas/titanium-logo.png"
+      logoUrl="/img/logo-white.webp"
       menuButtonColor="#0A7B3E"
       openMenuButtonColor="#0A7B3E"
       changeMenuColorOnOpen={true}
