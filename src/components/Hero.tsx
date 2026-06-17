@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const slides = [
   {
     id: 1,
+    image: "/img/hero-escritorio.webp",
     kicker: "Consultoria financeira para quem está construindo",
     title: ["Você constrói.", "O banco lucra", "em cima disso."],
     subtitle:
@@ -15,6 +17,7 @@ const slides = [
   },
   {
     id: 2,
+    image: "/img/hero-agro.webp",
     kicker: "Agro, frota, clínica, imóvel — R$15k a R$2M",
     title: ["Crédito aprovado.", "Sem banco.", "Sem juros compostos."],
     subtitle:
@@ -24,6 +27,7 @@ const slides = [
   },
   {
     id: 3,
+    image: "/img/hero-juridico.webp",
     kicker: "4 anos · CNPJ ativo · Regulamentado pelo Banco Central",
     title: ["Segurança jurídica", "em cada carta.", "Sem surpresas."],
     subtitle:
@@ -89,6 +93,15 @@ export default function Hero() {
     >
       {/* ── Background: textura geométrica sofisticada ── */}
       <div className="absolute inset-0 z-0" aria-hidden="true">
+        {/* Photo background */}
+        <Image
+          src={slide.image}
+          alt=""
+          fill
+          priority
+          className="object-cover opacity-20 transition-opacity duration-700"
+          sizes="100vw"
+        />
         {/* Gradiente base */}
         <div
           className="absolute inset-0"

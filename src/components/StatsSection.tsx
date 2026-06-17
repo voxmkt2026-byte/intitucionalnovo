@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useEffect, useRef, useState, useCallback } from "react";
 
 /* ── Stats data ── */
@@ -117,6 +119,14 @@ export default function StatsSection() {
       style={{ backgroundColor: "var(--bg-dark)" }}
     >
       {/* Background — gradiente CSS puro (sem imagens pesadas) */}
+      {/* Aerial city photo background */}
+      <Image
+        src="/img/stats-cidade.webp"
+        alt=""
+        fill
+        className="object-cover opacity-15"
+        sizes="100vw"
+      />
       <div
         className="absolute inset-0 z-0"
         style={{

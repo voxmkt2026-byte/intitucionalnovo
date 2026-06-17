@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -60,8 +61,15 @@ export default function InstitucionalPage() {
       <Navbar />
       <main className="bg-bg min-h-screen">
         {/* ── Hero ── */}
-        <section className="bg-bg pt-36 pb-20 border-b border-green/5">
-          <div className="max-w-[900px] mx-auto px-6">
+        <section className="bg-bg pt-36 pb-20 border-b border-green/5 relative overflow-hidden">
+          <Image
+            src="/img/inst-fachada.webp"
+            alt=""
+            fill
+            className="object-cover opacity-[0.07]"
+            sizes="100vw"
+          />
+          <div className="max-w-[900px] mx-auto px-6 relative z-10">
             <div className="flex items-center gap-2 mb-6">
               <span className="text-label text-green/60">Institucional</span>
               <span className="w-1.5 h-1.5 rounded-full bg-green-vivid" />
