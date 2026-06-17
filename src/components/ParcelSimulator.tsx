@@ -60,6 +60,29 @@ export default function ParcelSimulator() {
     setError(null);
   };
 
+  // ── Google Sheets webhook (fire-and-forget) ──
+  const SHEETS_WEBHOOK = process.env.NEXT_PUBLIC_SHEETS_WEBHOOK || "";
+
+  const sendToGoogleSheets = (plan: string) => {
+    if (!SHEETS_WEBHOOK) return;
+    const payload = {
+      name: name.trim(),
+      email: email.trim(),
+      phone,
+      segment: segment === "imovel" ? "Imóvel" : "Veículo",
+      credit: Number(credit),
+      months: Number(months),
+      plan,
+      origin: typeof window !== "undefined" ? window.location.pathname : "simulador",
+    };
+    fetch(SHEETS_WEBHOOK, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }).catch(() => {/* silently ignore – lead capture should never block UX */});
+  };
+
   const calculateScenarios = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -71,6 +94,8 @@ export default function ParcelSimulator() {
     const monthsNum = Number(months);
     if (!credit || isNaN(creditNum) || creditNum <= 0) { setError("Valor de crédito inválido."); return; }
     if (!months || isNaN(monthsNum) || monthsNum <= 0) { setError("Prazo inválido."); return; }
+    // ── Send lead to Google Sheets ──
+    sendToGoogleSheets(selectedPlan === "titanium" ? "Titanium" : "Conforto");
     setHasCalculated(true);
   };
 
