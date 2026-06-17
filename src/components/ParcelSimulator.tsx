@@ -61,10 +61,9 @@ export default function ParcelSimulator() {
   };
 
   // ── Google Sheets webhook (fire-and-forget) ──
-  const SHEETS_WEBHOOK = process.env.NEXT_PUBLIC_SHEETS_WEBHOOK || "";
+  const SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycby_VBHU7fH0xlZuGZ-RiE5_jUXxJ0gE7TmgY0D5MSjTvF19a_Jjn_JkEaJi0m7RJFh7VQ/exec";
 
   const sendToGoogleSheets = (plan: string) => {
-    if (!SHEETS_WEBHOOK) return;
     const payload = {
       name: name.trim(),
       email: email.trim(),
@@ -77,8 +76,6 @@ export default function ParcelSimulator() {
     };
     fetch(SHEETS_WEBHOOK, {
       method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     }).catch(() => {/* silently ignore – lead capture should never block UX */});
   };
