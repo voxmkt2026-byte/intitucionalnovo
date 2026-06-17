@@ -5,6 +5,7 @@ import StaggeredMenu from "./StaggeredMenu";
 
 const menuItems = [
   { label: "Segmentos", ariaLabel: "Ver segmentos", link: "/#segmentos" },
+  { label: "Para Você", ariaLabel: "Soluções por perfil", link: "/#para-voce" },
   { label: "Simulador", ariaLabel: "Simular carta", link: "/#simulador" },
   { label: "Sobre Nós", ariaLabel: "Sobre a Titanium", link: "/#sobre" },
   { label: "Nossos Valores", ariaLabel: "Missão, visão e valores", link: "/missao-visao-valores" },

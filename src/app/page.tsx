@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import PainProfiles from "@/components/PainProfiles";
+import PersonaGateway from "@/components/PersonaGateway";
 import ValueProps from "@/components/ValueProps";
 import Segments from "@/components/Segments";
 import ParcelSimulator from "@/components/ParcelSimulator";
@@ -15,7 +15,7 @@ export default function Home() {
       <main>
         <Hero />
         <About />
-        <PainProfiles />
+        <PersonaGateway />
         <ValueProps />
         <Segments />
         <ParcelSimulator />
