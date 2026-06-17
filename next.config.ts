@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  trailingSlash: true,
   images: {
     remotePatterns: [
       {
@@ -13,14 +14,6 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ["image/avif", "image/webp"],
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/:path(uber|caminhao|carta-contemplada|maquinas-agricolas|terrenos-construcao|carro-luxo|empresario|medico|placas-solares|aeronaves|embarcacao|carta-comum|corretor|terrenos-agricolas)",
-        destination: "/:path/index.html",
-      },
-    ];
   },
 };
 
