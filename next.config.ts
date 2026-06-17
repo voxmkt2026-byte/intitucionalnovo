@@ -14,6 +14,14 @@ const nextConfig: NextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/:path(uber|caminhao|carta-contemplada|maquinas-agricolas|terrenos-construcao|carro-luxo|empresario|medico|placas-solares|aeronaves|embarcacao|carta-comum|corretor|terrenos-agricolas)",
+        destination: "/:path/index.html",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
