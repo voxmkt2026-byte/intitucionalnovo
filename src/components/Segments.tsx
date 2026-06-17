@@ -10,49 +10,119 @@ const WHATSAPP_BASE =
 
 const segments = [
   {
-    title: "Imóveis",
+    title: "Casa Moderna",
     description:
-      "Mansões, apartamentos de alto padrão, fazendas e terrenos. Carta contemplada para patrimônio sólido — sem juros bancários, sem espera por sorteio.",
-    price: "R$ 912,34",
-    tag: "imóveis",
-    image: "/img/seg-imoveis.webp",
+      "Apartamento ou casa própria com crédito aprovado. Sem financiamento bancário, sem espera. Parcelas até 60% menores.",
+    price: "R$ 912",
+    tag: "imóvel residencial",
+    image: "/img/seg-casa-moderna.webp",
     featured: true,
-    ticket: "R$100k–R$2M",
+    ticket: "R$100k–R$1M",
   },
   {
-    title: "Veículos Premium",
+    title: "Mansões & Alto Padrão",
     description:
-      "BMW, Mercedes, Porsche, Audi. O carro que comunica resultado — com parcela menor que financiamento e sem juros abusivos.",
-    price: "R$ 503,61",
-    tag: "carros de luxo",
+      "Imóveis de alto padrão, coberturas e condomínios exclusivos. Patrimônio sólido sem juros compostos.",
+    price: "R$ 2.400",
+    tag: "imóvel alto padrão",
+    image: "/img/seg-imoveis.webp",
+    featured: true,
+    ticket: "R$500k–R$2M",
+  },
+  {
+    title: "Veículo Premium",
+    description:
+      "BMW, Mercedes, Porsche. O carro que comunica resultado — parcela menor que financiamento.",
+    price: "R$ 1.503",
+    tag: "carro de luxo",
     image: "/img/seg-carros.webp",
     featured: true,
     ticket: "R$100k–R$500k",
   },
   {
-    title: "Pesados & Frota",
+    title: "Carro Popular",
     description:
-      "Caminhões, carretas e implementos. Crédito aprovado para renovar ou expandir frota sem comprometer o caixa da operação.",
-    price: "R$ 915,22",
-    tag: "pesados",
-    image: "/img/seg-pesados.webp",
+      "Seu primeiro carro ou troca inteligente. Crédito aprovado sem entrada, sem juros abusivos.",
+    price: "R$ 503",
+    tag: "carro popular",
+    image: "/img/seg-carro-popular.webp",
+    featured: true,
+    ticket: "R$30k–R$100k",
+  },
+  {
+    title: "Motorista de App",
+    description:
+      "Carro para Uber, 99 e iFood. Comece a trabalhar com carro próprio — sem pagar aluguel.",
+    price: "R$ 389",
+    tag: "carro para Uber",
+    image: "/img/seg-motorista-app.webp",
+    featured: true,
+    ticket: "R$25k–R$80k",
+  },
+  {
+    title: "Caminhão & Frota",
+    description:
+      "Renove ou expanda a frota sem comprometer o caixa. Crédito para quem move o Brasil.",
+    price: "R$ 915",
+    tag: "caminhão",
+    image: "/img/seg-caminhao.webp",
     featured: true,
     ticket: "R$80k–R$500k",
   },
   {
-    title: "Agronegócio",
+    title: "Moto",
     description:
-      "Colheitadeiras, tratores e máquinas agrícolas. Renove o maquinário da safra com crédito inteligente — sem depender de banco.",
-    price: "R$ 1.200,00",
-    tag: "agronegócio",
-    image: "/img/seg-agro.webp",
+      "Moto nova para trabalho ou lazer. Carta contemplada com crédito liberado, sem sorteio.",
+    price: "R$ 189",
+    tag: "moto",
+    image: "/img/seg-moto.webp",
+    featured: true,
+    ticket: "R$10k–R$50k",
+  },
+  {
+    title: "Tratores & Agro",
+    description:
+      "Colheitadeira, trator, implemento. Renove o maquinário da safra sem depender de banco.",
+    price: "R$ 1.200",
+    tag: "máquinas agrícolas",
+    image: "/img/seg-trator.webp",
     featured: true,
     ticket: "R$150k–R$1.5M",
   },
   {
+    title: "Terreno Agrícola",
+    description:
+      "Fazenda, sítio ou chácara. Amplie sua propriedade rural com crédito inteligente.",
+    price: "R$ 800",
+    tag: "terreno agrícola",
+    image: "/img/seg-fazenda.webp",
+    featured: true,
+    ticket: "R$50k–R$1M",
+  },
+  {
+    title: "Terreno Urbano",
+    description:
+      "Lote em condomínio fechado ou bairro planejado. Investimento que só valoriza.",
+    price: "R$ 450",
+    tag: "terreno urbano",
+    image: "/img/seg-terreno-urbano.webp",
+    featured: true,
+    ticket: "R$50k–R$500k",
+  },
+  {
+    title: "Construção",
+    description:
+      "Crédito para construir do zero ou reformar. Realize o projeto sem financiamento bancário.",
+    price: "R$ 660",
+    tag: "construção",
+    image: "/img/seg-construcao.webp",
+    featured: true,
+    ticket: "R$50k–R$500k",
+  },
+  {
     title: "Aeronaves",
     description:
-      "Jatos executivos, turboélices e helicópteros. Carta contemplada viabiliza o que o financiamento bancário recusa.",
+      "Jatos executivos, turboélices e helicópteros. Carta contemplada viabiliza o que banco recusa.",
     price: "Sob consulta",
     tag: "aeronaves",
     image: "/img/seg-aeronaves.webp",
@@ -62,12 +132,22 @@ const segments = [
   {
     title: "Embarcações",
     description:
-      "Lanchas, iates e embarcações de luxo. Crédito para quem navega com inteligência financeira.",
+      "Lanchas, iates e embarcações. Crédito para quem navega com inteligência financeira.",
     price: "Sob consulta",
     tag: "embarcações",
     image: "/img/seg-embarcacao.webp",
     featured: true,
     ticket: "R$200k–R$3M",
+  },
+  {
+    title: "Placas Solares",
+    description:
+      "Energia solar para residência ou empresa. Economize até 95% na conta de luz.",
+    price: "R$ 320",
+    tag: "placas solares",
+    image: "/img/seg-placas-solares.webp",
+    featured: true,
+    ticket: "R$15k–R$200k",
   },
 ] as const;
 
@@ -100,8 +180,8 @@ export default function Segments() {
       style={{ backgroundColor: "var(--bg-dark)" }}
     >
       {/* ── Header ── */}
-      <div className="absolute top-0 left-0 right-0 z-10 px-6 md:px-12 lg:px-16 pt-14 md:pt-20 pointer-events-none">
-        <div className="mx-auto max-w-[1200px]">
+      <div className="absolute top-0 left-0 right-0 z-10 px-8 md:px-16 lg:px-24 pt-14 md:pt-20 pointer-events-none">
+        <div className="mx-auto max-w-[960px]">
           <div className="flex items-center gap-3 mb-4">
             <span className="inline-block w-6 h-px" style={{ backgroundColor: "var(--green-vivid)" }} />
             <span
@@ -114,7 +194,7 @@ export default function Segments() {
                 color: "var(--green-vivid)",
               }}
             >
-              Do caminhão ao imóvel
+              14 categorias de crédito
             </span>
           </div>
           <h2
@@ -248,7 +328,7 @@ export default function Segments() {
             </div>
 
             {/* Content */}
-            <div className="px-6 pb-6 pt-4 space-y-5">
+            <div className="px-6 pb-6 pt-4 space-y-5" style={{ maxWidth: "400px", margin: "0 auto" }}>
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.55)", lineHeight: 1.7 }}>
                 {activeSeg.description}
               </p>
