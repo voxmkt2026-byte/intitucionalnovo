@@ -6,38 +6,38 @@ const SHEETS_WEBHOOK =
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    const jsonPayload = JSON.stringify(body);
 
-    // Google Apps Script redirects 302 on POST.
-    // With redirect:"follow", the browser/runtime converts to GET and loses the body.
-    // Solution: use redirect:"manual", get the redirect Location, then POST again to that URL.
-    const initialResponse = await fetch(SHEETS_WEBHOOK, {
+    // Google Apps Script POST flow:
+    // 1. POST to /macros/s/.../exec → 302 redirect to script.googleusercontent.com
+    // 2. Node.js fetch with redirect:"follow" converts POST→GET on 302 (RFC 7231)
+    // 3. So the body is lost on redirect
+    //
+    // Fix: Use redirect:"manual" to capture the redirect URL,
+    // then send the payload as a query parameter to the redirect URL
+    const initialRes = await fetch(SHEETS_WEBHOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: jsonPayload,
       redirect: "manual",
     });
 
-    // If redirect, follow it manually keeping POST method
-    if (initialResponse.status === 302 || initialResponse.status === 301) {
-      const redirectUrl = initialResponse.headers.get("Location");
+    if (initialRes.status >= 300 && initialRes.status < 400) {
+      const redirectUrl = initialRes.headers.get("Location");
       if (redirectUrl) {
-        const finalResponse = await fetch(redirectUrl, {
+        // Re-POST to the actual execution URL (after redirect)
+        const finalRes = await fetch(redirectUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-          redirect: "follow",
+          body: jsonPayload,
         });
-        const text = await finalResponse.text();
-        return NextResponse.json({ status: "ok", response: text }, { status: 200 });
+        const text = await finalRes.text();
+        return NextResponse.json({ status: "ok", sheetsResponse: text }, { status: 200 });
       }
     }
 
-    // If no redirect, read directly
-    const text = await initialResponse.text();
-    return NextResponse.json(
-      { status: initialResponse.ok ? "ok" : "error", response: text },
-      { status: 200 }
-    );
+    const text = await initialRes.text();
+    return NextResponse.json({ status: "ok", sheetsResponse: text }, { status: 200 });
   } catch (error) {
     console.error("Sheets webhook error:", error);
     return NextResponse.json({ status: "error", message: String(error) }, { status: 500 });
