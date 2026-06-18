@@ -45,7 +45,7 @@ const stats = [
     prefix: "",
     label: "consorciados ativos",
     description:
-      "Mais de 2 milhões de consorciados ativos no mercado. Com a carta contemplada, você acessa o crédito na hora.",
+      "Mais de 2 milhões de consorciados ativos no mercado. Com a carta contemplada, você acessa o crédito sem esperar sorteio.",
   },
   {
     value: 307,
@@ -233,7 +233,7 @@ export default function About() {
               </h3>
 
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
-                Quando você financia equipamento, veículo ou imóvel pelo banco, você paga o valor do bem <strong style={{ color: "var(--ink)", fontWeight: 600 }}>mais 12% a 24% ao ano em juros</strong>. Em 5 anos, um crédito de R$300 mil pode custar R$700 mil. Esse é o negócio do banco.
+                Quando você financia equipamento, veículo ou imóvel pelo banco, você paga o valor do bem <strong style={{ color: "var(--ink)", fontWeight: 600 }}>mais 12% a 24% ao ano em juros</strong> (média do mercado bancário, fonte: Banco Central). Em 5 anos, um crédito de R$300 mil pode custar R$700 mil*. Esse é o negócio do banco. <span className="text-xs opacity-40">*Exemplo simulado considerando taxa média de financiamento imobiliário. Valores reais variam.</span>
               </p>
 
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>

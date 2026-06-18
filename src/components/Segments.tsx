@@ -42,7 +42,7 @@ const segments = [
   {
     title: "Carro Popular",
     description:
-      "Seu primeiro carro ou troca inteligente. Crédito aprovado sem entrada, sem juros abusivos.",
+      "Seu primeiro carro ou troca inteligente. Crédito aprovado sem entrada, com taxas menores que o financiamento.",
     price: "R$ 503",
     tag: "carro popular",
     image: "/img/seg-carro-popular.webp",
@@ -142,7 +142,7 @@ const segments = [
   {
     title: "Placas Solares",
     description:
-      "Energia solar para residência ou empresa. Economize até 95% na conta de luz.",
+      "Energia solar para residência ou empresa. Invista em energia solar e economize na conta de luz*.",
     price: "R$ 320",
     tag: "placas solares",
     image: "/img/seg-placas-solares.webp",

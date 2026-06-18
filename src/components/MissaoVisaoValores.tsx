@@ -580,7 +580,7 @@ export default function MissaoVisaoValores() {
   const numRef2 = useRef<HTMLSpanElement>(null);
   const numRef3 = useRef<HTMLSpanElement>(null);
 
-  useCountUp(numRef1, 10, 1800);
+  useCountUp(numRef1, 4, 1800);
   useCountUp(numRef2, 2000, 2200);
   useCountUp(numRef3, 50, 2000);
 
@@ -765,11 +765,13 @@ export default function MissaoVisaoValores() {
             </div>
             <div className="text-center">
               <span className="block font-[family-name:var(--font-jakarta)] text-3xl md:text-5xl font-black text-green tabular-nums">+<span ref={numRef2}>0</span></span>
-              <span className="block mt-1 text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">Clientes atendidos</span>
+              <span className="block mt-1 text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">Clientes atendidos*</span>
+              <span className="block mt-0.5 text-[0.6rem] font-[family-name:var(--font-jakarta)] text-ink-mute/60 normal-case tracking-normal">*Dados internos Titanium Consultoria</span>
             </div>
             <div className="text-center">
               <span className="block font-[family-name:var(--font-jakarta)] text-3xl md:text-5xl font-black text-green tabular-nums">R$<span ref={numRef3}>0</span>M</span>
-              <span className="block mt-1 text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">Em crédito negociado</span>
+              <span className="block mt-1 text-xs uppercase tracking-[0.15em] font-[family-name:var(--font-jakarta)] font-bold text-ink-mute">Em crédito negociado*</span>
+              <span className="block mt-0.5 text-[0.6rem] font-[family-name:var(--font-jakarta)] text-ink-mute/60 normal-case tracking-normal">*Valor acumulado desde a fundação</span>
             </div>
           </div>
         </div>

@@ -84,7 +84,7 @@ export const personasConfig: Record<string, PersonaConfig> = {
     theme: 'light',
     proofText: '2.847 motoristas já conquistaram o carro próprio',
     securityBadge: 'Sem consulta ao SPC. Dados protegidos.',
-    whatsappTemplate: 'Olá! Sou motorista de app e quero conquistar meu carro próprio. Tenho interesse em um *[bem_desejado]* com parcelas de aproximadamente *R$ [parcela]*. Como funciona o consórcio sem juros?',
+    whatsappTemplate: 'Olá! Sou motorista de app e quero conquistar meu carro próprio. Tenho interesse em um *[bem_desejado]* com parcelas de aproximadamente *R$ [parcela]*. Como funciona o consórcio com taxas menores que financiamento?',
     steps: [
       {
         title: '🚗 Qual carro você quer colocar na garagem?',
@@ -323,7 +323,7 @@ export const personasConfig: Record<string, PersonaConfig> = {
     steps: [
       {
         title: '☀️ Quanto você paga de conta de luz?',
-        subtitle: 'Use o consórcio para zerar sua conta e gerar economia por 25 anos.',
+        subtitle: 'Use o consórcio para reduzir significativamente sua conta de energia e gerar economia por 25 anos.',
         ctaText: 'Avançar para Proposta →',
         fields: [
           { id: 'bem_desejado', label: 'Descreva seu projeto de energia solar', type: 'text', required: true, placeholder: 'Ex: Sistema 10kWp para residência, fazenda...' },

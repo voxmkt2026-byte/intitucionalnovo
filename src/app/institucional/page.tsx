@@ -16,7 +16,7 @@ const steps = [
   { num: "02", title: "Curadoria de Cartas", desc: "Filtramos apenas cartas contempladas verificadas, com as menores taxas administrativas e condições seguras." },
   { num: "03", title: "Auditoria Jurídica", desc: "Nossa equipe legal analisa cada documento, contrato e histórico da carta antes de apresentá-la a você." },
   { num: "04", title: "Formalização", desc: "Com tudo aprovado, formalizamos a transferência junto à administradora. Você acompanha cada etapa." },
-  { num: "05", title: "Crédito Liberado", desc: "Carta em seu nome, crédito disponível. Sem financiamento bancário, sem juros, sem surpresas." },
+  { num: "05", title: "Crédito Liberado", desc: "Carta em seu nome, crédito disponível. Sem financiamento bancário, sem juros bancários, sem surpresas — apenas taxa administrativa transparente." },
 ];
 
 const faqs = [

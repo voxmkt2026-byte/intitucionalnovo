@@ -16,20 +16,20 @@ export const metadata: Metadata = {
   keywords: [
     "carta contemplada",
     "consórcio contemplado",
-    "crédito sem juros",
+    "crédito sem juros bancários",
     "consórcio agro",
     "carta contemplada imóvel",
     "carta contemplada veículo",
     "titanium consultoria",
     "crédito rural",
     "consórcio empresário",
-    "carta de crédito aprovada",
+    "carta contemplada verificada",
   ],
   authors: [{ name: "Titanium Consultoria" }],
   openGraph: {
     title: "Titanium Consultoria | Crédito sem banco para quem está construindo",
     description:
-      "Do agro ao imóvel. Da frota à clínica. Crédito aprovado sem financiamento bancário. Segurança jurídica, CNPJ ativo, regulamentado pelo Banco Central.",
+      "Do agro ao imóvel. Da frota à clínica. Crédito via consórcio contemplado, sem financiamento bancário tradicional. Segurança jurídica, CNPJ ativo, regulamentado pelo Banco Central.",
     url: "https://titaniumconsultoria.com.br",
     siteName: "Titanium Consultoria",
     locale: "pt_BR",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Titanium Consultoria | Crédito sem banco",
     description:
-      "Do agro ao imóvel. Crédito aprovado sem juros bancários.",
+      "Acesse crédito com taxas menores que o financiamento tradicional",
     images: ["https://titaniumconsultoria.com.br/cartas/titanium-logo.png"],
   },
   robots: {
@@ -99,7 +99,7 @@ const jsonLd = [
     "@id": "https://titaniumconsultoria.com.br/#service-imovel",
     "name": "Carta Contemplada de Imóveis",
     "provider": { "@id": "https://titaniumconsultoria.com.br/#organization" },
-    "description": "Crédito aprovado para aquisição de imóveis residenciais e comerciais sem juros bancários.",
+    "description": "Intermediação de cartas contempladas para aquisição de imóveis, sem financiamento bancário tradicional.",
     "areaServed": "BR",
     "serviceType": "FinancialService"
   },

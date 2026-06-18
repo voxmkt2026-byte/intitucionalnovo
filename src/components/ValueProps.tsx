@@ -10,7 +10,7 @@ const propositions = [
     tagline: "Crédito imediato",
     headline: "Cada mês pagando banco é patrimônio que não foi pro seu bolso.",
     description:
-      "No consórcio tradicional você espera anos por sorteio. No financiamento, paga juros todo mês. Com carta contemplada o crédito já está liberado — a espera acabou e os juros também.",
+      "No consórcio tradicional você espera anos por sorteio. No financiamento, paga juros todo mês. Com carta contemplada o crédito já está liberado — a espera acabou e os juros bancários também.",
   },
   {
     num: "02",

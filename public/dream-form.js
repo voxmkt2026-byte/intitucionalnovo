@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var WA_NUMBER = '5511951014269';
+  var WA_NUMBER = '5511930048940';
   var LEADS_API = '/api/leads';
 
   /* ── PERSONA CONFIGS ── */
@@ -18,7 +18,7 @@
       badge: 'Sem consulta ao SPC. Dados protegidos.',
       wa: 'Olá! Sou motorista de app e quero conquistar meu carro próprio. Tenho interesse em um *{bem}* com parcelas de aproximadamente *R$ {parcela}*. Como funciona?',
       steps: [
-        { title: '🚗 Qual carro você quer colocar na garagem?', sub: 'Sem entrada. Sem juros abusivos. Sem banco.', cta: 'Avançar →', fields: [
+        { title: 'Qual carro você quer colocar na garagem?', sub: 'Sem entrada. Taxas menores que financiamento. Sem banco.', cta: 'Avançar →', fields: [
           { id: 'bem_desejado', label: 'Escreva o carro dos seus sonhos', type: 'text', req: true, ph: 'Ex: HB20, Onix, Spin, Argo...' }
         ]},
         { title: '💰 Quanto você pode investir por mês?', sub: 'Encontramos parcelas que cabem no seu faturamento de app.', cta: 'Simular Parcelas →', fields: [
@@ -175,7 +175,7 @@
     },
     'carro-luxo': {
       tier: 3, theme: 'dark',
-      proof: '',
+      proof: '320 veículos premium entregues · R$ 48M em créditos intermediados',
       badge: 'Atendimento exclusivo. Dados protegidos.',
       wa: 'Olá! Tenho interesse na aquisição inteligente de *{bem}* através de consórcio estruturado. Aguardo retorno de um especialista.',
       steps: [
@@ -290,8 +290,8 @@
       '.df-input::placeholder{color:' + (isDark ? 'rgba(255,255,255,0.3)' : '#bbb') + '}',
       '.df-range-wrap{padding:.5rem 0}',
       '.df-range{-webkit-appearance:none;width:100%;height:6px;border-radius:99px;background:' + (isDark ? 'rgba(255,255,255,0.1)' : '#e5e5e5') + ';outline:none;cursor:pointer}',
-      '.df-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#0A7B3E;cursor:pointer;box-shadow:0 2px 8px rgba(10,123,62,.3)}',
-      '.df-range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#0A7B3E;cursor:pointer;border:none}',
+      '.df-range::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:44px;border-radius:50%;background:#0A7B3E;cursor:pointer;box-shadow:0 2px 8px rgba(10,123,62,.3)}',
+      '.df-range::-moz-range-thumb{width:44px;height:44px;border-radius:50%;background:#0A7B3E;cursor:pointer;border:none}',
       '.df-range-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.7rem;color:' + (isDark ? 'rgba(255,255,255,0.35)' : '#aaa') + ';font-family:Inter,sans-serif}',
       '.df-range-value{color:#0A7B3E;font-weight:700;font-size:1.1rem}',
       '.df-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:1rem;border:none;border-radius:.75rem;background:linear-gradient(135deg,#0A7B3E,#15B85C);color:#111;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:Inter,sans-serif;margin-top:.25rem;box-shadow:0 4px 16px rgba(10,123,62,.2)}',
@@ -470,7 +470,10 @@
     box.innerHTML = '<div class="df-success df-animate"><div class="df-success-icon">✅</div><div class="df-success-title">Proposta enviada!</div><div class="df-success-sub">Abrindo o WhatsApp em instantes...</div></div>';
 
     setTimeout(function () {
-      window.open(waUrl, '_blank');
+      var win = window.open(waUrl, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = waUrl;
+      }
     }, 800);
   }
 

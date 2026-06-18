@@ -519,3 +519,9 @@ img.quote-wall__avatar{width:52px;height:52px;border-radius:50%;object-fit:cover
   [data-rise]{opacity:1;transform:none}
   html{scroll-behavior:auto}
 }
+
+/* ── Touch targets: WCAG mínimo 44x44px ── */
+@media(max-width:680px){
+  .sticky__btn{min-height:44px;padding:.85rem 1.4rem}
+  .foot__link{min-height:44px;display:inline-flex;align-items:center}
+}

@@ -82,10 +82,10 @@ const personas = [
       </svg>
     ),
     question: "Precisa de crédito agora?",
-    pain: "Aprovação imediata — sem esperar sorteio.",
+    pain: "Crédito já contemplado — sem esperar sorteio.",
     cta: "Ver carta disponível",
     href: "/carta-contemplada",
-    badge: "Imediato",
+    badge: "Disponível",
   },
   {
     id: "luxo",

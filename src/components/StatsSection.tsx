@@ -39,7 +39,7 @@ const statsData = [
     description: (
       <>
         <strong className="text-white font-semibold">Taxa de 20% de contemplação.</strong> Com a carta
-        contemplada, você elimina a espera e tem crédito liberado na hora.
+        contemplada, você elimina a espera e tem crédito liberado sem esperar sorteio.
       </>
     ),
   },
@@ -213,7 +213,7 @@ export default function StatsSection() {
           </div>
           <div className="col-span-7">
             <p className="font-[family-name:var(--font-montserrat)] text-lg md:text-xl lg:text-2xl text-white/60 leading-relaxed font-normal">
-              <strong className="text-white font-semibold">Taxa de 20% de contemplação.</strong> Com a carta contemplada, você elimina a espera e tem crédito liberado na hora.
+              <strong className="text-white font-semibold">Taxa de 20% de contemplação.</strong> Com a carta contemplada, você elimina a espera e tem crédito liberado sem esperar sorteio.
             </p>
           </div>
         </div>

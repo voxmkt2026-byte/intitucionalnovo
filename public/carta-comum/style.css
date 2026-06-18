@@ -263,7 +263,6 @@ h1,h2,h3{font-family:var(--font-display);text-wrap:balance}
 @media(max-width:980px){.scroll-hint{display:none}}
 
 /* ── Faixa de marcas: quieta, tipográfica ── */
-}
 
 /* ============================================================================
    SOCIAL PROOF BAR
@@ -525,3 +524,9 @@ img.quote-wall__avatar{width:52px;height:52px;border-radius:50%;object-fit:cover
 @media(max-width:680px){.marquee{padding:.6rem 0;overflow:hidden}.marquee__track{gap:1.8rem;padding-right:1.8rem;animation-duration:18s}.marquee__item img{height:20px;max-width:70px;opacity:.45}}
 @keyframes scroll-x{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 
+
+/* -- Touch targets: WCAG minimo 44x44px -- */
+@media(max-width:680px){
+  .sticky__btn{min-height:44px;padding:.85rem 1.4rem}
+  .foot__link{min-height:44px;display:inline-flex;align-items:center}
+}
