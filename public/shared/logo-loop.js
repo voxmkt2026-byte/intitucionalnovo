@@ -9,12 +9,11 @@
 
   /* ── CONFIG ──────────────────────────────────────────────── */
   const SPEED       = 80;   // px/s
-  const LOGO_HEIGHT = 36;   // px
-  const GAP         = 48;   // px entre logos
+  const LOGO_HEIGHT = 32;   // px
+  const GAP         = 56;   // px entre logos
   const SMOOTH_TAU  = 0.25; // easing
   const MIN_COPIES  = 2;
   const HEADROOM    = 2;
-  const FADE_COLOR  = 'var(--bg-dark, #0a0e0a)';
 
   /* ── STYLES ─────────────────────────────────────────────── */
   const STYLES = `
@@ -22,7 +21,10 @@
       position: relative;
       overflow: hidden;
       width: 100%;
-      padding: 20px 0;
+      padding: 18px 0;
+      background: var(--bg-white, #f5f5f0);
+      border-top: 1px solid var(--hairline, rgba(0,0,0,0.08));
+      border-bottom: 1px solid var(--hairline, rgba(0,0,0,0.08));
     }
     .ll-root::before,
     .ll-root::after {
@@ -35,11 +37,11 @@
     }
     .ll-root::before {
       left: 0;
-      background: linear-gradient(to right, ${FADE_COLOR} 0%, transparent 100%);
+      background: linear-gradient(to right, var(--bg-white, #f5f5f0) 0%, transparent 100%);
     }
     .ll-root::after {
       right: 0;
-      background: linear-gradient(to left, ${FADE_COLOR} 0%, transparent 100%);
+      background: linear-gradient(to left, var(--bg-white, #f5f5f0) 0%, transparent 100%);
     }
     .ll-track {
       display: flex;
@@ -65,14 +67,16 @@
       width: auto;
       display: block;
       object-fit: contain;
-      filter: brightness(0) invert(1) opacity(0.5);
-      transition: filter 0.3s ease, transform 0.3s ease;
+      opacity: 0.6;
+      filter: grayscale(100%);
+      transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
       pointer-events: none;
       -webkit-user-drag: none;
     }
     .ll-item:hover img {
-      filter: brightness(0) invert(1) opacity(0.85);
-      transform: scale(1.12);
+      opacity: 1;
+      filter: grayscale(0%);
+      transform: scale(1.08);
     }
   `;
 
@@ -188,9 +192,9 @@
 
       const { root, track, renderCopies } = buildLogoLoop(logos);
 
-      // Replace the old marquee
+      // Replace the old marquee completely
       marqueeEl.parentNode.insertBefore(root, marqueeEl);
-      marqueeEl.style.display = 'none';
+      marqueeEl.remove();
 
       // After images load, measure and set proper copy count
       let seqWidth = 0;
