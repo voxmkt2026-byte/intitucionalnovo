@@ -9,11 +9,10 @@ const personas = [
   {
     id: "uber",
     icon: (
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
-        <circle cx="20" cy="20" r="19" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M10 26 C10 26 12 20 20 20 C28 20 30 26 30 26" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <circle cx="20" cy="14" r="4" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M14 32 L16 28 L20 30 L24 28 L26 32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      /* Iconsax Bold: Driving / Steering */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2Zm5.93 7.45-1.7 4.68c-.17.46-.6.77-1.1.77h-6.26c-.49 0-.93-.3-1.1-.77l-1.7-4.68A.747.747 0 0 1 6.78 11h10.44c.55 0 .92.57.71 1.08v.37Z" opacity=".4"/>
+        <path d="M16.5 17.23h-9c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h9c.41 0 .75.34.75.75s-.34.75-.75.75ZM12 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2Z"/>
       </svg>
     ),
     question: "Você é motorista de app?",
@@ -25,12 +24,12 @@ const personas = [
   {
     id: "caminhao",
     icon: (
-      <svg viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-7">
-        <rect x="1" y="5" width="24" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M25 10 L36 10 L39 18 L39 23 L25 23 Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <circle cx="7" cy="26" r="3" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="19" cy="26" r="3" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="33" cy="26" r="3" stroke="currentColor" strokeWidth="1.5"/>
+      /* Iconsax Bold: Truck Fast */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M15 2H9C5.5 2 4 3.5 4 7v7.25h12.5V7c0-3.5-1.5-5-5-5Z" opacity=".4"/>
+        <path d="M21.5 15.5v1.25c0 .41-.34.75-.75.76h-.26c-.01-1.25-1.04-2.26-2.3-2.26-1.25 0-2.27.99-2.3 2.24H9.81c-.01-1.25-1.04-2.24-2.3-2.24-1.27 0-2.3 1.01-2.3 2.26H4.5a.749.749 0 0 1-.75-.76V15.5c0-.69.56-1.25 1.25-1.25h15.25c.69 0 1.25.56 1.25 1.25Z"/>
+        <path d="M7.5 20c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2ZM18.19 20c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2ZM22 12.53l-1.71-2.57a.75.75 0 0 0-.62-.33H16.5v4.62h4.89c.43 0 .71-.46.5-.83l-.89-1.33v.44Z"/>
+        <path d="M4 12.25H2c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h2c.41 0 .75.34.75.75s-.34.75-.75.75ZM4 9.25H3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h1c.41 0 .75.34.75.75s-.34.75-.75.75ZM4 15.25H1c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h3c.41 0 .75.34.75.75s-.34.75-.75.75Z"/>
       </svg>
     ),
     question: "Você tem frota ou quer ter?",
@@ -42,11 +41,11 @@ const personas = [
   {
     id: "imovel",
     icon: (
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
-        <path d="M5 38 L5 18 L20 6 L35 18 L35 38 Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <rect x="14" y="26" width="12" height="12" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-        <rect x="9" y="22" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-        <rect x="24" y="22" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+      /* Iconsax Bold: Building 4 */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M10.75 2.45c-.69-.55-1.81-.55-2.51 0L3.49 6.44C2.87 6.95 2.5 7.93 2.5 8.74v8.65c0 1.64 1.36 3 3 3h13c1.64 0 3-1.36 3-3V8.83c0-.87-.39-1.79-.97-2.3l-5.5-4.76" opacity=".4"/>
+        <path d="M12 18.75c-.41 0-.75-.34-.75-.75v-3c0-.41.34-.75.75-.75s.75.34.75.75v3c0 .41-.34.75-.75.75Z"/>
+        <path d="M10.75 2.45c-.69-.56-1.81-.56-2.51 0L3.49 6.44C2.87 6.95 2.5 7.93 2.5 8.74v8.65c0 1.64 1.36 3 3 3H12V2.91c-.44-.27-.93-.42-1.25-.46Z"/>
       </svg>
     ),
     question: "Você quer construir ou investir?",
@@ -58,11 +57,12 @@ const personas = [
   {
     id: "agro",
     icon: (
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
-        <path d="M20 36 C20 36 6 28 6 16 C6 9 12 4 20 4 C28 4 34 9 34 16 C34 28 20 36 20 36Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <path d="M20 12 L20 36" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M20 20 C20 20 14 18 12 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M20 26 C20 26 26 22 28 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      /* Iconsax Bold: Tree / Crop */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M18.89 6.46c-.04-.34-.07-.66-.07-1C18.82 3 16.92 2 14.75 2h-5.5C7.08 2 5.18 3 5.18 5.46c0 .34-.03.66-.07 1C4.42 12.63 8.14 16 12 16s7.58-3.37 6.89-9.54Z" opacity=".4"/>
+        <path d="M12.75 16v5c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-5h1.5Z"/>
+        <path d="M18.5 22H5.5c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h13c.41 0 .75.34.75.75s-.34.75-.75.75Z"/>
+        <path d="M17.47 8.83H6.53c-.35 0-.59-.36-.46-.69.4-.99.72-2.11.93-3.39.04-.22.23-.39.46-.39h9.08c.23 0 .43.16.46.39.21 1.28.53 2.4.93 3.39.14.33-.1.69-.46.69Z"/>
       </svg>
     ),
     question: "Você está no agronegócio?",
@@ -74,11 +74,11 @@ const personas = [
   {
     id: "contemplada",
     icon: (
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
-        <rect x="4" y="8" width="32" height="24" rx="3" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M4 15 L36 15" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="20" cy="27" r="5" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M17.5 27 L19 28.5 L22.5 25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      /* Iconsax Bold: Card Tick */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M22 7.55v.95H2v-.95C2 4.99 3.56 3.5 6 3.5h12c2.44 0 4 1.49 4 4.05Z"/>
+        <path d="M2 8.5v7.95C2 19.01 3.56 20.5 6 20.5h12c2.44 0 4-1.49 4-4.05V8.5H2Zm6.56 8.83H5.78c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h2.78c.41 0 .75.34.75.75s-.33.75-.75.75Zm7.44 0h-4.11c-.41 0-.75-.34-.75-.75s.34-.75.75-.75H16c.41 0 .75.34.75.75s-.34.75-.75.75Z" opacity=".4"/>
+        <path d="M14.15 12.63c-.19 0-.38-.07-.53-.22l-1.15-1.15a.754.754 0 0 1 0-1.06c.29-.29.77-.29 1.06 0l.62.62 1.66-1.66c.29-.29.77-.29 1.06 0 .29.29.29.77 0 1.06l-2.19 2.19c-.15.15-.34.22-.53.22Z"/>
       </svg>
     ),
     question: "Precisa de crédito agora?",
@@ -90,12 +90,12 @@ const personas = [
   {
     id: "luxo",
     icon: (
-      <svg viewBox="0 0 44 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-7">
-        <path d="M3 18 C3 18 8 8 22 8 C36 8 41 18 41 18 L41 22 C41 24 39 25 37 25 L7 25 C5 25 3 24 3 22 Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <path d="M8 8 L12 3 L32 3 L36 8" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <circle cx="10" cy="25" r="4" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="34" cy="25" r="4" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M14 25 L30 25" stroke="currentColor" strokeWidth="1"/>
+      /* Iconsax Bold: Car */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M19.32 7.04c-.31-.93-.83-1.69-1.68-2.27-.43-.3-.91-.47-1.43-.57L14.73 2.6a1.48 1.48 0 0 0-1.09-.47h-3.28c-.42 0-.81.17-1.09.47L7.79 4.2c-.52.1-1 .27-1.43.57-.85.58-1.37 1.34-1.68 2.27-.37 1.11-.62 2.66-.66 4.83 0 .28.11.55.31.74.2.19.47.3.75.28h13.84c.28.02.55-.09.75-.28.2-.19.31-.46.31-.74-.04-2.17-.29-3.72-.66-4.83Z" opacity=".4"/>
+        <path d="M5.08 12.89v1.14c0 1.57.02 2.52.08 3.19.06.62.16.85.27.98.11.13.3.28.91.44.65.17 1.58.26 3.11.29h5.1c1.53-.03 2.46-.12 3.11-.29.61-.16.8-.31.91-.44.11-.13.21-.36.27-.98.06-.67.08-1.62.08-3.19v-1.14H5.08Z"/>
+        <path d="M8.5 17c.83 0 1.5-.67 1.5-1.5S9.33 14 8.5 14 7 14.67 7 15.5 7.67 17 8.5 17ZM15.5 17c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5Z"/>
+        <path d="M19.94 18.77c-.02.27-.17.5-.4.62-.3.15-.87.37-1.95.55v.56c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V20H9.41v.5c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5v-.56c-1.08-.18-1.65-.4-1.95-.55a.76.76 0 0 1-.4-.62"/>
       </svg>
     ),
     question: "Você busca um veículo premium?",
@@ -107,11 +107,11 @@ const personas = [
   {
     id: "empresario",
     icon: (
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
-        <rect x="8" y="16" width="24" height="20" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M14 16 L14 12 C14 9 16 8 20 8 C24 8 26 9 26 12 L26 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M8 24 L32 24" stroke="currentColor" strokeWidth="1.5"/>
-        <rect x="17" y="22" width="6" height="4" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+      /* Iconsax Bold: Briefcase */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M16.17 4.65v-.72c0-1.59-.62-2.93-2.93-2.93h-2.48c-2.31 0-2.93 1.34-2.93 2.93v.73c-3.02.24-4.38 1.69-4.73 4.43-.04.32.22.59.54.59h16.72c.32 0 .58-.28.54-.59-.35-2.75-1.71-4.19-4.73-4.44Zm-6.84-.72c0-1.49.53-1.43 1.43-1.43h2.48c.9 0 1.43 0 1.43 1.43V4.7h-5.34v-.77Z"/>
+        <path d="M20.5 10.15c.34 0 .6.3.56.64-.37 3.3-1.56 6.03-5.16 6.7-.16.03-.3.13-.38.27-.56.98-1.57 1.74-3.52 1.74-1.94 0-2.96-.77-3.52-1.75a.526.526 0 0 0-.38-.27C4.5 16.81 3.31 14.09 2.94 10.79a.55.55 0 0 1 .56-.64h17Z" opacity=".4"/>
+        <path d="M14.5 13.63c0 .25-.07.49-.18.7-.28.55-.85.92-1.51.92h-.12c-.01 0-.02 0-.04.01a1.732 1.732 0 0 1-1.47-.93c-.11-.21-.18-.45-.18-.7v-1.26c0-.55.45-1 1-1h.5c.55 0 1 .45 1 1v1.26Z"/>
       </svg>
     ),
     question: "Você é PJ ou sócio de empresa?",
@@ -123,10 +123,10 @@ const personas = [
   {
     id: "medico",
     icon: (
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
-        <circle cx="20" cy="14" r="8" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M7 38 C7 30 13 26 20 26 C27 26 33 30 33 38" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M17 11 L17 17 M14 14 L20 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      /* Iconsax Bold: Health / Stethoscope */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M17 2H7C4.24 2 2 4.24 2 7v6c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5Z" opacity=".4"/>
+        <path d="M15.08 8.79h-2.37V6.42c0-.41-.34-.75-.75-.75s-.75.34-.75.75v2.37H8.84c-.41 0-.75.34-.75.75s.34.75.75.75h2.37v2.37c0 .41.34.75.75.75s.75-.34.75-.75V10.29h2.37c.41 0 .75-.34.75-.75s-.34-.75-.75-.75ZM19.08 18H4.92c-.41 0-.75.34-.75.75v.5c0 1.52 1.23 2.75 2.75 2.75h10.16c1.52 0 2.75-1.23 2.75-2.75v-.5c0-.41-.34-.75-.75-.75Z"/>
       </svg>
     ),
     question: "Você é profissional autônomo?",
@@ -138,10 +138,10 @@ const personas = [
   {
     id: "solar",
     icon: (
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
-        <circle cx="20" cy="20" r="7" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M20 4 L20 8 M20 32 L20 36 M4 20 L8 20 M32 20 L36 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M8.7 8.7 L11.5 11.5 M28.5 28.5 L31.3 31.3 M31.3 8.7 L28.5 11.5 M11.5 28.5 L8.7 31.3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      /* Iconsax Bold: Sun / Flash */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M12 18.5c-3.58 0-6.5-2.92-6.5-6.5s2.92-6.5 6.5-6.5 6.5 2.92 6.5 6.5-2.92 6.5-6.5 6.5Z" opacity=".4"/>
+        <path d="M12 2c-.41 0-.75.34-.75.75v1.5c0 .41.34.75.75.75s.75-.34.75-.75v-1.5c0-.41-.34-.75-.75-.75ZM12 19c-.41 0-.75.34-.75.75v1.5c0 .41.34.75.75.75s.75-.34.75-.75v-1.5c0-.41-.34-.75-.75-.75ZM22 11.25h-1.5c-.41 0-.75.34-.75.75s.34.75.75.75H22c.41 0 .75-.34.75-.75s-.34-.75-.75-.75ZM4.25 12c0-.41-.34-.75-.75-.75H2c-.41 0-.75.34-.75.75s.34.75.75.75h1.5c.41 0 .75-.34.75-.75ZM18.89 5.81l-1.06 1.06a.754.754 0 0 0 0 1.06c.15.15.34.22.53.22s.38-.07.53-.22l1.06-1.06c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0ZM6.17 17.12l-1.06 1.06c-.29.29-.29.77 0 1.06.15.15.34.22.53.22s.38-.07.53-.22l1.06-1.06c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0ZM18.89 18.18c-.29-.29-.77-.29-1.06 0s-.29.77 0 1.06l1.06 1.06c.15.15.34.22.53.22s.38-.07.53-.22c.29-.29.29-.77 0-1.06l-1.06-1.06ZM6.17 6.88c.19 0 .38-.07.53-.22.29-.29.29-.77 0-1.06L5.64 4.54c-.29-.29-.77-.29-1.06 0s-.29.77 0 1.06L5.64 6.66c.15.15.34.22.53.22Z"/>
       </svg>
     ),
     question: "Você quer cortar custos fixos?",
@@ -153,10 +153,10 @@ const personas = [
   {
     id: "aeronave",
     icon: (
-      <svg viewBox="0 0 44 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-9">
-        <path d="M4 22 L20 16 L36 10 L34 22 L20 26 Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <path d="M20 26 L22 36 L16 32 L20 16" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <path d="M34 16 L40 20 L36 22" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+      /* Iconsax Bold: Airplane */
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+        <path d="M20.11 3.89C18.6 2.38 16.85 1.87 15.51 2.2c-1.57.39-2.67 1.81-3.32 3.18L11.5 6.84 6.9 5.36c-.56-.18-1.2-.03-1.63.39l-.78.78c-.63.63-.49 1.7.29 2.14l3.59 2.04-1.99 1.99-.97.97-1.56-.49c-.44-.14-.93-.03-1.26.3l-.3.3c-.5.5-.38 1.32.24 1.66l2.34 1.27 1.27 2.34c.34.62 1.17.74 1.66.24l.3-.3c.33-.33.44-.82.3-1.26l-.49-1.56 2.96-2.96 2.04 3.59c.44.78 1.51.92 2.14.29l.78-.78c.42-.42.57-1.06.39-1.63l-1.48-4.6 1.46-.69c1.37-.65 2.79-1.75 3.18-3.32.33-1.34-.18-3.09-1.69-4.6Z" opacity=".4"/>
+        <path d="m9.6 13.17-1.99 1.99-.97.97-1.56-.49c-.44-.14-.93-.03-1.26.3l-.3.3c-.5.5-.38 1.32.24 1.66l2.34 1.27 1.27 2.34c.34.62 1.17.74 1.66.24l.3-.3c.33-.33.44-.82.3-1.26l-.49-1.56 2.96-2.96"/>
       </svg>
     ),
     question: "Você usa aviação executiva?",
