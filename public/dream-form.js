@@ -21,7 +21,7 @@
         { title: 'Qual carro você quer colocar na garagem?', sub: 'Sem entrada. Taxas menores que financiamento. Sem banco.', cta: 'Avançar →', fields: [
           { id: 'bem_desejado', label: 'Escreva o carro dos seus sonhos', type: 'text', req: true, ph: 'Ex: HB20, Onix, Spin, Argo...' }
         ]},
-        { title: '💰 Quanto você pode investir por mês?', sub: 'Encontramos parcelas que cabem no seu faturamento de app.', cta: 'Simular Parcelas →', fields: [
+        { title: 'Quanto você pode investir por mês?', sub: 'Encontramos parcelas que cabem no seu faturamento de app.', cta: 'Simular Parcelas →', fields: [
           { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 400, max: 2500, step: 50, def: 800 }
         ]},
         { title: 'Falta pouco para conquistar o seu!', sub: 'Preencha e receba sua proposta personalizada no WhatsApp.', cta: 'Receber Proposta no WhatsApp →', fields: [
@@ -37,10 +37,10 @@
       badge: 'Sem burocracia. Sem fiador. Dados protegidos.',
       wa: 'Olá! Trabalho com fretes e quero meu caminhão próprio. Tenho interesse em um *{bem}* com parcelas de aproximadamente *R$ {parcela}*. Quero saber mais!',
       steps: [
-        { title: '🚛 Qual caminhão vai colocar na estrada?', sub: 'Chega de pagar frete pra terceiro. Conquiste a independência.', cta: 'Avançar →', fields: [
+        { title: 'Qual caminhão vai colocar na estrada?', sub: 'Chega de pagar frete pra terceiro. Conquiste a independência.', cta: 'Avançar →', fields: [
           { id: 'bem_desejado', label: 'Escreva o caminhão que você quer', type: 'text', req: true, ph: 'Ex: 3/4, Toco, Truck, Cavalo Mecânico...' }
         ]},
-        { title: '💰 Quanto quer pagar por mês sem se endividar?', sub: 'Parcelas que cabem no faturamento das suas viagens.', cta: 'Simular Parcelas →', fields: [
+        { title: 'Quanto quer pagar por mês sem se endividar?', sub: 'Parcelas que cabem no faturamento das suas viagens.', cta: 'Simular Parcelas →', fields: [
           { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 1000, max: 8000, step: 250, def: 2500 }
         ]},
         { title: 'Garanta suas condições especiais de frota!', sub: 'Sua simulação está pronta. Informe onde deseja receber.', cta: 'Receber Orçamento no WhatsApp →', fields: [
@@ -56,10 +56,10 @@
       badge: 'Sem juros bancários. Dados protegidos.',
       wa: 'Olá! Quero simular uma carta de consórcio para *{bem}* com parcelas de aproximadamente *R$ {parcela}*. Pode me ajudar?',
       steps: [
-        { title: '📋 O que você quer conquistar com o consórcio?', sub: 'Compare com o financiamento e veja a economia real.', cta: 'Avançar →', fields: [
+        { title: 'O que você quer conquistar com o consórcio?', sub: 'Compare com o financiamento e veja a economia real.', cta: 'Avançar →', fields: [
           { id: 'bem_desejado', label: 'Descreva o que deseja adquirir', type: 'text', req: true, ph: 'Ex: Carro popular, apartamento, terreno...' }
         ]},
-        { title: '💰 Qual parcela cabe no seu bolso?', sub: 'Parcelas flexíveis sem os juros do banco.', cta: 'Ver Simulação →', fields: [
+        { title: 'Qual parcela cabe no seu bolso?', sub: 'Parcelas flexíveis sem os juros do banco.', cta: 'Ver Simulação →', fields: [
           { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 300, max: 5000, step: 100, def: 1000 }
         ]},
         { title: 'Falta pouco para conquistar o seu!', sub: 'Preencha e receba sua proposta personalizada no WhatsApp.', cta: 'Receber Proposta no WhatsApp →', fields: [
@@ -75,10 +75,10 @@
       badge: 'Programa de parceria oficial. Dados protegidos.',
       wa: 'Olá! Sou corretor e tenho interesse no programa de parceria da Titanium. Trabalho com *{bem}* e quero entender as comissões e ferramentas.',
       steps: [
-        { title: '🤝 Quer vender consórcio e ganhar comissões?', sub: 'Parceria oficial com as maiores administradoras do Brasil.', cta: 'Avançar →', fields: [
+        { title: 'Quer vender consórcio e ganhar comissões?', sub: 'Parceria oficial com as maiores administradoras do Brasil.', cta: 'Avançar →', fields: [
           { id: 'bem_desejado', label: 'Qual segmento você trabalha?', type: 'text', req: true, ph: 'Ex: Imóveis, veículos, agro, energia solar...' }
         ]},
-        { title: '💼 Quantos clientes você atende por mês?', sub: 'Queremos entender seu potencial para dimensionar o suporte.', cta: 'Avançar →', fields: [
+        { title: 'Quantos clientes você atende por mês?', sub: 'Queremos entender seu potencial para dimensionar o suporte.', cta: 'Avançar →', fields: [
           { id: 'parcela', label: 'Volume mensal estimado', type: 'text', req: true, ph: 'Ex: 5 a 10 clientes, mais de 20...' }
         ]},
         { title: 'Entre para a rede Titanium!', sub: 'Preencha e um gestor de parceria entra em contato.', cta: 'Quero Ser Parceiro →', fields: [
@@ -94,7 +94,7 @@
       badge: 'Sem entrada obrigatória. Dados protegidos.',
       wa: 'Olá! Estou planejando *{bem}*. Quero simular um crédito com parcelas de aproximadamente *R$ {parcela}*. Como funciona o consórcio para construção?',
       steps: [
-        { title: '🏗️ Qual o tamanho do seu projeto de vida?', sub: 'Use o consórcio para comprar terreno e construir do seu jeito.', cta: 'Avançar para Proposta →', fields: [
+        { title: 'Qual o tamanho do seu projeto de vida?', sub: 'Use o consórcio para comprar terreno e construir do seu jeito.', cta: 'Avançar para Proposta →', fields: [
           { id: 'bem_desejado', label: 'Descreva seu projeto', type: 'text', req: true, ph: 'Ex: Terreno 300m² + casa 3 quartos...' },
           { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 800, max: 8000, step: 200, def: 2000 }
         ]},
@@ -111,7 +111,7 @@
       badge: 'Sem burocracia bancária. Dados protegidos.',
       wa: 'Olá! Sou produtor rural e quero expandir minha área. Tenho interesse em *{bem}* com parcelas de aproximadamente *R$ {parcela}*. Quero entender as condições.',
       steps: [
-        { title: '🌾 Quanto de terra quer para expandir?', sub: 'Investimento em terra com planejamento inteligente.', cta: 'Avançar para Proposta →', fields: [
+        { title: 'Quanto de terra quer para expandir?', sub: 'Investimento em terra com planejamento inteligente.', cta: 'Avançar para Proposta →', fields: [
           { id: 'bem_desejado', label: 'Descreva a área que precisa', type: 'text', req: true, ph: 'Ex: 50 hectares para soja, pasto para gado...' },
           { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 1500, max: 15000, step: 500, def: 4000 }
         ]},
@@ -128,7 +128,7 @@
       badge: 'Sem financiamento rural burocrático. Dados protegidos.',
       wa: 'Olá! Sou produtor e preciso de *{bem}* para a fazenda. Quero parcelas de aproximadamente *R$ {parcela}*. Como funciona?',
       steps: [
-        { title: '🚜 Qual máquina vai aumentar sua produtividade?', sub: 'Mecanize sem depender de crédito rural burocrático.', cta: 'Avançar para Proposta →', fields: [
+        { title: 'Qual máquina vai aumentar sua produtividade?', sub: 'Mecanize sem depender de crédito rural burocrático.', cta: 'Avançar para Proposta →', fields: [
           { id: 'bem_desejado', label: 'Descreva a máquina que precisa', type: 'text', req: true, ph: 'Ex: Trator John Deere, colheitadeira, plantadeira...' },
           { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 2000, max: 20000, step: 500, def: 5000 }
         ]},
@@ -145,7 +145,7 @@
       badge: 'Cartas verificadas e com seguro. Dados protegidos.',
       wa: 'Olá! Quero comprar uma carta contemplada para *{bem}* com crédito de aproximadamente *R$ {parcela}*. Quais cartas vocês têm disponíveis?',
       steps: [
-        { title: '⚡ Precisa do crédito rápido?', sub: 'Cartas contempladas prontas para uso imediato. Sem esperar sorteio.', cta: 'Avançar para Proposta →', fields: [
+        { title: 'Precisa do crédito rápido?', sub: 'Cartas contempladas prontas para uso imediato. Sem esperar sorteio.', cta: 'Avançar para Proposta →', fields: [
           { id: 'bem_desejado', label: 'O que você quer comprar com a carta?', type: 'text', req: true, ph: 'Ex: Apartamento, carro, terreno...' },
           { id: 'parcela', label: 'Valor de crédito desejado', type: 'range', req: true, min: 50000, max: 1000000, step: 25000, def: 200000 }
         ]},
@@ -162,7 +162,7 @@
       badge: 'Economia na conta de luz desde o 1º mês. Dados protegidos.',
       wa: 'Olá! Quero instalar *{bem}* na minha propriedade. Parcelas de aproximadamente *R$ {parcela}*. Qual o melhor plano?',
       steps: [
-        { title: '☀️ Quer zerar sua conta de luz?', sub: 'Use o consórcio para instalar energia solar e economizar por 25 anos.', cta: 'Avançar para Proposta →', fields: [
+        { title: 'Invista em energia solar e reduza sua conta de luz', sub: 'Use o consórcio para instalar energia solar e economizar por 25 anos.', cta: 'Avançar para Proposta →', fields: [
           { id: 'bem_desejado', label: 'Descreva seu projeto de energia solar', type: 'text', req: true, ph: 'Ex: Sistema 10kWp para residência, fazenda...' },
           { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 500, max: 5000, step: 100, def: 1200 }
         ]},
@@ -271,40 +271,56 @@
   function injectStyles(theme) {
     if (document.getElementById('df-styles')) return;
     var isDark = theme === 'dark';
+    var bg = isDark ? '#0a0e0a' : '#f8f7f4';
+    var cardBg = isDark ? 'rgba(255,255,255,0.035)' : 'rgba(255,255,255,0.92)';
+    var cardBorder = isDark ? 'rgba(10,123,62,0.15)' : 'rgba(10,123,62,0.08)';
+    var ink = isDark ? '#f0f0f0' : '#1a1a1a';
+    var inkSoft = isDark ? 'rgba(255,255,255,0.5)' : '#6b7280';
+    var inputBg = isDark ? 'rgba(255,255,255,0.05)' : '#f9fafb';
+    var inputBorder = isDark ? 'rgba(255,255,255,0.1)' : '#e5e7eb';
+    var green = '#0A7B3E';
+    var greenGlow = isDark ? 'rgba(10,123,62,0.12)' : 'rgba(10,123,62,0.06)';
     var css = [
-      '.df-section{padding:4rem 1.5rem;display:flex;justify-content:center;background:' + (isDark ? '#0a0e0a' : '#f5f4f0') + '}',
-      '.df-section .df-kicker{text-align:center;text-transform:uppercase;letter-spacing:.15em;font-size:.75rem;font-weight:700;color:#0A7B3E;margin-bottom:.5rem;font-family:Inter,sans-serif}',
-      '.df-section .df-section-title{text-align:center;font-size:1.6rem;font-weight:700;margin-bottom:2rem;color:' + (isDark ? '#fff' : '#1a1a1a') + ';font-family:Fraunces,serif;line-height:1.2}',
-      '.df-section .df-section-title .df-grad{background:linear-gradient(135deg,#0A7B3E,#15B85C);-webkit-background-clip:text;-webkit-text-fill-color:transparent}',
-      '.df-wrap{width:100%;max-width:460px}',
-      '.df-box{padding:2rem;border-radius:1.5rem;border:1px solid ' + (isDark ? 'rgba(255,255,255,0.08)' : '#e5e5e5') + ';background:' + (isDark ? 'rgba(255,255,255,0.04)' : '#fff') + ';' + (isDark ? 'backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);' : 'backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);') + 'box-shadow:' + (isDark ? '0 8px 32px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,0.06)' : '0 4px 24px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04)') + ';transition:all .3s ease}',
-      '.df-progress{display:flex;gap:4px;margin-bottom:1.25rem}',
-      '.df-progress span{flex:1;height:4px;border-radius:99px;background:' + (isDark ? 'rgba(255,255,255,0.1)' : '#e5e5e5') + ';transition:background .3s}',
-      '.df-progress span.active{background:#0A7B3E}',
-      '.df-title{font-size:1.25rem;font-weight:700;line-height:1.3;margin-bottom:.35rem;color:' + (isDark ? '#fff' : '#1a1a1a') + ';font-family:Fraunces,serif}',
-      '.df-sub{font-size:.85rem;color:' + (isDark ? 'rgba(255,255,255,0.55)' : '#777') + ';margin-bottom:1.5rem;line-height:1.5;font-family:Inter,sans-serif}',
-      '.df-field{margin-bottom:1.15rem}',
-      '.df-label{display:block;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#0A7B3E;margin-bottom:.4rem;font-family:Inter,sans-serif}',
-      '.df-input{width:100%;padding:.85rem 1rem;border-radius:0.875rem;border:1px solid ' + (isDark ? 'rgba(255,255,255,0.12)' : '#ddd') + ';background:' + (isDark ? 'rgba(255,255,255,0.06)' : '#fafafa') + ';color:' + (isDark ? '#fff' : '#1a1a1a') + ';font-size:.9rem;outline:none;transition:border .2s,box-shadow .2s,background .2s;font-family:Inter,sans-serif;box-sizing:border-box}',
-      '.df-input:focus{border-color:' + (isDark ? 'var(--green,#0A7B3E)' : '#0A7B3E') + ';box-shadow:' + (isDark ? '0 0 0 3px rgba(10,123,62,.2),inset 0 2px 4px rgba(0,0,0,0.1)' : '0 0 0 3px rgba(10,123,62,.15)') + ';' + (isDark ? 'background:rgba(255,255,255,0.08)' : '') + '}',
-      '.df-input::placeholder{color:' + (isDark ? 'rgba(255,255,255,0.3)' : '#bbb') + '}',
-      '.df-range-wrap{padding:.5rem 0}',
-      '.df-range{-webkit-appearance:none;width:100%;height:6px;border-radius:99px;background:' + (isDark ? 'rgba(255,255,255,0.1)' : '#e5e5e5') + ';outline:none;cursor:pointer}',
-      '.df-range::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:44px;border-radius:50%;background:#0A7B3E;cursor:pointer;box-shadow:0 2px 8px rgba(10,123,62,.3)}',
-      '.df-range::-moz-range-thumb{width:44px;height:44px;border-radius:50%;background:#0A7B3E;cursor:pointer;border:none}',
-      '.df-range-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.7rem;color:' + (isDark ? 'rgba(255,255,255,0.35)' : '#aaa') + ';font-family:Inter,sans-serif}',
-      '.df-range-value{color:#0A7B3E;font-weight:700;font-size:1.1rem}',
-      '.df-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:1rem;border:none;border-radius:.75rem;background:linear-gradient(135deg,#0A7B3E,#15B85C);color:#111;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:Inter,sans-serif;margin-top:.25rem;box-shadow:0 4px 16px rgba(10,123,62,.2)}',
-      '.df-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,123,62,.3)}',
-      '.df-btn:active{transform:scale(.98)}',
-      '.df-badge{display:flex;align-items:center;justify-content:center;gap:.4rem;font-size:.68rem;color:' + (isDark ? 'rgba(255,255,255,0.4)' : '#aaa') + ';margin-top:.75rem;font-family:Inter,sans-serif}',
-      '.df-proof{text-align:center;font-size:.75rem;color:' + (isDark ? 'rgba(255,255,255,0.5)' : '#999') + ';margin-top:1rem;font-family:Inter,sans-serif}',
-      '.df-success{text-align:center;padding:2rem 1rem}',
-      '.df-success-icon{font-size:3rem;margin-bottom:.5rem}',
-      '.df-success-title{font-size:1.1rem;font-weight:700;color:' + (isDark ? '#fff' : '#1a1a1a') + ';margin-bottom:.25rem;font-family:Fraunces,serif}',
-      '.df-success-sub{font-size:.85rem;color:' + (isDark ? 'rgba(255,255,255,0.55)' : '#777') + ';font-family:Inter,sans-serif}',
-      '@keyframes df-fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}',
-      '.df-animate{animation:df-fadeIn .35s ease-out}'
+      '.df-section{padding:5rem 1.5rem;display:flex;justify-content:center;background:' + bg + '}',
+      '.df-section .df-kicker{text-align:center;letter-spacing:.2em;font-size:.65rem;font-weight:600;color:' + green + ';margin-bottom:.6rem;font-family:Inter,system-ui,sans-serif;opacity:.8}',
+      '.df-section .df-section-title{text-align:center;font-size:clamp(1.4rem,3.5vw,1.8rem);font-weight:600;margin-bottom:2.5rem;color:' + ink + ';font-family:Fraunces,serif;line-height:1.25;letter-spacing:-.01em}',
+      '.df-section .df-section-title .df-grad{background:linear-gradient(135deg,' + green + ',#15B85C);-webkit-background-clip:text;-webkit-text-fill-color:transparent}',
+      '.df-wrap{width:100%;max-width:440px}',
+      '.df-box{position:relative;padding:2rem 1.75rem;border-radius:1.25rem;border:1px solid ' + cardBorder + ';background:' + cardBg + ';backdrop-filter:blur(24px) saturate(1.2);-webkit-backdrop-filter:blur(24px) saturate(1.2);box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 32px ' + greenGlow + ';transition:all .4s cubic-bezier(.4,0,.2,1)}',
+      '.df-progress{display:flex;align-items:center;gap:0;margin-bottom:1.5rem}',
+      '.df-progress-step{display:flex;align-items:center;flex:1}',
+      '.df-progress-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;font-family:Inter,system-ui,sans-serif;border:2px solid ' + inputBorder + ';color:' + inkSoft + ';background:transparent;transition:all .3s;flex-shrink:0}',
+      '.df-progress-dot.active{border-color:' + green + ';background:' + green + ';color:#fff;box-shadow:0 0 0 4px ' + greenGlow + '}',
+      '.df-progress-dot.done{border-color:' + green + ';background:' + green + ';color:#fff}',
+      '.df-progress-line{flex:1;height:2px;background:' + inputBorder + ';margin:0 6px;transition:background .3s}',
+      '.df-progress-line.active{background:' + green + '}',
+      '.df-title{font-size:1.15rem;font-weight:600;line-height:1.35;margin-bottom:.3rem;color:' + ink + ';font-family:Fraunces,serif;letter-spacing:-.01em}',
+      '.df-sub{font-size:.82rem;color:' + inkSoft + ';margin-bottom:1.75rem;line-height:1.6;font-family:Inter,system-ui,sans-serif}',
+      '.df-field{margin-bottom:1.25rem}',
+      '.df-label{display:block;font-size:.72rem;font-weight:500;color:' + inkSoft + ';margin-bottom:.4rem;font-family:Inter,system-ui,sans-serif;letter-spacing:.01em}',
+      '.df-input{width:100%;padding:.8rem 1rem;border-radius:.625rem;border:1.5px solid ' + inputBorder + ';background:' + inputBg + ';color:' + ink + ';font-size:.88rem;outline:none;transition:border .25s,box-shadow .25s,background .25s;font-family:Inter,system-ui,sans-serif;box-sizing:border-box}',
+      '.df-input:focus{border-color:' + green + ';box-shadow:0 0 0 3px rgba(10,123,62,.1);background:' + (isDark ? 'rgba(255,255,255,0.07)' : '#fff') + '}',
+      '.df-input::placeholder{color:' + (isDark ? 'rgba(255,255,255,0.25)' : '#9ca3af') + '}',
+      '.df-range-wrap{padding:.75rem 0 .25rem}',
+      '.df-range{-webkit-appearance:none;width:100%;height:4px;border-radius:99px;background:' + (isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb') + ';outline:none;cursor:pointer}',
+      '.df-range::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid ' + green + ';cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12),0 0 0 4px rgba(10,123,62,.08)}',
+      '.df-range::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid ' + green + ';cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12)}',
+      '.df-range-labels{display:flex;justify-content:space-between;align-items:baseline;margin-top:.6rem;font-size:.7rem;color:' + inkSoft + ';font-family:Inter,system-ui,sans-serif}',
+      '.df-range-value{color:' + green + ';font-weight:700;font-size:1.2rem;font-variant-numeric:tabular-nums}',
+      '.df-btn{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;padding:1rem 1.5rem;border:none;border-radius:.625rem;background:' + green + ';color:#fff;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);font-family:Inter,system-ui,sans-serif;margin-top:.5rem;box-shadow:0 1px 3px rgba(10,123,62,.2),0 4px 12px rgba(10,123,62,.12);letter-spacing:.01em}',
+      '.df-btn:hover{background:#096832;box-shadow:0 2px 6px rgba(10,123,62,.25),0 8px 20px rgba(10,123,62,.15);transform:translateY(-1px)}',
+      '.df-btn:active{transform:translateY(0);box-shadow:0 1px 2px rgba(10,123,62,.15)}',
+      '.df-btn svg{flex-shrink:0}',
+      '.df-badge{display:flex;align-items:center;justify-content:center;gap:.35rem;font-size:.68rem;color:' + inkSoft + ';margin-top:1rem;font-family:Inter,system-ui,sans-serif;opacity:.7}',
+      '.df-proof{display:flex;align-items:center;justify-content:center;gap:.35rem;font-size:.72rem;color:' + (isDark ? 'rgba(255,255,255,0.45)' : '#6b7280') + ';margin-top:.75rem;font-family:Inter,system-ui,sans-serif}',
+      '.df-proof svg{flex-shrink:0;color:' + green + '}',
+      '.df-success{text-align:center;padding:2.5rem 1rem}',
+      '.df-success-icon{width:56px;height:56px;border-radius:50%;background:rgba(10,123,62,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}',
+      '.df-success-title{font-size:1.15rem;font-weight:600;color:' + ink + ';margin-bottom:.35rem;font-family:Fraunces,serif}',
+      '.df-success-sub{font-size:.82rem;color:' + inkSoft + ';font-family:Inter,system-ui,sans-serif;line-height:1.5}',
+      '@keyframes df-fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}',
+      '.df-animate{animation:df-fadeIn .3s ease-out}',
+      '@media(max-width:480px){.df-box{padding:1.5rem 1.25rem;border-radius:1rem}.df-title{font-size:1.05rem}.df-progress-dot{width:24px;height:24px;font-size:.6rem}}'
     ].join('\n');
     var el = document.createElement('style');
     el.id = 'df-styles';
@@ -325,11 +341,14 @@
       var isLast = state.step === cfg.steps.length - 1;
       var h = '';
 
-      // Progress bar
+      // Progress bar — numbered steps
       if (cfg.steps.length > 1) {
         h += '<div class="df-progress">';
         for (var p = 0; p < cfg.steps.length; p++) {
-          h += '<span' + (p <= state.step ? ' class="active"' : '') + '></span>';
+          var dotClass = p < state.step ? 'done' : (p === state.step ? 'active' : '');
+          var lineClass = p < state.step ? 'active' : '';
+          h += '<div class="df-progress-dot ' + dotClass + '"><span>' + (p + 1) + '</span></div>';
+          if (p < cfg.steps.length - 1) h += '<div class="df-progress-line ' + lineClass + '"></div>';
         }
         h += '</div>';
       }
@@ -367,8 +386,8 @@
       h += s.cta + '</button>';
       h += '</form>';
 
-      h += '<div class="df-badge">🔒 ' + (cfg.badge || 'Dados protegidos.') + '</div>';
-      if (cfg.proof && state.step === 0) h += '<div class="df-proof">✓ ' + cfg.proof + '</div>';
+      h += '<div class="df-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> ' + (cfg.badge || 'Dados protegidos.') + '</div>';
+      if (cfg.proof && state.step === 0) h += '<div class="df-proof"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg> ' + cfg.proof + '</div>';
 
       container.querySelector('.df-box').innerHTML = h;
       container.querySelector('.df-box').classList.add('df-animate');
@@ -467,7 +486,7 @@
 
     // Show success + redirect
     var box = container.querySelector('.df-box');
-    box.innerHTML = '<div class="df-success df-animate"><div class="df-success-icon">✅</div><div class="df-success-title">Proposta enviada!</div><div class="df-success-sub">Abrindo o WhatsApp em instantes...</div></div>';
+    box.innerHTML = '<div class="df-success df-animate"><div class="df-success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A7B3E" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div><div class="df-success-title">Proposta enviada!</div><div class="df-success-sub">Abrindo o WhatsApp em instantes...</div></div>';
 
     setTimeout(function () {
       var win = window.open(waUrl, '_blank');
