@@ -1,7 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState, useCallback } from "react";
+import dynamic from "next/dynamic";
+
+/* ── Lazy-load LiquidEther (heavy Three.js dep — SSR-skip) ── */
+const LiquidEther = dynamic(() => import("./LiquidEther"), { ssr: false });
 
 /* ── Stats data ── */
 const statsData = [
@@ -117,24 +120,36 @@ export default function StatsSection() {
       className="relative py-16 md:py-28 overflow-hidden"
       style={{ backgroundColor: "var(--bg-dark)" }}
     >
-      {/* Background — gradiente CSS puro (sem imagens pesadas) */}
-      {/* Aerial city photo background */}
-      <Image
-        src="/img/stats-cidade.webp"
-        alt=""
-        fill
-        className="object-cover opacity-15"
-        sizes="100vw"
-      />
+      {/* Background — LiquidEther fluid simulation (replaces city photo) */}
+      <div className="absolute inset-0 z-0" style={{ opacity: 0.35 }}>
+        <LiquidEther
+          colors={["#0A7B3E", "#06532A", "#15B85C"]}
+          mouseForce={15}
+          cursorSize={120}
+          isViscous={false}
+          resolution={0.4}
+          isBounce={false}
+          autoDemo={true}
+          autoSpeed={0.3}
+          autoIntensity={1.8}
+          takeoverDuration={0.3}
+          autoResumeDelay={2000}
+          autoRampDuration={0.8}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+
+      {/* Subtle radial gradients for depth */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-[1]"
         style={{
           background:
             "radial-gradient(ellipse 70% 50% at 15% 50%, rgba(10,123,62,0.14) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 85% 50%, rgba(6,83,42,0.10) 0%, transparent 60%)",
         }}
       />
+
       {/* Grid de pontos sutil */}
-      <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.04 }}>
+      <svg className="absolute inset-0 w-full h-full z-[1]" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.04 }}>
         <defs>
           <pattern id="stats-dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
             <circle cx="1" cy="1" r="1" fill="#ffffff" />

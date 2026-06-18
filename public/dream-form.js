@@ -272,37 +272,37 @@
     if (document.getElementById('df-styles')) return;
     var isDark = theme === 'dark';
     var css = [
-      '.df-section{padding:4rem 1.5rem;display:flex;justify-content:center;background:' + (isDark ? '#111' : '#f5f4f0') + '}',
+      '.df-section{padding:4rem 1.5rem;display:flex;justify-content:center;background:' + (isDark ? '#0a0e0a' : '#f5f4f0') + '}',
       '.df-section .df-kicker{text-align:center;text-transform:uppercase;letter-spacing:.15em;font-size:.75rem;font-weight:700;color:#0A7B3E;margin-bottom:.5rem;font-family:Inter,sans-serif}',
       '.df-section .df-section-title{text-align:center;font-size:1.6rem;font-weight:700;margin-bottom:2rem;color:' + (isDark ? '#fff' : '#1a1a1a') + ';font-family:Fraunces,serif;line-height:1.2}',
       '.df-section .df-section-title .df-grad{background:linear-gradient(135deg,#0A7B3E,#15B85C);-webkit-background-clip:text;-webkit-text-fill-color:transparent}',
       '.df-wrap{width:100%;max-width:460px}',
-      '.df-box{padding:2rem;border-radius:1.25rem;border:1px solid ' + (isDark ? '#2a2a2a' : '#e5e5e5') + ';background:' + (isDark ? '#1a1a1a' : '#fff') + ';box-shadow:0 8px 32px rgba(0,0,0,' + (isDark ? '.4' : '.08') + ');transition:all .3s ease}',
+      '.df-box{padding:2rem;border-radius:1.5rem;border:1px solid ' + (isDark ? 'rgba(255,255,255,0.08)' : '#e5e5e5') + ';background:' + (isDark ? 'rgba(255,255,255,0.04)' : '#fff') + ';' + (isDark ? 'backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);' : 'backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);') + 'box-shadow:' + (isDark ? '0 8px 32px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,0.06)' : '0 4px 24px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04)') + ';transition:all .3s ease}',
       '.df-progress{display:flex;gap:4px;margin-bottom:1.25rem}',
-      '.df-progress span{flex:1;height:4px;border-radius:99px;background:' + (isDark ? '#333' : '#e5e5e5') + ';transition:background .3s}',
+      '.df-progress span{flex:1;height:4px;border-radius:99px;background:' + (isDark ? 'rgba(255,255,255,0.1)' : '#e5e5e5') + ';transition:background .3s}',
       '.df-progress span.active{background:#0A7B3E}',
       '.df-title{font-size:1.25rem;font-weight:700;line-height:1.3;margin-bottom:.35rem;color:' + (isDark ? '#fff' : '#1a1a1a') + ';font-family:Fraunces,serif}',
-      '.df-sub{font-size:.85rem;color:' + (isDark ? '#999' : '#777') + ';margin-bottom:1.5rem;line-height:1.5;font-family:Inter,sans-serif}',
+      '.df-sub{font-size:.85rem;color:' + (isDark ? 'rgba(255,255,255,0.55)' : '#777') + ';margin-bottom:1.5rem;line-height:1.5;font-family:Inter,sans-serif}',
       '.df-field{margin-bottom:1.15rem}',
       '.df-label{display:block;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#0A7B3E;margin-bottom:.4rem;font-family:Inter,sans-serif}',
-      '.df-input{width:100%;padding:.85rem 1rem;border-radius:.75rem;border:1px solid ' + (isDark ? '#333' : '#ddd') + ';background:' + (isDark ? '#111' : '#fafafa') + ';color:' + (isDark ? '#fff' : '#1a1a1a') + ';font-size:.9rem;outline:none;transition:border .2s;font-family:Inter,sans-serif;box-sizing:border-box}',
-      '.df-input:focus{border-color:#0A7B3E;box-shadow:0 0 0 3px rgba(10,123,62,.15)}',
-      '.df-input::placeholder{color:' + (isDark ? '#555' : '#bbb') + '}',
+      '.df-input{width:100%;padding:.85rem 1rem;border-radius:0.875rem;border:1px solid ' + (isDark ? 'rgba(255,255,255,0.12)' : '#ddd') + ';background:' + (isDark ? 'rgba(255,255,255,0.06)' : '#fafafa') + ';color:' + (isDark ? '#fff' : '#1a1a1a') + ';font-size:.9rem;outline:none;transition:border .2s,box-shadow .2s,background .2s;font-family:Inter,sans-serif;box-sizing:border-box}',
+      '.df-input:focus{border-color:' + (isDark ? 'var(--green,#0A7B3E)' : '#0A7B3E') + ';box-shadow:' + (isDark ? '0 0 0 3px rgba(10,123,62,.2),inset 0 2px 4px rgba(0,0,0,0.1)' : '0 0 0 3px rgba(10,123,62,.15)') + ';' + (isDark ? 'background:rgba(255,255,255,0.08)' : '') + '}',
+      '.df-input::placeholder{color:' + (isDark ? 'rgba(255,255,255,0.3)' : '#bbb') + '}',
       '.df-range-wrap{padding:.5rem 0}',
-      '.df-range{-webkit-appearance:none;width:100%;height:6px;border-radius:99px;background:' + (isDark ? '#333' : '#e5e5e5') + ';outline:none;cursor:pointer}',
+      '.df-range{-webkit-appearance:none;width:100%;height:6px;border-radius:99px;background:' + (isDark ? 'rgba(255,255,255,0.1)' : '#e5e5e5') + ';outline:none;cursor:pointer}',
       '.df-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#0A7B3E;cursor:pointer;box-shadow:0 2px 8px rgba(10,123,62,.3)}',
       '.df-range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#0A7B3E;cursor:pointer;border:none}',
-      '.df-range-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.7rem;color:' + (isDark ? '#666' : '#aaa') + ';font-family:Inter,sans-serif}',
+      '.df-range-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.7rem;color:' + (isDark ? 'rgba(255,255,255,0.35)' : '#aaa') + ';font-family:Inter,sans-serif}',
       '.df-range-value{color:#0A7B3E;font-weight:700;font-size:1.1rem}',
       '.df-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:1rem;border:none;border-radius:.75rem;background:linear-gradient(135deg,#0A7B3E,#15B85C);color:#111;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:Inter,sans-serif;margin-top:.25rem;box-shadow:0 4px 16px rgba(10,123,62,.2)}',
       '.df-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,123,62,.3)}',
       '.df-btn:active{transform:scale(.98)}',
-      '.df-badge{display:flex;align-items:center;justify-content:center;gap:.4rem;font-size:.68rem;color:' + (isDark ? '#666' : '#aaa') + ';margin-top:.75rem;font-family:Inter,sans-serif}',
-      '.df-proof{text-align:center;font-size:.75rem;color:' + (isDark ? '#888' : '#999') + ';margin-top:1rem;font-family:Inter,sans-serif}',
+      '.df-badge{display:flex;align-items:center;justify-content:center;gap:.4rem;font-size:.68rem;color:' + (isDark ? 'rgba(255,255,255,0.4)' : '#aaa') + ';margin-top:.75rem;font-family:Inter,sans-serif}',
+      '.df-proof{text-align:center;font-size:.75rem;color:' + (isDark ? 'rgba(255,255,255,0.5)' : '#999') + ';margin-top:1rem;font-family:Inter,sans-serif}',
       '.df-success{text-align:center;padding:2rem 1rem}',
       '.df-success-icon{font-size:3rem;margin-bottom:.5rem}',
       '.df-success-title{font-size:1.1rem;font-weight:700;color:' + (isDark ? '#fff' : '#1a1a1a') + ';margin-bottom:.25rem;font-family:Fraunces,serif}',
-      '.df-success-sub{font-size:.85rem;color:' + (isDark ? '#999' : '#777') + ';font-family:Inter,sans-serif}',
+      '.df-success-sub{font-size:.85rem;color:' + (isDark ? 'rgba(255,255,255,0.55)' : '#777') + ';font-family:Inter,sans-serif}',
       '@keyframes df-fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}',
       '.df-animate{animation:df-fadeIn .35s ease-out}'
     ].join('\n');
@@ -423,7 +423,7 @@
     // Initial structure
     var isDark = cfg.theme === 'dark';
     container.className = 'df-section';
-    container.style.background = isDark ? '#111' : '#f5f4f0';
+    container.style.background = isDark ? '#0a0e0a' : '#f5f4f0';
     container.innerHTML = '<div class="df-wrap"><p class="df-kicker">● SIMULAÇÃO PERSONALIZADA</p><h2 class="df-section-title">Dê o primeiro passo para a sua <span class="df-grad">conquista.</span></h2><div class="df-box df-animate"></div></div>';
 
     draw();
