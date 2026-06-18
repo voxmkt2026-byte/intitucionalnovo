@@ -267,6 +267,37 @@
     } catch (e) { /* silent */ }
   }
 
+  /* ── IDENTIFIER CAPTURE (Ciclo Infinito de Dados) ── */
+  function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : '';
+  }
+
+  function captureIdentifiers() {
+    var stored = sessionStorage.getItem('tf_ids');
+    if (stored) return JSON.parse(stored);
+
+    var params = new URLSearchParams(window.location.search);
+    var fbclid = params.get('fbclid') || '';
+
+    var ids = {
+      ref: 'tf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+      fbc: getCookie('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : ''),
+      fbp: getCookie('_fbp') || '',
+      gclid: params.get('gclid') || '',
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || '',
+      utm_content: params.get('utm_content') || '',
+      utm_term: params.get('utm_term') || '',
+      lp: window.location.pathname.replace(/\//g, '') || 'home',
+      landing_time: new Date().toISOString()
+    };
+
+    sessionStorage.setItem('tf_ids', JSON.stringify(ids));
+    return ids;
+  }
+
   /* ── INJECT STYLES ── */
   function injectStyles(theme) {
     if (document.getElementById('df-styles')) return;
@@ -450,8 +481,9 @@
 
   /* ── SUBMIT ── */
   function submitForm(container, cfg, data, personaId) {
-    track('form_submit', { persona: personaId, tier: cfg.tier, has_email: !!data.email });
-    track('conversion', { persona: personaId, tier: cfg.tier });
+    var ids = captureIdentifiers();
+    track('form_submit', { persona: personaId, tier: cfg.tier, has_email: !!data.email, ref: ids.ref });
+    track('conversion', { persona: personaId, tier: cfg.tier, ref: ids.ref });
 
     // Fire Google Ads conversion
     try {
@@ -459,7 +491,7 @@
       if (window.fbq) window.fbq('track', 'Lead');
     } catch (e) { /* silent */ }
 
-    // Send to Google Sheets via API
+    // Send to Google Sheets via API — enriched with identifiers
     var payload = {
       name: data.nome || '',
       email: data.email || '',
@@ -468,7 +500,16 @@
       credit: data.parcela || data.bem_desejado || '',
       months: 0,
       plan: 'LP-' + personaId,
-      origin: window.location.href
+      origin: window.location.href,
+      ref: ids.ref,
+      fbc: ids.fbc,
+      fbp: ids.fbp,
+      gclid: ids.gclid,
+      utm_source: ids.utm_source,
+      utm_medium: ids.utm_medium,
+      utm_campaign: ids.utm_campaign,
+      utm_content: ids.utm_content,
+      lp: ids.lp
     };
 
     fetch(LEADS_API, {
@@ -477,10 +518,11 @@
       body: JSON.stringify(payload)
     }).catch(function () { /* silent */ });
 
-    // Build WhatsApp message
+    // Build WhatsApp message with ref for traceability
     var msg = cfg.wa
       .replace('{bem}', data.bem_desejado || 'consórcio')
-      .replace('{parcela}', data.parcela ? fmtCurrency(parseInt(data.parcela)) : 'A combinar');
+      .replace('{parcela}', data.parcela ? fmtCurrency(parseInt(data.parcela)) : 'A combinar')
+      + '\n\nRef: ' + ids.ref;
 
     var waUrl = 'https://api.whatsapp.com/send?phone=' + WA_NUMBER + '&text=' + encodeURIComponent(msg);
 
