@@ -30,7 +30,7 @@ function track(ev: string, data: Record<string, unknown>) {
   } catch { /* silent */ }
 }
 
-const WA_NUMBER = '5511951014269';
+const WA_NUMBER = '5511930048940';
 
 export default function DynamicForm({ personaId }: DynamicFormProps) {
   const config = personasConfig[personaId];

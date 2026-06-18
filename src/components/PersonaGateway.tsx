@@ -343,7 +343,7 @@ export default function PersonaGateway() {
           <p className="text-white/30 text-sm font-sans text-center sm:text-left">
             Não encontrou seu perfil?{" "}
             <a
-              href="https://wa.me/5511951014269?text=Olá, quero entender qual opção faz sentido para meu perfil"
+              href="https://wa.me/5511930048940?text=Olá, quero entender qual opção faz sentido para meu perfil"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-4 hover:text-white transition-colors"
@@ -354,7 +354,7 @@ export default function PersonaGateway() {
           </p>
 
           <a
-            href="https://wa.me/5511951014269?text=Olá, quero entender qual opção faz sentido para meu perfil"
+            href="https://wa.me/5511930048940?text=Olá, quero entender qual opção faz sentido para meu perfil"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 px-8 py-4 rounded-full font-[family-name:var(--font-montserrat)] font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] hover:shadow-xl"

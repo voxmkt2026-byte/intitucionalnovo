@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export default function WhatsAppButton() {
   return (
     <motion.a
-      href="https://wa.me/5511951014269"
+      href="https://wa.me/5511930048940"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Fale conosco pelo WhatsApp"

@@ -222,7 +222,7 @@ export default function InstitucionalPage() {
               para o seu perfil. Sem compromisso.
             </p>
             <a
-              href="https://wa.me/5511951014269"
+              href="https://wa.me/5511930048940"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"

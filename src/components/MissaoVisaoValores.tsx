@@ -799,7 +799,7 @@ export default function MissaoVisaoValores() {
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <a
-              href="https://wa.me/5511951014269"
+              href="https://wa.me/5511930048940"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"

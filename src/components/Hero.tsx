@@ -33,7 +33,7 @@ const slides = [
     subtitle:
       "Cada carta é auditada pela nossa equipe jurídica antes de chegar até você. Aqui não tem promessa — tem processo.",
     cta1: { label: "Conhecer a Titanium", href: "#sobre" },
-    cta2: { label: "Falar com consultor", href: "https://wa.me/5511951014269" },
+    cta2: { label: "Falar com consultor", href: "https://wa.me/5511930048940" },
   },
 ];
 

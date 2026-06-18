@@ -133,7 +133,7 @@ export default function ParcelSimulator() {
     const fmtC = creditNum.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     const fmtI = inst.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     const msg = `Olá, meu nome é ${name}. Simulei uma carta de ${fmtC} com parcelas de ${fmtI} (${seg} · Plano ${plan}). Quero saber mais.`;
-    return `https://wa.me/5511951014269?text=${encodeURIComponent(msg)}`;
+    return `https://wa.me/5511930048940?text=${encodeURIComponent(msg)}`;
   };
 
   const fmt = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });

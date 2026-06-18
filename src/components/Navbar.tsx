@@ -10,12 +10,12 @@ const menuItems = [
   { label: "Sobre Nós", ariaLabel: "Sobre a Titanium", link: "/#sobre" },
   { label: "Nossos Valores", ariaLabel: "Missão, visão e valores", link: "/missao-visao-valores" },
   { label: "Trajetória", ariaLabel: "Nossa linha do tempo", link: "/trajetoria" },
-  { label: "Contato", ariaLabel: "Fale conosco", link: "https://wa.me/5511951014269" },
+  { label: "Contato", ariaLabel: "Fale conosco", link: "https://wa.me/5511930048940" },
 ];
 
 const socialItems = [
   { label: "Instagram", link: "https://instagram.com/titaniumconsultoria" },
-  { label: "WhatsApp", link: "https://wa.me/5511951014269" },
+  { label: "WhatsApp", link: "https://wa.me/5511930048940" },
 ];
 
 /**

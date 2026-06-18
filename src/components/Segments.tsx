@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 const InfiniteMenu = dynamic(() => import("./InfiniteMenu"), { ssr: false });
 
 const WHATSAPP_BASE =
-  "https://wa.me/5511951014269?text=Olá,%20tenho%20interesse%20em%20carta%20contemplada%20de%20";
+  "https://wa.me/5511930048940?text=Olá,%20tenho%20interesse%20em%20carta%20contemplada%20de%20";
 
 const segments = [
   {
