@@ -62,6 +62,30 @@ export default function ParcelSimulator() {
 
   // ── Google Sheets via server-side proxy (avoids CORS) ──
   const sendToGoogleSheets = (plan: string) => {
+    // Capture tracking identifiers for the data cycle
+    let ids: Record<string, string> = { ref: '' };
+    try {
+      const stored = sessionStorage.getItem('tf_ids');
+      if (stored) ids = JSON.parse(stored);
+      else {
+        const params = new URLSearchParams(window.location.search);
+        const fbclid = params.get('fbclid') || '';
+        const getCk = (n: string) => { const m = document.cookie.match(new RegExp('(^| )' + n + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : ''; };
+        ids = {
+          ref: 'tf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          fbc: getCk('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : ''),
+          fbp: getCk('_fbp') || '',
+          gclid: params.get('gclid') || '',
+          utm_source: params.get('utm_source') || '',
+          utm_medium: params.get('utm_medium') || '',
+          utm_campaign: params.get('utm_campaign') || '',
+          utm_content: params.get('utm_content') || '',
+          lp: window.location.pathname.replace(/\//g, '') || 'home',
+        };
+        sessionStorage.setItem('tf_ids', JSON.stringify(ids));
+      }
+    } catch { /* silent */ }
+
     const payload = {
       name: name.trim(),
       email: email.trim(),
@@ -71,6 +95,15 @@ export default function ParcelSimulator() {
       months: Number(months),
       plan,
       origin: typeof window !== "undefined" ? window.location.href : "simulador",
+      ref: ids.ref || '',
+      fbc: ids.fbc || '',
+      fbp: ids.fbp || '',
+      gclid: ids.gclid || '',
+      utm_source: ids.utm_source || '',
+      utm_medium: ids.utm_medium || '',
+      utm_campaign: ids.utm_campaign || '',
+      utm_content: ids.utm_content || '',
+      lp: ids.lp || '',
     };
     fetch("/api/leads", {
       method: "POST",
@@ -132,7 +165,11 @@ export default function ParcelSimulator() {
     const seg = segment === "imovel" ? "Imóvel" : "Veículo";
     const fmtC = creditNum.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     const fmtI = inst.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    const msg = `Olá, meu nome é ${name}. Simulei uma carta de ${fmtC} com parcelas de ${fmtI} (${seg} · Plano ${plan}). Quero saber mais.`;
+    // Get ref from session for traceability
+    let ref = '';
+    try { const s = sessionStorage.getItem('tf_ids'); if (s) ref = JSON.parse(s).ref || ''; } catch {}
+    const refSuffix = ref ? `\n\nRef: ${ref}` : '';
+    const msg = `Olá, meu nome é ${name}. Simulei uma carta de ${fmtC} com parcelas de ${fmtI} (${seg} · Plano ${plan}). Quero saber mais.${refSuffix}`;
     return `https://wa.me/5511930048940?text=${encodeURIComponent(msg)}`;
   };
 

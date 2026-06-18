@@ -30,6 +30,37 @@ function track(ev: string, data: Record<string, unknown>) {
   } catch { /* silent */ }
 }
 
+/* ── Identifier Capture (Ciclo Infinito de Dados) ── */
+function getCookie(name: string): string {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : '';
+}
+
+function captureIdentifiers(): Record<string, string> {
+  const stored = sessionStorage.getItem('tf_ids');
+  if (stored) return JSON.parse(stored);
+
+  const params = new URLSearchParams(window.location.search);
+  const fbclid = params.get('fbclid') || '';
+
+  const ids: Record<string, string> = {
+    ref: 'tf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+    fbc: getCookie('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : ''),
+    fbp: getCookie('_fbp') || '',
+    gclid: params.get('gclid') || '',
+    utm_source: params.get('utm_source') || '',
+    utm_medium: params.get('utm_medium') || '',
+    utm_campaign: params.get('utm_campaign') || '',
+    utm_content: params.get('utm_content') || '',
+    utm_term: params.get('utm_term') || '',
+    lp: window.location.pathname.replace(/\//g, '') || 'home',
+    landing_time: new Date().toISOString(),
+  };
+
+  sessionStorage.setItem('tf_ids', JSON.stringify(ids));
+  return ids;
+}
+
 const WA_NUMBER = '5511930048940';
 
 export default function DynamicForm({ personaId }: DynamicFormProps) {
@@ -70,14 +101,15 @@ export default function DynamicForm({ personaId }: DynamicFormProps) {
     }
 
     // Final submit
-    track('form_submit', { persona: personaId, tier: config.tier });
+    const ids = captureIdentifiers();
+    track('form_submit', { persona: personaId, tier: config.tier, ref: ids.ref });
     try {
       const w = window as unknown as Record<string, unknown>;
       if (w.gtag) (w.gtag as Function)('event', 'conversion', { send_to: 'AW-18226518834/kTjGCO35_r0cELK2ivND' });
       if (w.fbq) (w.fbq as Function)('track', 'Lead');
     } catch { /* silent */ }
 
-    // Send to Sheets
+    // Send to Sheets — enriched with identifiers
     fetch('/api/leads', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -90,13 +122,23 @@ export default function DynamicForm({ personaId }: DynamicFormProps) {
         months: 0,
         plan: 'LP-' + personaId,
         origin: typeof window !== 'undefined' ? window.location.href : '',
+        ref: ids.ref,
+        fbc: ids.fbc,
+        fbp: ids.fbp,
+        gclid: ids.gclid,
+        utm_source: ids.utm_source,
+        utm_medium: ids.utm_medium,
+        utm_campaign: ids.utm_campaign,
+        utm_content: ids.utm_content,
+        lp: ids.lp,
       }),
     }).catch(() => {});
 
-    // WhatsApp redirect
+    // WhatsApp redirect with ref
     const msg = config.whatsappTemplate
       .replace('[bem_desejado]', String(data.bem_desejado || 'consórcio'))
-      .replace('[parcela]', data.parcela ? `R$ ${fmtCurrency(Number(data.parcela))}` : 'A combinar');
+      .replace('[parcela]', data.parcela ? `R$ ${fmtCurrency(Number(data.parcela))}` : 'A combinar')
+      + '\n\nRef: ' + ids.ref;
 
     const waUrl = `https://api.whatsapp.com/send?phone=${WA_NUMBER}&text=${encodeURIComponent(msg)}`;
 
