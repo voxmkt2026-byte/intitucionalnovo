@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import PersonaGateway from "@/components/PersonaGateway";
+import TrustLogos from "@/components/TrustLogos";
 import ValueProps from "@/components/ValueProps";
 import Segments from "@/components/Segments";
 import ParcelSimulator from "@/components/ParcelSimulator";
@@ -16,6 +17,7 @@ export default function Home() {
         <Hero />
         <About />
         <PersonaGateway />
+        <TrustLogos />
         <ValueProps />
         <Segments />
         <ParcelSimulator />
