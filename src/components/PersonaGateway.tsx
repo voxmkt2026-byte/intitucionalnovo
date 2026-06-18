@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import BorderGlow from "./BorderGlow";
 
 // ─── PERSONAS ─────────────────────────────────────────────────────────────────
 // Cada persona tem: hook de identidade, dor, CTA e link para a LP
@@ -173,7 +174,7 @@ export default function PersonaGateway() {
   // Intersection observer — anima cards na entrada
   useEffect(() => {
     const cards = sectionRef.current?.querySelectorAll<HTMLElement>(
-      ".pg-card"
+      ".pg-card .border-glow-inner > a"
     );
     if (!cards) return;
 
@@ -248,97 +249,92 @@ export default function PersonaGateway() {
         </div>
 
         {/* ── Grid de cards ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-7">
           {personas.map((p) => (
-            <a
+            <BorderGlow
               key={p.id}
-              href={p.href}
-              className="pg-card group relative flex flex-col gap-4 rounded-2xl border p-7 transition-all duration-300 no-underline"
-              style={{
-                borderColor: "rgba(255,255,255,0.08)",
-                backgroundColor: "rgba(255,255,255,0.03)",
-                opacity: 0,
-                transform: "translateY(28px)",
-                transition:
-                  "opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget;
-                el.style.borderColor = "var(--green-vivid)";
-                el.style.backgroundColor = "rgba(21, 184, 92, 0.05)";
-                el.style.boxShadow =
-                  "0 0 0 1px var(--green-vivid), 0 20px 40px rgba(0,0,0,0.4)";
-                el.style.transform = "translateY(-4px)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget;
-                el.style.borderColor = "rgba(255,255,255,0.08)";
-                el.style.backgroundColor = "rgba(255,255,255,0.03)";
-                el.style.boxShadow = "none";
-                el.style.transform = "translateY(0)";
-              }}
+              className="pg-card"
+              backgroundColor="rgba(10, 14, 10, 0.95)"
+              borderRadius={20}
+              glowRadius={30}
+              glowIntensity={1.2}
+              coneSpread={20}
+              edgeSensitivity={25}
+              glowColor="145 72 55"
+              fillOpacity={0.35}
+              colors={['#0A7B3E', '#15B85C', '#1EE67C']}
             >
-              {/* Badge (se tiver) */}
-              {p.badge && (
-                <span
-                  className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full font-[family-name:var(--font-montserrat)]"
-                  style={{
-                    backgroundColor: "rgba(21, 184, 92, 0.15)",
-                    color: "var(--green-vivid)",
-                    border: "1px solid rgba(21, 184, 92, 0.3)",
-                  }}
-                >
-                  {p.badge}
-                </span>
-              )}
-
-              {/* Ícone */}
-              <div
-                className="flex items-center justify-center w-12 h-12 rounded-xl transition-colors duration-300"
+              <a
+                href={p.href}
+                className="group relative flex flex-col gap-4 p-7 no-underline h-full"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.06)",
-                  color: "rgba(255,255,255,0.5)",
+                  opacity: 0,
+                  transform: "translateY(28px)",
+                  transition: "opacity 0.5s ease, transform 0.5s ease",
                 }}
               >
-                {p.icon}
-              </div>
+                {/* Badge (se tiver) */}
+                {p.badge && (
+                  <span
+                    className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full font-[family-name:var(--font-montserrat)]"
+                    style={{
+                      backgroundColor: "rgba(21, 184, 92, 0.15)",
+                      color: "var(--green-vivid)",
+                      border: "1px solid rgba(21, 184, 92, 0.3)",
+                    }}
+                  >
+                    {p.badge}
+                  </span>
+                )}
 
-              {/* Texto */}
-              <div className="flex flex-col gap-2 flex-1">
-                <h3 className="font-[family-name:var(--font-montserrat)] font-bold text-lg leading-tight text-white">
-                  {p.question}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed font-sans"
-                  style={{ color: "rgba(255,255,255,0.45)" }}
+                {/* Ícone */}
+                <div
+                  className="flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300 group-hover:scale-110"
+                  style={{
+                    backgroundColor: "rgba(21, 184, 92, 0.08)",
+                    color: "rgba(255,255,255,0.55)",
+                  }}
                 >
-                  {p.pain}
-                </p>
-              </div>
+                  {p.icon}
+                </div>
 
-              {/* CTA */}
-              <div
-                className="flex items-center gap-2 text-sm font-bold font-[family-name:var(--font-montserrat)] uppercase tracking-wider mt-auto transition-colors duration-300 group-hover:gap-3"
-                style={{ color: "var(--green-vivid)" }}
-              >
-                {p.cta}
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  className="transition-transform duration-300 group-hover:translate-x-1"
+                {/* Texto */}
+                <div className="flex flex-col gap-2 flex-1">
+                  <h3 className="font-[family-name:var(--font-montserrat)] font-bold text-lg leading-tight text-white">
+                    {p.question}
+                  </h3>
+                  <p
+                    className="text-sm leading-relaxed font-sans"
+                    style={{ color: "rgba(255,255,255,0.45)" }}
+                  >
+                    {p.pain}
+                  </p>
+                </div>
+
+                {/* CTA */}
+                <div
+                  className="flex items-center gap-2 text-sm font-bold font-[family-name:var(--font-montserrat)] uppercase tracking-wider mt-auto transition-all duration-300 group-hover:gap-3"
+                  style={{ color: "var(--green-vivid)" }}
                 >
-                  <path
-                    d="M3 8 L13 8 M9 4 L13 8 L9 12"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </a>
+                  {p.cta}
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    <path
+                      d="M3 8 L13 8 M9 4 L13 8 L9 12"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </a>
+            </BorderGlow>
           ))}
         </div>
 
