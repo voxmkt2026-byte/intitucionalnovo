@@ -487,7 +487,7 @@
 
     // Fire Google Ads conversion
     try {
-      if (window.gtag) window.gtag('event', 'conversion', { 'send_to': 'AW-18226518834/kTjGCO35_r0cELK2ivND' });
+      if (window.gtag) window.gtag('event', 'conversion', { 'send_to': 'AW-18248652606/kTjGCO35_r0cELK2ivND' });
       if (window.fbq) window.fbq('track', 'Lead');
     } catch (e) { /* silent */ }
 
