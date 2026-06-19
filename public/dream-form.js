@@ -275,15 +275,26 @@
 
   function captureIdentifiers() {
     var stored = sessionStorage.getItem('tf_ids');
-    if (stored) return JSON.parse(stored);
-
     var params = new URLSearchParams(window.location.search);
     var fbclid = params.get('fbclid') || '';
 
+    // Always re-read Facebook cookies (pixel may have loaded AFTER first capture)
+    var freshFbc = getCookie('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : '');
+    var freshFbp = getCookie('_fbp') || '';
+
+    if (stored) {
+      // Return cached ids but ALWAYS refresh fbc/fbp (pixel loads async)
+      var cached = JSON.parse(stored);
+      if (freshFbc) cached.fbc = freshFbc;
+      if (freshFbp) cached.fbp = freshFbp;
+      sessionStorage.setItem('tf_ids', JSON.stringify(cached));
+      return cached;
+    }
+
     var ids = {
       ref: 'tf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-      fbc: getCookie('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : ''),
-      fbp: getCookie('_fbp') || '',
+      fbc: freshFbc,
+      fbp: freshFbp,
       gclid: params.get('gclid') || '',
       utm_source: params.get('utm_source') || '',
       utm_medium: params.get('utm_medium') || '',

@@ -38,15 +38,25 @@ function getCookie(name: string): string {
 
 function captureIdentifiers(): Record<string, string> {
   const stored = sessionStorage.getItem('tf_ids');
-  if (stored) return JSON.parse(stored);
-
   const params = new URLSearchParams(window.location.search);
   const fbclid = params.get('fbclid') || '';
 
+  // Always re-read Facebook cookies (pixel may have loaded AFTER first capture)
+  const freshFbc = getCookie('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : '');
+  const freshFbp = getCookie('_fbp') || '';
+
+  if (stored) {
+    const cached = JSON.parse(stored);
+    if (freshFbc) cached.fbc = freshFbc;
+    if (freshFbp) cached.fbp = freshFbp;
+    sessionStorage.setItem('tf_ids', JSON.stringify(cached));
+    return cached;
+  }
+
   const ids: Record<string, string> = {
     ref: 'tf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-    fbc: getCookie('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : ''),
-    fbp: getCookie('_fbp') || '',
+    fbc: freshFbc,
+    fbp: freshFbp,
     gclid: params.get('gclid') || '',
     utm_source: params.get('utm_source') || '',
     utm_medium: params.get('utm_medium') || '',
