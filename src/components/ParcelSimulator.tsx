@@ -65,16 +65,25 @@ export default function ParcelSimulator() {
     // Capture tracking identifiers for the data cycle
     let ids: Record<string, string> = { ref: '' };
     try {
+      const getCk = (n: string) => { const m = document.cookie.match(new RegExp('(^| )' + n + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : ''; };
+      const params = new URLSearchParams(window.location.search);
+      const fbclid = params.get('fbclid') || '';
+
+      // Always re-read Facebook cookies (pixel loads async)
+      const freshFbc = getCk('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : '');
+      const freshFbp = getCk('_fbp') || '';
+
       const stored = sessionStorage.getItem('tf_ids');
-      if (stored) ids = JSON.parse(stored);
-      else {
-        const params = new URLSearchParams(window.location.search);
-        const fbclid = params.get('fbclid') || '';
-        const getCk = (n: string) => { const m = document.cookie.match(new RegExp('(^| )' + n + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : ''; };
+      if (stored) {
+        ids = JSON.parse(stored);
+        if (freshFbc) ids.fbc = freshFbc;
+        if (freshFbp) ids.fbp = freshFbp;
+        sessionStorage.setItem('tf_ids', JSON.stringify(ids));
+      } else {
         ids = {
           ref: 'tf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-          fbc: getCk('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : ''),
-          fbp: getCk('_fbp') || '',
+          fbc: freshFbc,
+          fbp: freshFbp,
           gclid: params.get('gclid') || '',
           utm_source: params.get('utm_source') || '',
           utm_medium: params.get('utm_medium') || '',
