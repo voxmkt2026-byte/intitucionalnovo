@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
+import WebGLErrorBoundary from "./WebGLErrorBoundary";
 
 const InfiniteMenu = dynamic(() => import("./InfiniteMenu"), { ssr: false });
 
@@ -236,11 +237,13 @@ export default function Segments() {
             if (dist < 15 && dt < 400) setPopupIndex(activeIndex);
           }}
         >
+          <WebGLErrorBoundary>
           <InfiniteMenu
             items={menuItems}
             scale={1.0}
             onActiveIndexChange={handleActiveIndex}
           />
+          </WebGLErrorBoundary>
         </div>
 
         {/* Mobile CTA */}

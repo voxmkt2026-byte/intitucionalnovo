@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
+import WebGLErrorBoundary from "./WebGLErrorBoundary";
 
 /* ── Lazy-load LiquidEther (heavy Three.js dep — SSR-skip) ── */
 const LiquidEther = dynamic(() => import("./LiquidEther"), { ssr: false });
@@ -122,6 +123,7 @@ export default function StatsSection() {
     >
       {/* Background — LiquidEther fluid simulation (replaces city photo) */}
       <div className="absolute inset-0 z-0" style={{ opacity: 0.35 }}>
+        <WebGLErrorBoundary>
         <LiquidEther
           colors={["#0A7B3E", "#06532A", "#15B85C"]}
           mouseForce={15}
@@ -137,6 +139,7 @@ export default function StatsSection() {
           autoRampDuration={0.8}
           style={{ width: "100%", height: "100%" }}
         />
+        </WebGLErrorBoundary>
       </div>
 
       {/* Subtle radial gradients for depth */}

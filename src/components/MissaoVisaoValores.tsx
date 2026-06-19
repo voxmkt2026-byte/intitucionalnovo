@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import WebGLErrorBoundary from "./WebGLErrorBoundary";
 
 const CircularGallery = dynamic(() => import("./CircularGallery"), { ssr: false });
 
@@ -462,6 +463,7 @@ function ValoresGallery() {
         </p>
       </div>
       <div className="h-[450px] md:h-[700px] relative">
+        <WebGLErrorBoundary>
         <CircularGallery
           items={cardImages}
           bend={0}
@@ -471,6 +473,7 @@ function ValoresGallery() {
           font="bold 22px 'Plus Jakarta Sans'"
           fontUrl="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap"
         />
+        </WebGLErrorBoundary>
       </div>
     </section>
   );
