@@ -506,10 +506,24 @@
     track('form_submit', { persona: personaId, tier: cfg.tier, has_email: !!data.email, ref: ids.ref });
     track('conversion', { persona: personaId, tier: cfg.tier, ref: ids.ref });
 
-    // Fire Google Ads conversion
+    // Fire Enhanced Conversions + Google Ads conversion
     try {
-      if (window.gtag) window.gtag('event', 'conversion', { 'send_to': 'AW-18248652606/EfVTCOr4mcIcEL6u0f1D' });
-      if (window.fbq) window.fbq('track', 'Lead');
+      if (window.gtag) {
+        window.gtag('set', 'user_data', {
+          email: (data.email || '').trim().toLowerCase(),
+          phone_number: '+55' + (data.whatsapp || '').replace(/\D/g, '')
+        });
+        window.gtag('event', 'conversion', {
+          'send_to': 'AW-18248652606/EfVTCOr4mcIcEL6u0f1D',
+          'value': parseInt(data.parcela) || 0,
+          'currency': 'BRL'
+        });
+      }
+      if (window.fbq) window.fbq('track', 'Lead', {
+        value: parseInt(data.parcela) || 0,
+        currency: 'BRL',
+        content_name: 'LP-' + personaId
+      });
     } catch (e) { /* silent */ }
 
     // Send to Google Sheets via API — enriched with identifiers

@@ -133,6 +133,12 @@ export default function RootLayout({
 
       </head>
       <body className="min-h-full flex flex-col" style={{ background: "var(--bg)", color: "var(--ink)" }}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-6 focus:py-3 focus:bg-green-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-bold focus:shadow-lg"
+        >
+          Pular para o conteúdo principal
+        </a>
         {children}
 
         {/* Google Ads + GA4 */}

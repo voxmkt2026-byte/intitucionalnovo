@@ -795,10 +795,10 @@ export default function MissaoVisaoValores() {
       >
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="font-[family-name:var(--font-jakarta)] text-[clamp(1.5rem,4vw,3rem)] font-black text-white uppercase tracking-tight leading-tight">
-            Pronto para conquistar<br />seu próximo bem?
+            Antes de decidir,<br />compare alternativas.
           </h2>
           <p className="mt-5 text-white/60 text-lg font-[family-name:var(--font-jakarta)] max-w-xl mx-auto">
-            Fale com um consultor Titanium e descubra a carta contemplada ideal para você.
+            Solicite uma análise consultiva gratuita e entenda qual alternativa faz mais sentido para seu perfil.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <a
@@ -807,7 +807,7 @@ export default function MissaoVisaoValores() {
               rel="noopener noreferrer"
               className="btn-primary"
             >
-              Falar no WhatsApp →
+              Solicitar análise gratuita →
             </a>
             <a
               href="/"

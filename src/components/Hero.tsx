@@ -33,7 +33,7 @@ const slides = [
     subtitle:
       "Diagnóstico gratuito de aquisição patrimonial. Avaliamos objetivo, perfil e possibilidades disponíveis.",
     cta1: { label: "Fazer diagnóstico gratuito", href: "#simulador" },
-    cta2: { label: "Falar com consultor", href: "https://wa.me/5511930048940" },
+    cta2: { label: "Solicitar diagnóstico gratuito", href: "https://wa.me/5511930048940" },
   },
 ];
 

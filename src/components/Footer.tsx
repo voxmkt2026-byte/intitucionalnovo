@@ -139,7 +139,7 @@ export default function Footer() {
             "Nunca solicitamos depósitos antecipados, pagamentos de taxas de liberação ou qualquer transferência sem formalização contratual prévia. Em caso de contato suspeito em nome da Titanium, interrompa imediatamente e acione nossos canais oficiais.",
             "Informações e privacidade: todas as condições são apresentadas antes de qualquer negociação. Dados tratados conforme LGPD (Lei nº 13.709/2018).",
           ].map((text, i) => (
-            <p key={i} style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.75rem", color: "rgba(255,255,255,0.2)", lineHeight: 1.7 }}>
+            <p key={i} style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.75rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.7 }}>
               {text}
             </p>
           ))}
@@ -160,12 +160,12 @@ export default function Footer() {
           />
 
           {/* Copyright */}
-          <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.2)" }}>
+          <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>
             © {new Date().getFullYear()} Titanium Consultoria. Todos os direitos reservados.
           </span>
 
           {/* CNPJ */}
-          <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.2)" }}>
+          <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>
             CNPJ: 46.640.755/0001-51
           </span>
         </div>
