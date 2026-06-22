@@ -43,7 +43,7 @@ const segments = [
   {
     title: "Carro Popular",
     description:
-      "Seu primeiro carro ou troca inteligente. Crédito aprovado sem entrada, com taxas menores que o financiamento.",
+      "Seu primeiro carro ou troca inteligente. Alternativas que podem não exigir entrada tradicional*.",
     price: "R$ 503",
     tag: "carro popular",
     image: "/img/seg-carro-popular.webp",
@@ -103,7 +103,7 @@ const segments = [
   {
     title: "Terreno Urbano",
     description:
-      "Lote em condomínio fechado ou bairro planejado. Investimento que só valoriza.",
+      "Lote em condomínio fechado ou bairro planejado. Investimento com potencial de valorização*.",
     price: "R$ 450",
     tag: "terreno urbano",
     image: "/img/seg-terreno-urbano.webp",
@@ -342,12 +342,15 @@ export default function Segments() {
                 style={{ borderTop: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}
               >
                 <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.75rem", color: "rgba(255,255,255,0.35)" }}>
-                  Parcelas a partir de:
+                  Parcelas a partir de*:
                 </span>
                 <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.25rem", color: "var(--green-vivid)" }}>
                   {activeSeg.price}
                 </span>
               </div>
+              <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.6rem", color: "rgba(255,255,255,0.25)", lineHeight: 1.5, marginTop: "0.5rem" }}>
+                *Valores ilustrativos. Parcelas reais dependem de crédito, prazo e administradora.
+              </p>
 
               {/* CTA */}
               <a

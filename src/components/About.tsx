@@ -61,7 +61,7 @@ const stats = [
     prefix: "",
     label: "de mercado",
     description:
-      "4 anos operando com CNPJ ativo, regulamentados pelo Banco Central. Zero litígios. NPS de 87 pontos.",
+      "4 anos operando com CNPJ ativo, regulamentados pelo Banco Central. Zero litígios. NPS de 87 pontos (pesquisa interna, 2025).",
   },
 ] as const;
 
@@ -179,8 +179,8 @@ export default function About() {
                   color: "var(--ink)",
                 }}
               >
-                A consultoria de quem está{" "}
-                <span className="text-gradient">construindo patrimônio</span>
+                Consultoria para quem está{" "}
+                <span className="text-gradient">planejando uma aquisição</span>
               </h2>
             </div>
 
@@ -195,15 +195,15 @@ export default function About() {
                   lineHeight: 1.4,
                 }}
               >
-                O que o banco não te conta sobre expansão
+                Por que análise consultiva antes de comprar
               </h3>
 
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
-                Quando você financia equipamento, veículo ou imóvel pelo banco, você paga o valor do bem <strong style={{ color: "var(--ink)", fontWeight: 600 }}>mais 12% a 24% ao ano em juros</strong> (média do mercado bancário, fonte: Banco Central). Em 5 anos, um crédito de R$300 mil pode custar R$700 mil*. Esse é o negócio do banco. <span className="text-xs opacity-40">*Exemplo simulado considerando taxa média de financiamento imobiliário. Valores reais variam.</span>
+                Antes de financiar ou comprar uma carta no impulso, vale entender as alternativas. Consórcio, carta contemplada e financiamento têm custos, prazos e riscos diferentes — e <strong style={{ color: "var(--ink)", fontWeight: 600 }}>a melhor opção depende do seu perfil e objetivo</strong>. Nossa consultoria avalia seu momento financeiro e apresenta um comparativo real. <span className="text-xs opacity-40">*Taxas médias de financiamento variam de 12% a 24% a.a. (fonte: Banco Central). Valores reais dependem de perfil e instituição.</span>
               </p>
 
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
-                Trabalhamos com cartas contempladas — crédito já aprovado, sem sorteio, sem espera, sem juros bancários. Cada carta é auditada juridicamente pela nossa equipe antes de chegar até você.
+                Quando a carta contemplada faz sentido, apresentamos opções disponíveis — sempre com verificação documental e jurídica pela nossa equipe. Quando não faz, dizemos isso também. Nosso papel é consultoria, não pressão de venda.
               </p>
 
               {/* Credenciais */}

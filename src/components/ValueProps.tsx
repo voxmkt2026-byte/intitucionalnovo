@@ -7,24 +7,31 @@ import CardSwap, { Card } from "./CardSwap";
 const propositions = [
   {
     num: "01",
-    tagline: "Crédito imediato",
-    headline: "Cada mês pagando banco é patrimônio que não foi pro seu bolso.",
+    tagline: "Diagnóstico de perfil",
+    headline: "Avaliação do seu objetivo, prazo, entrada disponível e capacidade de parcela.",
     description:
-      "No consórcio tradicional você espera anos por sorteio. No financiamento, paga juros todo mês. Com carta contemplada o crédito já está liberado — a espera acabou e os juros bancários também.",
+      "Antes de qualquer recomendação, entendemos seu momento financeiro. Mapeamos metas, prazos e limites para que a orientação seja personalizada — não genérica.",
   },
   {
     num: "02",
-    tagline: "Sem juros bancários",
-    headline: "Quem financia R$ 500 mil paga R$ 1,2 milhão. Esse é o negócio do banco.",
+    tagline: "Comparativo de alternativas",
+    headline: "Consórcio novo, carta contemplada, financiamento ou aguardar melhor momento.",
     description:
-      "Juros de 12% a 24% ao ano transformam expansão em dívida. Carta contemplada não cobra juros compostos — apenas taxa administrativa. A diferença fica no seu caixa.",
+      "Nem sempre carta contemplada é a melhor opção. Comparamos custos, prazos e riscos de cada alternativa para que você decida com clareza.",
   },
   {
     num: "03",
-    tagline: "Segurança jurídica",
-    headline: "Cada carta é auditada antes de chegar até você.",
+    tagline: "Curadoria de cartas disponíveis",
+    headline: "Somente quando houver disponibilidade real e com validação.",
     description:
-      "4 anos de mercado, CNPJ ativo e regulamentação pelo Banco Central. Verificação documental e jurídica completa em cada operação. Aqui não tem promessa — tem processo auditado e time especializado do início ao fim.",
+      "Se fizer sentido, apresentamos cartas contempladas disponíveis no mercado — cada uma verificada pela nossa equipe antes de chegar até você.",
+  },
+  {
+    num: "04",
+    tagline: "Orientação sobre riscos",
+    headline: "Transferência, aprovação, garantias, saldo devedor, taxas e documentação.",
+    description:
+      "Explicamos cada etapa, risco e custo envolvido. Transferência de titularidade, aprovação da administradora, taxas, documentação e o que pode dar errado.",
   },
 ] as const;
 
@@ -177,7 +184,7 @@ export default function ValueProps() {
           <div className="lg:col-span-5 space-y-6 lg:pr-8 xl:pr-12">
             <div className="flex items-center gap-3">
               <span className="inline-block w-6 h-px" style={{ backgroundColor: "var(--green)" }} />
-              <span className="kicker">Diferenciais</span>
+              <span className="kicker">Análise consultiva</span>
             </div>
             <h2
               style={{
@@ -189,9 +196,9 @@ export default function ValueProps() {
                 color: "var(--ink)",
               }}
             >
-              Crédito aprovado,
+              O que você recebe
               <br />
-              <span className="text-gradient">sem surpresas</span>
+              <span className="text-gradient">na análise consultiva</span>
             </h2>
             <p
               style={{
@@ -201,7 +208,7 @@ export default function ValueProps() {
                 lineHeight: 1.75,
               }}
             >
-              Cartas contempladas com crédito liberado para imóveis, veículos e agro. Sem sorteio, sem espera, sem juros bancários.
+              Antes de qualquer recomendação, fazemos um diagnóstico completo do seu perfil, objetivo e possibilidades. Você recebe orientação — não pressão de venda.
             </p>
             <div className="pt-2">
               <a
@@ -209,7 +216,7 @@ export default function ValueProps() {
                 className="btn-primary"
                 style={{ display: "inline-flex" }}
               >
-                Simular meu crédito
+                Solicitar análise gratuita
               </a>
             </div>
           </div>

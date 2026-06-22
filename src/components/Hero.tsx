@@ -8,31 +8,31 @@ const slides = [
   {
     id: 1,
     image: "/img/hero-escritorio.webp",
-    kicker: "4 anos · +2.000 clientes · CNPJ ativo",
-    title: ["Você constrói.", "O banco lucra", "em cima disso."],
+    kicker: "Consultoria especializada em aquisição patrimonial",
+    title: ["Antes de financiar,", "compare."],
     subtitle:
-      "Do agro ao imóvel. Da frota à clínica. Existe um caminho para expandir patrimônio sem pagar 30% ao banco.",
-    cta1: { label: "Simular meu crédito", href: "#simulador" },
+      "Receba uma análise consultiva para entender se consórcio ou carta contemplada faz sentido para seu objetivo e momento financeiro.",
+    cta1: { label: "Solicitar análise gratuita", href: "#simulador" },
     cta2: { label: "Ver categorias de crédito", href: "#segmentos" },
   },
   {
     id: 2,
     image: "/img/hero-agro.webp",
-    kicker: "Agro, frota, clínica, imóvel — R$15k a R$2M",
-    title: ["Crédito aprovado.", "Sem banco.", "Sem juros compostos."],
+    kicker: "4 anos · +2.000 clientes* · CNPJ ativo",
+    title: ["A parcela não conta", "a história toda."],
     subtitle:
-      "Quem financia R$ 500 mil paga R$ 1,2 milhão. Esse é o negócio do banco — não o seu. Cartas contempladas mudam esse cálculo.",
-    cta1: { label: "Simular meu crédito", href: "#simulador" },
-    cta2: { label: "Calcular diferença", href: "#segmentos" },
+      "Antes de assumir uma compra de longo prazo, compare custos, prazos e alternativas com orientação especializada.",
+    cta1: { label: "Comparar alternativas", href: "#simulador" },
+    cta2: { label: "Ver como funciona", href: "#diferenciais" },
   },
   {
     id: 3,
     image: "/img/hero-juridico.webp",
     kicker: "4 anos · CNPJ ativo · Regulamentado pelo Banco Central",
-    title: ["Segurança jurídica", "em cada carta.", "Sem surpresas."],
+    title: ["Comprar bem começa", "antes da assinatura."],
     subtitle:
-      "Cada carta é auditada pela nossa equipe jurídica antes de chegar até você. Aqui não tem promessa — tem processo.",
-    cta1: { label: "Simular meu crédito", href: "#simulador" },
+      "Diagnóstico gratuito de aquisição patrimonial. Avaliamos objetivo, perfil e possibilidades disponíveis.",
+    cta1: { label: "Fazer diagnóstico gratuito", href: "#simulador" },
     cta2: { label: "Falar com consultor", href: "https://wa.me/5511930048940" },
   },
 ];
@@ -242,8 +242,8 @@ export default function Hero() {
       >
         <div className="max-w-[860px] mx-auto flex flex-wrap items-center gap-6 pt-6">
           {[
-            { value: "4 anos", label: "de mercado" },
-            { value: "R$15k–2M", label: "em cartas aprovadas" },
+            { value: "4 anos*", label: "de mercado" },
+            { value: "+2.000*", label: "clientes atendidos" },
             { value: "CNPJ ativo", label: "Banco Central regulado" },
           ].map((item) => (
             <div key={item.value} className="flex items-center gap-3">
@@ -273,6 +273,17 @@ export default function Hero() {
             </div>
           ))}
         </div>
+        <p
+          className="max-w-[860px] mx-auto mt-4"
+          style={{
+            fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+            fontSize: "0.6rem",
+            color: "rgba(255,255,255,0.2)",
+            lineHeight: 1.5,
+          }}
+        >
+          *Dados internos da Titanium Consultoria, acumulados desde 2021. Resultados individuais podem variar conforme perfil, valor e condições de mercado.
+        </p>
       </div>
     </section>
   );

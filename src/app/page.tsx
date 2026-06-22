@@ -17,13 +17,13 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <ParcelSimulator />
-        <About />
-        <Testimonials />
-        <PersonaGateway />
-        <TrustLogos />
         <ValueProps />
+        <About />
+        <TrustLogos />
+        <Testimonials />
         <CaseStudy />
+        <ParcelSimulator />
+        <PersonaGateway />
         <Segments />
       </main>
       <Footer />

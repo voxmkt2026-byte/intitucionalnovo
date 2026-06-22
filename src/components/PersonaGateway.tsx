@@ -15,9 +15,9 @@ const personas = [
         <path d="M16.5 17.23h-9c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h9c.41 0 .75.34.75.75s-.34.75-.75.75ZM12 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2Z"/>
       </svg>
     ),
-    question: "Você é motorista de app?",
-    pain: "Seu carro gera renda — mas o banco não reconhece.",
-    cta: "Financiar sem holerite",
+    question: "Antes de financiar seu próximo carro?",
+    pain: "Compare alternativas de aquisição para motoristas de app antes de assumir um financiamento.",
+    cta: "Comparar alternativas",
     href: "/uber",
     badge: null,
   },
@@ -32,9 +32,9 @@ const personas = [
         <path d="M4 12.25H2c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h2c.41 0 .75.34.75.75s-.34.75-.75.75ZM4 9.25H3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h1c.41 0 .75.34.75.75s-.34.75-.75.75ZM4 15.25H1c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h3c.41 0 .75.34.75.75s-.34.75-.75.75Z"/>
       </svg>
     ),
-    question: "Você tem frota ou quer ter?",
-    pain: "Cada caminhão parado é dinheiro que não entra.",
-    cta: "Estruturar minha frota",
+    question: "Planejando expandir sua frota?",
+    pain: "Avalie alternativas antes de financiar caminhões ou veículos pesados.",
+    cta: "Verificar opções",
     href: "/caminhao",
     badge: null,
   },
@@ -48,9 +48,9 @@ const personas = [
         <path d="M10.75 2.45c-.69-.56-1.81-.56-2.51 0L3.49 6.44C2.87 6.95 2.5 7.93 2.5 8.74v8.65c0 1.64 1.36 3 3 3H12V2.91c-.44-.27-.93-.42-1.25-.46Z"/>
       </svg>
     ),
-    question: "Você quer construir ou investir?",
-    pain: "Juros bancários estão consumindo o seu patrimônio.",
-    cta: "Crédito sem juros compostos",
+    question: "Quer comprar imóvel sem decidir no escuro?",
+    pain: "Entenda se uma carta contemplada ou consórcio pode fazer sentido para seu planejamento.",
+    cta: "Solicitar análise",
     href: "/terrenos-construcao",
     badge: null,
   },
@@ -65,9 +65,9 @@ const personas = [
         <path d="M17.47 8.83H6.53c-.35 0-.59-.36-.46-.69.4-.99.72-2.11.93-3.39.04-.22.23-.39.46-.39h9.08c.23 0 .43.16.46.39.21 1.28.53 2.4.93 3.39.14.33-.1.69-.46.69Z"/>
       </svg>
     ),
-    question: "Você está no agronegócio?",
-    pain: "Máquina parada é safra perdida.",
-    cta: "Renovar equipamentos",
+    question: "Planejando renovar maquinário?",
+    pain: "Compare consórcio, carta contemplada e financiamento para equipamentos agrícolas.",
+    cta: "Solicitar análise",
     href: "/maquinas-agricolas",
     badge: null,
   },
@@ -81,9 +81,9 @@ const personas = [
         <path d="M14.15 12.63c-.19 0-.38-.07-.53-.22l-1.15-1.15a.754.754 0 0 1 0-1.06c.29-.29.77-.29 1.06 0l.62.62 1.66-1.66c.29-.29.77-.29 1.06 0 .29.29.29.77 0 1.06l-2.19 2.19c-.15.15-.34.22-.53.22Z"/>
       </svg>
     ),
-    question: "Precisa de crédito agora?",
-    pain: "Crédito já contemplado — sem esperar sorteio.",
-    cta: "Ver carta disponível",
+    question: "Precisa de crédito com urgência?",
+    pain: "Cartas contempladas podem oferecer crédito mais rápido — quando disponíveis e validadas.",
+    cta: "Verificar disponibilidade",
     href: "/carta-contemplada",
     badge: "Disponível",
   },
@@ -98,9 +98,9 @@ const personas = [
         <path d="M19.94 18.77c-.02.27-.17.5-.4.62-.3.15-.87.37-1.95.55v.56c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5V20H9.41v.5c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5v-.56c-1.08-.18-1.65-.4-1.95-.55a.76.76 0 0 1-.4-.62"/>
       </svg>
     ),
-    question: "Você busca um veículo premium?",
-    pain: "Você paga R$ 200 mil em juros num carro que desvaloriza 30% no primeiro ano.",
-    cta: "Ver cartas para veículo premium",
+    question: "Pensando em veículo premium?",
+    pain: "Antes de financiar, compare custos totais e alternativas de aquisição.",
+    cta: "Comparar alternativas",
     href: "/carro-luxo",
     badge: null,
   },
@@ -114,9 +114,9 @@ const personas = [
         <path d="M14.5 13.63c0 .25-.07.49-.18.7-.28.55-.85.92-1.51.92h-.12c-.01 0-.02 0-.04.01a1.732 1.732 0 0 1-1.47-.93c-.11-.21-.18-.45-.18-.7v-1.26c0-.55.45-1 1-1h.5c.55 0 1 .45 1 1v1.26Z"/>
       </svg>
     ),
-    question: "Você é PJ ou sócio de empresa?",
-    pain: "Renda variável não é impedimento. É contexto.",
-    cta: "Estruturar crédito PJ",
+    question: "Planejando aquisição para sua empresa?",
+    pain: "Planeje a compra de veículo, máquina ou imóvel comercial com uma estratégia mais inteligente.",
+    cta: "Solicitar análise",
     href: "/empresario",
     badge: null,
   },
@@ -129,9 +129,9 @@ const personas = [
         <path d="M15.08 8.79h-2.37V6.42c0-.41-.34-.75-.75-.75s-.75.34-.75.75v2.37H8.84c-.41 0-.75.34-.75.75s.34.75.75.75h2.37v2.37c0 .41.34.75.75.75s.75-.34.75-.75V10.29h2.37c.41 0 .75-.34.75-.75s-.34-.75-.75-.75ZM19.08 18H4.92c-.41 0-.75.34-.75.75v.5c0 1.52 1.23 2.75 2.75 2.75h10.16c1.52 0 2.75-1.23 2.75-2.75v-.5c0-.41-.34-.75-.75-.75Z"/>
       </svg>
     ),
-    question: "Você é profissional autônomo?",
-    pain: "Holerite não define o seu crédito.",
-    cta: "Ver cartas para profissionais",
+    question: "Profissional autônomo planejando aquisição?",
+    pain: "Estruture sua próxima aquisição patrimonial com análise de carta de crédito.",
+    cta: "Solicitar análise",
     href: "/medico",
     badge: null,
   },
@@ -144,9 +144,9 @@ const personas = [
         <path d="M12 2c-.41 0-.75.34-.75.75v1.5c0 .41.34.75.75.75s.75-.34.75-.75v-1.5c0-.41-.34-.75-.75-.75ZM12 19c-.41 0-.75.34-.75.75v1.5c0 .41.34.75.75.75s.75-.34.75-.75v-1.5c0-.41-.34-.75-.75-.75ZM22 11.25h-1.5c-.41 0-.75.34-.75.75s.34.75.75.75H22c.41 0 .75-.34.75-.75s-.34-.75-.75-.75ZM4.25 12c0-.41-.34-.75-.75-.75H2c-.41 0-.75.34-.75.75s.34.75.75.75h1.5c.41 0 .75-.34.75-.75ZM18.89 5.81l-1.06 1.06a.754.754 0 0 0 0 1.06c.15.15.34.22.53.22s.38-.07.53-.22l1.06-1.06c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0ZM6.17 17.12l-1.06 1.06c-.29.29-.29.77 0 1.06.15.15.34.22.53.22s.38-.07.53-.22l1.06-1.06c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0ZM18.89 18.18c-.29-.29-.77-.29-1.06 0s-.29.77 0 1.06l1.06 1.06c.15.15.34.22.53.22s.38-.07.53-.22c.29-.29.29-.77 0-1.06l-1.06-1.06ZM6.17 6.88c.19 0 .38-.07.53-.22.29-.29.29-.77 0-1.06L5.64 4.54c-.29-.29-.77-.29-1.06 0s-.29.77 0 1.06L5.64 6.66c.15.15.34.22.53.22Z"/>
       </svg>
     ),
-    question: "Você quer cortar custos fixos?",
-    pain: "Cada mês de energia cara é dinheiro que não investe.",
-    cta: "Simular placas solares",
+    question: "Pensando em energia solar?",
+    pain: "Avalie se consórcio ou carta contemplada faz sentido para seu projeto de energia solar.",
+    cta: "Verificar opções",
     href: "/placas-solares",
     badge: null,
   },
@@ -159,9 +159,9 @@ const personas = [
         <path d="m9.6 13.17-1.99 1.99-.97.97-1.56-.49c-.44-.14-.93-.03-1.26.3l-.3.3c-.5.5-.38 1.32.24 1.66l2.34 1.27 1.27 2.34c.34.62 1.17.74 1.66.24l.3-.3c.33-.33.44-.82.3-1.26l-.49-1.56 2.96-2.96"/>
       </svg>
     ),
-    question: "Você usa aviação executiva?",
-    pain: "Carta contemplada viabiliza o que o banco recusa.",
-    cta: "Ver crédito para aeronave",
+    question: "Planejando aquisição de aeronave?",
+    pain: "Avalie alternativas de crédito para aviação executiva com orientação especializada.",
+    cta: "Solicitar análise",
     href: "/aeronaves",
     badge: null,
   },
@@ -242,8 +242,8 @@ export default function PersonaGateway() {
               </span>
             </h2>
             <p className="text-white/45 text-base md:text-lg leading-relaxed max-w-sm font-sans">
-              Cada perfil tem uma estratégia de crédito diferente. Selecione o
-              que mais se parece com você.
+              Cada perfil tem necessidades diferentes. Selecione o que mais se
+              parece com você para receber uma orientação personalizada.
             </p>
           </div>
         </div>
@@ -366,7 +366,7 @@ export default function PersonaGateway() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
             </svg>
-            Quero orientação personalizada
+            Solicitar análise gratuita
           </a>
         </div>
       </div>

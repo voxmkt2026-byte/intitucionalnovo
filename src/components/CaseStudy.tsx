@@ -345,6 +345,69 @@ export default function CaseStudy() {
           cliente. Valores e prazos podem variar conforme perfil, administradora
           e condições de mercado.
         </p>
+
+        {/* ── CTA após case study ── */}
+        <div
+          style={{
+            marginTop: "3rem",
+            padding: "2rem",
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "var(--r-lg)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "1.25rem",
+            textAlign: "center",
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(20px)",
+            transition: "all 0.7s var(--ease) 1000ms",
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+              fontWeight: 700,
+              fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
+              color: "var(--ink-white)",
+            }}
+          >
+            Quer um diagnóstico como o do Wellington?
+          </h3>
+          <p
+            style={{
+              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+              fontSize: "0.9rem",
+              color: "rgba(255,255,255,0.5)",
+              maxWidth: "480px",
+              lineHeight: 1.6,
+            }}
+          >
+            Solicite uma análise gratuita e descubra se consórcio ou carta contemplada faz sentido para o seu perfil e objetivo.
+          </p>
+          <a
+            href="https://wa.me/5511930048940?text=Olá, quero um diagnóstico como o do case de sucesso"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "1rem 2rem",
+              borderRadius: "var(--r-pill)",
+              backgroundColor: "var(--green-vivid)",
+              color: "white",
+              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+              fontWeight: 700,
+              fontSize: "0.95rem",
+              textDecoration: "none",
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 16px rgba(21,184,92,0.3)",
+            }}
+          >
+            Solicitar análise gratuita
+          </a>
+        </div>
       </div>
     </section>
   );

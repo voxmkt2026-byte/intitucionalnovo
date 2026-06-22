@@ -156,6 +156,38 @@ export default function Testimonials() {
           privacidade. Resultados individuais podem variar conforme perfil,
           valor e condições de mercado.
         </p>
+
+        {/* ── CTA após depoimentos ── */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "3rem",
+          }}
+        >
+          <a
+            href="https://wa.me/5511930048940?text=Olá, gostaria de solicitar uma análise consultiva gratuita"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "1rem 2rem",
+              borderRadius: "var(--r-pill)",
+              backgroundColor: "var(--green)",
+              color: "white",
+              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+              fontWeight: 700,
+              fontSize: "0.95rem",
+              textDecoration: "none",
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 16px rgba(10,123,62,0.3)",
+            }}
+          >
+            Solicitar minha análise gratuita →
+          </a>
+        </div>
       </div>
     </section>
   );
