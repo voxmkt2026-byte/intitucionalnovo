@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
@@ -6,19 +5,19 @@ import { useEffect, useRef } from 'react';
 
 import './CircularGallery.css';
 
-function debounce(func, wait) {
-  let timeout;
-  return function (...args) {
+function debounce(func: Function, wait: number) {
+  let timeout: any;
+  return function (this: any, ...args: any[]) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
 
-function lerp(p1, p2, t) {
+function lerp(p1: number, p2: number, t: number) {
   return p1 + (p2 - p1) * t;
 }
 
-function autoBind(instance) {
+function autoBind(instance: any) {
   const proto = Object.getPrototypeOf(instance);
   Object.getOwnPropertyNames(proto).forEach(key => {
     if (key !== 'constructor' && typeof instance[key] === 'function') {
@@ -30,25 +29,25 @@ function autoBind(instance) {
 const DEFAULT_FONT = 'bold 30px Figtree';
 const DEFAULT_FONT_URL = 'https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap';
 
-function deriveFontFamilyFromUrl(url) {
+function deriveFontFamilyFromUrl(url: string) {
   const fileName = (url.split('/').pop() || 'custom-font').split('?')[0];
   const base = fileName.replace(/\.(woff2?|ttf|otf|eot)$/i, '');
   return base.replace(/[^a-zA-Z0-9-_ ]/g, '').trim() || 'CircularGalleryFont';
 }
 
-async function loadFontFromStylesheet(url) {
+async function loadFontFromStylesheet(url: string) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch font stylesheet (${response.status})`);
   const cssText = await response.text();
   const faceBlocks = cssText.match(/@font-face\s*{[^}]*}/g) || [];
-  let family = null;
-  const fontFaces = [];
+  let family: string | null = null;
+  const fontFaces: FontFace[] = [];
   for (const block of faceBlocks) {
     const familyMatch = block.match(/font-family:\s*['"]?([^;'"]+)['"]?/);
     const urlMatch = block.match(/url\(\s*['"]?([^'")]+)['"]?\s*\)/);
     if (!familyMatch || !urlMatch) continue;
     family = familyMatch[1].trim();
-    const descriptors = {};
+    const descriptors: any = {};
     const weightMatch = block.match(/font-weight:\s*([^;]+);/);
     const styleMatch = block.match(/font-style:\s*([^;]+);/);
     const rangeMatch = block.match(/unicode-range:\s*([^;]+);/);
@@ -61,32 +60,32 @@ async function loadFontFromStylesheet(url) {
   await Promise.allSettled(
     fontFaces.map(async face => {
       await face.load();
-      document.fonts.add(face);
+      (document as any).fonts.add(face);
     })
   );
   return family;
 }
 
-async function loadFontFromFile(url) {
+async function loadFontFromFile(url: string) {
   const family = deriveFontFamilyFromUrl(url);
   const fontFace = new FontFace(family, `url(${url})`);
   await fontFace.load();
-  document.fonts.add(fontFace);
+  (document as any).fonts.add(fontFace);
   return family;
 }
 
-async function loadCustomFont(fontUrl) {
+async function loadCustomFont(fontUrl: string) {
   const isStylesheet = fontUrl.includes('fonts.googleapis.com') || /\.css(\?.*)?$/i.test(fontUrl);
   return isStylesheet ? loadFontFromStylesheet(fontUrl) : loadFontFromFile(fontUrl);
 }
 
-async function resolveFont(font, fontUrl) {
+async function resolveFont(font: string, fontUrl?: string) {
   const effectiveUrl = fontUrl || (font === DEFAULT_FONT ? DEFAULT_FONT_URL : null);
   if (!effectiveUrl) {
-    if (document.fonts && document.fonts.load) {
+    if (document.fonts && (document as any).fonts.load) {
       try {
-        await document.fonts.load(font);
-        await document.fonts.ready;
+        await (document as any).fonts.load(font);
+        await (document as any).fonts.ready;
       } catch {
         // fallback
       }
@@ -98,8 +97,8 @@ async function resolveFont(font, fontUrl) {
     const sizeMatch = font.match(/^\s*(.*?\d+px)/);
     const prefix = sizeMatch ? sizeMatch[1].trim() : 'bold 30px';
     const resolved = `${prefix} "${family}"`;
-    if (document.fonts && document.fonts.load) {
-      try { await document.fonts.load(resolved); } catch { /* ignore */ }
+    if (document.fonts && (document as any).fonts.load) {
+      try { await (document as any).fonts.load(resolved); } catch { /* ignore */ }
     }
     return resolved;
   } catch (error) {
@@ -108,14 +107,14 @@ async function resolveFont(font, fontUrl) {
   }
 }
 
-function getFontSize(font) {
+function getFontSize(font: string) {
   const match = font.match(/(\d+)px/);
   return match ? parseInt(match[1], 10) : 30;
 }
 
-function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'black') {
+function createTextTexture(gl: any, text: string, font = 'bold 30px monospace', color = 'black') {
   const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext('2d')!;
   context.font = font;
   const metrics = context.measureText(text);
   const textWidth = Math.ceil(metrics.width);
@@ -134,7 +133,22 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
 }
 
 class Title {
-  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }) {
+  gl: any;
+  plane: any;
+  renderer: any;
+  text: string;
+  textColor: string;
+  font: string;
+  mesh: any;
+
+  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }: {
+    gl: any;
+    plane: any;
+    renderer: any;
+    text: string;
+    textColor?: string;
+    font?: string;
+  }) {
     autoBind(this);
     this.gl = gl;
     this.plane = plane;
@@ -183,7 +197,49 @@ class Title {
 }
 
 class Media {
-  constructor({ geometry, gl, image, index, length, renderer, scene, screen, text, viewport, bend, textColor, borderRadius = 0, font }) {
+  extra: number;
+  geometry: any;
+  gl: any;
+  image: string;
+  index: number;
+  length: number;
+  renderer: any;
+  scene: any;
+  screen: any;
+  text: string;
+  viewport: any;
+  bend: number;
+  textColor: string;
+  borderRadius: number;
+  font: string;
+  program: any;
+  plane: any;
+  title: any;
+  speed: number = 0;
+  isBefore: boolean = false;
+  isAfter: boolean = false;
+  widthTotal: number = 0;
+  scale: number = 1;
+  padding: number = 0;
+  width: number = 0;
+  x: number = 0;
+
+  constructor({ geometry, gl, image, index, length, renderer, scene, screen, text, viewport, bend, textColor, borderRadius = 0, font }: {
+    geometry: any;
+    gl: any;
+    image: string;
+    index: number;
+    length: number;
+    renderer: any;
+    scene: any;
+    screen: any;
+    text: string;
+    viewport: any;
+    bend: number;
+    textColor: string;
+    borderRadius?: number;
+    font: string;
+  }) {
     this.extra = 0;
     this.geometry = geometry;
     this.gl = gl;
@@ -287,7 +343,7 @@ class Media {
       text: this.text, textColor: this.textColor, font: this.font
     });
   }
-  update(scroll, direction) {
+  update(scroll: any, direction: 'right' | 'left') {
     this.plane.position.x = this.x - scroll.current - this.extra;
     const x = this.plane.position.x;
     const H = this.viewport.width / 2;
@@ -323,7 +379,7 @@ class Media {
       this.isBefore = this.isAfter = false;
     }
   }
-  onResize({ screen, viewport } = {}) {
+  onResize({ screen, viewport }: { screen?: any; viewport?: any } = {}) {
     if (screen) this.screen = screen;
     if (viewport) {
       this.viewport = viewport;
@@ -343,7 +399,37 @@ class Media {
 }
 
 class App {
-  constructor(container, { items, bend, textColor = '#ffffff', borderRadius = 0, font = 'bold 30px Figtree', scrollSpeed = 2, scrollEase = 0.05 } = {}) {
+  container: HTMLElement;
+  scrollSpeed: number;
+  scroll: { ease: number; current: number; target: number; last: number; position?: number };
+  onCheckDebounce: any;
+  renderer!: Renderer;
+  gl: any;
+  camera!: Camera;
+  scene!: Transform;
+  planeGeometry: any;
+  mediasImages: any[] = [];
+  medias: Media[] = [];
+  isDown: boolean = false;
+  start: number = 0;
+  viewport: any;
+  screen: any;
+  raf: any;
+  boundOnResize: any;
+  boundOnWheel: any;
+  boundOnTouchDown: any;
+  boundOnTouchMove: any;
+  boundOnTouchUp: any;
+
+  constructor(container: HTMLElement, { items, bend, textColor = '#ffffff', borderRadius = 0, font = 'bold 30px Figtree', scrollSpeed = 2, scrollEase = 0.05 }: {
+    items?: any[];
+    bend?: number;
+    textColor?: string;
+    borderRadius?: number;
+    font?: string;
+    scrollSpeed?: number;
+    scrollEase?: number;
+  } = {}) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
     this.scrollSpeed = scrollSpeed;
@@ -373,7 +459,7 @@ class App {
   createGeometry() {
     this.planeGeometry = new Plane(this.gl, { heightSegments: 50, widthSegments: 100 });
   }
-  createMedias(items, bend = 1, textColor, borderRadius, font) {
+  createMedias(items: any[] | undefined, bend = 1, textColor: string, borderRadius: number, font: string) {
     const defaultItems = [
       { image: 'https://picsum.photos/seed/1/800/600?grayscale', text: 'Bridge' },
       { image: 'https://picsum.photos/seed/2/800/600?grayscale', text: 'Desk Setup' },
@@ -393,19 +479,19 @@ class App {
       });
     });
   }
-  onTouchDown(e) {
+  onTouchDown(e: any) {
     this.isDown = true;
     this.scroll.position = this.scroll.current;
     this.start = e.touches ? e.touches[0].clientX : e.clientX;
   }
-  onTouchMove(e) {
+  onTouchMove(e: any) {
     if (!this.isDown) return;
     const x = e.touches ? e.touches[0].clientX : e.clientX;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
-    this.scroll.target = this.scroll.position + distance;
+    this.scroll.target = this.scroll.position! + distance;
   }
   onTouchUp() { this.isDown = false; this.onCheck(); }
-  onWheel(e) {
+  onWheel(e: any) {
     const delta = e.deltaY || e.wheelDelta || e.detail;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
@@ -470,6 +556,17 @@ class App {
   }
 }
 
+interface CircularGalleryProps {
+  items?: { image: string; text: string }[];
+  bend?: number;
+  textColor?: string;
+  borderRadius?: number;
+  font?: string;
+  fontUrl?: string;
+  scrollSpeed?: number;
+  scrollEase?: number;
+}
+
 export default function CircularGallery({
   items,
   bend = 3,
@@ -479,13 +576,13 @@ export default function CircularGallery({
   fontUrl,
   scrollSpeed = 2,
   scrollEase = 0.05
-}) {
-  const containerRef = useRef(null);
+}: CircularGalleryProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!containerRef.current) return;
-    let app;
+    let app: App;
     let isMounted = true;
-    let observer;
+    let observer: IntersectionObserver;
 
     resolveFont(font, fontUrl).then(resolvedFont => {
       if (!isMounted || !containerRef.current) return;

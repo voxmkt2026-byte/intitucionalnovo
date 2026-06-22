@@ -161,6 +161,18 @@ export default function StatsSection() {
         <rect width="100%" height="100%" fill="url(#stats-dots)" />
       </svg>
 
+      <div className="relative z-10 max-w-[960px] mx-auto px-8 md:px-16 pt-8 pb-16 text-center">
+        <span className="inline-block text-green-vivid text-xs font-sans font-bold uppercase tracking-[0.2em] mb-3">
+          Indicadores do Setor
+        </span>
+        <h2 className="font-[family-name:var(--font-jakarta)] text-white text-3xl md:text-4xl font-extrabold tracking-tight">
+          O Mercado de Consórcios no Brasil
+        </h2>
+        <p className="text-white/60 text-sm mt-2 max-w-lg mx-auto leading-relaxed">
+          Para contextualizar seu planejamento: veja os dados oficiais consolidados do sistema nacional de consórcios (Fonte: ABAC).
+        </p>
+      </div>
+
       {/* ════ DESKTOP: Grid rows — number + text side by side ════ */}
       <div className="relative z-10 hidden md:block max-w-[960px] mx-auto px-8 md:px-16 space-y-36">
         {/* Row 1 — number LEFT, text RIGHT */}

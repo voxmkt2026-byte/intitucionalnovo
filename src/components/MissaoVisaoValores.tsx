@@ -584,7 +584,7 @@ export default function MissaoVisaoValores() {
   const numRef3 = useRef<HTMLSpanElement>(null);
 
   useCountUp(numRef1, 4, 1800);
-  useCountUp(numRef2, 2000, 2200);
+  useCountUp(numRef2, 3000, 2200);
   useCountUp(numRef3, 50, 2000);
 
   // Scroll-reveal for .mv-reveal elements

@@ -40,12 +40,12 @@ const MAX_BAR_VALUE = 50;
 
 const stats = [
   {
-    value: 2000,
+    value: 3000,
     suffix: "+",
     prefix: "",
     label: "clientes atendidos",
     description:
-      "Mais de 2.000 clientes já conquistaram imóveis, veículos e equipamentos com a Titanium. Produtores rurais, empresários e profissionais liberais.",
+      "Mais de 3.000 clientes já conquistaram imóveis, veículos e equipamentos com a Titanium. Produtores rurais, empresários e profissionais liberais.",
   },
   {
     value: 50,

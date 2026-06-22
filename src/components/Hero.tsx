@@ -18,7 +18,7 @@ const slides = [
   {
     id: 2,
     image: "/img/hero-agro.webp",
-    kicker: "4 anos · +2.000 clientes* · CNPJ ativo",
+    kicker: "4 anos · +3.000 clientes* · CNPJ ativo",
     title: ["A parcela não conta", "a história toda."],
     subtitle:
       "Antes de assumir uma compra de longo prazo, compare custos, prazos e alternativas com orientação especializada.",
@@ -243,7 +243,7 @@ export default function Hero() {
         <div className="max-w-[860px] mx-auto flex flex-wrap items-center gap-6 pt-6">
           {[
             { value: "4 anos*", label: "de mercado" },
-            { value: "+2.000*", label: "clientes atendidos" },
+            { value: "+3.000*", label: "clientes atendidos" },
             { value: "CNPJ ativo", label: "Banco Central regulado" },
           ].map((item) => (
             <div key={item.value} className="flex items-center gap-3">

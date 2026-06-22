@@ -243,10 +243,10 @@ export default function ParcelSimulator() {
             >
               Quanto você economiza
               <br />
-              <span className="text-gradient">sem banco?</span>
+              <span className="text-gradient">com análise consultiva?</span>
             </h2>
             <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
-              Compare a parcela do banco com a carta contemplada. A diferença fica no seu bolso — não no lucro da instituição financeira.
+              Compare o custo de um financiamento tradicional com a estruturação inteligente de uma carta de consórcio.
             </p>
 
             {/* Trust badge */}

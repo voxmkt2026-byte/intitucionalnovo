@@ -99,7 +99,7 @@ const milestones = [
   {
     year: "2026",
     title: "O Futuro É Agora",
-    text: "Mais de 2.000 clientes atendidos. Presença consolidada em todos os 26 estados e Distrito Federal. Equipe de 25 profissionais entre consultores, jurídico e tecnologia. A Titanium segue democratizando o acesso ao crédito inteligente — porque acreditamos que a casa própria, o carro novo e o crescimento do negócio não devem ser privilégio de poucos.",
+    text: "Mais de 3.000 clientes atendidos. Presença consolidada em todos os 26 estados e Distrito Federal. Equipe de 25 profissionais entre consultores, jurídico e tecnologia. A Titanium segue democratizando o acesso ao crédito inteligente — porque acreditamos que a casa própria, o carro novo e o crescimento do negócio não devem ser privilégio de poucos.",
     accent: true,
   },
 ];

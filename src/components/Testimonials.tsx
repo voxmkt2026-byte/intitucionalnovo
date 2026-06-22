@@ -19,7 +19,7 @@ const testimonials: Testimonial[] = [
     role: "Motorista de app · São Paulo",
     quote:
       "Pagava R$ 2.700 de aluguel. Hoje a parcela do meu carro é R$ 990. Foram 12 dias do primeiro contato até pegar a chave.",
-    badge: "Economia de R$ 1.710/mês",
+    badge: "Economia de R$ 1.710/mês*",
   },
   {
     initial: "R",
@@ -27,7 +27,7 @@ const testimonials: Testimonial[] = [
     role: "Cirurgião-Dentista · Campinas",
     quote:
       "O banco queria 24% ao ano para financiar meu tomógrafo de R$ 220 mil. Pela Titanium, equipei a clínica em 8 meses e economizei R$ 90 mil.",
-    badge: "R$ 90 mil economizados",
+    badge: "R$ 90 mil economizados*",
   },
   {
     initial: "P",
@@ -35,7 +35,7 @@ const testimonials: Testimonial[] = [
     role: "Investidora · Belo Horizonte",
     quote:
       "Precisava de R$ 280 mil para um imóvel e não queria esperar sorteio. A carta contemplada foi aprovada em 3 dias. Negócio fechado em uma semana.",
-    badge: "Crédito liberado em 3 dias",
+    badge: "Crédito liberado em 3 dias*",
   },
 ];
 
