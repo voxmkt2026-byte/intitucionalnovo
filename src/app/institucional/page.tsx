@@ -3,46 +3,45 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Institucional | Titanium Consultoria",
   description:
-    "Conheça a Titanium Consultoria: história, missão, valores, processo de aquisição de cartas contempladas, parceiros e perguntas frequentes.",
+    "Conheça a Titanium Consultoria: história, missão, valores, processo de análise consultiva para aquisição patrimonial via consórcio e cartas contempladas.",
 };
 
 const steps = [
-  { num: "01", title: "Consulta Inicial", desc: "Você nos conta seu objetivo. Imóvel? Veículo? Valor? Nosso consultor mapeia as melhores opções disponíveis no mercado." },
-  { num: "02", title: "Curadoria de Cartas", desc: "Filtramos apenas cartas contempladas verificadas, com as menores taxas administrativas e condições seguras." },
-  { num: "03", title: "Auditoria Jurídica", desc: "Nossa equipe legal analisa cada documento, contrato e histórico da carta antes de apresentá-la a você." },
-  { num: "04", title: "Formalização", desc: "Com tudo aprovado, formalizamos a transferência junto à administradora. Você acompanha cada etapa." },
-  { num: "05", title: "Crédito Liberado", desc: "Carta em seu nome, crédito disponível. Sem financiamento bancário, sem juros bancários, sem surpresas — apenas taxa administrativa transparente." },
+  { num: "01", title: "Diagnóstico de Perfil", desc: "Você nos conta seu objetivo. Imóvel? Veículo? Equipamento? Nosso consultor avalia as alternativas compatíveis com seu perfil e momento." },
+  { num: "02", title: "Comparativo de Alternativas", desc: "Analisamos consórcio novo, carta contemplada, financiamento ou aguardar melhor momento. Você entende os prós e contras de cada caminho." },
+  { num: "03", title: "Curadoria de Cartas", desc: "Se houver carta contemplada compatível, verificamos documentação, histórico e condições junto à administradora antes de apresentá-la." },
+  { num: "04", title: "Formalização", desc: "Com tudo validado, formalizamos a transferência junto à administradora. Você acompanha cada etapa com total transparência." },
+  { num: "05", title: "Orientação Completa", desc: "Carta em seu nome, crédito disponível conforme regras da administradora. Sem juros bancários compostos — apenas taxa administrativa transparente*." },
 ];
 
 const faqs = [
   {
     q: "O que é uma carta contemplada?",
-    a: "É uma cota de consórcio que já foi sorteada ou contemplada por lance. Ao adquiri-la, você tem acesso imediato ao crédito, sem precisar esperar sorteio.",
+    a: "É uma cota de consórcio que já foi sorteada ou contemplada por lance. Ao adquiri-la, o crédito pode estar disponível de forma mais rápida do que em um consórcio novo. A disponibilidade depende de análise e aprovação da administradora.",
   },
   {
     q: "É seguro comprar uma carta contemplada?",
-    a: "Sim, desde que a transação seja intermediada por uma consultoria com auditoria jurídica — como a Titanium. Verificamos toda a documentação e histórico da carta antes de oferecê-la.",
+    a: "A segurança depende da intermediação. Na Titanium, toda operação passa por verificação de documentação e histórico da carta. Recomendamos sempre consultar uma empresa com CNPJ ativo e experiência comprovada no mercado.",
   },
   {
-    q: "Tem juros?",
-    a: "Não. Consórcio não cobra juros. Existe apenas uma taxa administrativa, que nas cartas contempladas da Titanium começa a partir de 0,5% ao mês.",
+    q: "Consórcio tem juros?",
+    a: "Consórcio não cobra juros bancários compostos como um financiamento tradicional. Existe uma taxa de administração, que varia conforme a administradora e o plano escolhido. Na prática, o custo total tende a ser menor, mas depende de cada caso*.",
   },
   {
     q: "Posso usar a carta para qualquer imóvel ou veículo?",
-    a: "Sim. A carta de crédito pode ser utilizada para aquisição de imóveis residenciais, comerciais, terrenos, veículos novos ou seminovos, conforme as regras da administradora.",
+    a: "A carta de crédito pode ser utilizada conforme as regras da administradora. Em geral, atende imóveis residenciais, comerciais, terrenos, veículos novos e seminovos. Recomendamos verificar as condições específicas durante a análise consultiva.",
   },
   {
     q: "Quanto tempo leva o processo?",
-    a: "Após a escolha da carta, a formalização leva em média 7 a 15 dias úteis, dependendo da administradora e da documentação envolvida.",
+    a: "Após a escolha da carta, a formalização leva em média 7 a 15 dias úteis, dependendo da administradora e da documentação. Cada caso pode variar conforme complexidade e aprovação.",
   },
   {
     q: "Quais administradoras vocês trabalham?",
-    a: "Trabalhamos com as maiores e mais confiáveis administradoras do país, incluindo Porto Seguro, Embracon, Rodobens e outras de primeira linha.",
+    a: "Trabalhamos com administradoras de primeira linha, incluindo Porto Seguro, Embracon, Rodobens e outras. A escolha depende do perfil e objetivo do cliente.",
   },
 ];
 
@@ -75,11 +74,12 @@ export default function InstitucionalPage() {
               <span className="w-1.5 h-1.5 rounded-full bg-green-vivid" />
             </div>
             <h1 className="text-massive font-[family-name:var(--font-jakarta)] text-green mb-8 leading-tight">
-              Quem está por trás<br />da sua próxima conquista
+              Consultoria para quem está<br />planejando uma aquisição
             </h1>
             <p className="text-lg md:text-xl text-ink-soft font-[family-name:var(--font-jakarta)] leading-relaxed max-w-2xl">
-              A Titanium Consultoria nasceu da convicção de que adquirir um imóvel ou veículo
-              não deveria envolver juros abusivos, burocracia excessiva ou insegurança jurídica.
+              A Titanium nasceu da convicção de que adquirir imóvel, veículo ou equipamento
+              merece análise profissional. Avaliamos seu objetivo, perfil e alternativas antes
+              de qualquer decisão.
             </p>
           </div>
         </section>
@@ -91,17 +91,17 @@ export default function InstitucionalPage() {
               {[
                 {
                   label: "Missão",
-                  text: "Democratizar o acesso a cartas contempladas com transparência total, segurança jurídica e as menores taxas do mercado.",
+                  text: "Oferecer análise consultiva para aquisição patrimonial via consórcio e cartas contempladas, com transparência e segurança.",
                 },
                 {
                   label: "Visão",
-                  text: "Ser a referência nacional em consultoria de consórcios, reconhecida pela excelência no atendimento e confiabilidade.",
+                  text: "Ser referência nacional em consultoria de consórcios, reconhecida pela excelência no atendimento e pela confiabilidade.",
                 },
                 {
                   label: "Valores",
-                  text: "Ética. Transparência. Sigilo. Compromisso com o resultado do cliente acima de qualquer comissão.",
+                  text: "Ética. Transparência. Sigilo. Compromisso com a orientação correta acima de qualquer comissão.",
                 },
-              ].map((item, i) => (
+              ].map((item) => (
                 <div
                   key={item.label}
                   className="p-8 bg-bg border border-green/5 shadow-sm rounded-3xl transition-all duration-300 hover:shadow-md"
@@ -124,11 +124,11 @@ export default function InstitucionalPage() {
               <span className="w-1.5 h-1.5 rounded-full bg-green-vivid" />
             </div>
             <h2 className="text-display font-[family-name:var(--font-jakarta)] text-green mb-16">
-              Como funciona
+              Como funciona a<br />análise consultiva
             </h2>
 
             <div className="flex flex-col gap-6">
-               {steps.map((step, i) => (
+               {steps.map((step) => (
                 <div key={step.num} className="bg-bg-white border border-green/5 p-8 rounded-3xl shadow-sm">
                   <div className="flex gap-6 items-start">
                     <span className="font-[family-name:var(--font-jakarta)] text-3xl text-green-vivid font-black shrink-0 w-12">
@@ -161,7 +161,7 @@ export default function InstitucionalPage() {
             </h2>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {partners.map((partner, i) => (
+              {partners.map((partner) => (
                 <div
                   key={partner}
                   className="p-6 flex items-center justify-center bg-bg border border-green/5 rounded-2xl shadow-sm"
@@ -208,6 +208,10 @@ export default function InstitucionalPage() {
                 </details>
               ))}
             </div>
+
+            <p className="mt-8 text-xs text-green/30 font-[family-name:var(--font-jakarta)] leading-relaxed">
+              *A disponibilidade de cartas, valores, parcelas, transferência e utilização do crédito estão sujeitas à análise, regras contratuais, aprovação da administradora e documentação necessária. Taxas variam conforme administradora e plano.
+            </p>
           </div>
         </section>
 
@@ -215,11 +219,11 @@ export default function InstitucionalPage() {
         <section className="bg-bg-white py-24 text-center">
           <div className="max-w-[900px] mx-auto px-6">
             <h2 className="text-display font-[family-name:var(--font-jakarta)] text-green mb-6">
-              Quanto você deixa de pagar ao banco este mês?
+              Antes de decidir, compare.
             </h2>
             <p className="text-lg text-ink-soft font-[family-name:var(--font-jakarta)] mb-10 max-w-xl mx-auto">
-              Fale com um consultor Titanium e descubra a melhor carta contemplada
-              para o seu perfil. Sem compromisso.
+              Solicite uma análise consultiva gratuita e entenda qual alternativa
+              — consórcio, carta contemplada ou outra — faz mais sentido para seu objetivo.
             </p>
             <a
               href="https://wa.me/5511930048940"
@@ -227,10 +231,10 @@ export default function InstitucionalPage() {
               rel="noopener noreferrer"
               className="btn-primary"
             >
-              Falar com Consultor
+              Solicitar análise gratuita
             </a>
             <p className="mt-8 text-xs text-green/50 font-[family-name:var(--font-jakarta)] font-semibold">
-              CNPJ 46.640.755/0001-51
+              CNPJ 46.640.755/0001-51 · Consultoria especializada em aquisição patrimonial
             </p>
           </div>
         </section>

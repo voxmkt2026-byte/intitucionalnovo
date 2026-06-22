@@ -7,13 +7,13 @@ import WebGLErrorBoundary from "./WebGLErrorBoundary";
 const InfiniteMenu = dynamic(() => import("./InfiniteMenu"), { ssr: false });
 
 const WHATSAPP_BASE =
-  "https://wa.me/5511930048940?text=Olá,%20tenho%20interesse%20em%20carta%20contemplada%20de%20";
+  "https://wa.me/5511930048940?text=Olá,%20gostaria%20de%20uma%20análise%20consultiva%20sobre%20";
 
 const segments = [
   {
     title: "Casa Moderna",
     description:
-      "Apartamento ou casa própria com crédito aprovado. Sem financiamento bancário, sem espera. Parcelas até 60% menores que o banco*.",
+      "Apartamento ou casa própria via consórcio ou carta contemplada. Alternativa ao financiamento bancário tradicional, com parcelas que podem ser até 60% menores*.",
     price: "R$ 912",
     tag: "imóvel residencial",
     image: "/img/seg-casa-moderna.webp",
@@ -23,7 +23,7 @@ const segments = [
   {
     title: "Mansões & Alto Padrão",
     description:
-      "Imóveis de alto padrão, coberturas e condomínios exclusivos. Patrimônio sólido sem juros compostos.",
+      "Imóveis de alto padrão, coberturas e condomínios exclusivos. Patrimônio sólido sem juros bancários compostos*.",
     price: "R$ 2.400",
     tag: "imóvel alto padrão",
     image: "/img/seg-imoveis.webp",
@@ -33,7 +33,7 @@ const segments = [
   {
     title: "Veículo Premium",
     description:
-      "BMW, Mercedes, Porsche. O carro que comunica resultado — parcela menor que financiamento.",
+      "BMW, Mercedes, Porsche. Compare o custo total: parcelas que podem ser menores que financiamento bancário*.",
     price: "R$ 1.503",
     tag: "carro de luxo",
     image: "/img/seg-carros.webp",
@@ -53,7 +53,7 @@ const segments = [
   {
     title: "Motorista de App",
     description:
-      "Carro para Uber, 99 e iFood. Comece a trabalhar com carro próprio — sem pagar aluguel.",
+      "Carro para Uber, 99 e iFood. Analise alternativas ao aluguel e ao financiamento para ter seu carro próprio*.",
     price: "R$ 389",
     tag: "carro para Uber",
     image: "/img/seg-motorista-app.webp",
@@ -63,7 +63,7 @@ const segments = [
   {
     title: "Caminhão & Frota",
     description:
-      "Renove ou expanda a frota sem comprometer o caixa. Crédito para quem move o Brasil.",
+      "Renove ou expanda a frota com alternativas ao financiamento bancário. Parcelas que podem preservar seu caixa*.",
     price: "R$ 915",
     tag: "caminhão",
     image: "/img/seg-caminhao.webp",
@@ -73,7 +73,7 @@ const segments = [
   {
     title: "Moto",
     description:
-      "Moto nova para trabalho ou lazer. Carta contemplada com crédito liberado, sem sorteio.",
+      "Moto nova para trabalho ou lazer. Carta contemplada com crédito já disponível, sem necessidade de aguardar sorteio*.",
     price: "R$ 189",
     tag: "moto",
     image: "/img/seg-moto.webp",
@@ -83,7 +83,7 @@ const segments = [
   {
     title: "Tratores & Agro",
     description:
-      "Colheitadeira, trator, implemento. Renove o maquinário da safra sem depender de banco.",
+      "Colheitadeira, trator, implemento. Alternativas ao financiamento bancário para renovar o maquinário da safra*.",
     price: "R$ 1.200",
     tag: "máquinas agrícolas",
     image: "/img/seg-trator.webp",
@@ -93,7 +93,7 @@ const segments = [
   {
     title: "Terreno Agrícola",
     description:
-      "Fazenda, sítio ou chácara. Amplie sua propriedade rural com crédito inteligente.",
+      "Fazenda, sítio ou chácara. Conheça alternativas de crédito para ampliar sua propriedade rural*.",
     price: "R$ 800",
     tag: "terreno agrícola",
     image: "/img/seg-fazenda.webp",
@@ -113,7 +113,7 @@ const segments = [
   {
     title: "Construção",
     description:
-      "Crédito para construir do zero ou reformar. Realize o projeto sem financiamento bancário.",
+      "Crédito para construir do zero ou reformar. Compare alternativas ao financiamento bancário tradicional*.",
     price: "R$ 660",
     tag: "construção",
     image: "/img/seg-construcao.webp",
@@ -123,7 +123,7 @@ const segments = [
   {
     title: "Aeronaves",
     description:
-      "Jatos executivos, turboélices e helicópteros. Carta contemplada viabiliza o que banco recusa.",
+      "Jatos executivos, turboélices e helicópteros. Cartas contempladas podem viabilizar aquisições de alto valor*.",
     price: "Sob consulta",
     tag: "aeronaves",
     image: "/img/seg-aeronaves.webp",
@@ -133,7 +133,7 @@ const segments = [
   {
     title: "Embarcações",
     description:
-      "Lanchas, iates e embarcações. Crédito para quem navega com inteligência financeira.",
+      "Lanchas, iates e embarcações. Analise alternativas de crédito para sua embarcação*.",
     price: "Sob consulta",
     tag: "embarcações",
     image: "/img/seg-embarcacao.webp",
@@ -143,7 +143,7 @@ const segments = [
   {
     title: "Placas Solares",
     description:
-      "Energia solar para residência ou empresa. Invista em energia solar e economize na conta de luz*.",
+      "Energia solar para residência ou empresa. Alternativas de crédito para investir em energia solar e reduzir custos*.",
     price: "R$ 320",
     tag: "placas solares",
     image: "/img/seg-placas-solares.webp",
@@ -210,7 +210,7 @@ export default function Segments() {
           >
             O que você pode adquirir
             <br />
-            <span style={{ color: "var(--green-vivid)" }}>sem banco</span>
+            <span style={{ color: "var(--green-vivid)" }}>com análise consultiva</span>
           </h2>
         </div>
       </div>
@@ -367,7 +367,7 @@ export default function Segments() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
-                Quero minha carta agora
+                Solicitar análise gratuita
               </a>
             </div>
           </div>
