@@ -8,7 +8,7 @@ const slides = [
   {
     id: 1,
     image: "/img/hero-escritorio.webp",
-    kicker: "Consultoria financeira para quem está construindo",
+    kicker: "4 anos · +2.000 clientes · CNPJ ativo",
     title: ["Você constrói.", "O banco lucra", "em cima disso."],
     subtitle:
       "Do agro ao imóvel. Da frota à clínica. Existe um caminho para expandir patrimônio sem pagar 30% ao banco.",

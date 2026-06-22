@@ -15,6 +15,7 @@ export default function ParcelSimulator() {
   const [selectedPlan, setSelectedPlan] = useState<"titanium" | "conforto">("titanium");
   const [consent, setConsent] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [contactError, setContactError] = useState<string | null>(null);
   const [hasCalculated, setHasCalculated] = useState<boolean>(true);
 
   const minCredit = segment === "imovel" ? 100000 : 30000;
@@ -57,7 +58,7 @@ export default function ParcelSimulator() {
     else if (v.length > 2) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
     else if (v.length > 0) v = `(${v}`;
     setPhone(v);
-    setError(null);
+    setContactError(null);
   };
 
   // ── Google Sheets via server-side proxy (avoids CORS) ──
@@ -121,20 +122,26 @@ export default function ParcelSimulator() {
     }).catch(() => {/* silently ignore */});
   };
 
+  // ── Phase 1: Calculate — only validates credit inputs ──
   const calculateScenarios = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!name.trim()) { setError("Por favor, preencha o seu nome completo."); return; }
-    if (!email.trim() || !email.includes("@")) { setError("Por favor, insira um e-mail válido."); return; }
-    if (phone.length < 14) { setError("Por favor, insira um telefone de contato válido."); return; }
-    if (!consent) { setError("Você precisa aceitar o aviso de privacidade para continuar."); return; }
     const creditNum = Number(credit);
     const monthsNum = Number(months);
     if (!credit || isNaN(creditNum) || creditNum <= 0) { setError("Valor de crédito inválido."); return; }
     if (!months || isNaN(monthsNum) || monthsNum <= 0) { setError("Prazo inválido."); return; }
-    // ── Send lead to Google Sheets ──
-    sendToGoogleSheets(selectedPlan === "titanium" ? "Titanium" : "Conforto");
     setHasCalculated(true);
+  };
+
+  // ── Phase 2: WhatsApp CTA — validates personal data ──
+  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setContactError(null);
+    if (!name.trim()) { e.preventDefault(); setContactError("Por favor, preencha o seu nome completo."); return; }
+    if (!email.trim() || !email.includes("@")) { e.preventDefault(); setContactError("Por favor, insira um e-mail válido."); return; }
+    if (phone.length < 14) { e.preventDefault(); setContactError("Por favor, insira um telefone de contato válido."); return; }
+    if (!consent) { e.preventDefault(); setContactError("Você precisa aceitar o aviso de privacidade para continuar."); return; }
+    // All good — send lead to Google Sheets
+    sendToGoogleSheets(selectedPlan === "titanium" ? "Titanium" : "Conforto");
   };
 
   const creditNum = Number(credit) || 0;
@@ -240,72 +247,35 @@ export default function ParcelSimulator() {
             className="lg:col-span-7 rounded-2xl p-8 md:p-10 space-y-8"
             style={{ backgroundColor: "var(--bg-dark)" }}
           >
+            {/* ══ PHASE 1: Credit inputs (no personal data required) ══ */}
             <form onSubmit={calculateScenarios} className="space-y-6">
 
-              {/* Personal info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { label: "Seu nome completo", value: name, onChange: (e: React.ChangeEvent<HTMLInputElement>) => { setName(e.target.value); setError(null); }, placeholder: "Ex: João da Silva", type: "text" },
-                  { label: "Seu melhor e-mail", value: email, onChange: (e: React.ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value); setError(null); }, placeholder: "Ex: joao@email.com", type: "email" },
-                ].map((field) => (
-                  <div key={field.label}>
-                    <label
-                      style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}
+              {/* Segment toggle + sliders */}
+              <div>
+                <label style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}>
+                  Tipo de carta
+                </label>
+                <div className="flex gap-2">
+                  {(["imovel", "veiculo"] as const).map((seg) => (
+                    <button
+                      key={seg}
+                      type="button"
+                      onClick={() => handleSegmentChange(seg)}
+                      className="flex-1 py-3 text-xs uppercase tracking-wider font-bold rounded-xl transition-all duration-200"
+                      style={{
+                        fontFamily: "var(--font-jakarta)",
+                        backgroundColor: segment === seg ? "var(--green)" : "rgba(255,255,255,0.08)",
+                        color: segment === seg ? "white" : "rgba(255,255,255,0.5)",
+                      }}
                     >
-                      {field.label}
-                    </label>
-                    <input
-                      type={field.type}
-                      value={field.value}
-                      onChange={field.onChange}
-                      placeholder={field.placeholder}
-                      style={{ fontFamily: "var(--font-jakarta)" }}
-                      className="w-full bg-white/8 border border-white/10 px-4 py-3.5 text-white placeholder:text-white/25 text-sm rounded-xl focus:outline-none focus:border-green-500/50 transition-all"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}>
-                    WhatsApp / Celular
-                  </label>
-                  <input
-                    type="text"
-                    value={phone}
-                    onChange={handlePhoneChange}
-                    placeholder="(11) 99999-9999"
-                    style={{ fontFamily: "var(--font-jakarta)" }}
-                    className="w-full bg-white/8 border border-white/10 px-4 py-3.5 text-white placeholder:text-white/25 text-sm rounded-xl focus:outline-none focus:border-green-500/50 transition-all"
-                  />
-                </div>
-                <div>
-                  <label style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}>
-                    Tipo de carta
-                  </label>
-                  <div className="flex gap-2">
-                    {(["imovel", "veiculo"] as const).map((seg) => (
-                      <button
-                        key={seg}
-                        type="button"
-                        onClick={() => handleSegmentChange(seg)}
-                        className="flex-1 py-3 text-xs uppercase tracking-wider font-bold rounded-xl transition-all duration-200"
-                        style={{
-                          fontFamily: "var(--font-jakarta)",
-                          backgroundColor: segment === seg ? "var(--green)" : "rgba(255,255,255,0.08)",
-                          color: segment === seg ? "white" : "rgba(255,255,255,0.5)",
-                        }}
-                      >
-                        {seg === "imovel" ? "Imóvel" : "Veículo"}
-                      </button>
-                    ))}
-                  </div>
+                      {seg === "imovel" ? "Imóvel" : "Veículo"}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               {/* Sliders */}
-              <div className="pt-6 space-y-6" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="pt-4 space-y-6" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                 {/* Credit */}
                 <div>
                   <div className="flex justify-between items-baseline mb-3">
@@ -369,21 +339,6 @@ export default function ParcelSimulator() {
                 </div>
               </div>
 
-              {/* Consent */}
-              <div className="flex items-start gap-3 pt-1">
-                <input
-                  type="checkbox"
-                  id="privacy-consent"
-                  checked={consent}
-                  onChange={(e) => setConsent(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 rounded"
-                  style={{ accentColor: "var(--green-vivid)" }}
-                />
-                <label htmlFor="privacy-consent" style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.6, cursor: "pointer" }}>
-                  Concordo em fornecer os dados para simulação e atendimento. Seus dados estão protegidos pela LGPD.
-                </label>
-              </div>
-
               <button
                 type="submit"
                 disabled={isDisabled}
@@ -407,8 +362,8 @@ export default function ParcelSimulator() {
               )}
             </form>
 
-            {/* Resultados */}
-            {hasCalculated && name && phone.length >= 14 && (
+            {/* ══ PHASE 2: Results + personal data + WhatsApp CTA ══ */}
+            {hasCalculated && (
               <div className="pt-8 space-y-5" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
 
                 {/* Comparação banco vs contemplada */}
@@ -488,23 +443,94 @@ export default function ParcelSimulator() {
                   </div>
                 )}
 
-                {/* CTA WhatsApp */}
-                <a
-                  href={getWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                  style={{
-                    fontFamily: "var(--font-jakarta)",
-                    backgroundColor: "var(--whatsapp)",
-                    color: "white",
-                  }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                  </svg>
-                  Falar com consultor no WhatsApp
-                </a>
+                {/* ── Simulation disclaimer ── */}
+                <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.68rem", color: "rgba(255,255,255,0.25)", lineHeight: 1.6, fontStyle: "italic" }}>
+                  *Simulação ilustrativa. Valores reais podem variar conforme administradora, grupo e condições de mercado. Taxa administrativa de 12% a 22% conforme prazo e segmento.
+                </p>
+
+                {/* ── Personal data collection (after results) ── */}
+                <div className="pt-6 space-y-4" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                  <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.8rem", fontWeight: 600, color: "rgba(255,255,255,0.5)" }}>
+                    Gostou do resultado? Preencha seus dados para falar com um consultor:
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      { label: "Seu nome completo", value: name, onChange: (e: React.ChangeEvent<HTMLInputElement>) => { setName(e.target.value); setContactError(null); }, placeholder: "Ex: João da Silva", type: "text" },
+                      { label: "Seu melhor e-mail", value: email, onChange: (e: React.ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value); setContactError(null); }, placeholder: "Ex: joao@email.com", type: "email" },
+                    ].map((field) => (
+                      <div key={field.label}>
+                        <label
+                          style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}
+                        >
+                          {field.label}
+                        </label>
+                        <input
+                          type={field.type}
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder={field.placeholder}
+                          style={{ fontFamily: "var(--font-jakarta)" }}
+                          className="w-full bg-white/8 border border-white/10 px-4 py-3.5 text-white placeholder:text-white/25 text-sm rounded-xl focus:outline-none focus:border-green-500/50 transition-all"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div>
+                    <label style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}>
+                      WhatsApp / Celular
+                    </label>
+                    <input
+                      type="text"
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      placeholder="(11) 99999-9999"
+                      style={{ fontFamily: "var(--font-jakarta)" }}
+                      className="w-full bg-white/8 border border-white/10 px-4 py-3.5 text-white placeholder:text-white/25 text-sm rounded-xl focus:outline-none focus:border-green-500/50 transition-all"
+                    />
+                  </div>
+
+                  {/* Consent */}
+                  <div className="flex items-start gap-3 pt-1">
+                    <input
+                      type="checkbox"
+                      id="privacy-consent"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded"
+                      style={{ accentColor: "var(--green-vivid)" }}
+                    />
+                    <label htmlFor="privacy-consent" style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.6, cursor: "pointer" }}>
+                      Concordo em fornecer os dados para simulação e atendimento. Seus dados estão protegidos pela LGPD.
+                    </label>
+                  </div>
+
+                  {contactError && (
+                    <div className="text-xs font-sans border p-3.5 rounded-xl" style={{ color: "var(--bad)", borderColor: "rgba(196,64,64,0.2)", backgroundColor: "rgba(196,64,64,0.08)" }}>
+                      {contactError}
+                    </div>
+                  )}
+
+                  {/* CTA WhatsApp */}
+                  <a
+                    href={getWhatsAppUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={handleWhatsAppClick}
+                    className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    style={{
+                      fontFamily: "var(--font-jakarta)",
+                      backgroundColor: "var(--whatsapp)",
+                      color: "white",
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    Falar com consultor no WhatsApp
+                  </a>
+                </div>
               </div>
             )}
           </div>

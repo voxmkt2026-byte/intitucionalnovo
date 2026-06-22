@@ -37,7 +37,7 @@ export default function Footer() {
                 style={{ filter: "brightness(0) invert(1)" }}
               />
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.9rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.75, maxWidth: "380px" }}>
-                Consultoria financeira especializada em cartas contempladas. Cartas contempladas com taxas menores que o financiamento bancário para produtores rurais, empresários e profissionais liberais.
+                Consultoria especializada em cartas contempladas para produtores rurais, empresários e profissionais liberais. Taxas a partir de 0,5% ao mês — regulamentada pelo Banco Central.
               </p>
               <div className="flex flex-wrap gap-3">
                 {[

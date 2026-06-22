@@ -215,7 +215,7 @@ export default function InstitucionalPage() {
         <section className="bg-bg-white py-24 text-center">
           <div className="max-w-[900px] mx-auto px-6">
             <h2 className="text-display font-[family-name:var(--font-jakarta)] text-green mb-6">
-              Pronto para começar?
+              Quanto você deixa de pagar ao banco este mês?
             </h2>
             <p className="text-lg text-ink-soft font-[family-name:var(--font-jakarta)] mb-10 max-w-xl mx-auto">
               Fale com um consultor Titanium e descubra a melhor carta contemplada

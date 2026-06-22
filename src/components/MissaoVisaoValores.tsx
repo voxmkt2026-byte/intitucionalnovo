@@ -227,18 +227,18 @@ const valores = [
   },
   {
     iconKey: "handshake" as const,
-    title: "Compromisso com o Cliente",
-    text: "Atendimento consultivo e personalizado. Nosso sucesso se mede pela conquista de cada cliente que atendemos.",
+    title: "Resultado acima da comissão",
+    text: "O consultor só ganha quando o cliente fecha uma carta que realmente faz sentido para ele.",
   },
   {
     iconKey: "bolt" as const,
-    title: "Excelência Operacional",
-    text: "Processos ágeis e eficientes para que o crédito chegue rápido, sem burocracia desnecessária e com total suporte.",
+    title: "Resposta em 24h",
+    text: "Qualquer dúvida, qualquer etapa — retornamos em no máximo 24 horas úteis.",
   },
   {
     iconKey: "lightbulb" as const,
-    title: "Inovação Contínua",
-    text: "Buscamos constantemente novas formas de entregar mais valor, com tecnologia e inteligência de mercado a serviço dos nossos clientes.",
+    title: "Processo 100% digital",
+    text: "Da simulação à assinatura — tudo online, sem papelada, sem deslocamento.",
   },
   {
     iconKey: "diamond" as const,
