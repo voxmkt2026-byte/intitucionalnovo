@@ -12,8 +12,8 @@ const slides = [
     title: ["Você constrói.", "O banco lucra", "em cima disso."],
     subtitle:
       "Do agro ao imóvel. Da frota à clínica. Existe um caminho para expandir patrimônio sem pagar 30% ao banco.",
-    cta1: { label: "Ver como funciona", href: "#segmentos" },
-    cta2: { label: "Simular crédito", href: "#simulador" },
+    cta1: { label: "Simular meu crédito", href: "#simulador" },
+    cta2: { label: "Ver segmentos", href: "#segmentos" },
   },
   {
     id: 2,
@@ -22,8 +22,8 @@ const slides = [
     title: ["Crédito aprovado.", "Sem banco.", "Sem juros compostos."],
     subtitle:
       "Quem financia R$ 500 mil paga R$ 1,2 milhão. Esse é o negócio do banco — não o seu. Cartas contempladas mudam esse cálculo.",
-    cta1: { label: "Quero meu crédito", href: "#segmentos" },
-    cta2: { label: "Calcular diferença", href: "#simulador" },
+    cta1: { label: "Simular meu crédito", href: "#simulador" },
+    cta2: { label: "Calcular diferença", href: "#segmentos" },
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ const slides = [
     title: ["Segurança jurídica", "em cada carta.", "Sem surpresas."],
     subtitle:
       "Cada carta é auditada pela nossa equipe jurídica antes de chegar até você. Aqui não tem promessa — tem processo.",
-    cta1: { label: "Conhecer a Titanium", href: "#sobre" },
+    cta1: { label: "Simular meu crédito", href: "#simulador" },
     cta2: { label: "Falar com consultor", href: "https://wa.me/5511930048940" },
   },
 ];

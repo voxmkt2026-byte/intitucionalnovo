@@ -15,12 +15,12 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <ParcelSimulator />
         <About />
         <PersonaGateway />
         <TrustLogos />
         <ValueProps />
         <Segments />
-        <ParcelSimulator />
       </main>
       <Footer />
       <WhatsAppButton />
