@@ -22,9 +22,9 @@ const propositions = [
   {
     num: "03",
     tagline: "Segurança jurídica",
-    headline: "4 anos de mercado. CNPJ ativo. Regulamentado pelo Banco Central.",
+    headline: "Cada carta é auditada antes de chegar até você.",
     description:
-      "Cada carta passa por verificação documental e jurídica completa antes de sair daqui. Aqui não tem promessa — tem processo auditado e time especializado do início ao fim.",
+      "4 anos de mercado, CNPJ ativo e regulamentação pelo Banco Central. Verificação documental e jurídica completa em cada operação. Aqui não tem promessa — tem processo auditado e time especializado do início ao fim.",
   },
 ] as const;
 

@@ -36,32 +36,32 @@ function useCountUp(end: number, duration = 2000, startOnView = true) {
   return { count, ref };
 }
 
-const MAX_BAR_VALUE = 307;
+const MAX_BAR_VALUE = 50;
 
 const stats = [
   {
-    value: 2,
-    suffix: " mi",
+    value: 2000,
+    suffix: "+",
     prefix: "",
-    label: "consorciados ativos",
+    label: "clientes atendidos",
     description:
-      "Mais de 2 milhões de consorciados ativos no mercado. Com a carta contemplada, você acessa o crédito sem esperar sorteio.",
+      "Mais de 2.000 clientes já conquistaram imóveis, veículos e equipamentos com a Titanium. Produtores rurais, empresários e profissionais liberais.",
   },
   {
-    value: 307,
-    suffix: " bi",
+    value: 50,
+    suffix: "M+",
     prefix: "R$ ",
-    label: "em créditos comercializados",
+    label: "em créditos negociados",
     description:
-      "R$ 307 bilhões em créditos comercializados em 12 meses. Um mercado sólido, regulamentado e em crescimento.",
+      "R$ 50 milhões em créditos negociados nos últimos 4 anos. Cada carta passa por auditoria jurídica antes de chegar até você.",
   },
   {
-    value: 20,
-    suffix: "%",
+    value: 4,
+    suffix: " anos",
     prefix: "",
-    label: "de contemplação",
+    label: "de mercado",
     description:
-      "Taxa de 20% de contemplação. Com a carta contemplada você elimina a espera e tem crédito liberado imediatamente.",
+      "4 anos operando com CNPJ ativo, regulamentados pelo Banco Central. Zero litígios. NPS de 87 pontos.",
   },
 ] as const;
 
@@ -69,40 +69,6 @@ function StatChart({ stat, index }: { stat: typeof stats[number]; index: number 
   const target = stat.value;
   const { count, ref } = useCountUp(target, 2200 + index * 400);
   const countProgress = target > 0 ? count / target : 0;
-
-  if (stat.suffix === "%") {
-    const radius = 70;
-    const circumference = 2 * Math.PI * radius;
-    const offset = circumference - countProgress * circumference;
-
-    return (
-      <div ref={ref} className="flex flex-col items-center text-center">
-        <div className="relative w-48 h-48 md:w-52 md:h-52 mb-6">
-          <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
-            <circle cx="80" cy="80" r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="14" />
-            <circle
-              cx="80" cy="80" r={radius} fill="none"
-              stroke="var(--green-vivid)" strokeWidth="14" strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={offset}
-              style={{ transition: "stroke-dashoffset 0.06s linear" }}
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "3rem", color: "white" }}>
-              {count}<span style={{ fontSize: "1.75rem", color: "var(--green-vivid)" }}>%</span>
-            </span>
-          </div>
-        </div>
-        <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: "0.5rem", display: "block" }}>
-          {stat.label}
-        </span>
-        <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.6, maxWidth: "260px" }}>
-          {stat.description}
-        </p>
-      </div>
-    );
-  }
 
   const barHeight = 200;
   return (

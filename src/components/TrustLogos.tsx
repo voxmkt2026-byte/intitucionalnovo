@@ -33,7 +33,7 @@ export default function TrustLogos() {
           className="text-center text-xs font-bold uppercase tracking-[0.25em] font-[family-name:var(--font-montserrat)]"
           style={{ color: 'rgba(255,255,255,0.35)' }}
         >
-          Parceiros de confiança
+          Administradoras parceiras
         </p>
       </div>
 

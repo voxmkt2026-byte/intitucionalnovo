@@ -13,7 +13,7 @@ const segments = [
   {
     title: "Casa Moderna",
     description:
-      "Apartamento ou casa própria com crédito aprovado. Sem financiamento bancário, sem espera. Parcelas até 60% menores.",
+      "Apartamento ou casa própria com crédito aprovado. Sem financiamento bancário, sem espera. Parcelas até 60% menores que o banco*.",
     price: "R$ 912",
     tag: "imóvel residencial",
     image: "/img/seg-casa-moderna.webp",

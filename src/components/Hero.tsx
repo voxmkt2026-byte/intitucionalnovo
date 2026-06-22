@@ -13,7 +13,7 @@ const slides = [
     subtitle:
       "Do agro ao imóvel. Da frota à clínica. Existe um caminho para expandir patrimônio sem pagar 30% ao banco.",
     cta1: { label: "Simular meu crédito", href: "#simulador" },
-    cta2: { label: "Ver segmentos", href: "#segmentos" },
+    cta2: { label: "Ver categorias de crédito", href: "#segmentos" },
   },
   {
     id: 2,

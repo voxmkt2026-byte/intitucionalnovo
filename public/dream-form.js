@@ -189,7 +189,7 @@
     },
     'empresario': {
       tier: 3, theme: 'dark',
-      proof: '',
+      proof: '+480 empresários já expandiram com consórcio',
       badge: 'Atendimento PJ especializado. Dados protegidos.',
       wa: 'Olá! Sou empresário e quero estruturar a aquisição de *{bem}* via consórcio para minha empresa. Aguardo contato.',
       steps: [
@@ -203,7 +203,7 @@
     },
     'medico': {
       tier: 3, theme: 'dark',
-      proof: '',
+      proof: '+520 profissionais de saúde já equiparam suas clínicas',
       badge: 'Atendimento especializado. Dados protegidos.',
       wa: 'Olá! Sou profissional de saúde e tenho interesse em adquirir *{bem}* via consórcio. Gostaria de falar com um consultor.',
       steps: [
@@ -217,7 +217,7 @@
     },
     'aeronaves': {
       tier: 3, theme: 'dark',
-      proof: '',
+      proof: 'Crédito aeronáutico de R$ 200k a R$ 2M — sem banco',
       badge: 'Consultoria private. Dados protegidos.',
       wa: 'Olá! Gostaria de falar com um consultor para estruturar a aquisição de *{bem}* via consórcio aeronáutico. Aguardo retorno.',
       steps: [
@@ -231,7 +231,7 @@
     },
     'embarcacao': {
       tier: 3, theme: 'dark',
-      proof: '',
+      proof: '+85 embarcações financiadas via consórcio náutico',
       badge: 'Consultoria náutica. Dados protegidos.',
       wa: 'Olá! Tenho interesse em adquirir *{bem}* via consórcio náutico. Gostaria de falar com um consultor.',
       steps: [
@@ -485,7 +485,17 @@
     var isDark = cfg.theme === 'dark';
     container.className = 'df-section';
     container.style.background = isDark ? '#0a0e0a' : '#f5f4f0';
-    container.innerHTML = '<div class="df-wrap"><p class="df-kicker">● SIMULAÇÃO PERSONALIZADA</p><h2 class="df-section-title">Dê o primeiro passo para a sua <span class="df-grad">conquista.</span></h2><div class="df-box df-animate"></div></div>';
+    var formTitles = {
+      'uber': 'carro próprio', 'caminhao': 'caminhão próprio', 'carta-comum': 'crédito ideal',
+      'corretor': 'imóvel que você merece', 'terrenos-construcao': 'terreno dos seus planos',
+      'terrenos-agricolas': 'propriedade rural', 'maquinas-agricolas': 'maquinário da próxima safra',
+      'carta-contemplada': 'crédito aprovado', 'placas-solares': 'economia na conta de luz',
+      'carro-luxo': 'veículo premium', 'empresario': 'expansão do seu negócio',
+      'medico': 'clínica dos seus sonhos', 'aeronaves': 'aeronave executiva',
+      'embarcacao': 'embarcação que você merece'
+    };
+    var titleText = formTitles[personaId] || 'conquista';
+    container.innerHTML = '<div class="df-wrap"><p class="df-kicker">● SIMULAÇÃO PERSONALIZADA</p><h2 class="df-section-title">Dê o primeiro passo para o seu <span class="df-grad">' + titleText + '.</span></h2><div class="df-box df-animate"></div></div>';
 
     draw();
   }
