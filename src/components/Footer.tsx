@@ -64,6 +64,17 @@ export default function Footer() {
                   </span>
                 ))}
               </div>
+              <div style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.55)" }} className="pt-2">
+                <span>E-mail: </span>
+                <a 
+                  href="mailto:contato@titaniumconsultorias.com.br"
+                  style={{ color: "rgba(255,255,255,0.8)", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--green-vivid)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.8)")}
+                >
+                  contato@titaniumconsultorias.com.br
+                </a>
+              </div>
             </div>
 
             {/* Links: Empresa */}
