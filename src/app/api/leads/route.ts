@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import crypto from "crypto";
+import { neon } from "@neondatabase/serverless";
 
 const leadSchema = z.object({
   name: z.string().max(100).default(""),
@@ -29,74 +30,141 @@ type LeadData = z.infer<typeof leadSchema>;
 const SHEETS_WEBHOOK_URL = process.env.SHEETS_WEBHOOK_URL;
 const META_PIXEL_ID = process.env.META_PIXEL_ID || "";
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "";
-
-if (!SHEETS_WEBHOOK_URL) {
-  throw new Error("SHEETS_WEBHOOK_URL environment variable is required");
-}
-
-const SHEETS_WEBHOOK: string = SHEETS_WEBHOOK_URL;
+const DATABASE_URL = process.env.DATABASE_URL || "";
 
 // --- Helpers ---
 
 function sha256(value: string): string {
-  return crypto
-    .createHash("sha256")
-    .update(value.trim().toLowerCase())
-    .digest("hex");
+  return crypto.createHash("sha256").update(value.trim().toLowerCase()).digest("hex");
 }
 
 function cleanPhone(phone: string): string {
   return phone.replace(/\D/g, "");
 }
 
-// --- Sheets ---
+// --- Neon Postgres (PRIMARY STORAGE) ---
+
+async function sendToNeon(body: LeadData): Promise<boolean> {
+  if (!DATABASE_URL) {
+    console.warn("[Neon] DATABASE_URL não configurada — pulando Neon.");
+    return false;
+  }
+
+  try {
+    const sql = neon(DATABASE_URL);
+
+    // Cria tabela se não existir
+    await sql`
+      CREATE TABLE IF NOT EXISTS leads (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        email TEXT,
+        phone TEXT,
+        segment TEXT,
+        credit TEXT,
+        months INTEGER,
+        plan TEXT,
+        origin TEXT,
+        ref TEXT,
+        fbc TEXT,
+        fbp TEXT,
+        gclid TEXT,
+        utm_source TEXT,
+        utm_medium TEXT,
+        utm_campaign TEXT,
+        utm_content TEXT,
+        lp TEXT,
+        source_url TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `;
+
+    await sql`
+      INSERT INTO leads (
+        name, email, phone, segment, credit, months, plan,
+        origin, ref, fbc, fbp, gclid,
+        utm_source, utm_medium, utm_campaign, utm_content,
+        lp, source_url
+      ) VALUES (
+        ${body.name}, ${body.email}, ${body.phone},
+        ${body.segment}, ${String(body.credit)}, ${body.months},
+        ${body.plan}, ${body.origin}, ${body.ref},
+        ${body.fbc}, ${body.fbp}, ${body.gclid},
+        ${body.utm_source}, ${body.utm_medium}, ${body.utm_campaign},
+        ${body.utm_content}, ${body.lp}, ${body.source_url}
+      )
+    `;
+
+    console.log("[Neon] Lead salvo com sucesso.");
+    return true;
+  } catch (err) {
+    console.error("[Neon] Erro ao salvar lead:", err);
+    return false;
+  }
+}
+
+// --- Google Sheets (OPCIONAL — fallback) ---
 
 async function sendToSheets(body: LeadData): Promise<boolean> {
-  const leadPayload = {
-    sheet: "Leads",
-    name: body.name,
-    email: body.email,
-    phone: body.phone,
-    segment: body.segment,
-    credit: body.credit,
-    months: body.months,
-    plan: body.plan,
-    origin: body.origin,
-    ref: body.ref,
-    timestamp: body.timestamp || new Date().toISOString(),
-  };
+  if (!SHEETS_WEBHOOK_URL) {
+    console.warn("[Sheets] SHEETS_WEBHOOK_URL não configurada — pulando Sheets.");
+    return false;
+  }
 
-  const res = await fetch(SHEETS_WEBHOOK, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(leadPayload),
-    redirect: "follow",
-  });
+  try {
+    const leadPayload = {
+      sheet: "Leads",
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+      segment: body.segment,
+      credit: body.credit,
+      months: body.months,
+      plan: body.plan,
+      origin: body.origin,
+      ref: body.ref,
+      timestamp: body.timestamp || new Date().toISOString(),
+    };
 
-  return res.ok;
+    const res = await fetch(SHEETS_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(leadPayload),
+      redirect: "follow",
+    });
+
+    return res.ok;
+  } catch (err) {
+    console.warn("[Sheets] Falhou (não crítico):", err);
+    return false;
+  }
 }
 
 async function sendClickAttribution(body: LeadData): Promise<void> {
-  if (!body.ref) return;
+  if (!SHEETS_WEBHOOK_URL || !body.ref) return;
 
-  await fetch(SHEETS_WEBHOOK, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      sheet: "Cliques",
-      ref: body.ref,
-      fbc: body.fbc,
-      fbp: body.fbp,
-      gclid: body.gclid,
-      utm_source: body.utm_source,
-      utm_medium: body.utm_medium,
-      utm_campaign: body.utm_campaign,
-      utm_content: body.utm_content,
-      lp: body.lp || body.origin,
-      timestamp: new Date().toISOString(),
-    }),
-    redirect: "follow",
-  });
+  try {
+    await fetch(SHEETS_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sheet: "Cliques",
+        ref: body.ref,
+        fbc: body.fbc,
+        fbp: body.fbp,
+        gclid: body.gclid,
+        utm_source: body.utm_source,
+        utm_medium: body.utm_medium,
+        utm_campaign: body.utm_campaign,
+        utm_content: body.utm_content,
+        lp: body.lp || body.origin,
+        timestamp: new Date().toISOString(),
+      }),
+      redirect: "follow",
+    });
+  } catch {
+    // silencioso — não crítico
+  }
 }
 
 // --- Meta CAPI ---
@@ -118,8 +186,7 @@ async function sendMetaCAPI(body: LeadData): Promise<void> {
         event_name: "Lead",
         event_time: Math.floor(Date.now() / 1000),
         event_id: eventId,
-        event_source_url:
-          body.source_url || "https://titaniumconsultoria.com.br",
+        event_source_url: body.source_url || "https://titaniumconsultoria.com.br",
         action_source: "website",
         user_data: {
           em: [sha256(body.email)],
@@ -162,18 +229,19 @@ export async function POST(request: Request) {
   try {
     const body = leadSchema.parse(await request.json());
 
-    // Fire all three in parallel
-    const [sheetsResult] = await Promise.allSettled([
-      sendToSheets(body),
+    // Dispara tudo em paralelo
+    const [neonResult] = await Promise.allSettled([
+      sendToNeon(body),
+      sendToSheets(body).catch(() => {}),
       sendClickAttribution(body).catch(() => {}),
       sendMetaCAPI(body).catch(() => {}),
     ]);
 
-    const sheetsOk =
-      sheetsResult.status === "fulfilled" && sheetsResult.value === true;
+    // Sucesso se Neon salvou (Sheets é opcional)
+    const saved = neonResult.status === "fulfilled" && neonResult.value === true;
 
     return NextResponse.json(
-      { status: sheetsOk ? "ok" : "error", event_id: body.ref },
+      { status: saved ? "ok" : "partial", event_id: body.ref },
       { status: 200 }
     );
   } catch (error) {
@@ -195,11 +263,9 @@ export async function POST(request: Request) {
 export async function GET() {
   return NextResponse.json({
     status: "ok",
-    sheets: SHEETS_WEBHOOK_URL ? "configured" : "missing",
+    neon: DATABASE_URL ? "configured" : "missing ⚠️",
+    sheets: SHEETS_WEBHOOK_URL ? "configured" : "not configured (optional)",
     pixel: META_PIXEL_ID ? "configured" : "missing",
-    capi:
-      META_ACCESS_TOKEN && META_ACCESS_TOKEN.length > 10
-        ? "configured"
-        : "pending",
+    capi: META_ACCESS_TOKEN && META_ACCESS_TOKEN.length > 10 ? "configured" : "pending",
   });
 }
