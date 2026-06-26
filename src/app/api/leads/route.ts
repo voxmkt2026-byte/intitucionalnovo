@@ -31,6 +31,7 @@ const SHEETS_WEBHOOK_URL = process.env.SHEETS_WEBHOOK_URL;
 const META_PIXEL_ID = process.env.META_PIXEL_ID || "";
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "";
 const DATABASE_URL = process.env.DATABASE_URL || "";
+const N8N_KOMMO_WEBHOOK_URL = process.env.N8N_KOMMO_WEBHOOK_URL || "";
 
 // --- Helpers ---
 
@@ -169,7 +170,11 @@ async function sendClickAttribution(body: LeadData): Promise<void> {
 
 // --- Meta CAPI ---
 
-async function sendMetaCAPI(body: LeadData): Promise<void> {
+async function sendMetaCAPI(
+  body: LeadData,
+  clientIp: string,
+  userAgent: string
+): Promise<void> {
   if (!META_ACCESS_TOKEN || !META_PIXEL_ID) return;
 
   const eventId = body.ref || crypto.randomUUID();
@@ -180,6 +185,18 @@ async function sendMetaCAPI(body: LeadData): Promise<void> {
       ? body.credit
       : parseFloat(String(body.credit).replace(/\D/g, "")) || 0;
 
+  // Fix #2: usar IP e User Agent reais da request
+  // Fix #3: não enviar hash de campos vazios
+  const userData: Record<string, unknown> = {
+    ...(body.email && { em: [sha256(body.email)] }),
+    ...(cleanedPhone && { ph: [sha256("55" + cleanedPhone)] }),
+    ...(firstName && { fn: [sha256(firstName)] }),
+    ...(body.fbc && { fbc: body.fbc }),
+    ...(body.fbp && { fbp: body.fbp }),
+    ...(clientIp && { client_ip_address: clientIp }),
+    client_user_agent: userAgent || "Mozilla/5.0",
+  };
+
   const payload = {
     data: [
       {
@@ -188,14 +205,7 @@ async function sendMetaCAPI(body: LeadData): Promise<void> {
         event_id: eventId,
         event_source_url: body.source_url || "https://titaniumconsultoria.com.br",
         action_source: "website",
-        user_data: {
-          em: [sha256(body.email)],
-          ph: [sha256("55" + cleanedPhone)],
-          fn: [sha256(firstName)],
-          ...(body.fbc && { fbc: body.fbc }),
-          ...(body.fbp && { fbp: body.fbp }),
-          client_user_agent: "Mozilla/5.0 (server-side)",
-        },
+        user_data: userData,
         custom_data: {
           currency: "BRL",
           value: creditValue,
@@ -223,18 +233,61 @@ async function sendMetaCAPI(body: LeadData): Promise<void> {
   }
 }
 
+// --- Kommo via n8n (Opção B — disparo simultâneo) ---
+
+async function sendToKommoViaN8N(body: LeadData): Promise<void> {
+  if (!N8N_KOMMO_WEBHOOK_URL) {
+    console.warn("[Kommo] N8N_KOMMO_WEBHOOK_URL não configurada — pulando.");
+    return;
+  }
+
+  try {
+    await fetch(N8N_KOMMO_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: body.name,
+        phone: body.phone,
+        email: body.email,
+        segment: body.segment,
+        credit: String(body.credit),
+        months: body.months,
+        plan: body.plan,
+        lp: body.lp || body.origin,
+        utm_source: body.utm_source,
+        utm_medium: body.utm_medium,
+        utm_campaign: body.utm_campaign,
+        utm_content: body.utm_content,
+        ref: body.ref,
+        timestamp: new Date().toISOString(),
+      }),
+    });
+    console.log("[Kommo] Enviado para n8n com sucesso.");
+  } catch (err) {
+    console.warn("[Kommo] Falhou (não crítico):", err);
+  }
+}
+
 // --- Route Handler ---
 
 export async function POST(request: Request) {
   try {
+    // Fix #2: extrair IP e User Agent reais para o CAPI
+    const clientIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      "";
+    const userAgent = request.headers.get("user-agent") || "";
+
     const body = leadSchema.parse(await request.json());
 
-    // Dispara tudo em paralelo
+    // Dispara tudo em paralelo — Kommo é simultâneo (Opção B)
     const [neonResult] = await Promise.allSettled([
       sendToNeon(body),
       sendToSheets(body).catch(() => {}),
       sendClickAttribution(body).catch(() => {}),
-      sendMetaCAPI(body).catch(() => {}),
+      sendMetaCAPI(body, clientIp, userAgent).catch(() => {}),
+      sendToKommoViaN8N(body).catch(() => {}),
     ]);
 
     // Sucesso se Neon salvou (Sheets é opcional)

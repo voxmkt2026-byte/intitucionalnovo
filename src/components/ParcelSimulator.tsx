@@ -156,14 +156,14 @@ export default function ParcelSimulator() {
           currency: "BRL",
         });
       }
-      // Meta Pixel Lead event
+      // Meta Pixel Lead event — eventID sincronizado com CAPI (deduplicação)
       if (typeof w.fbq === "function") {
         const fbq = w.fbq as (...args: unknown[]) => void;
         fbq("track", "Lead", {
           value: Number(credit) || 0,
           currency: "BRL",
           content_name: `Simulador - ${segment === "imovel" ? "Imóvel" : "Veículo"} - ${selectedPlan}`,
-        });
+        }, { eventID: ids.ref });  // ← mesmo ID enviado ao CAPI
       }
     } catch { /* silent */ }
 
