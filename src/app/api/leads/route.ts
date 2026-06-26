@@ -32,6 +32,9 @@ const META_PIXEL_ID = process.env.META_PIXEL_ID || "";
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "";
 const DATABASE_URL = process.env.DATABASE_URL || "";
 const N8N_KOMMO_WEBHOOK_URL = process.env.N8N_KOMMO_WEBHOOK_URL || "";
+const KOMMO_ACCESS_TOKEN = process.env.KOMMO_ACCESS_TOKEN || "";
+const KOMMO_DOMAIN = "titaniumconsultoriaofc.kommo.com";
+const KOMMO_PIPELINE_ID = 13995439;
 
 // --- Helpers ---
 
@@ -233,38 +236,100 @@ async function sendMetaCAPI(
   }
 }
 
-// --- Kommo via n8n (Opção B — disparo simultâneo) ---
+// --- Kommo API Direta ---
 
-async function sendToKommoViaN8N(body: LeadData): Promise<void> {
-  if (!N8N_KOMMO_WEBHOOK_URL) {
-    console.warn("[Kommo] N8N_KOMMO_WEBHOOK_URL não configurada — pulando.");
-    return;
+async function sendToKommo(body: LeadData): Promise<boolean> {
+  if (!KOMMO_ACCESS_TOKEN) {
+    console.warn("[Kommo] KOMMO_ACCESS_TOKEN não configurado — pulando.");
+    // Fallback: tenta via n8n se configurado
+    if (N8N_KOMMO_WEBHOOK_URL) {
+      try {
+        await fetch(N8N_KOMMO_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: body.name, phone: body.phone, email: body.email, segment: body.segment, credit: String(body.credit), months: body.months, plan: body.plan, lp: body.lp || body.origin, utm_source: body.utm_source, utm_medium: body.utm_medium, utm_campaign: body.utm_campaign, ref: body.ref, timestamp: new Date().toISOString() }),
+        });
+      } catch { /* não crítico */ }
+    }
+    return false;
   }
 
+  const phone = body.phone.replace(/\D/g, "");
+  const formattedPhone = phone.startsWith("55") ? `+${phone}` : `+55${phone}`;
+  const creditValue = parseInt(String(body.credit).replace(/\D/g, "")) || 0;
+  const leadName = `Lead - ${body.segment || "Geral"} | ${body.lp || body.utm_source || "site"}`;
+
+  const tags: { name: string }[] = [];
+  if (body.lp) tags.push({ name: body.lp });
+  if (body.utm_source) tags.push({ name: body.utm_source });
+  if (body.utm_campaign) tags.push({ name: body.utm_campaign });
+
+  const nota = [
+    "📋 Lead do formulário",
+    `Nome: ${body.name || "-"}`,
+    `Email: ${body.email || "-"}`,
+    `Telefone: ${formattedPhone}`,
+    `Segmento: ${body.segment || "-"}`,
+    `Crédito: R$ ${creditValue.toLocaleString("pt-BR")}`,
+    `Prazo: ${body.months || "-"} meses`,
+    `Plano: ${body.plan || "-"}`,
+    `LP: ${body.lp || "-"}`,
+    `UTM Source: ${body.utm_source || "-"}`,
+    `UTM Campaign: ${body.utm_campaign || "-"}`,
+    `Ref: ${body.ref || "-"}`,
+    `Data: ${new Date().toISOString()}`,
+  ].join("\n");
+
   try {
-    await fetch(N8N_KOMMO_WEBHOOK_URL, {
+    const headers = {
+      "Authorization": `Bearer ${KOMMO_ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+    };
+
+    // 1. Cria o lead
+    const leadRes = await fetch(`https://${KOMMO_DOMAIN}/api/v4/leads`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: body.name,
-        phone: body.phone,
-        email: body.email,
-        segment: body.segment,
-        credit: String(body.credit),
-        months: body.months,
-        plan: body.plan,
-        lp: body.lp || body.origin,
-        utm_source: body.utm_source,
-        utm_medium: body.utm_medium,
-        utm_campaign: body.utm_campaign,
-        utm_content: body.utm_content,
-        ref: body.ref,
-        timestamp: new Date().toISOString(),
-      }),
+      headers,
+      body: JSON.stringify([{
+        name: leadName,
+        price: creditValue,
+        pipeline_id: KOMMO_PIPELINE_ID,
+        _embedded: {
+          contacts: [{
+            name: body.name || "Lead sem nome",
+            custom_fields_values: [
+              { field_code: "PHONE", values: [{ value: formattedPhone, enum_code: "WORK" }] },
+              { field_code: "EMAIL", values: [{ value: body.email || "", enum_code: "WORK" }] },
+            ],
+          }],
+          tags,
+        },
+      }]),
     });
-    console.log("[Kommo] Enviado para n8n com sucesso.");
+
+    if (!leadRes.ok) {
+      const err = await leadRes.text();
+      console.error("[Kommo] Erro ao criar lead:", leadRes.status, err);
+      return false;
+    }
+
+    const leadData = await leadRes.json() as { _embedded?: { leads?: { id: number }[] } };
+    const leadId = leadData?._embedded?.leads?.[0]?.id;
+    if (!leadId) { console.error("[Kommo] Lead criado sem ID."); return false; }
+    console.log("[Kommo] Lead criado:", leadId);
+
+    // 2. Adiciona nota com dados completos
+    await fetch(`https://${KOMMO_DOMAIN}/api/v4/leads/notes`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify([{ entity_id: leadId, note_type: "common", params: { text: nota } }]),
+    });
+
+    console.log("[Kommo] Nota adicionada ao lead", leadId);
+    return true;
   } catch (err) {
-    console.warn("[Kommo] Falhou (não crítico):", err);
+    console.error("[Kommo] Erro:", err);
+    return false;
   }
 }
 
@@ -281,13 +346,13 @@ export async function POST(request: Request) {
 
     const body = leadSchema.parse(await request.json());
 
-    // Dispara tudo em paralelo — Kommo é simultâneo (Opção B)
+    // Dispara tudo em paralelo — Kommo direto
     const [neonResult] = await Promise.allSettled([
       sendToNeon(body),
       sendToSheets(body).catch(() => {}),
       sendClickAttribution(body).catch(() => {}),
       sendMetaCAPI(body, clientIp, userAgent).catch(() => {}),
-      sendToKommoViaN8N(body).catch(() => {}),
+      sendToKommo(body).catch(() => {}),
     ]);
 
     // Sucesso se Neon salvou (Sheets é opcional)
@@ -320,7 +385,8 @@ export async function GET() {
     sheets: SHEETS_WEBHOOK_URL ? "configured ✅" : "not configured",
     pixel: META_PIXEL_ID ? "configured ✅" : "missing ⚠️",
     capi: META_ACCESS_TOKEN && META_ACCESS_TOKEN.length > 10 ? "configured ✅" : "missing ⚠️",
-    kommo_n8n: N8N_KOMMO_WEBHOOK_URL ? "configured ✅" : "missing ⚠️",
+    kommo: KOMMO_ACCESS_TOKEN && KOMMO_ACCESS_TOKEN.length > 10 ? "configured ✅" : "missing ⚠️",
+    kommo_n8n: N8N_KOMMO_WEBHOOK_URL ? "configured ✅" : "(fallback não configurado)",
   });
 }
 
