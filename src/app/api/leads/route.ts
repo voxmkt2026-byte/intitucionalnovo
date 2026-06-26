@@ -316,9 +316,11 @@ export async function POST(request: Request) {
 export async function GET() {
   return NextResponse.json({
     status: "ok",
-    neon: DATABASE_URL ? "configured" : "missing ⚠️",
-    sheets: SHEETS_WEBHOOK_URL ? "configured" : "not configured (optional)",
-    pixel: META_PIXEL_ID ? "configured" : "missing",
-    capi: META_ACCESS_TOKEN && META_ACCESS_TOKEN.length > 10 ? "configured" : "pending",
+    neon: DATABASE_URL ? "configured ✅" : "missing ⚠️",
+    sheets: SHEETS_WEBHOOK_URL ? "configured ✅" : "not configured",
+    pixel: META_PIXEL_ID ? "configured ✅" : "missing ⚠️",
+    capi: META_ACCESS_TOKEN && META_ACCESS_TOKEN.length > 10 ? "configured ✅" : "missing ⚠️",
+    kommo_n8n: N8N_KOMMO_WEBHOOK_URL ? "configured ✅" : "missing ⚠️",
   });
 }
+
