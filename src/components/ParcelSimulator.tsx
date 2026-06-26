@@ -144,6 +144,14 @@ export default function ParcelSimulator() {
     // ── Enhanced Conversions for Leads (Google Ads) ──
     try {
       const w = window as unknown as Record<string, unknown>;
+
+      // Lê o ref de rastreamento do sessionStorage (gravado pelo sendToGoogleSheets)
+      let eventRef = "";
+      try {
+        const stored = sessionStorage.getItem("tf_ids");
+        if (stored) eventRef = JSON.parse(stored).ref || "";
+      } catch { /* silent */ }
+
       if (typeof w.gtag === "function") {
         const gtag = w.gtag as (...args: unknown[]) => void;
         gtag("set", "user_data", {
@@ -163,7 +171,7 @@ export default function ParcelSimulator() {
           value: Number(credit) || 0,
           currency: "BRL",
           content_name: `Simulador - ${segment === "imovel" ? "Imóvel" : "Veículo"} - ${selectedPlan}`,
-        }, { eventID: ids.ref });  // ← mesmo ID enviado ao CAPI
+        }, eventRef ? { eventID: eventRef } : undefined);  // ← deduplicação com CAPI
       }
     } catch { /* silent */ }
 
