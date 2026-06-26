@@ -347,19 +347,21 @@ export async function POST(request: Request) {
     const body = leadSchema.parse(await request.json());
 
     // Dispara tudo em paralelo — Kommo direto
-    const [neonResult] = await Promise.allSettled([
+    const [neonResult, , , , kommoResult] = await Promise.allSettled([
       sendToNeon(body),
       sendToSheets(body).catch(() => {}),
       sendClickAttribution(body).catch(() => {}),
       sendMetaCAPI(body, clientIp, userAgent).catch(() => {}),
-      sendToKommo(body).catch(() => {}),
+      sendToKommo(body),
     ]);
 
     // Sucesso se Neon salvou (Sheets é opcional)
     const saved = neonResult.status === "fulfilled" && neonResult.value === true;
+    const kommoOk = kommoResult.status === "fulfilled" && kommoResult.value === true;
+    const kommoError = kommoResult.status === "rejected" ? String((kommoResult as PromiseRejectedResult).reason) : null;
 
     return NextResponse.json(
-      { status: saved ? "ok" : "partial", event_id: body.ref },
+      { status: saved ? "ok" : "partial", event_id: body.ref, kommo: kommoOk ? "✅ ok" : (kommoError ?? "❌ failed") },
       { status: 200 }
     );
   } catch (error) {
