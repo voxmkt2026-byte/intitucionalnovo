@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import StaggeredMenu from "./StaggeredMenu";
@@ -14,7 +14,7 @@ const menuItems = [
 ];
 
 const socialItems = [
-  { label: "Instagram", link: "https://instagram.com/titaniumconsultoria" },
+  { label: "Instagram", link: "https://www.instagram.com/titaniumconsultoriafinanceira" },
   { label: "WhatsApp", link: "https://wa.me/5511930048940" },
 ];
 
