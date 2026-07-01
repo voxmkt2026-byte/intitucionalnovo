@@ -21,7 +21,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 130px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,7 +43,7 @@
 
 .sm-logo-img {
   display: block;
-  height: 56px;
+  height: 100px;
   width: auto;
   object-fit: contain;
   /* Filter controlled dynamically by Navbar.tsx */
