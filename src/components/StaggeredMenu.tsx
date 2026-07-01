@@ -354,9 +354,8 @@ export const StaggeredMenu = ({
             alt="Titanium"
             className="sm-logo-img"
             draggable={false}
-            width={110}
-            height={24}
-            style={{ filter: 'brightness(0) invert(1)' }}
+            width={140}
+            height={30}
           />
         </a>
         <button

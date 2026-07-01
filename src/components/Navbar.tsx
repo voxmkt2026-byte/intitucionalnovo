@@ -156,10 +156,8 @@ export default function Navbar() {
     // On dark bg: apply white invert so it's visible
     const logo = document.querySelector(".sm-logo-img") as HTMLElement;
     if (logo) {
-      logo.style.transition = "filter 0.35s ease";
-      logo.style.filter = (onDark || menuOpen)
-        ? "brightness(0) invert(1)"
-        : "none";
+      logo.style.transition = "opacity 0.35s ease";
+      logo.style.filter = "none";
     }
 
     // Menu toggle button
@@ -177,7 +175,7 @@ export default function Navbar() {
       socialItems={socialItems}
       displaySocials={true}
       displayItemNumbering={true}
-      logoUrl="/img/logo-black.webp"
+      logoUrl="/img/logo-titanium-white.png"
       menuButtonColor="#0A7B3E"
       openMenuButtonColor="#0A7B3E"
       changeMenuColorOnOpen={true}
