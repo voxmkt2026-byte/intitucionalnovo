@@ -1,172 +1,94 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import StaggeredMenu from "./StaggeredMenu";
 
+/* ─── Menu items ─────────────────────────────────────────── */
 const menuItems = [
-  { label: "Segmentos", ariaLabel: "Ver segmentos", link: "/#segmentos" },
-  { label: "Para Você", ariaLabel: "Soluções por perfil", link: "/#para-voce" },
-  { label: "Simulador", ariaLabel: "Simular carta", link: "/#simulador" },
-  { label: "Sobre Nós", ariaLabel: "Sobre a Titanium", link: "/#sobre" },
-  { label: "Nossos Valores", ariaLabel: "Missão, visão e valores", link: "/missao-visao-valores" },
-  { label: "Trajetória", ariaLabel: "Nossa linha do tempo", link: "/trajetoria" },
-  { label: "Contato", ariaLabel: "Fale conosco", link: "https://wa.me/5511930048940" },
+  { label: "Segmentos",     ariaLabel: "Ver segmentos",              link: "/#segmentos" },
+  { label: "Para Você",     ariaLabel: "Soluções por perfil",        link: "/#para-voce" },
+  { label: "Simulador",     ariaLabel: "Simular carta",              link: "/#simulador" },
+  { label: "Sobre Nós",     ariaLabel: "Sobre a Titanium",           link: "/#sobre" },
+  { label: "Nossos Valores",ariaLabel: "Missão, visão e valores",    link: "/missao-visao-valores" },
+  { label: "Trajetória",    ariaLabel: "Nossa linha do tempo",       link: "/trajetoria" },
+  { label: "Contato",       ariaLabel: "Fale conosco",               link: "https://wa.me/5511930048940" },
 ];
 
 const socialItems = [
   { label: "Instagram", link: "https://www.instagram.com/titaniumconsultoriafinanceira" },
-  { label: "WhatsApp", link: "https://wa.me/5511930048940" },
+  { label: "WhatsApp",  link: "https://wa.me/5511930048940" },
 ];
 
-/**
- * Finds all dark sections by checking inline style backgroundColor
- * and CSS computed backgroundColor on sections.
- */
-function findDarkSections(): HTMLElement[] {
-  const all = document.querySelectorAll("section, [data-dark]");
-  const darkEls: HTMLElement[] = [];
-
-  all.forEach((el) => {
-    const htmlEl = el as HTMLElement;
-    // Check inline style backgroundColor first
-    const inlineBg = htmlEl.style.backgroundColor;
-    if (inlineBg) {
-      if (isDarkColor(inlineBg)) {
-        darkEls.push(htmlEl);
-        return;
-      }
-    }
-    // Check inline style background (catches linear-gradient, etc.)
-    const inlineBgShort = htmlEl.style.background;
-    if (inlineBgShort) {
-      // Extract first color from gradient or plain color
-      const colorMatch = inlineBgShort.match(/#[0-9a-fA-F]{3,8}|rgb[a]?\([^)]+\)/);
-      if (colorMatch && isDarkColor(colorMatch[0])) {
-        darkEls.push(htmlEl);
-        return;
-      }
-    }
-    // Fallback to computed style
-    const computed = getComputedStyle(htmlEl).backgroundColor;
-    if (computed && computed !== "transparent" && computed !== "rgba(0, 0, 0, 0)") {
-      if (isDarkColor(computed)) {
-        darkEls.push(htmlEl);
-      }
-    }
-  });
-
-  return darkEls;
-}
-
-function isDarkColor(color: string): boolean {
-  // Handle hex
-  if (color.startsWith("#")) {
-    const hex = color.replace("#", "");
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-    return r + g + b < 250;
-  }
-  // Handle rgb/rgba
-  const match = color.match(/\d+/g);
-  if (match && match.length >= 3) {
-    const [r, g, b] = match.map(Number);
-    return r + g + b < 250;
-  }
-  return false;
-}
-
+/* ─── Navbar ─────────────────────────────────────────────── */
 export default function Navbar() {
-  const [onDark, setOnDark] = useState(true); // hero é sempre escuro no topo
   const [menuOpen, setMenuOpen] = useState(false);
-  const rafRef = useRef<number>(0);
-  const logoRef = useRef<HTMLImageElement | null>(null);
-  const darkSectionsRef = useRef<HTMLElement[]>([]);
+  const rafRef    = useRef<number>(0);
+  const headerRef = useRef<HTMLElement | null>(null);
 
-  // Cache dark sections — only recalculate on mount/resize, not every scroll
-  const cacheDarkSections = useCallback(() => {
-    darkSectionsRef.current = findDarkSections();
-  }, []);
-
-  const checkPosition = useCallback(() => {
-    const navY = 40;
-    let isOverDark = false;
-    for (const section of darkSectionsRef.current) {
-      const rect = section.getBoundingClientRect();
-      if (rect.top <= navY && rect.bottom >= navY) {
-        isOverDark = true;
-        break;
-      }
-    }
-    setOnDark(isOverDark);
-  }, []);
-
+  /* Glassmorphism: toggle .scrolled class on header */
   useEffect(() => {
-    // Cache dark sections on init
-    cacheDarkSections();
+    headerRef.current = document.querySelector<HTMLElement>(".staggered-menu-header");
 
-    // Cache DOM refs once
-    const logoEl = document.querySelector(".sm-logo") as HTMLElement | null;
-    const heroEl = document.querySelector("main > section:first-of-type") as HTMLElement | null;
-    const isTrajetoria = window.location.pathname.includes("trajetoria");
+    const getHeroBottom = () => {
+      const hero =
+        document.querySelector<HTMLElement>("[data-hero]") ??
+        document.querySelector<HTMLElement>("main > section:first-of-type");
+      return hero ? hero.getBoundingClientRect().bottom + window.scrollY : window.innerHeight * 0.7;
+    };
 
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
-        checkPosition();
-
-        // Hide logo on mobile after scrolling past hero on /trajetoria
-        const isMobile = window.innerWidth < 768;
-        if (logoEl && isMobile && isTrajetoria) {
-          const heroBottom = heroEl ? heroEl.getBoundingClientRect().bottom : 999;
-          const pastHero = heroBottom < 0;
-          logoEl.style.transition = "opacity 0.3s ease";
-          logoEl.style.opacity = pastHero ? "0" : "1";
-          logoEl.style.pointerEvents = pastHero ? "none" : "auto";
-        } else if (logoEl) {
-          logoEl.style.opacity = "1";
-          logoEl.style.pointerEvents = "auto";
-        }
+        const pastHero = window.scrollY > getHeroBottom() - 100;
+        headerRef.current?.classList.toggle("scrolled", pastHero);
       });
     };
 
-    const onResize = () => {
-      cacheDarkSections();
-    };
+    /* Initial check after DOM settles */
+    const t1 = setTimeout(onScroll, 80);
+    const t2 = setTimeout(onScroll, 350);
 
-    // Initial check after DOM settles
-    const timer = setTimeout(() => { cacheDarkSections(); checkPosition(); }, 50);
-    const timer2 = setTimeout(() => { cacheDarkSections(); checkPosition(); }, 300);
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize);
     return () => {
-      clearTimeout(timer);
-      clearTimeout(timer2);
+      clearTimeout(t1);
+      clearTimeout(t2);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [checkPosition, cacheDarkSections]);
+  }, []);
 
-  // Apply logo filter + button color imperatively
+  /* Menu toggle button color — always white (site é escuro) */
   useEffect(() => {
-    // Logo: original image is WHITE, needs filter to be visible
-    // Logo: original image is BLACK, needs filter to be visible
-    // On light bg: normal (no filter)
-    // On dark bg: apply white invert so it's visible
-    const logo = document.querySelector(".sm-logo-img") as HTMLElement;
-    if (logo) {
-      logo.style.transition = "opacity 0.35s ease";
-      logo.style.filter = "none";
-    }
+    const btn = document.querySelector<HTMLElement>(".sm-toggle");
+    if (!btn) return;
+    btn.style.transition = "color 0.3s ease";
+    btn.style.color = "#ffffff";
+  }, [menuOpen]);
 
-    // Menu toggle button
-    const btn = document.querySelector(".sm-toggle") as HTMLElement;
-    if (btn) {
-      btn.style.transition = "color 0.35s ease";
-      btn.style.color = (onDark || menuOpen) ? "#ffffff" : "var(--green, #0A7B3E)";
-    }
-  }, [onDark, menuOpen]);
+  /* Logo opacity: hide on mobile when scrolled past hero on /trajetoria */
+  useEffect(() => {
+    const isTrajetoria = window.location.pathname.includes("trajetoria");
+    if (!isTrajetoria) return;
+
+    const logoEl  = document.querySelector<HTMLElement>(".sm-logo");
+    const heroEl  = document.querySelector<HTMLElement>("main > section:first-of-type");
+
+    const onScroll = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        if (!logoEl) return;
+        const isMobile  = window.innerWidth < 768;
+        const heroBottom = heroEl ? heroEl.getBoundingClientRect().bottom : 999;
+        const pastHero  = isMobile && heroBottom < 0;
+        logoEl.style.transition    = "opacity 0.3s ease";
+        logoEl.style.opacity       = pastHero ? "0" : "1";
+        logoEl.style.pointerEvents = pastHero ? "none" : "auto";
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <StaggeredMenu
@@ -176,11 +98,11 @@ export default function Navbar() {
       displaySocials={true}
       displayItemNumbering={true}
       logoUrl="/img/logo-titanium-white.png"
-      menuButtonColor="#0A7B3E"
-      openMenuButtonColor="#0A7B3E"
+      menuButtonColor="#ffffff"
+      openMenuButtonColor="#ffffff"
       changeMenuColorOnOpen={true}
-      colors={["#E8F5EE", "#D1ECDD"]}
-      accentColor="#0A7B3E"
+      colors={["#111", "#1a1a1a"]}
+      accentColor="#C9A84C"
       isFixed={true}
       closeOnClickAway={true}
       onMenuOpen={() => setMenuOpen(true)}

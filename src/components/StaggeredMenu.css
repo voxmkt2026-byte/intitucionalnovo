@@ -21,14 +21,31 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 130px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2em;
+  padding: 0 2.5rem;
   background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    background 0.35s ease,
+    backdrop-filter 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
   pointer-events: none;
   z-index: 20;
+}
+
+/* Estado: navbar passou da hero → glassmorphism */
+.staggered-menu-header.scrolled {
+  background: rgba(8, 8, 8, 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
 .staggered-menu-header > * {
@@ -43,10 +60,10 @@
 
 .sm-logo-img {
   display: block;
-  height: 100px;
+  height: 52px;
   width: auto;
   object-fit: contain;
-  /* Filter controlled dynamically by Navbar.tsx */
+  transition: opacity 0.3s ease;
 }
 
 .sm-toggle {
@@ -324,9 +341,9 @@
   opacity: 1;
 }
 
-/* ── Open-state overrides: white logo & button on dark panel ── */
+/* logo já é branco com fundo transparente – nenhum filtro necessário */
 .staggered-menu-wrapper[data-open] .sm-logo-img {
-  filter: brightness(0) invert(1);
+  filter: none;
 }
 
 .staggered-menu-wrapper[data-open] .sm-toggle {
@@ -345,7 +362,7 @@
   }
 
   .staggered-menu-wrapper[data-open] .sm-logo-img {
-    filter: invert(100%);
+    filter: none; /* já é branco */
   }
 }
 
@@ -362,11 +379,12 @@
   }
 
   .staggered-menu-header {
-    padding: 1.2em 1.2em;
+    height: 80px;
+    padding: 0 1.2rem;
   }
 
   .staggered-menu-wrapper[data-open] .sm-logo-img {
-    filter: invert(100%);
+    filter: none; /* já é branco */
   }
 
   .sm-panel-item {
