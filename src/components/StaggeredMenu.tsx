@@ -356,6 +356,7 @@ export const StaggeredMenu = ({
             draggable={false}
             width={110}
             height={24}
+            style={{ filter: 'brightness(0) invert(1)' }}
           />
         </a>
         <button

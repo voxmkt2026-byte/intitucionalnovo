@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import StaggeredMenu from "./StaggeredMenu";
@@ -77,7 +77,7 @@ function isDarkColor(color: string): boolean {
 }
 
 export default function Navbar() {
-  const [onDark, setOnDark] = useState(false);
+  const [onDark, setOnDark] = useState(true); // hero é sempre escuro no topo
   const [menuOpen, setMenuOpen] = useState(false);
   const rafRef = useRef<number>(0);
   const logoRef = useRef<HTMLImageElement | null>(null);
@@ -151,14 +151,15 @@ export default function Navbar() {
   // Apply logo filter + button color imperatively
   useEffect(() => {
     // Logo: original image is WHITE, needs filter to be visible
-    // On light bg: apply dark green filter so it's visible
+    // Logo: original image is BLACK, needs filter to be visible
+    // On light bg: normal (no filter)
     // On dark bg: apply white invert so it's visible
     const logo = document.querySelector(".sm-logo-img") as HTMLElement;
     if (logo) {
       logo.style.transition = "filter 0.35s ease";
       logo.style.filter = (onDark || menuOpen)
-        ? "brightness(0) invert(1)"  // white on dark
-        : "brightness(0) saturate(100%) invert(14%) sepia(85%) saturate(800%) hue-rotate(140deg)"; // dark green on light
+        ? "brightness(0) invert(1)"
+        : "none";
     }
 
     // Menu toggle button
@@ -176,7 +177,7 @@ export default function Navbar() {
       socialItems={socialItems}
       displaySocials={true}
       displayItemNumbering={true}
-      logoUrl="/img/logo-white.webp"
+      logoUrl="/img/logo-black.webp"
       menuButtonColor="#0A7B3E"
       openMenuButtonColor="#0A7B3E"
       changeMenuColorOnOpen={true}
