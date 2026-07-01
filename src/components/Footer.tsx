@@ -1,6 +1,8 @@
 "use client";
 
-const LOGO_URL = "/img/logo-white.webp";
+import Image from "next/image";
+
+const LOGO_URL = "/img/logo-titanium-white.png";
 
 const navLinks = [
   { label: "Segmentos", href: "/#segmentos" },
@@ -29,12 +31,12 @@ export default function Footer() {
 
             {/* Logo + brand copy */}
             <div className="lg:col-span-5 space-y-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={LOGO_URL}
                 alt="Titanium Consultoria"
+                width={160}
+                height={40}
                 className="h-10 w-auto"
-                style={{ filter: "brightness(0) invert(1)" }}
               />
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.9rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.75, maxWidth: "380px" }}>
                 Consultoria especializada em aquisição patrimonial via consórcio e cartas contempladas. Análise consultiva de perfil, comparativo de alternativas e orientação sobre riscos — regulamentada pelo Banco Central.
@@ -162,12 +164,13 @@ export default function Footer() {
           style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
         >
           {/* Logo pequeno */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={LOGO_URL}
             alt="Titanium Consultoria"
+            width={112}
+            height={28}
             className="h-7 w-auto"
-            style={{ filter: "brightness(0) invert(1)", opacity: 0.5 }}
+            style={{ opacity: 0.5 }}
           />
 
           {/* Copyright */}

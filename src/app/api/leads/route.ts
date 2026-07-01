@@ -36,6 +36,9 @@ const KOMMO_ACCESS_TOKEN = process.env.KOMMO_ACCESS_TOKEN || "";
 const KOMMO_DOMAIN = "titaniumconsultoriaofc.kommo.com";
 const KOMMO_PIPELINE_ID = 13995439;
 
+// --- Neon table init flag (executa uma vez por cold start) ---
+let _tableReady = false;
+
 // --- Helpers ---
 
 function sha256(value: string): string {
@@ -57,31 +60,34 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
   try {
     const sql = neon(DATABASE_URL);
 
-    // Cria tabela se não existir
-    await sql`
-      CREATE TABLE IF NOT EXISTS leads (
-        id SERIAL PRIMARY KEY,
-        name TEXT,
-        email TEXT,
-        phone TEXT,
-        segment TEXT,
-        credit TEXT,
-        months INTEGER,
-        plan TEXT,
-        origin TEXT,
-        ref TEXT,
-        fbc TEXT,
-        fbp TEXT,
-        gclid TEXT,
-        utm_source TEXT,
-        utm_medium TEXT,
-        utm_campaign TEXT,
-        utm_content TEXT,
-        lp TEXT,
-        source_url TEXT,
-        created_at TIMESTAMPTZ DEFAULT NOW()
-      )
-    `;
+    // Cria tabela apenas uma vez por cold start (não em cada request)
+    if (!_tableReady) {
+      await sql`
+        CREATE TABLE IF NOT EXISTS leads (
+          id SERIAL PRIMARY KEY,
+          name TEXT,
+          email TEXT,
+          phone TEXT,
+          segment TEXT,
+          credit TEXT,
+          months INTEGER,
+          plan TEXT,
+          origin TEXT,
+          ref TEXT,
+          fbc TEXT,
+          fbp TEXT,
+          gclid TEXT,
+          utm_source TEXT,
+          utm_medium TEXT,
+          utm_campaign TEXT,
+          utm_content TEXT,
+          lp TEXT,
+          source_url TEXT,
+          created_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `;
+      _tableReady = true;
+    }
 
     await sql`
       INSERT INTO leads (
@@ -127,6 +133,15 @@ async function sendToSheets(body: LeadData): Promise<boolean> {
       plan: body.plan,
       origin: body.origin,
       ref: body.ref,
+      fbc: body.fbc,
+      fbp: body.fbp,
+      gclid: body.gclid,
+      utm_source: body.utm_source,
+      utm_medium: body.utm_medium,
+      utm_campaign: body.utm_campaign,
+      utm_content: body.utm_content,
+      lp: body.lp,
+      source_url: body.source_url,
       timestamp: body.timestamp || new Date().toISOString(),
     };
 
@@ -135,6 +150,7 @@ async function sendToSheets(body: LeadData): Promise<boolean> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(leadPayload),
       redirect: "follow",
+      signal: AbortSignal.timeout(8000),
     });
 
     return res.ok;
@@ -165,6 +181,7 @@ async function sendClickAttribution(body: LeadData): Promise<void> {
         timestamp: new Date().toISOString(),
       }),
       redirect: "follow",
+      signal: AbortSignal.timeout(5000),
     });
   } catch {
     // silencioso — não crítico
@@ -227,6 +244,7 @@ async function sendMetaCAPI(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(8000),
       }
     );
     const result = await res.json();
@@ -305,6 +323,7 @@ async function sendToKommo(body: LeadData): Promise<boolean> {
           tags,
         },
       }]),
+      signal: AbortSignal.timeout(10000),
     });
 
     if (!leadRes.ok) {
@@ -323,6 +342,7 @@ async function sendToKommo(body: LeadData): Promise<boolean> {
       method: "POST",
       headers,
       body: JSON.stringify([{ entity_id: leadId, note_type: "common", params: { text: nota } }]),
+      signal: AbortSignal.timeout(6000),
     });
 
     console.log("[Kommo] Nota adicionada ao lead", leadId);
@@ -379,8 +399,16 @@ export async function POST(request: Request) {
   }
 }
 
-// Health check
-export async function GET() {
+// Health check — protegido por header x-admin-key
+export async function GET(request: Request) {
+  const adminKey = request.headers.get("x-admin-key");
+  const validKey = process.env.ADMIN_SECRET;
+
+  // Sem chave válida: retorna apenas status genérico (sem information disclosure)
+  if (!validKey || adminKey !== validKey) {
+    return NextResponse.json({ status: "ok" }, { status: 200 });
+  }
+
   return NextResponse.json({
     status: "ok",
     neon: DATABASE_URL ? "configured ✅" : "missing ⚠️",

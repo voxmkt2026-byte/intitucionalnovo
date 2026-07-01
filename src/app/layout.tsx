@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://titaniumconsultoria.com.br/cartas/titanium-logo.png",
-        width: 800,
-        height: 600,
+        url: "https://titaniumconsultoria.com.br/og-image.png",
+        width: 1200,
+        height: 630,
         alt: "Titanium Consultoria — Crédito inteligente para construtores de patrimônio",
       },
     ],
@@ -84,7 +84,7 @@ const jsonLd = [
     "description": "Consultoria financeira especializada em cartas contempladas para produtores rurais, empresários e profissionais liberais.",
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+55-11-95101-4269",
+      "telephone": "+55-11-93004-8940",
       "contactType": "customer service",
       "availableLanguage": "Portuguese",
     },
