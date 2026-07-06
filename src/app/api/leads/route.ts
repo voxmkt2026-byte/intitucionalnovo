@@ -442,6 +442,8 @@ export async function POST(request: Request) {
         status: saved ? "ok" : "partial",
         event_id: body.ref,
         storage: neonOk ? "neon" : sheetsOk ? "sheets" : "none",
+        neon: neonOk ? "✅" : "❌",
+        sheets: sheetsOk ? "✅" : "❌",
         kommo: kommoOk ? "✅ ok" : (kommoError ?? "❌ failed"),
       },
       { status: 200 }
