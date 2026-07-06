@@ -114,36 +114,18 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
 }
 
 // --- Google Sheets (OPCIONAL — fallback) ---
-// Fix: Google Apps Script retorna redirect 302 em POSTs.
-// Node.js converte POST→GET no redirect, perdendo o body.
-// Solução: seguir o redirect manualmente com POST.
-async function postWithRedirect(url: string, payload: object, timeoutMs = 8000): Promise<Response> {
-  const body = JSON.stringify(payload);
-  const headers = { "Content-Type": "application/json" };
+// Fix: Google Apps Script com POST retorna redirect que Node.js não segue corretamente.
+// Solução: GET com payload JSON como query parameter (doGet no Apps Script já suporta isso).
+async function sendToAppsScript(url: string, payload: object, timeoutMs = 10000): Promise<Response> {
+  const jsonPayload = JSON.stringify(payload);
+  const separator = url.includes("?") ? "&" : "?";
+  const getUrl = `${url}${separator}payload=${encodeURIComponent(jsonPayload)}`;
 
-  // Primeira request sem seguir redirect
-  const r1 = await fetch(url, {
-    method: "POST",
-    headers,
-    body,
-    redirect: "manual",
+  return fetch(getUrl, {
+    method: "GET",
+    redirect: "follow",
     signal: AbortSignal.timeout(timeoutMs),
   });
-
-  // Se redirect (302/301/308), segue manualmente com POST preservando body
-  if (r1.status >= 300 && r1.status < 400) {
-    const location = r1.headers.get("Location");
-    if (location) {
-      return fetch(location, {
-        method: "POST",
-        headers,
-        body,
-        redirect: "follow",
-        signal: AbortSignal.timeout(timeoutMs),
-      });
-    }
-  }
-  return r1;
 }
 
 async function sendToSheets(body: LeadData): Promise<boolean> {
@@ -176,7 +158,7 @@ async function sendToSheets(body: LeadData): Promise<boolean> {
       timestamp: body.timestamp || new Date().toISOString(),
     };
 
-    const res = await postWithRedirect(SHEETS_WEBHOOK_URL, leadPayload);
+    const res = await sendToAppsScript(SHEETS_WEBHOOK_URL, leadPayload);
     console.log("[Sheets] Status:", res.status, res.ok ? "✅" : "❌");
     return res.ok;
   } catch (err) {
@@ -189,7 +171,7 @@ async function sendClickAttribution(body: LeadData): Promise<void> {
   if (!SHEETS_WEBHOOK_URL || !body.ref) return;
 
   try {
-    await postWithRedirect(SHEETS_WEBHOOK_URL, {
+    await sendToAppsScript(SHEETS_WEBHOOK_URL, {
       sheet: "Cliques",
       ref: body.ref,
       fbc: body.fbc,
