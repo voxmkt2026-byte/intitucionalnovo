@@ -11,6 +11,7 @@ const menuItems = [
   { label: "Sobre Nós",     ariaLabel: "Sobre a Titanium",           link: "/#sobre" },
   { label: "Nossos Valores",ariaLabel: "Missão, visão e valores",    link: "/missao-visao-valores" },
   { label: "Trajetória",    ariaLabel: "Nossa linha do tempo",       link: "/trajetoria" },
+  { label: "Cartas Disponíveis", ariaLabel: "Ver cartas contempladas", link: "/cartas-contempladas" },
   { label: "Contato",       ariaLabel: "Fale conosco",               link: "https://wa.me/5511930048940" },
 ];
 
