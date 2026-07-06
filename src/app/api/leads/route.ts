@@ -114,6 +114,37 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
 }
 
 // --- Google Sheets (OPCIONAL — fallback) ---
+// Fix: Google Apps Script retorna redirect 302 em POSTs.
+// Node.js converte POST→GET no redirect, perdendo o body.
+// Solução: seguir o redirect manualmente com POST.
+async function postWithRedirect(url: string, payload: object, timeoutMs = 8000): Promise<Response> {
+  const body = JSON.stringify(payload);
+  const headers = { "Content-Type": "application/json" };
+
+  // Primeira request sem seguir redirect
+  const r1 = await fetch(url, {
+    method: "POST",
+    headers,
+    body,
+    redirect: "manual",
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+
+  // Se redirect (302/301/308), segue manualmente com POST preservando body
+  if (r1.status >= 300 && r1.status < 400) {
+    const location = r1.headers.get("Location");
+    if (location) {
+      return fetch(location, {
+        method: "POST",
+        headers,
+        body,
+        redirect: "follow",
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+    }
+  }
+  return r1;
+}
 
 async function sendToSheets(body: LeadData): Promise<boolean> {
   if (!SHEETS_WEBHOOK_URL) {
@@ -145,14 +176,8 @@ async function sendToSheets(body: LeadData): Promise<boolean> {
       timestamp: body.timestamp || new Date().toISOString(),
     };
 
-    const res = await fetch(SHEETS_WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(leadPayload),
-      redirect: "follow",
-      signal: AbortSignal.timeout(8000),
-    });
-
+    const res = await postWithRedirect(SHEETS_WEBHOOK_URL, leadPayload);
+    console.log("[Sheets] Status:", res.status, res.ok ? "✅" : "❌");
     return res.ok;
   } catch (err) {
     console.warn("[Sheets] Falhou (não crítico):", err);
@@ -164,24 +189,18 @@ async function sendClickAttribution(body: LeadData): Promise<void> {
   if (!SHEETS_WEBHOOK_URL || !body.ref) return;
 
   try {
-    await fetch(SHEETS_WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sheet: "Cliques",
-        ref: body.ref,
-        fbc: body.fbc,
-        fbp: body.fbp,
-        gclid: body.gclid,
-        utm_source: body.utm_source,
-        utm_medium: body.utm_medium,
-        utm_campaign: body.utm_campaign,
-        utm_content: body.utm_content,
-        lp: body.lp || body.origin,
-        timestamp: new Date().toISOString(),
-      }),
-      redirect: "follow",
-      signal: AbortSignal.timeout(5000),
+    await postWithRedirect(SHEETS_WEBHOOK_URL, {
+      sheet: "Cliques",
+      ref: body.ref,
+      fbc: body.fbc,
+      fbp: body.fbp,
+      gclid: body.gclid,
+      utm_source: body.utm_source,
+      utm_medium: body.utm_medium,
+      utm_campaign: body.utm_campaign,
+      utm_content: body.utm_content,
+      lp: body.lp || body.origin,
+      timestamp: new Date().toISOString(),
     });
   } catch {
     // silencioso — não crítico
