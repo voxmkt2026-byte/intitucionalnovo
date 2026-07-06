@@ -48,42 +48,56 @@ export default function CartaFilters({ segmentos, administradoras, onFilter }: P
 
   const hasFilters = segmento || administradora || valorMin || valorMax;
 
+  const chipActive   = { backgroundColor: "#0A7B3E", color: "#FFFFFF" };
+  const chipInactive = { backgroundColor: "#EFEDE8", color: "#4A4A4A", border: "1px solid #E5E2DC" };
+  const inputStyle   = {
+    border: "1px solid #E5E2DC",
+    borderRadius: "10px",
+    padding: "8px 12px",
+    fontSize: "13px",
+    width: "140px",
+    backgroundColor: "#F8F7F4",
+    color: "#1A1A1A",
+    outline: "none",
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6">
+    <div className="rounded-2xl p-5 mb-6" style={{
+      backgroundColor: "#FFFFFF",
+      boxShadow: "0 1px 3px rgba(0,0,0,.04), 0 6px 24px rgba(0,0,0,.06)",
+    }}>
       {/* Segmento */}
-      <div className="mb-4">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Segmento</p>
-        <div className="flex flex-wrap gap-2">
-          {segmentos.map((s) => (
-            <button
-              key={s}
-              onClick={() => handleSegmento(s)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
-                ${segmento === s
-                  ? "bg-[#C41E3A] text-white shadow-md"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-            >
-              {SEGMENTO_LABELS[s] || s}
-            </button>
-          ))}
+      {segmentos.length > 0 && (
+        <div className="mb-4">
+          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#8A8A8A" }}>Segmento</p>
+          <div className="flex flex-wrap gap-2">
+            {segmentos.map((s) => (
+              <button
+                key={s}
+                onClick={() => handleSegmento(s)}
+                className="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-150"
+                style={segmento === s ? chipActive : chipInactive}
+              >
+                {SEGMENTO_LABELS[s] || s}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Administradora */}
       {administradoras.length > 0 && (
         <div className="mb-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Administradora</p>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#8A8A8A" }}>Administradora</p>
           <div className="flex flex-wrap gap-2">
             {administradoras.map((a) => (
               <button
                 key={a}
                 onClick={() => handleAdmin(a)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
-                  ${administradora === a
-                    ? "bg-[#1a1a2e] text-white shadow-md"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
+                className="px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-all duration-150"
+                style={administradora === a
+                  ? { backgroundColor: "#1A1F1C", color: "#FFFFFF" }
+                  : chipInactive}
               >
                 {a}
               </button>
@@ -92,35 +106,30 @@ export default function CartaFilters({ segmentos, administradoras, onFilter }: P
         </div>
       )}
 
-      {/* Range de valor */}
+      {/* Range */}
       <div className="flex flex-wrap gap-4 items-end">
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Crédito mínimo</p>
-          <input
-            type="number"
-            placeholder="Ex: 50000"
-            value={valorMin}
+          <p className="text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#8A8A8A" }}>Crédito mínimo</p>
+          <input type="number" placeholder="Ex: 50.000" value={valorMin}
             onChange={(e) => setValorMin(e.target.value)}
             onBlur={() => apply()}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-36 focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/30"
+            style={inputStyle}
+            onFocus={(e) => e.target.style.borderColor = "#0A7B3E"}
           />
         </div>
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Crédito máximo</p>
-          <input
-            type="number"
-            placeholder="Ex: 500000"
-            value={valorMax}
+          <p className="text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "#8A8A8A" }}>Crédito máximo</p>
+          <input type="number" placeholder="Ex: 500.000" value={valorMax}
             onChange={(e) => setValorMax(e.target.value)}
             onBlur={() => apply()}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-36 focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/30"
+            style={inputStyle}
+            onFocus={(e) => e.target.style.borderColor = "#0A7B3E"}
           />
         </div>
         {hasFilters && (
-          <button
-            onClick={clearAll}
-            className="text-sm text-gray-400 hover:text-[#C41E3A] transition-colors cursor-pointer underline"
-          >
+          <button onClick={clearAll}
+            className="text-sm cursor-pointer transition-colors hover:underline"
+            style={{ color: "#8A8A8A" }}>
             Limpar filtros
           </button>
         )}

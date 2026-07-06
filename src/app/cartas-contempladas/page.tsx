@@ -4,48 +4,60 @@ import CartasTable from "@/components/CartasTable";
 export const metadata: Metadata = {
   title: "Cartas Contempladas Disponíveis | Titanium Consultoria",
   description:
-    "Confira as cartas contempladas disponíveis agora. Veículos, imóveis e mais — com crédito imediato, entrada acessível e parcelas que cabem no seu bolso.",
+    "Curadoria de cartas contempladas verificadas pela Titanium. Crédito já aprovado para veículos e imóveis — com validação jurídica, sem sorteio.",
   openGraph: {
     title: "Cartas Contempladas Disponíveis | Titanium Consultoria",
     description:
-      "Compre uma carta contemplada e acesse crédito imediato. Veja as opções disponíveis agora.",
+      "Curadoria de cartas contempladas verificadas. Liquidez imediata para quem precisa de crédito agora.",
     url: "https://titaniumconsultorias.com.br/cartas-contempladas",
   },
 };
 
 export default function CartasContempladasPage() {
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="bg-[#1a1a2e] text-white py-16 px-4">
+    <main className="min-h-screen" style={{ backgroundColor: "#F8F7F4", fontFamily: "var(--font-jakarta), sans-serif" }}>
+
+      {/* Hero — Light, clean, professional */}
+      <section style={{ backgroundColor: "#F8F7F4", borderBottom: "1px solid #E5E2DC" }} className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 bg-[#C41E3A]/20 text-[#ff6b7a] text-xs font-bold px-3 py-1.5 rounded-full mb-5 border border-[#C41E3A]/30 uppercase tracking-wider">
-              ⚡ Estoque atualizado — sem sorteio, sem espera
-            </span>
-            <h1 className="text-3xl md:text-5xl font-black mb-4 leading-tight">
-              Crédito de{" "}
-              <span className="text-[#C41E3A]">R$ 15 mil a R$ 2 milhões</span>
-              <span className="block">disponível agora.</span>
+          <div className="max-w-2xl">
+            {/* Kicker */}
+            <div className="flex items-center gap-2 mb-5">
+              <span style={{ backgroundColor: "#E8F5EE", color: "#0A7B3E", borderColor: "#D1ECDD" }}
+                className="inline-block text-xs font-semibold px-3 py-1 rounded-full border uppercase tracking-widest">
+                Curadoria de Cartas
+              </span>
+            </div>
+
+            <h1 style={{ color: "#1A1A1A" }} className="text-4xl md:text-5xl font-bold mb-5 leading-tight">
+              Cartas Contempladas{" "}
+              <span style={{ backgroundImage: "linear-gradient(100deg, #0A7B3E, #15B85C 55%, #06532A)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
+                verificadas
+              </span>
+              {" "}pela Titanium.
             </h1>
-            <p className="text-gray-300 text-lg leading-relaxed mb-4">
-              Enquanto a maioria espera ser sorteada — você pode ter o crédito <strong className="text-white">na sua mão esta semana.</strong>{" "}
-              Uma carta contemplada te dá acesso imediato ao bem que você quer: carro, casa, máquina, investimento.
-            </p>
-            <p className="text-gray-400 text-sm">
-              Escolha a carta ideal abaixo → clique em <strong className="text-[#C41E3A]">QUERO ESSE CRÉDITO</strong> → um consultor entra em contato nas próximas horas.
+
+            <p style={{ color: "#4A4A4A" }} className="text-lg leading-relaxed mb-6">
+              Somente quando houver disponibilidade real e com validação jurídica.
+              Cada carta passa pela análise da nossa equipe antes de chegar até você.
             </p>
 
-            <div className="flex flex-wrap gap-8 mt-8 pt-8 border-t border-white/10">
+            <p style={{ color: "#8A8A8A" }} className="text-sm leading-relaxed">
+              Selecione a carta ideal abaixo e solicite uma análise consultiva gratuita.
+              Um especialista Titanium entra em contato para estruturar a operação.
+            </p>
+
+            {/* Stats */}
+            <div className="flex flex-wrap gap-8 mt-10 pt-8" style={{ borderTop: "1px solid #E5E2DC" }}>
               {[
-                { label: "R$ 50M+", sub: "em crédito já acessado" },
-                { label: "+3.000",  sub: "clientes contemplados" },
-                { label: "11",     sub: "administradoras parceiras" },
-                { label: "4 anos", sub: "de operação no mercado" },
+                { label: "R$ 50M+",  sub: "em crédito intermediado" },
+                { label: "+3.000",   sub: "operações estruturadas" },
+                { label: "11",       sub: "administradoras parceiras" },
+                { label: "4 anos",   sub: "de atuação no mercado" },
               ].map(({ label, sub }) => (
                 <div key={label}>
-                  <p className="text-2xl font-black text-[#C41E3A]">{label}</p>
-                  <p className="text-gray-400 text-xs mt-0.5">{sub}</p>
+                  <p style={{ color: "#0A7B3E" }} className="text-2xl font-bold">{label}</p>
+                  <p style={{ color: "#8A8A8A" }} className="text-xs mt-0.5">{sub}</p>
                 </div>
               ))}
             </div>
@@ -53,32 +65,42 @@ export default function CartasContempladasPage() {
         </div>
       </section>
 
-
       {/* Table section */}
-      <section className="py-10 px-4">
+      <section className="py-10 px-4" style={{ backgroundColor: "#F8F7F4" }}>
         <div className="max-w-6xl mx-auto">
           <CartasTable />
         </div>
       </section>
 
       {/* Bottom CTA */}
-      <section className="bg-[#1a1a2e] text-white py-12 px-4">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-3">Não encontrou o que procura?</h2>
-          <p className="text-gray-400 mb-6">
-            Nosso estoque é atualizado constantemente. Entre em contato e descubra
-            outras opções disponíveis.
+      <section className="py-14 px-4" style={{ backgroundColor: "#EFEDE8", borderTop: "1px solid #E5E2DC" }}>
+        <div className="max-w-xl mx-auto text-center">
+          <span style={{ color: "#0A7B3E", backgroundColor: "#E8F5EE", borderColor: "#D1ECDD" }}
+            className="inline-block text-xs font-semibold px-3 py-1 rounded-full border uppercase tracking-widest mb-4">
+            Análise Consultiva
+          </span>
+          <h2 style={{ color: "#1A1A1A" }} className="text-2xl font-bold mb-3">
+            Não encontrou a carta ideal?
+          </h2>
+          <p style={{ color: "#4A4A4A" }} className="text-sm leading-relaxed mb-6">
+            Nosso estoque é atualizado com frequência. Entre em contato e apresentamos
+            outras opções disponíveis — sem compromisso.
           </p>
           <a
-            href="https://wa.me/5511930048940?text=Olá! Não encontrei a carta que procuro no site. Podem me ajudar?"
+            href="https://wa.me/5511930048940?text=Olá! Gostaria de verificar opções de cartas contempladas disponíveis."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-[#C41E3A] hover:bg-[#a01830] text-white font-semibold px-8 py-4 rounded-2xl transition-colors duration-200 cursor-pointer"
+            style={{ backgroundColor: "#0A7B3E", color: "#FFFFFF" }}
+            className="inline-block font-semibold px-8 py-3.5 rounded-full hover:opacity-90 transition-opacity duration-200 cursor-pointer text-sm"
           >
-            Falar com um consultor
+            Solicitar análise consultiva
           </a>
+          <p style={{ color: "#8A8A8A" }} className="text-xs mt-4">
+            Sem pressão de venda. Orientação estratégica.
+          </p>
         </div>
       </section>
+
     </main>
   );
 }
