@@ -61,18 +61,22 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
     }
   }
 
-  const inputCls = "w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C41E3A]/30 focus:border-[#C41E3A] transition-colors";
+  const inputCls = "w-full rounded-xl px-3 py-2.5 text-sm outline-none transition-colors" + " focus:ring-0";
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-800">
-            {isEdit ? "Editar Carta" : "Nova Carta Contemplada"}
-          </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 cursor-pointer transition-colors">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(26,26,26,0.5)", backdropFilter: "blur(4px)" }}>
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto" style={{ backgroundColor: "#FFFFFF", borderRadius: "20px", boxShadow: "0 4px 12px rgba(0,0,0,.05), 0 16px 48px rgba(0,0,0,.08)" }}>
+        <div className="flex items-center justify-between" style={{ padding: "20px 24px", borderBottom: "1px solid #E5E2DC" }}>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#8A8A8A" }}>Curadoria</p>
+            <h2 className="text-base font-bold" style={{ color: "#1A1A1A" }}>
+              {isEdit ? "Editar Carta" : "Nova Carta Contemplada"}
+            </h2>
+          </div>
+          <button onClick={onClose} className="cursor-pointer transition-opacity hover:opacity-60" style={{ color: "#8A8A8A" }}>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
