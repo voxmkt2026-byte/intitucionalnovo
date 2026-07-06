@@ -327,8 +327,39 @@ async function sendToKommo(body: LeadData): Promise<boolean> {
     });
 
     if (!leadRes.ok) {
-      const err = await leadRes.text();
-      console.error("[Kommo] Erro ao criar lead:", leadRes.status, err);
+      const errText = await leadRes.text();
+      console.error("[Kommo] Erro ao criar lead:", leadRes.status, errText);
+
+      // 402 Payment Required: plano Kommo sem API — tenta fallback via n8n
+      if (leadRes.status === 402 && N8N_KOMMO_WEBHOOK_URL) {
+        console.warn("[Kommo] 402 detectado — ativando fallback n8n...");
+        try {
+          const n8nRes = await fetch(N8N_KOMMO_WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: body.name,
+              phone: body.phone,
+              email: body.email,
+              segment: body.segment,
+              credit: String(body.credit),
+              months: body.months,
+              plan: body.plan,
+              lp: body.lp || body.origin,
+              utm_source: body.utm_source,
+              utm_medium: body.utm_medium,
+              utm_campaign: body.utm_campaign,
+              ref: body.ref,
+              timestamp: new Date().toISOString(),
+            }),
+            signal: AbortSignal.timeout(8000),
+          });
+          console.log("[Kommo] Fallback n8n:", n8nRes.ok ? "✅ ok" : `❌ ${n8nRes.status}`);
+          return n8nRes.ok;
+        } catch (n8nErr) {
+          console.error("[Kommo] Fallback n8n falhou:", n8nErr);
+        }
+      }
       return false;
     }
 
@@ -366,22 +397,34 @@ export async function POST(request: Request) {
 
     const body = leadSchema.parse(await request.json());
 
-    // Dispara tudo em paralelo — Kommo direto
-    const [neonResult, , , , kommoResult] = await Promise.allSettled([
+    // Dispara tudo em paralelo
+    const [neonResult, sheetsResult, , , kommoResult] = await Promise.allSettled([
       sendToNeon(body),
-      sendToSheets(body).catch(() => {}),
+      sendToSheets(body),
       sendClickAttribution(body).catch(() => {}),
       sendMetaCAPI(body, clientIp, userAgent).catch(() => {}),
       sendToKommo(body),
     ]);
 
-    // Sucesso se Neon salvou (Sheets é opcional)
-    const saved = neonResult.status === "fulfilled" && neonResult.value === true;
-    const kommoOk = kommoResult.status === "fulfilled" && kommoResult.value === true;
-    const kommoError = kommoResult.status === "rejected" ? String((kommoResult as PromiseRejectedResult).reason) : null;
+    // Salvo = Neon OU Sheets (redundância: Sheets é backup enquanto DATABASE_URL não está configurado)
+    const neonOk   = neonResult.status   === "fulfilled" && neonResult.value   === true;
+    const sheetsOk = sheetsResult.status === "fulfilled" && sheetsResult.value  === true;
+    const saved    = neonOk || sheetsOk;
+
+    const kommoOk    = kommoResult.status === "fulfilled" && kommoResult.value === true;
+    const kommoError = kommoResult.status === "rejected"
+      ? String((kommoResult as PromiseRejectedResult).reason)
+      : null;
+
+    console.log(`[API] neon=${neonOk} sheets=${sheetsOk} kommo=${kommoOk}`);
 
     return NextResponse.json(
-      { status: saved ? "ok" : "partial", event_id: body.ref, kommo: kommoOk ? "✅ ok" : (kommoError ?? "❌ failed") },
+      {
+        status: saved ? "ok" : "partial",
+        event_id: body.ref,
+        storage: neonOk ? "neon" : sheetsOk ? "sheets" : "none",
+        kommo: kommoOk ? "✅ ok" : (kommoError ?? "❌ failed"),
+      },
       { status: 200 }
     );
   } catch (error) {
