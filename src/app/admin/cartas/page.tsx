@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import CartaAdminClient from "./CartaAdminClient";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "titanium-admin-secret-2024-change-in-prod"
+  process.env.JWT_SECRET!
 );
 
 export default async function AdminCartasPage() {

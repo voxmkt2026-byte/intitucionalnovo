@@ -71,6 +71,22 @@ export function middleware(req: NextRequest) {
     }
   }
 
+  /* ── Proteção de rotas /admin/* ── */
+  // Edge Runtime não suporta jose/Node APIs completos.
+  // Verificamos presença do cookie aqui (barreira leve) +
+  // verificação criptográfica completa nos Server Components e API routes.
+  if (
+    pathname.startsWith("/admin/") &&
+    !pathname.startsWith("/admin/login")
+  ) {
+    const adminToken = req.cookies.get("admin_token")?.value;
+    if (!adminToken) {
+      const loginUrl = new URL("/admin/login", req.url);
+      loginUrl.searchParams.set("from", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
   /* ── Apply security headers to all responses ── */
   const response = NextResponse.next();
 

@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
 const JWT_SECRET   = new TextEncoder().encode(
-  process.env.JWT_SECRET || "titanium-admin-secret-2024-change-in-prod"
+  process.env.JWT_SECRET!
 );
 
 async function verifyAdmin() {

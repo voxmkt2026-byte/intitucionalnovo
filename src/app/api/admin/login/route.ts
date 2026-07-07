@@ -5,7 +5,7 @@ import { SignJWT } from "jose";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
 const JWT_SECRET   = new TextEncoder().encode(
-  process.env.JWT_SECRET || "titanium-admin-secret-2024-change-in-prod"
+  process.env.JWT_SECRET!
 );
 
 async function getDb() {
@@ -77,14 +77,14 @@ export async function POST(request: Request) {
     response.cookies.set("admin_token", token, {
       httpOnly: true,
       secure:   process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "strict", // CSRF protection: strict > lax para painel admin
       maxAge:   8 * 60 * 60, // 8h
       path:     "/",
     });
 
     return response;
   } catch (err) {
-    console.error("[admin/login] erro:", err);
+    console.error("[admin/login] falha na autenticação"); // sem stack trace
     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
 }
