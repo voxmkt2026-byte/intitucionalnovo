@@ -100,14 +100,14 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
             </svg>
           </button>
           <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "#8A8A8A" }}>Carta selecionada</p>
-          <p className="text-3xl font-bold" style={{ color: "#15B85C" }}>{formatBRL(carta.valor_credito)}</p>
+          <p className="text-3xl font-bold" style={{ color: "#34d399" }}>{formatBRL(carta.valor_credito)}</p>
           <p className="text-sm mt-1" style={{ color: "#8A8A8A" }}>{carta.administradora} · {carta.parcelas}x de {formatBRL(carta.valor_parcela)}</p>
         </div>
 
         {sent ? (
           <div className="p-8 text-center">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: "#E8F5EE" }}>
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#0A7B3E" }}>
+            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: "rgba(16,185,129,0.08)" }}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#10b981" }}>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
@@ -115,7 +115,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
             <p className="text-sm leading-relaxed" style={{ color: "#4A4A4A" }}>
               Um especialista Titanium entrará em contato para verificar a disponibilidade e estruturar a operação.
             </p>
-            <button onClick={onClose} className="mt-5 text-sm cursor-pointer hover:underline" style={{ color: "#0A7B3E" }}>Fechar</button>
+            <button onClick={onClose} className="mt-5 text-sm cursor-pointer hover:underline" style={{ color: "#10b981" }}>Fechar</button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -124,25 +124,25 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
             <div>
               <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: "#8A8A8A" }}>Nome completo *</label>
               <input type="text" required value={form.name} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Seu nome" style={inputStyle}
-                onFocus={(e) => e.target.style.borderColor = "#0A7B3E"}
+                onFocus={(e) => e.target.style.borderColor = "#10b981"}
                 onBlur={(e) => e.target.style.borderColor = "#E5E2DC"} />
             </div>
             <div>
               <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: "#8A8A8A" }}>WhatsApp *</label>
               <input type="tel" required value={form.phone} onChange={(e) => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="(11) 99999-9999" style={inputStyle}
-                onFocus={(e) => e.target.style.borderColor = "#0A7B3E"}
+                onFocus={(e) => e.target.style.borderColor = "#10b981"}
                 onBlur={(e) => e.target.style.borderColor = "#E5E2DC"} />
             </div>
             <div>
               <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: "#8A8A8A" }}>E-mail</label>
               <input type="email" value={form.email} onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))} placeholder="seu@email.com" style={inputStyle}
-                onFocus={(e) => e.target.style.borderColor = "#0A7B3E"}
+                onFocus={(e) => e.target.style.borderColor = "#10b981"}
                 onBlur={(e) => e.target.style.borderColor = "#E5E2DC"} />
             </div>
 
             {error && <p className="text-sm px-4 py-3 rounded-xl" style={{ backgroundColor: "#FEF2F2", color: "#C44040" }}>{error}</p>}
 
-            <button type="submit" disabled={loading} className="w-full font-semibold py-3.5 rounded-full cursor-pointer transition-opacity duration-200 text-sm" style={{ backgroundColor: "#0A7B3E", color: "#FFFFFF", opacity: loading ? 0.7 : 1 }}>
+            <button type="submit" disabled={loading} className="w-full font-semibold py-3.5 rounded-full cursor-pointer transition-opacity duration-200 text-sm" style={{ backgroundColor: "#10b981", color: "#FFFFFF", opacity: loading ? 0.7 : 1 }}>
               {loading ? "Enviando..." : "Solicitar análise consultiva"}
             </button>
             <p className="text-center text-xs" style={{ color: "#8A8A8A" }}>Sem compromisso. Orientação estratégica.</p>
@@ -174,7 +174,7 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         </div>
       </td>
       <td className="px-5 py-4">
-        <p className="text-lg font-bold" style={{ color: "#0A7B3E" }}>{formatBRL(carta.valor_credito)}</p>
+        <p className="text-lg font-bold" style={{ color: "#10b981" }}>{formatBRL(carta.valor_credito)}</p>
         <p className="text-xs mt-0.5" style={{ color: "#8A8A8A" }}>crédito contemplado</p>
       </td>
       <td className="px-5 py-4">
@@ -183,19 +183,19 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
       </td>
       <td className="px-5 py-4">
         <p className="font-medium text-sm" style={{ color: "#4A4A4A" }}>{carta.parcelas}x</p>
-        <p className="text-xs font-medium" style={{ color: "#0D9E50" }}>{formatBRL(carta.valor_parcela)}/mês</p>
+        <p className="text-xs font-medium" style={{ color: "#059669" }}>{formatBRL(carta.valor_parcela)}/mês</p>
       </td>
       <td className="px-5 py-4">
         {days !== null ? (
           <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full"
             style={isUrgent
               ? { backgroundColor: "#FEF2F2", color: "#C44040", border: "1px solid #FECACA" }
-              : { backgroundColor: "#E8F5EE", color: "#0A7B3E", border: "1px solid #D1ECDD" }}>
+              : { backgroundColor: "rgba(16,185,129,0.08)", color: "#10b981", border: "1px solid rgba(16,185,129,0.2)" }}>
             {isUrgent ? `Vence em ${days}d` : "Disponível"}
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full"
-            style={{ backgroundColor: "#E8F5EE", color: "#0A7B3E", border: "1px solid #D1ECDD" }}>
+            style={{ backgroundColor: "rgba(16,185,129,0.08)", color: "#10b981", border: "1px solid rgba(16,185,129,0.2)" }}>
             Disponível
           </span>
         )}
@@ -203,9 +203,9 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
       <td className="px-5 py-4">
         <button onClick={onCTA}
           className="text-xs font-semibold px-5 py-2.5 rounded-full cursor-pointer transition-opacity duration-150 whitespace-nowrap"
-          style={{ backgroundColor: "#0A7B3E", color: "#FFFFFF" }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#0D9E50")}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#0A7B3E")}>
+          style={{ backgroundColor: "#10b981", color: "#FFFFFF" }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#059669")}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#10b981")}>
           Verificar disponibilidade
         </button>
       </td>
@@ -237,7 +237,7 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
           <span className="text-xs font-medium px-2 py-1 rounded-full"
             style={isUrgent
               ? { backgroundColor: "#C44040", color: "#FFFFFF" }
-              : { backgroundColor: "#0A7B3E", color: "#FFFFFF" }}>
+              : { backgroundColor: "#10b981", color: "#FFFFFF" }}>
             {isUrgent ? `${days}d` : "OK"}
           </span>
         )}
@@ -246,7 +246,7 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
       <div className="p-4">
         <div className="text-center mb-4">
           <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "#8A8A8A" }}>Crédito contemplado</p>
-          <p className="text-3xl font-bold" style={{ color: "#0A7B3E" }}>{formatBRL(carta.valor_credito)}</p>
+          <p className="text-3xl font-bold" style={{ color: "#10b981" }}>{formatBRL(carta.valor_credito)}</p>
         </div>
 
         <div className="grid grid-cols-3 gap-2 mb-4">
@@ -264,7 +264,7 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
 
         <button onClick={onCTA}
           className="w-full font-semibold py-3 rounded-full cursor-pointer text-sm transition-opacity"
-          style={{ backgroundColor: "#0A7B3E", color: "#FFFFFF" }}>
+          style={{ backgroundColor: "#10b981", color: "#FFFFFF" }}>
           Verificar disponibilidade
         </button>
       </div>
@@ -349,7 +349,7 @@ export default function CartasTable() {
     <button onClick={() => handlePage(p)}
       className="w-9 h-9 rounded-full text-sm font-medium cursor-pointer transition-all"
       style={page === p
-        ? { backgroundColor: "#0A7B3E", color: "#FFFFFF" }
+        ? { backgroundColor: "#10b981", color: "#FFFFFF" }
         : { backgroundColor: "#FFFFFF", color: "#4A4A4A", border: "1px solid #E5E2DC" }}>
       {p}
     </button>

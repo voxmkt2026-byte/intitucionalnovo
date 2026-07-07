@@ -48,7 +48,7 @@ export default function CartaFilters({ segmentos, administradoras, onFilter }: P
 
   const hasFilters = segmento || administradora || valorMin || valorMax;
 
-  const chipActive   = { backgroundColor: "#0A7B3E", color: "#FFFFFF" };
+  const chipActive   = { backgroundColor: "#10b981", color: "#FFFFFF" };
   const chipInactive = { backgroundColor: "#EFEDE8", color: "#4A4A4A", border: "1px solid #E5E2DC" };
   const inputStyle   = {
     border: "1px solid #E5E2DC",
@@ -114,7 +114,7 @@ export default function CartaFilters({ segmentos, administradoras, onFilter }: P
             onChange={(e) => setValorMin(e.target.value)}
             onBlur={() => apply()}
             style={inputStyle}
-            onFocus={(e) => e.target.style.borderColor = "#0A7B3E"}
+            onFocus={(e) => e.target.style.borderColor = "#10b981"}
           />
         </div>
         <div>
@@ -123,7 +123,7 @@ export default function CartaFilters({ segmentos, administradoras, onFilter }: P
             onChange={(e) => setValorMax(e.target.value)}
             onBlur={() => apply()}
             style={inputStyle}
-            onFocus={(e) => e.target.style.borderColor = "#0A7B3E"}
+            onFocus={(e) => e.target.style.borderColor = "#10b981"}
           />
         </div>
         {hasFilters && (
