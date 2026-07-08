@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { verifyAdminSession } from "@/lib/admin-auth";
 import { fetchAdminStats } from "@/lib/admin-stats";
-import AdminNavbar from "@/components/admin/AdminNavbar";
 import KpiCard from "@/components/admin/KpiCard";
 import BarChart from "@/components/admin/BarChart";
 import PieChart from "@/components/admin/PieChart";
@@ -12,7 +11,43 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ── Integration status helper ────────────────────────────────────────────────
+function IntegrationStatus() {
+  const integrations = [
+    { key: "neon",   label: "Neon DB",    ok: !!process.env.DATABASE_URL },
+    { key: "capi",   label: "Meta CAPI",  ok: !!(process.env.META_ACCESS_TOKEN && process.env.META_PIXEL_ID) },
+    { key: "kommo",  label: "Kommo CRM",  ok: !!process.env.KOMMO_ACCESS_TOKEN },
+    { key: "sheets", label: "Sheets",     ok: !!process.env.SHEETS_WEBHOOK_URL },
+    { key: "n8n",    label: "N8n",        ok: !!process.env.N8N_KOMMO_WEBHOOK_URL },
+  ];
+  return (
+    <div style={{
+      padding: '12px 18px',
+      borderRadius: '12px', marginBottom: '28px',
+      border: '1px solid var(--admin-border)',
+      backgroundColor: 'var(--admin-surface)',
+      boxShadow: 'var(--admin-card-shadow)',
+      display: 'flex', flexWrap: 'wrap' as const, alignItems: 'center', gap: '6px 20px',
+    }}>
+      <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em',
+        color: 'var(--admin-text-mute)', textTransform: 'uppercase' as const, marginRight: 4 }}>
+        Integrações
+      </span>
+      {integrations.map(({ key, label, ok }) => (
+        <span key={key} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px',
+          fontWeight: 500, color: ok ? 'var(--admin-text-soft)' : '#ef4444' }}>
+          <span style={{
+            width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0,
+            backgroundColor: ok ? '#0A7B3E' : '#ef4444',
+            boxShadow: ok ? '0 0 5px rgba(10,123,62,0.55)' : '0 0 5px rgba(239,68,68,0.55)',
+          }} />
+          {label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function formatBRL(v: number) {
   if (!v) return "—";
   return new Intl.NumberFormat("pt-BR", {
@@ -28,12 +63,14 @@ function timeAgo(dateStr: string): string {
   return `${Math.floor(diff / 86400)}d`;
 }
 
-// Status badge colors
 const STATUS_COLOR: Record<string, string> = {
   Novo: "#3b82f6", Qualificado: "#eab308", Vendido: "#0A7B3E", Perdido: "#ef4444",
 };
 
-// Segment SVG icons
+const FUNIL_COLORS: Record<string, string> = {
+  Novo: "#3b82f6", Qualificado: "#eab308", Vendido: "#0A7B3E", Perdido: "#ef4444",
+};
+
 function IconVehicle() {
   return (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -57,178 +94,166 @@ function IconClock() {
   );
 }
 
-// ─── Funil colors — same as PieChart default order ───────────────────────────
-const FUNIL_COLORS = {
-  Novo:        "#3b82f6",
-  Qualificado: "#eab308",
-  Vendido:     "#0A7B3E",
-  Perdido:     "#ef4444",
-};
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default async function DashboardPage() {
   const isAuth = await verifyAdminSession();
   if (!isAuth) redirect("/admin/login");
 
   const stats = await fetchAdminStats();
 
-  // Build status data for pie chart
   const statusPieData = Object.fromEntries(
     Object.entries(stats.por_status ?? {}).filter(([, v]) => v > 0)
   );
-
-  // Funil colors array aligned with PieChart default palette
   const funilPieColors = (Object.keys(statusPieData) as string[]).map(
-    (k) => FUNIL_COLORS[k as keyof typeof FUNIL_COLORS] ?? "#8b5cf6"
+    (k) => FUNIL_COLORS[k] ?? "#8b5cf6"
   );
 
   return (
-    <>
-      <AdminNavbar />
-      <main className="max-w-7xl mx-auto px-4 py-8">
+    <main className="max-w-7xl mx-auto px-4 py-8">
 
-        {/* ── Page header ── */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Visão Geral</h1>
-            <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.38)" }}>
-              Titanium CRM · dados ao vivo · Neon Postgres
+      {/* Page header */}
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--admin-text)" }}>Visão Geral</h1>
+          <p className="text-sm mt-1" style={{ color: "var(--admin-text-mute)" }}>
+            Titanium CRM · dados ao vivo · Neon Postgres
+          </p>
+        </div>
+        {/* Live pill */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{
+          backgroundColor: "var(--admin-brand-tint)",
+          border: "1px solid var(--admin-brand-tint2)",
+        }}>
+          <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "var(--admin-brand)" }} />
+          <span className="text-xs font-medium" style={{ color: "var(--admin-brand)" }}>Ao vivo</span>
+        </div>
+      </div>
+
+      {/* KPIs */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+        <KpiCard iconKey="today"      label="Hoje"         value={stats.hoje}    />
+        <KpiCard iconKey="week"       label="7 dias"       value={stats.semana}  />
+        <KpiCard iconKey="month"      label="30 dias"      value={stats.mes}     />
+        <KpiCard iconKey="total"      label="Total"        value={stats.total}   />
+        <KpiCard iconKey="conversion" label="Conversão"    value={`${stats.taxa_conversao}%`} />
+        <KpiCard iconKey="ticket"     label="Ticket médio" value={formatBRL(stats.ticket_medio_vendido)} />
+      </div>
+
+      {/* Integration Status */}
+      <IntegrationStatus />
+
+      {/* Funil Pizza + Feed recente */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+
+        {/* Funil */}
+        <PieChart
+          title="Funil de Leads por Status"
+          data={statusPieData}
+          colors={funilPieColors}
+        />
+
+        {/* Feed */}
+        <div className="rounded-2xl border overflow-hidden" style={{
+          backgroundColor: "var(--admin-surface)",
+          borderColor: "var(--admin-border)",
+          boxShadow: "var(--admin-card-shadow)",
+        }}>
+          {/* CSS hover for feed rows (server component can't use event handlers) */}
+          <style dangerouslySetInnerHTML={{ __html: `.dash-feed-row { background-color: var(--admin-surface); transition: background-color 0.1s ease; } .dash-feed-row:hover { background-color: var(--admin-hover) !important; }` }} />
+
+          <div className="px-6 py-4 border-b flex items-center justify-between"
+               style={{ borderColor: "var(--admin-border)" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest"
+               style={{ color: "var(--admin-text-mute)" }}>
+              Leads Recentes
             </p>
+            <a href="/admin/leads"
+               className="text-xs font-medium flex items-center gap-1"
+               style={{ color: "var(--admin-brand)", textDecoration: "none" }}>
+              Ver todos
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
           </div>
-          {/* Live indicator */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: "rgba(10,123,62,0.12)", border: "1px solid rgba(10,123,62,0.25)" }}>
-            <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#0A7B3E" }} />
-            <span className="text-xs font-medium" style={{ color: "#15B85C" }}>Ao vivo</span>
-          </div>
-        </div>
 
-        {/* ── KPI Cards ── */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          <KpiCard iconKey="today"      label="Hoje"        value={stats.hoje}    color="#0A7B3E" />
-          <KpiCard iconKey="week"       label="7 dias"      value={stats.semana}  color="#0D9E50" />
-          <KpiCard iconKey="month"      label="30 dias"     value={stats.mes}     color="#15B85C" />
-          <KpiCard iconKey="total"      label="Total"       value={stats.total}   color="#3b82f6" />
-          <KpiCard iconKey="conversion" label="Conversão"   value={`${stats.taxa_conversao}%`} color="#0A7B3E" />
-          <KpiCard iconKey="ticket"     label="Ticket médio" value={formatBRL(stats.ticket_medio_vendido)} color="#0A7B3E" />
-        </div>
+          <div className="divide-y" style={{ borderColor: "var(--admin-border-2, var(--admin-border))" }}>
+            {stats.recentes.slice(0, 7).map((lead) => (
+              <div key={lead.id} className="dash-feed-row px-6 py-3 flex items-center gap-3">
+                {/* Segment icon */}
+                <span className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg"
+                      style={{
+                        backgroundColor: lead.segment === "veiculos" ? "rgba(59,130,246,0.1)" : "var(--admin-brand-tint)",
+                        color: lead.segment === "veiculos" ? "#3b82f6" : "var(--admin-brand)",
+                      }}>
+                  {lead.segment === "veiculos" ? <IconVehicle /> : <IconBuilding />}
+                </span>
 
-        {/* ── Funil Pizza + Feed recente ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                {/* Name + meta */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium truncate" style={{ color: "var(--admin-text)" }}>
+                      {lead.name || "Sem nome"}
+                    </span>
+                    <span className="text-xs px-1.5 py-0.5 rounded-full font-medium shrink-0"
+                          style={{
+                            backgroundColor: `${STATUS_COLOR[lead.status ?? "Novo"]}18`,
+                            color: STATUS_COLOR[lead.status ?? "Novo"],
+                          }}>
+                      {lead.status ?? "Novo"}
+                    </span>
+                  </div>
+                  <p className="text-xs mt-0.5" style={{ color: "var(--admin-text-mute)" }}>
+                    {lead.credit ? `R$ ${lead.credit}` : "—"} · {lead.utm_source || "orgânico"}
+                  </p>
+                </div>
 
-          {/* Funil de status — Pie Chart */}
-          <PieChart
-            title="Funil de Leads por Status"
-            data={statusPieData}
-            colors={funilPieColors}
-          />
+                {/* Time */}
+                <div className="flex items-center gap-1 shrink-0" style={{ color: "var(--admin-text-mute)" }}>
+                  <IconClock />
+                  <span className="text-xs">{timeAgo(lead.created_at)}</span>
+                </div>
+              </div>
+            ))}
 
-          {/* Feed recente */}
-          <div
-            className="rounded-2xl border overflow-hidden"
-            style={{ backgroundColor: "#0b0f17", borderColor: "rgba(255,255,255,0.07)" }}
-          >
-            {/* Header */}
-            <div
-              className="px-6 py-4 border-b flex items-center justify-between"
-              style={{ borderColor: "rgba(255,255,255,0.07)" }}
-            >
-              <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>
-                Leads Recentes
-              </p>
-              <a href="/admin/leads" className="text-xs font-medium flex items-center gap-1" style={{ color: "#15B85C" }}>
-                Ver todos
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M13 6l6 6-6 6"/>
+            {stats.recentes.length === 0 && (
+              <div className="px-6 py-10 text-center" style={{ color: "var(--admin-text-mute)" }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-2" style={{ opacity: 0.4 }}>
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
                 </svg>
-              </a>
-            </div>
-
-            {/* Rows */}
-            <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
-              {stats.recentes.slice(0, 7).map((lead) => (
-                <div key={lead.id} className="px-6 py-3 flex items-center gap-3">
-                  {/* Segment icon */}
-                  <span
-                    className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg"
-                    style={{
-                      backgroundColor: lead.segment === "veiculos"
-                        ? "rgba(59,130,246,0.12)"
-                        : "rgba(10,123,62,0.12)",
-                      color: lead.segment === "veiculos" ? "#60a5fa" : "#15B85C",
-                    }}
-                  >
-                    {lead.segment === "veiculos" ? <IconVehicle /> : <IconBuilding />}
-                  </span>
-
-                  {/* Name + meta */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-white truncate">
-                        {lead.name || "Sem nome"}
-                      </span>
-                      <span
-                        className="text-xs px-1.5 py-0.5 rounded-full font-medium shrink-0"
-                        style={{
-                          backgroundColor: `${STATUS_COLOR[lead.status ?? "Novo"]}20`,
-                          color: STATUS_COLOR[lead.status ?? "Novo"],
-                        }}
-                      >
-                        {lead.status ?? "Novo"}
-                      </span>
-                    </div>
-                    <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.28)" }}>
-                      {lead.credit ? `R$ ${lead.credit}` : "—"} · {lead.utm_source || "orgânico"}
-                    </p>
-                  </div>
-
-                  {/* Time */}
-                  <div className="flex items-center gap-1 shrink-0" style={{ color: "rgba(255,255,255,0.22)" }}>
-                    <IconClock />
-                    <span className="text-xs">{timeAgo(lead.created_at)}</span>
-                  </div>
-                </div>
-              ))}
-
-              {stats.recentes.length === 0 && (
-                <div className="px-6 py-10 text-center" style={{ color: "rgba(255,255,255,0.25)" }}>
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-2" style={{ opacity: 0.4 }}>
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                  <p className="text-sm">Nenhum lead ainda</p>
-                </div>
-              )}
-            </div>
+                <p className="text-sm">Nenhum lead ainda</p>
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
-        {/* ── Gráficos de pizza — 3 dimensões ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <PieChart
-            title="Por Fonte de Tráfego"
-            data={stats.por_source ?? {}}
-            colors={["#0A7B3E", "#15B85C", "#3b82f6", "#8b5cf6", "#f97316", "#06b6d4", "#eab308", "#ef4444"]}
-          />
-          <PieChart
-            title="Por Landing Page"
-            data={stats.por_lp ?? {}}
-            colors={["#3b82f6", "#60a5fa", "#0A7B3E", "#15B85C", "#8b5cf6", "#a78bfa", "#f97316", "#06b6d4"]}
-          />
-          <PieChart
-            title="Por Segmento"
-            data={stats.por_segmento ?? {}}
-            colors={["#0A7B3E", "#3b82f6", "#eab308", "#8b5cf6", "#f97316"]}
-          />
-        </div>
+      {/* Pie charts — 3 dimensões */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <PieChart
+          title="Por Fonte de Tráfego"
+          data={stats.por_source ?? {}}
+          colors={["#0A7B3E","#15B85C","#3b82f6","#8b5cf6","#f97316","#06b6d4","#eab308","#ef4444"]}
+        />
+        <PieChart
+          title="Por Landing Page"
+          data={stats.por_lp ?? {}}
+          colors={["#3b82f6","#60a5fa","#0A7B3E","#15B85C","#8b5cf6","#a78bfa","#f97316","#06b6d4"]}
+        />
+        <PieChart
+          title="Por Segmento"
+          data={stats.por_segmento ?? {}}
+          colors={["#0A7B3E","#3b82f6","#eab308","#8b5cf6","#f97316"]}
+        />
+      </div>
 
-        {/* ── Bar charts — ranking detalhado ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <BarChart title="Ranking — UTM Source"  data={stats.por_source   ?? {}} color="#0A7B3E" />
-          <BarChart title="Ranking — Landing Page" data={stats.por_lp      ?? {}} color="#3b82f6" />
-          <BarChart title="Ranking — Segmento"     data={stats.por_segmento ?? {}} color="#eab308" />
-        </div>
+      {/* Bar charts — ranking */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        <BarChart title="Ranking — UTM Source"   data={stats.por_source   ?? {}} color="#0A7B3E" />
+        <BarChart title="Ranking — Landing Page" data={stats.por_lp       ?? {}} color="#3b82f6" />
+        <BarChart title="Ranking — Segmento"     data={stats.por_segmento ?? {}} color="#eab308" />
+      </div>
 
-      </main>
-    </>
+    </main>
   );
 }

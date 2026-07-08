@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useRef } from 'react';
 
@@ -16,9 +16,11 @@ export interface Lead {
   utm_campaign: string;
   fbc: string;
   fbp: string;
+  fbp: string;
   gclid: string;
   status: string;
   notes: string;
+  revenue: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -26,20 +28,20 @@ export interface Lead {
 interface LeadDrawerProps {
   lead: Lead | null;
   onClose: () => void;
-  onUpdate: (id: number, updates: { status?: string; notes?: string }) => void;
+  onUpdate: (id: number, updates: { status?: string; notes?: string; revenue?: number | null }) => void;
 }
 
 const STATUS_COLORS: Record<string, string> = {
   Novo:        '#3b82f6',
   Qualificado: '#eab308',
-  Vendido:     '#10b981',
+  Vendido:     '#0A7B3E',
   Perdido:     '#ef4444',
 };
 
 const STATUS_BG: Record<string, string> = {
   Novo:        'rgba(59,130,246,0.12)',
   Qualificado: 'rgba(234,179,8,0.12)',
-  Vendido:     'rgba(16,185,129,0.12)',
+  Vendido:     'rgba(10,123,62,0.12)',
   Perdido:     'rgba(239,68,68,0.12)',
 };
 
@@ -47,9 +49,9 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <div style={{
       fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em',
-      color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' as const,
+      color: 'var(--admin-text-mute)', textTransform: 'uppercase' as const,
       marginBottom: '12px', paddingBottom: '8px',
-      borderBottom: '1px solid rgba(255,255,255,0.06)',
+      borderBottom: '1px solid var(--admin-border)',
     }}>
       {children}
     </div>
@@ -59,13 +61,13 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 function DataRow({ label, value, mono = false }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '3px', marginBottom: '12px' }}>
-      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontWeight: 500 }}>{label}</span>
+      <span style={{ fontSize: '11px', color: 'var(--admin-text-mute)', fontWeight: 500 }}>{label}</span>
       <span style={{
-        fontSize: '13px', color: 'rgba(255,255,255,0.85)',
+        fontSize: '13px', color: 'var(--admin-text)',
         fontFamily: mono ? 'monospace' : 'inherit',
         wordBreak: 'break-all' as const, lineHeight: 1.5,
       }}>
-        {value || <span style={{ color: 'rgba(255,255,255,0.2)' }}>—</span>}
+        {value || <span style={{ color: 'var(--admin-text-mute)' }}>—</span>}
       </span>
     </div>
   );
@@ -76,15 +78,15 @@ function SignalBadge({ label, value, present }: { label: string; value?: string;
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '10px' }}>
       <span style={{
         width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0, marginTop: '4px',
-        backgroundColor: present ? '#10b981' : 'rgba(255,255,255,0.15)',
-        boxShadow: present ? '0 0 6px rgba(16,185,129,0.6)' : 'none',
+        backgroundColor: present ? '#0A7B3E' : 'var(--admin-border)',
+        boxShadow: present ? '0 0 6px rgba(10,123,62,0.6)' : 'none',
       }}/>
       <div>
-        <div style={{ fontSize: '12px', fontWeight: 600, color: present ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.3)' }}>
+        <div style={{ fontSize: '12px', fontWeight: 600, color: present ? 'var(--admin-text)' : 'var(--admin-text-mute)' }}>
           {label}
         </div>
         {present && value && (
-          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontFamily: 'monospace', wordBreak: 'break-all' as const }}>
+          <div style={{ fontSize: '11px', color: 'var(--admin-text-mute)', fontFamily: 'monospace', wordBreak: 'break-all' as const }}>
             {value.substring(0, 48)}{value.length > 48 ? '…' : ''}
           </div>
         )}
@@ -114,6 +116,7 @@ function formatDate(dateStr: string): string {
 export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps) {
   const [localNotes, setLocalNotes] = useState('');
   const [localStatus, setLocalStatus] = useState('');
+  const [localRevenue, setLocalRevenue] = useState('');
   const [saving, setSaving] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -123,6 +126,7 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
     if (lead) {
       setLocalNotes(lead.notes ?? '');
       setLocalStatus(lead.status ?? 'Novo');
+      setLocalRevenue(lead.revenue ? String(lead.revenue) : '');
     }
   }, [lead]);
 
@@ -149,7 +153,14 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
     if (!lead) return;
     setSaving(true);
     try {
-      onUpdate(lead.id, { notes: localNotes, status: localStatus });
+      const parsedRevenue = localRevenue ? parseFloat(localRevenue.replace(',', '.')) : null;
+      const finalRevenue = isNaN(parsedRevenue as any) ? null : parsedRevenue;
+      
+      onUpdate(lead.id, { 
+        notes: localNotes, 
+        status: localStatus,
+        revenue: localStatus === 'Vendido' ? finalRevenue : null
+      });
       setSavedFlash(true);
       setTimeout(() => setSavedFlash(false), 2000);
     } finally {
@@ -164,11 +175,11 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
       <style>{`
         @keyframes drawer-fade-in  { from { opacity: 0; } to { opacity: 1; } }
         @keyframes drawer-slide-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        .drawer-textarea:focus { outline: none; border-color: rgba(16,185,129,0.4) !important; }
-        .drawer-select:focus { outline: none; border-color: rgba(16,185,129,0.4) !important; }
-        .drawer-select option { background: #0b0f17; color: #fff; }
-        .drawer-save-btn:not(:disabled):hover { background: rgba(16,185,129,0.18) !important; }
-        .drawer-close:hover { background: rgba(255,255,255,0.1) !important; }
+        .drawer-textarea:focus { outline: none; border-color: var(--admin-brand-mid) !important; }
+        .drawer-select:focus { outline: none; border-color: var(--admin-brand-mid) !important; }
+        .drawer-select option { background: var(--admin-surface); color: var(--admin-text); }
+        .drawer-save-btn:not(:disabled):hover { background: var(--admin-brand-tint) !important; border-color: var(--admin-brand-tint2) !important; color: var(--admin-brand) !important; }
+        .drawer-close:hover { background: var(--admin-bg2) !important; }
       `}</style>
 
       {/* Backdrop */}
@@ -193,26 +204,26 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
         style={{
           position: 'fixed' as const, top: 0, right: 0, bottom: 0, zIndex: 101,
           width: '420px', maxWidth: '95vw',
-          backgroundColor: '#0b0f17',
-          borderLeft: '1px solid rgba(255,255,255,0.08)',
+          backgroundColor: 'var(--admin-surface)',
+          borderLeft: '1px solid var(--admin-border)',
           overflowY: 'auto' as const,
           display: 'flex', flexDirection: 'column' as const,
           transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 280ms cubic-bezier(.22,1,.36,1)',
-          boxShadow: '-24px 0 80px rgba(0,0,0,0.6)',
+          boxShadow: '-24px 0 80px rgba(0,0,0,0.4)',
         }}
       >
         {lead && (
           <>
             {/* ── Header ──────────────────────────────── */}
             <div style={{
-              padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.07)',
+              padding: '20px 24px', borderBottom: '1px solid var(--admin-border)',
               display: 'flex', alignItems: 'flex-start', gap: '12px', flexShrink: 0,
               position: 'sticky' as const, top: 0, zIndex: 10,
-              backgroundColor: '#0b0f17',
+              backgroundColor: 'var(--admin-surface)',
             }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <h2 style={{ margin: '0 0 6px', fontSize: '16px', fontWeight: 700, color: '#fff', lineHeight: 1.3 }}>
+                <h2 style={{ margin: '0 0 6px', fontSize: '16px', fontWeight: 700, color: 'var(--admin-text)', lineHeight: 1.3 }}>
                   {lead.name}
                 </h2>
                 <span style={{
@@ -234,8 +245,8 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
                 style={{
                   width: '30px', height: '30px', borderRadius: '8px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
-                  color: 'rgba(255,255,255,0.5)', cursor: 'pointer', flexShrink: 0,
+                  background: 'var(--admin-bg2)', border: '1px solid var(--admin-border)',
+                  color: 'var(--admin-text-mute)', cursor: 'pointer', flexShrink: 0,
                   transition: 'background 140ms ease',
                 }}
                 aria-label="Fechar"
@@ -297,9 +308,9 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
                   onChange={e => setLocalStatus(e.target.value)}
                   style={{
                     width: '100%', padding: '9px 12px', borderRadius: '8px', fontSize: '13px',
-                    color: STATUS_COLORS[localStatus] ?? '#fff',
-                    background: STATUS_BG[localStatus] ?? 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${STATUS_COLORS[localStatus] ?? 'rgba(255,255,255,0.12)'}44`,
+                    color: STATUS_COLORS[localStatus] ?? 'var(--admin-text)',
+                    background: STATUS_BG[localStatus] ?? 'var(--admin-brand-tint)',
+                    border: `1px solid ${STATUS_COLORS[localStatus] ?? 'var(--admin-border)'}44`,
                     cursor: 'pointer', marginBottom: '4px',
                     transition: 'border-color 140ms ease',
                     fontWeight: 600,
@@ -309,6 +320,29 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
                     <option key={s} value={s}>{s}</option>
                   ))}
                 </select>
+                
+                {localStatus === 'Vendido' && (
+                  <div style={{ marginTop: '12px', animation: 'drawer-fade-in 200ms ease forwards' }}>
+                    <label style={{ fontSize: '11px', color: 'var(--admin-text-mute)', fontWeight: 500, display: 'block', marginBottom: '4px' }}>
+                      Valor da Venda (R$)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      className="drawer-select"
+                      placeholder="Ex: 50000.00"
+                      value={localRevenue}
+                      onChange={e => setLocalRevenue(e.target.value)}
+                      style={{
+                        width: '100%', padding: '9px 12px', borderRadius: '8px', fontSize: '13px',
+                        color: 'var(--admin-text)', background: 'var(--admin-input-bg)',
+                        border: '1px solid var(--admin-input-border)',
+                        transition: 'border-color 140ms ease',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+                )}
               </section>
 
               {/* Section: Notas */}
@@ -323,8 +357,8 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
                   style={{
                     width: '100%', boxSizing: 'border-box' as const,
                     padding: '10px 12px', borderRadius: '8px', fontSize: '13px',
-                    color: 'rgba(255,255,255,0.8)', background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: 'var(--admin-text)', background: 'var(--admin-input-bg)',
+                    border: '1px solid var(--admin-input-border)',
                     resize: 'vertical' as const, lineHeight: 1.6, fontFamily: 'inherit',
                     transition: 'border-color 140ms ease',
                     marginBottom: '12px',
@@ -337,9 +371,9 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
                   style={{
                     width: '100%', padding: '10px', borderRadius: '8px',
                     fontSize: '13px', fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer',
-                    color: savedFlash ? '#10b981' : (saving ? 'rgba(255,255,255,0.4)' : '#fff'),
-                    background: savedFlash ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.08)',
-                    border: savedFlash ? '1px solid rgba(16,185,129,0.3)' : '1px solid rgba(255,255,255,0.1)',
+                    color: savedFlash ? 'var(--admin-brand)' : (saving ? 'var(--admin-text-mute)' : 'var(--admin-text)'),
+                    background: savedFlash ? 'var(--admin-brand-tint)' : 'var(--admin-bg2)',
+                    border: savedFlash ? '1px solid var(--admin-brand-tint2)' : '1px solid var(--admin-border)',
                     transition: 'all 200ms ease',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                   }}

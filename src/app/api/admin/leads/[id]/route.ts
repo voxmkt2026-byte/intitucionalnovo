@@ -26,6 +26,7 @@ interface LeadRow {
   gclid: string | null;
   status: string | null;
   notes: string | null;
+  revenue: number | null;
   created_at: string;
   updated_at: string | null;
 }
@@ -41,9 +42,10 @@ const PatchBodySchema = z
   .object({
     status: z.enum(VALID_STATUSES).optional(),
     notes: z.string().max(5000).optional(),
+    revenue: z.number().min(0).optional(),
   })
-  .refine((data) => data.status !== undefined || data.notes !== undefined, {
-    message: "At least one of 'status' or 'notes' must be provided",
+  .refine((data) => data.status !== undefined || data.notes !== undefined || data.revenue !== undefined, {
+    message: "At least one of 'status', 'notes', or 'revenue' must be provided",
   });
 
 // ---------------------------------------------------------------------------
@@ -92,7 +94,7 @@ export async function PATCH(
     );
   }
 
-  const { status, notes } = parsed.data;
+  const { status, notes, revenue } = parsed.data;
 
   try {
     await sql`CREATE TABLE IF NOT EXISTS lead_events (id SERIAL PRIMARY KEY, lead_id INTEGER, tipo TEXT, valor TEXT, criado_em TIMESTAMPTZ DEFAULT NOW())`;
@@ -107,48 +109,21 @@ export async function PATCH(
       return NextResponse.json({ error: "Lead not found" }, { status: 404 });
     }
 
-    // Build update dynamically: only touch provided fields
     let updatedLead: LeadRow[];
 
-    if (status !== undefined && notes !== undefined) {
-      updatedLead = (await sql`
-        UPDATE leads
-        SET
-          status     = ${status},
-          notes      = ${notes},
-          updated_at = NOW()
-        WHERE id = ${leadId}
-        RETURNING
-          id, name, phone, email, segment, credit, months, lp,
-          utm_source, utm_medium, utm_campaign, fbc, fbp, gclid,
-          status, notes, created_at, updated_at
-      `) as LeadRow[];
-    } else if (status !== undefined) {
-      updatedLead = (await sql`
-        UPDATE leads
-        SET
-          status     = ${status},
-          updated_at = NOW()
-        WHERE id = ${leadId}
-        RETURNING
-          id, name, phone, email, segment, credit, months, lp,
-          utm_source, utm_medium, utm_campaign, fbc, fbp, gclid,
-          status, notes, created_at, updated_at
-      `) as LeadRow[];
-    } else {
-      // notes only
-      updatedLead = (await sql`
-        UPDATE leads
-        SET
-          notes      = ${notes!},
-          updated_at = NOW()
-        WHERE id = ${leadId}
-        RETURNING
-          id, name, phone, email, segment, credit, months, lp,
-          utm_source, utm_medium, utm_campaign, fbc, fbp, gclid,
-          status, notes, created_at, updated_at
-      `) as LeadRow[];
-    }
+    updatedLead = (await sql`
+      UPDATE leads
+      SET
+        status     = COALESCE(${status !== undefined ? status : null}, status),
+        notes      = COALESCE(${notes !== undefined ? notes : null}, notes),
+        revenue    = COALESCE(${revenue !== undefined ? revenue : null}, revenue),
+        updated_at = NOW()
+      WHERE id = ${leadId}
+      RETURNING
+        id, name, phone, email, segment, credit, months, lp,
+        utm_source, utm_medium, utm_campaign, fbc, fbp, gclid,
+        status, notes, revenue, created_at, updated_at
+    `) as LeadRow[];
 
     // Write event if status changed
     if (status !== undefined) {

@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { verifyAdminSession } from "@/lib/admin-auth";
-import AdminNavbar from "@/components/admin/AdminNavbar";
 import LeadsTable from "@/components/admin/LeadsTable";
 import type { Metadata } from "next";
 
@@ -14,17 +13,16 @@ export default async function LeadsPage() {
   if (!isAuth) redirect("/admin/login");
 
   return (
-    <>
-      <AdminNavbar />
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white">Gestão de Leads</h1>
-          <p style={{ color: "rgba(255,255,255,0.4)" }} className="text-sm mt-1">
-            CRM interno · substitui o Google Sheets
-          </p>
-        </div>
-        <LeadsTable />
-      </main>
-    </>
+    <main className="max-w-7xl mx-auto px-4 py-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold" style={{ color: "var(--admin-text)" }}>
+          Gestão de Leads
+        </h1>
+        <p className="text-sm mt-1" style={{ color: "var(--admin-text-mute)" }}>
+          CRM interno · substitui o Google Sheets
+        </p>
+      </div>
+      <LeadsTable />
+    </main>
   );
 }

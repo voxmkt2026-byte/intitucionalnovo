@@ -60,7 +60,7 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
   try {
     const sql = neon(DATABASE_URL);
 
-    // Cria tabela apenas uma vez por cold start (não em cada request)
+    // Cria tabelas apenas uma vez por cold start
     if (!_tableReady) {
       await sql`
         CREATE TABLE IF NOT EXISTS leads (
@@ -83,6 +83,22 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
           utm_content TEXT,
           lp TEXT,
           source_url TEXT,
+          created_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `;
+      // Tabela de atribuição de cliques (antes só ia pro Sheets)
+      await sql`
+        CREATE TABLE IF NOT EXISTS lead_clicks (
+          id SERIAL PRIMARY KEY,
+          ref TEXT,
+          fbc TEXT,
+          fbp TEXT,
+          gclid TEXT,
+          utm_source TEXT,
+          utm_medium TEXT,
+          utm_campaign TEXT,
+          utm_content TEXT,
+          lp TEXT,
           created_at TIMESTAMPTZ DEFAULT NOW()
         )
       `;
@@ -168,25 +184,44 @@ async function sendToSheets(body: LeadData): Promise<boolean> {
 }
 
 async function sendClickAttribution(body: LeadData): Promise<void> {
-  if (!SHEETS_WEBHOOK_URL || !body.ref) return;
-
-  try {
-    await sendToAppsScript(SHEETS_WEBHOOK_URL, {
-      sheet: "Cliques",
-      ref: body.ref,
-      fbc: body.fbc,
-      fbp: body.fbp,
-      gclid: body.gclid,
-      utm_source: body.utm_source,
-      utm_medium: body.utm_medium,
-      utm_campaign: body.utm_campaign,
-      utm_content: body.utm_content,
-      lp: body.lp || body.origin,
-      timestamp: new Date().toISOString(),
-    });
-  } catch {
-    // silencioso — não crítico
-  }
+  // Salva no Neon (primário) e Sheets (secundário) em paralelo
+  await Promise.allSettled([
+    // Neon — atribuição permanente sem depender do Sheets
+    (async () => {
+      if (!DATABASE_URL || !body.ref) return;
+      try {
+        const sql = neon(DATABASE_URL);
+        await sql`
+          INSERT INTO lead_clicks (ref, fbc, fbp, gclid, utm_source, utm_medium, utm_campaign, utm_content, lp)
+          VALUES (
+            ${body.ref}, ${body.fbc || null}, ${body.fbp || null}, ${body.gclid || null},
+            ${body.utm_source || null}, ${body.utm_medium || null},
+            ${body.utm_campaign || null}, ${body.utm_content || null},
+            ${body.lp || body.origin || null}
+          )
+        `;
+      } catch { /* não crítico */ }
+    })(),
+    // Sheets — fallback secundário
+    (async () => {
+      if (!SHEETS_WEBHOOK_URL || !body.ref) return;
+      try {
+        await sendToAppsScript(SHEETS_WEBHOOK_URL, {
+          sheet: "Cliques",
+          ref: body.ref,
+          fbc: body.fbc,
+          fbp: body.fbp,
+          gclid: body.gclid,
+          utm_source: body.utm_source,
+          utm_medium: body.utm_medium,
+          utm_campaign: body.utm_campaign,
+          utm_content: body.utm_content,
+          lp: body.lp || body.origin,
+          timestamp: new Date().toISOString(),
+        });
+      } catch { /* silencioso */ }
+    })(),
+  ]);
 }
 
 // --- Meta CAPI ---

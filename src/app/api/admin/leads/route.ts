@@ -2,6 +2,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import { verifyAdminRequest } from "@/lib/admin-auth";
 
+// ---------------------------------------------------------------------------
+// CSV helper
+// ---------------------------------------------------------------------------
+
+function toCSV(rows: Record<string, unknown>[]): string {
+  if (!rows.length) return "";
+  const cols = Object.keys(rows[0]);
+  const escape = (v: unknown) => {
+    const s = v == null ? "" : String(v);
+    return s.includes(",") || s.includes('"') || s.includes("\n")
+      ? `"${s.replace(/"/g, '""')}"`
+      : s;
+  };
+  const header = cols.join(",");
+  const body   = rows.map(r => cols.map(c => escape(r[c])).join(",")).join("\n");
+  return `${header}\n${body}`;
+}
+
 
 
 // ---------------------------------------------------------------------------
@@ -60,6 +78,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
   const sql = neon(process.env.DATABASE_URL);
 
+  // ── Schema migration: add optional columns if they don't exist ──────────────
+  // These columns were added later; the table may not have them in production.
+  try {
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS status TEXT`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS notes TEXT`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS revenue NUMERIC`;
+  } catch {
+    // Ignore — column may already exist or table not ready yet
+  }
+
   const { searchParams } = new URL(request.url);
 
 
@@ -77,10 +106,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const rawDir = (searchParams.get("dir") ?? "desc").toLowerCase();
   const sortDir = rawDir === "asc" ? "ASC" : "DESC";
 
+  // ── CSV export branch ────────────────────────────────────────────────────
+  const format = searchParams.get("format") ?? "json";
+  const csvLimit = 5000;
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10));
-  const limit = Math.min(
+  const limit = format === "csv" ? csvLimit : Math.min(
     100,
-    Math.max(1, parseInt(searchParams.get("limit") ?? "25", 10))
+    Math.max(1, parseInt(searchParams.get("limit") ?? "20", 10))
   );
   const offset = (page - 1) * limit;
 
@@ -103,19 +135,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         SELECT
           id, name, phone, email, segment, credit, months, lp,
           utm_source, utm_medium, utm_campaign, fbc, fbp, gclid,
-          status, notes, created_at, updated_at
+          status, notes, revenue, created_at, updated_at
         FROM leads
         WHERE
-          (${status} IS NULL OR COALESCE(status, 'Novo') = ${status})
-          AND (${segmento} IS NULL OR segment = ${segmento})
-          AND (${utm_source} IS NULL OR utm_source = ${utm_source})
+          (${status}::text IS NULL OR COALESCE(status, 'Novo') = ${status}::text)
+          AND (${segmento}::text IS NULL OR segment = ${segmento}::text)
+          AND (${utm_source}::text IS NULL OR utm_source = ${utm_source}::text)
           AND (
-            ${q} IS NULL
-            OR name ILIKE ${'%' + (q ?? '') + '%'}
-            OR phone ILIKE ${'%' + (q ?? '') + '%'}
+            ${q}::text IS NULL
+            OR name ILIKE '%' || ${q}::text || '%'
+            OR phone ILIKE '%' || ${q}::text || '%'
           )
-          AND (${data_inicio} IS NULL OR created_at >= ${data_inicio}::timestamptz)
-          AND (${data_fim}   IS NULL OR created_at <= ${data_fim}::timestamptz)
+          AND (${data_inicio}::timestamptz IS NULL OR created_at >= ${data_inicio}::timestamptz)
+          AND (${data_fim}::timestamptz   IS NULL OR created_at <= ${data_fim}::timestamptz)
         ORDER BY
           CASE WHEN ${sortCol} = 'created_at'  AND ${sortDir} = 'DESC' THEN created_at  END DESC NULLS LAST,
           CASE WHEN ${sortCol} = 'created_at'  AND ${sortDir} = 'ASC'  THEN created_at  END ASC  NULLS LAST,
@@ -135,25 +167,38 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         SELECT COUNT(*)::text AS count
         FROM leads
         WHERE
-          (${status} IS NULL OR COALESCE(status, 'Novo') = ${status})
-          AND (${segmento} IS NULL OR segment = ${segmento})
-          AND (${utm_source} IS NULL OR utm_source = ${utm_source})
+          (${status}::text IS NULL OR COALESCE(status, 'Novo') = ${status}::text)
+          AND (${segmento}::text IS NULL OR segment = ${segmento}::text)
+          AND (${utm_source}::text IS NULL OR utm_source = ${utm_source}::text)
           AND (
-            ${q} IS NULL
-            OR name ILIKE ${'%' + (q ?? '') + '%'}
-            OR phone ILIKE ${'%' + (q ?? '') + '%'}
+            ${q}::text IS NULL
+            OR name ILIKE '%' || ${q}::text || '%'
+            OR phone ILIKE '%' || ${q}::text || '%'
           )
-          AND (${data_inicio} IS NULL OR created_at >= ${data_inicio}::timestamptz)
-          AND (${data_fim}   IS NULL OR created_at <= ${data_fim}::timestamptz)
+          AND (${data_inicio}::timestamptz IS NULL OR created_at >= ${data_inicio}::timestamptz)
+          AND (${data_fim}::timestamptz   IS NULL OR created_at <= ${data_fim}::timestamptz)
       ` as unknown as Promise<CountRow[]>,
     ]);
 
-    const total = parseInt(countRows[0]?.count ?? "0", 10);
-    const pages = Math.ceil(total / limit);
+    const total      = parseInt(countRows[0]?.count ?? "0", 10);
+    const totalPages = Math.ceil(total / limit);
+
+    // CSV export
+    if (format === "csv") {
+      const csv = toCSV(dataRows as unknown as Record<string, unknown>[]);
+      const filename = `leads_${new Date().toISOString().slice(0, 10)}.csv`;
+      return new NextResponse("\uFEFF" + csv, {   // BOM for Excel UTF-8
+        status: 200,
+        headers: {
+          "Content-Type": "text/csv; charset=utf-8",
+          "Content-Disposition": `attachment; filename="${filename}"`,
+        },
+      });
+    }
 
     return NextResponse.json({
-      data: dataRows,
-      meta: { total, page, pages, limit },
+      leads: dataRows,
+      meta: { total, page, totalPages, limit },
     });
   } catch (err) {
     console.error("[admin/leads] GET error:", err);

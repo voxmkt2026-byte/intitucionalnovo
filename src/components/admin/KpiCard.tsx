@@ -22,8 +22,7 @@ function IconMonth() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="4" width="18" height="18" rx="3"/>
-      <path d="M16 2v4M8 2v4M3 10h18"/>
-      <path d="M7 15h10M7 19h6"/>
+      <path d="M16 2v4M8 2v4M3 10h18M7 15h10M7 19h6"/>
     </svg>
   );
 }
@@ -66,51 +65,53 @@ interface KpiCardProps {
   label: string;
   value: string | number;
   sub?: string;
-  color?: string;
+  /** Accent color for icon box glow — defaults to brand green CSS var */
+  accentColor?: string;
   iconKey?: string;
 }
 
-export default function KpiCard({ label, value, sub, color, iconKey }: KpiCardProps) {
-  const brandGreen = "#0A7B3E";
-  const accentColor = color ?? brandGreen;
+export default function KpiCard({ label, value, sub, accentColor, iconKey }: KpiCardProps) {
   const icon = iconKey ? ICON_MAP[iconKey] : null;
 
   return (
     <div
       style={{
-        backgroundColor: "#0b0f17",
-        border: "1px solid rgba(255,255,255,0.07)",
-        borderRadius: "16px",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column" as const,
-        gap: "10px",
-        position: "relative" as const,
-        overflow: "hidden",
+        backgroundColor: 'var(--admin-surface)',
+        border: '1px solid var(--admin-border)',
+        borderRadius: '16px',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '10px',
+        position: 'relative' as const,
+        overflow: 'hidden',
         minWidth: 0,
+        boxShadow: 'var(--admin-card-shadow)',
       }}
     >
-      {/* Radial corner glow — Titanium Deep Emerald */}
+      {/* Corner glow — brand or accent */}
       <div
         style={{
-          position: "absolute" as const, top: 0, right: 0,
-          width: "90px", height: "90px",
-          background: `radial-gradient(circle at top right, ${accentColor}22 0%, transparent 70%)`,
-          pointerEvents: "none",
+          position: 'absolute' as const, top: 0, right: 0,
+          width: '90px', height: '90px',
+          background: accentColor
+            ? `radial-gradient(circle at top right, ${accentColor}18 0%, transparent 70%)`
+            : 'radial-gradient(circle at top right, rgba(10,123,62,0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
         }}
       />
 
-      {/* Top: icon box + label */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      {/* Icon box + Label */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         {icon && (
           <span
             style={{
-              display: "flex", alignItems: "center", justifyContent: "center",
-              width: "34px", height: "34px", flexShrink: 0,
-              background: `${accentColor}18`,
-              borderRadius: "9px",
-              border: `1px solid ${accentColor}35`,
-              color: accentColor,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '34px', height: '34px', flexShrink: 0,
+              background: 'var(--admin-brand-tint)',
+              borderRadius: '9px',
+              border: '1px solid var(--admin-brand-tint2)',
+              color: 'var(--admin-brand)',
             }}
           >
             {icon}
@@ -118,10 +119,10 @@ export default function KpiCard({ label, value, sub, color, iconKey }: KpiCardPr
         )}
         <span
           style={{
-            fontSize: "11px", fontWeight: 600,
-            color: "rgba(255,255,255,0.4)",
-            letterSpacing: "0.07em",
-            textTransform: "uppercase" as const,
+            fontSize: '11px', fontWeight: 600,
+            color: 'var(--admin-text-mute)',
+            letterSpacing: '0.07em',
+            textTransform: 'uppercase' as const,
           }}
         >
           {label}
@@ -131,10 +132,10 @@ export default function KpiCard({ label, value, sub, color, iconKey }: KpiCardPr
       {/* Value */}
       <div
         style={{
-          fontSize: "32px", fontWeight: 700, lineHeight: 1,
-          color: accentColor,
-          fontVariantNumeric: "tabular-nums",
-          letterSpacing: "-0.02em",
+          fontSize: '32px', fontWeight: 700, lineHeight: 1,
+          color: 'var(--admin-brand)',
+          fontVariantNumeric: 'tabular-nums',
+          letterSpacing: '-0.02em',
         }}
       >
         {value}
@@ -144,9 +145,9 @@ export default function KpiCard({ label, value, sub, color, iconKey }: KpiCardPr
       {sub && (
         <div
           style={{
-            fontSize: "11px", color: "rgba(255,255,255,0.28)",
-            borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: "8px", lineHeight: 1.5,
+            fontSize: '11px', color: 'var(--admin-text-mute)',
+            borderTop: '1px solid var(--admin-border)',
+            paddingTop: '8px', lineHeight: 1.5,
           }}
         >
           {sub}
