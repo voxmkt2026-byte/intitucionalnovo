@@ -1,0 +1,7 @@
+- [ ] Adicionar coluna `revenue` ao schema do NeonDB via API de leads.
+- [ ] Atualizar endpoint `GET /api/admin/leads` e `PATCH /api/admin/leads/[id]` para suportar `revenue`.
+- [ ] Atualizar componente `LeadDrawer.tsx` com input monetário para o valor da venda.
+- [ ] Modificar `meta-insights` para calcular receita, ROAS e ROI.
+- [ ] Modificar `google-insights` para calcular receita, ROAS e ROI.
+- [ ] Atualizar `CampaignTable.tsx` para exibir as novas colunas e cards.
+- [ ] Fazer deploy para Vercel.

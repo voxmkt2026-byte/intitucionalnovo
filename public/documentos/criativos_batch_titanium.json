@@ -1,0 +1,477 @@
+{
+  "meta": {
+    "project": "Titanium Consultorias — Criativos Tráfego Pago",
+    "reference": "FiveCred visual style (gradiente quente + pessoa + checklist + CTA)",
+    "brain": "Titanium Instagram Brain + Curadoria Criativos",
+    "style": "Alex Hormozi Direct Response × FiveCred Layout",
+    "compliance": "Meta Financial Services Policy compliant",
+    "total_creatives": 21,
+    "brand": {
+      "name": "Titanium Consultoria Financeira",
+      "colors": {
+        "primary_green": "#0A7B3E",
+        "gold": "#C5A44E",
+        "dark": "#0D0D0D",
+        "warm_gradient": "linear-gradient(135deg, #1a1a1a 0%, #0A7B3E 50%, #C5A44E 100%)",
+        "bg_warm": "#F5E6D0"
+      },
+      "fonts": ["Montserrat Black (headlines)", "Inter (body)"],
+      "logo": "TITANIUM — com barra dourada",
+      "whatsapp": "(11) 93004-8940",
+      "tagline": "Consultoria Financeira"
+    },
+    "specs": {
+      "feed": "1080x1080px",
+      "stories": "1080x1920px",
+      "carousel": "1080x1080px cada slide"
+    }
+  },
+
+  "carta_contemplada": [
+    {
+      "id": "CC-01",
+      "name": "Homem Confiante + Checklist de Benefícios",
+      "format": "1080x1350",
+      "pilar": "Matemática que Liberta",
+      "angulo_psicologico": "Economia tangível + autoridade",
+      "ref_visual": "FiveCred — pessoa à esquerda, checklist à direita",
+      "prompt": "Professional advertising creative, vertical format 1080x1350. Warm amber-to-dark-green gradient background transitioning from top-left warm gold to bottom-right deep emerald green. On the left side, a confident Brazilian businessman in his 40s wearing a dark premium suit, arms crossed, slight confident smile, looking directly at camera. He is holding a golden key in his right hand. Professional studio lighting with warm rim light. On the right side, clean open space for text overlay. At the top, small elegant logo area. Premium financial services aesthetic, sharp photography, warm skin tones. The mood conveys trust, authority, and financial success. No text, no watermarks, no UI elements.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM — Consultoria Financeira",
+        "badge": "🏆 CARTA CONTEMPLADA",
+        "headline": "CRÉDITO IMEDIATO\nCOM ATÉ 40% DE\nECONOMIA REAL.",
+        "subheadline": "Use o poder de compra à vista\ncom condições que o banco não oferece.",
+        "beneficios": [
+          {"icon": "%", "titulo": "Economia comprovada", "texto": "Até 40% mais barato que financiamento bancário"},
+          {"icon": "🔑", "titulo": "Crédito na hora", "texto": "Carta já contemplada, use como pagamento à vista"},
+          {"icon": "📋", "titulo": "Regulamentado", "texto": "Operação 100% regulamentada pelo Banco Central"},
+          {"icon": "⚡", "titulo": "Processo ágil", "texto": "Transferência em até 48 horas úteis"},
+          {"icon": "🛡️", "titulo": "Consultoria especializada", "texto": "Análise personalizada do melhor cenário pra você"}
+        ],
+        "cta_box": "FALE COM UM ESPECIALISTA →\nSimulação gratuita e sem compromisso",
+        "trust_bar": "Regulamentado pelo Banco Central | +200 clientes atendidos | Consultoria gratuita"
+      }
+    },
+    {
+      "id": "CC-02",
+      "name": "Escudo de Segurança + Stack de Valor",
+      "format": "1080x1350",
+      "pilar": "Prova Social Velada",
+      "angulo_psicologico": "Remoção de risco + segurança",
+      "ref_visual": "FiveCred — escudo central, benefícios ao redor",
+      "prompt": "Professional advertising creative, vertical format 1080x1350. Rich dark emerald green to warm gold gradient background. Central element: a large 3D metallic shield emblem with golden edges and emerald green center, emanating subtle golden light rays. The shield has a premium, trustworthy quality. Behind the shield, a soft-focus image of a modern Brazilian luxury home with warm interior lighting visible through windows. The overall mood is protection, security, and financial confidence. Premium fintech advertising aesthetic, sophisticated lighting, depth of field effect. On the right side of the shield, open space for benefit checklist. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM — Consultoria Financeira",
+        "badge": "🛡️ SEGURANÇA TOTAL",
+        "headline": "SEU PATRIMÔNIO\nCOM PROTEÇÃO\nE INTELIGÊNCIA.",
+        "subheadline": "Carta contemplada com contrato registrado\ne processo transparente do início ao fim.",
+        "beneficios": [
+          {"icon": "✅", "titulo": "Contrato registrado", "texto": "Documentação legal completa e verificável"},
+          {"icon": "🏛️", "titulo": "Banco Central", "texto": "Operação regulamentada — zero risco jurídico"},
+          {"icon": "📊", "titulo": "Análise personalizada", "texto": "Encontramos a carta ideal pro seu objetivo"},
+          {"icon": "💰", "titulo": "Poder de compra à vista", "texto": "Negocie direto com o vendedor, sem intermediário"},
+          {"icon": "🤝", "titulo": "Acompanhamento total", "texto": "Consultor dedicado do início à contemplação"}
+        ],
+        "cta_box": "SIMULE SUA CARTA GRATUITAMENTE →",
+        "trust_bar": "Processo seguro | Sem consulta SPC/Serasa | Atendimento humanizado"
+      }
+    },
+    {
+      "id": "CC-03",
+      "name": "Comparativo Banco vs Titanium",
+      "format": "1080x1080",
+      "pilar": "Matemática que Liberta",
+      "angulo_psicologico": "Dor do juros + lógica irrefutável",
+      "ref_visual": "Split visual — lado frio (banco) vs lado quente (Titanium)",
+      "prompt": "Professional split-screen advertising creative, square format 1080x1080. Left half: cold blue-gray tinted corporate bank building interior, harsh fluorescent lighting, sterile atmosphere, feeling of bureaucracy and coldness. A subtle red downward arrow overlay suggesting loss. Right half: warm golden-green tinted modern home interior, inviting warm lighting, a family silhouette visible in the warm glow, feeling of achievement and warmth. A subtle green upward arrow overlay suggesting growth. The division line between the halves is a bold diagonal line in emerald green with gold edge. High contrast between the cold and warm sides. Professional advertising photography, cinematic quality. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "left_label": "❌ FINANCIAMENTO",
+        "left_numbers": "Imóvel R$300K\nVocê paga: R$574K\nJuros: R$274K perdidos",
+        "right_label": "✅ CARTA CONTEMPLADA",
+        "right_numbers": "Imóvel R$300K\nVocê paga: R$318K\nEconomia: R$256K no bolso",
+        "headline_bottom": "FAÇA A CONTA.\nO BANCO JÁ FEZ A DELE.",
+        "cta": "CALCULAR MINHA ECONOMIA →"
+      }
+    },
+    {
+      "id": "CC-04",
+      "name": "Empresária Confiante + Timeline",
+      "format": "1080x1920",
+      "pilar": "Psicologia do Dinheiro",
+      "angulo_psicologico": "Empoderamento + clareza de processo",
+      "ref_visual": "FiveCred — pessoa profissional + passos visuais",
+      "prompt": "Professional advertising creative, vertical stories format 1080x1920. Warm gradient background from deep emerald green at top to warm amber gold at bottom. A confident Brazilian businesswoman in her 30s, wearing elegant dark blazer, natural makeup, standing with arms at her sides in a power pose. She is in a modern office setting with large windows showing a city skyline at golden hour. Warm rim lighting on her silhouette. Below her, open space for a vertical timeline or step visualization. Premium executive photography, warm skin tones, editorial quality, shallow depth of field on background. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "badge": "CARTA CONTEMPLADA",
+        "headline": "DA DECISÃO AO\nCRÉDITO NA MÃO.\n4 PASSOS.",
+        "timeline": [
+          "1️⃣ Consultoria gratuita — entendemos seu objetivo",
+          "2️⃣ Análise de cartas disponíveis no mercado",
+          "3️⃣ Proposta personalizada com melhor cenário",
+          "4️⃣ Transferência — crédito liberado em até 48h"
+        ],
+        "quote": "\"Quem entende de dinheiro não usa crédito caro.\"",
+        "cta": "COMEÇAR PELO PASSO 1 →"
+      }
+    },
+    {
+      "id": "CC-05",
+      "name": "Prova Social — Case Real",
+      "format": "1080x1080",
+      "pilar": "Prova Social Velada",
+      "angulo_psicologico": "Identificação + resultado tangível",
+      "ref_visual": "Depoimento com foto real + números",
+      "prompt": "Professional advertising creative, square format 1080x1080. Warm dark background with subtle emerald green gradient in upper corner. A confident Brazilian man in his early 40s, wearing a casual premium polo shirt, standing proudly in front of a beautiful modern Brazilian house. He has one hand resting on a white pillar of the house entrance. Warm golden hour sunlight illuminating the scene. The house is a modern middle-to-upper class Brazilian home with clean architecture. Lifestyle editorial photography, authentic and aspirational but not fake. Warm color grading, sharp focus on the person. Large quotation marks in gold as a design element. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "quote_marks": "\"\"",
+        "headline": "\"ECONOMIZEI R$180 MIL\nCOMPARADO AO\nFINANCIAMENTO.\"",
+        "subheadline": "Empresário, 42 anos — São Paulo\nAdquiriu carta contemplada de R$380K\npara imóvel comercial",
+        "highlight_box": "Parcela 47% menor que financiamento\nCrédito liberado em 72 horas",
+        "cta": "QUERO O MESMO RESULTADO →\nSimulação gratuita"
+      }
+    },
+    {
+      "id": "CC-06",
+      "name": "Urgência — Últimas Cartas Disponíveis",
+      "format": "1080x1080",
+      "pilar": "Cultura Rica",
+      "angulo_psicologico": "Escassez + FOMO + exclusividade",
+      "ref_visual": "Visual premium com elemento de contagem regressiva",
+      "prompt": "Professional advertising creative, square format 1080x1080. Dark premium background with emerald green and gold accent lighting. Central element: an elegant golden hourglass with emerald green sand flowing, sitting on a dark velvet surface. The hourglass catches dramatic side lighting creating golden reflections. Around it, subtle golden particle effects suggesting value and urgency. The mood is premium exclusivity and limited time. Luxury advertising aesthetic, dark moody atmosphere, cinematic lighting, ultra sharp detail on the hourglass. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "badge": "⚡ DISPONIBILIDADE LIMITADA",
+        "headline": "RESTAM POUCAS\nCARTAS COM ESTE\nDESCONTO.",
+        "subheadline": "Cartas contempladas de R$200K a R$500K\ncom condições especiais este mês.",
+        "beneficios_mini": [
+          "✅ Desconto de até 38% sobre financiamento",
+          "✅ Transferência em até 48h",
+          "✅ Consultoria inclusa"
+        ],
+        "cta": "VERIFICAR DISPONIBILIDADE →",
+        "urgencia": "As cartas são de mercado secundário — quando acabam, não voltam."
+      }
+    },
+    {
+      "id": "CC-07",
+      "name": "Investidor Inteligente — Hormozi Angle",
+      "format": "1080x1920",
+      "pilar": "Psicologia do Dinheiro",
+      "angulo_psicologico": "Identidade + inteligência financeira",
+      "ref_visual": "Visual editorial premium, estilo revista de negócios",
+      "prompt": "Professional advertising creative, vertical stories format 1080x1920. Dramatic dark background with emerald green accent. Top section: a bird's-eye view of a modern glass office desk with a laptop showing financial charts, a premium coffee cup, a golden pen, and a small house model — all arranged in an elegant flat lay composition. Warm overhead lighting creating soft shadows. The desk surface is dark wood or dark marble. Bottom section: clean dark space for text. The mood is strategic thinking, wealth planning, executive decision-making. Premium editorial photography, overhead shot, warm tones on objects against dark background. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "hook": "O DADO QUE O\nBANCO ESCONDE:",
+        "headline": "QUEM ENTENDE DE\nDINHEIRO NÃO USA\nCRÉDITO CARO.",
+        "body": "Financiamento imobiliário cobra\naté 12% ao ano de juros.\n\nCarta contemplada: taxa administrativa\nde 0,5% a 1,5% — sem juros compostos.\n\nA diferença em 20 anos?\nAté R$300.000 de economia.",
+        "cta_modelo_inversao": "Não estamos te vendendo nada.\nEstamos te mostrando uma conta\nque o banco prefere que você nunca faça.",
+        "cta": "FAZER MINHA CONTA GRATUITA →"
+      }
+    }
+  ],
+
+  "carta_comum": [
+    {
+      "id": "CM-01",
+      "name": "Família + Checklist Acessibilidade",
+      "format": "1080x1350",
+      "pilar": "Matemática que Liberta",
+      "angulo_psicologico": "Acessibilidade + primeiro passo + sonho",
+      "ref_visual": "FiveCred — pessoa com miniatura de casa + benefícios",
+      "prompt": "Professional advertising creative, vertical format 1080x1350. Warm gradient background from amber gold top to emerald green bottom. A young Brazilian couple (late 20s), both smiling warmly, casually dressed in clean modern clothes. The woman is holding a miniature house model in her open palm, both looking at it with hope and excitement. The miniature house is white and modern with tiny glowing windows. Warm studio lighting with golden rim light behind them. Open space on the right side for text overlay. The mood is hopeful, accessible, achievable dreams. Premium lifestyle photography, warm skin tones, genuine emotion. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM — Consultoria Financeira",
+        "badge": "📋 CONSÓRCIO INTELIGENTE",
+        "headline": "SUA CASA PRÓPRIA\nCOMEÇA COM\nR$399/MÊS.",
+        "subheadline": "Sem juros abusivos de financiamento.\nSem entrada obrigatória.\nCom poder de compra à vista na contemplação.",
+        "beneficios": [
+          {"icon": "💰", "titulo": "Parcelas acessíveis", "texto": "A partir de R$399/mês — cabe no seu orçamento"},
+          {"icon": "🚫", "titulo": "Sem juros compostos", "texto": "Você paga o valor real do bem, não 2x"},
+          {"icon": "🏠", "titulo": "Poder de compra à vista", "texto": "Quando contemplado, negocia como pagamento à vista"},
+          {"icon": "📅", "titulo": "Prazos flexíveis", "texto": "Até 240 meses para pagar com tranquilidade"},
+          {"icon": "🎯", "titulo": "Consultoria gratuita", "texto": "A Titanium estrutura tudo. Você só decide."}
+        ],
+        "cta_box": "SIMULAR MINHA PARCELA →\nÉ grátis e sem compromisso",
+        "trust_bar": "Regulamentado pelo Banco Central | Sem entrada | Consultoria inclusa"
+      }
+    },
+    {
+      "id": "CM-02",
+      "name": "Dor do Aluguel — Dinheiro Que Não Volta",
+      "format": "1080x1080",
+      "pilar": "Matemática que Liberta",
+      "angulo_psicologico": "Dor + urgência + lógica",
+      "ref_visual": "Visual impactante com números grandes",
+      "prompt": "Professional advertising creative, square format 1080x1080. Dark moody background with warm amber accent lighting. A stylized visualization of a calendar or clock with pages/hands dissolving into golden particles that float away — representing time and money being lost. The calendar pages are illuminated with warm light as they disintegrate. The mood is urgency, awareness that time equals money lost on rent. Conceptual advertising photography with 3D elements, dark premium atmosphere, cinematic warm lighting against dark background. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "hook": "FAÇA ESSA CONTA:",
+        "headline": "EM 5 ANOS DE ALUGUEL\nVOCÊ JOGOU FORA\nR$90.000.",
+        "body": "R$1.500/mês × 60 meses = R$90.000\nde patrimônio que ficou com outro.\n\nCom R$399/mês de consórcio,\nem 5 anos você já teria crédito\npara comprar À VISTA.",
+        "destaque": "O aluguel enriquece o proprietário.\nO consórcio constrói o SEU patrimônio.",
+        "cta": "PARAR DE PERDER DINHEIRO →"
+      }
+    },
+    {
+      "id": "CM-03",
+      "name": "Mito vs Verdade — Quebra de Objeção",
+      "format": "1080x1080",
+      "pilar": "Psicologia do Dinheiro",
+      "angulo_psicologico": "Educacional + quebra de objeção",
+      "ref_visual": "Visual limpo com ícones de X e ✓",
+      "prompt": "Professional advertising creative, square format 1080x1080. Clean dark emerald green background with subtle golden accent lighting from the right. Two floating 3D metallic badges: on the left, a red metallic X badge with matte finish representing myths/wrong beliefs. On the right, a golden checkmark badge with polished reflective finish representing truth/correct information. Both badges cast soft shadows on the dark background. Between them, a subtle dividing line in gold. The mood is educational, authoritative, myth-busting. Premium minimal design, 3D render quality, sophisticated lighting. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "headline": "MITO vs VERDADE",
+        "mitos": [
+          {"mito": "\"Consórcio demora muito\"", "verdade": "Com lance estratégico, contemplação em até 90 dias. A Titanium te ensina a estratégia."},
+          {"mito": "\"Financiamento é mais rápido\"", "verdade": "É rápido pra te cobrar. Em 20 anos você paga quase 2x o valor do imóvel."},
+          {"mito": "\"Consórcio não vale a pena\"", "verdade": "Quem fala isso nunca viu a planilha comparativa. Quer ver a sua?"}
+        ],
+        "cta": "VER MINHA PLANILHA COMPARATIVA →\nSimulação gratuita e personalizada"
+      }
+    },
+    {
+      "id": "CM-04",
+      "name": "Stack de Valor — Tudo que Você Recebe",
+      "format": "1080x1920",
+      "pilar": "Prova Social Velada",
+      "angulo_psicologico": "Value stack Hormozi + percepção de valor",
+      "ref_visual": "FiveCred — cards empilhados com benefícios",
+      "prompt": "Professional advertising creative, vertical stories format 1080x1920. Dark premium background with emerald green ambient glow. Five translucent glass cards stacked vertically with slight offset and rotation, each with a subtle golden edge glow. The cards appear to float in space with a premium holographic quality. Soft emerald green light particles floating around the cards. Each card has a subtle inner glow. The mood is premium value, organized benefits, fintech sophistication. 3D render quality, Apple-inspired minimalism with Titanium's emerald green instead of blue. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "headline": "O QUE VOCÊ RECEBE\nCOM A TITANIUM:",
+        "stack": [
+          "✅ Parcelas a partir de R$399/mês — sem entrada",
+          "✅ Sem juros compostos de financiamento",
+          "✅ Poder de compra à vista na contemplação",
+          "✅ Consultoria personalizada inclusa",
+          "✅ Estratégia de lance para contemplar mais rápido",
+          "✅ Acompanhamento do início à contemplação",
+          "✅ Operação regulamentada pelo Banco Central"
+        ],
+        "bonus": "🎁 BÔNUS: Planilha comparativa\nFinanciamento vs Consórcio personalizada",
+        "cta": "QUERO TUDO ISSO →"
+      }
+    },
+    {
+      "id": "CM-05",
+      "name": "Mulher Realizando Sonho — Emocional",
+      "format": "1080x1080",
+      "pilar": "Prova Social Velada",
+      "angulo_psicologico": "Emocional + identificação + conquista",
+      "ref_visual": "Lifestyle — pessoa na frente da casa nova",
+      "prompt": "Professional advertising creative, square format 1080x1080. Warm golden hour scene. A happy young Brazilian woman (early 30s), wearing casual elegant clothes, standing in front of a modern Brazilian middle-class home. She is holding house keys up triumphantly with a genuine, joyful smile. The home behind her is a clean, modern single-story house with a small garden. Warm sunset lighting creating a beautiful golden glow around her. The mood is achievement, joy, independence, dreams realized. Lifestyle documentary photography, authentic emotion, warm color grading, shallow depth of field on the house. Small emerald green accent element in corner. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "quote": "\"ELA GANHAVA O MESMO\nSALÁRIO QUE VOCÊ.\"",
+        "headline": "Há 3 anos decidiu parar\nde pagar aluguel.\n\nHoje mora na casa própria\ncom parcela menor do que\npagava de aluguel.",
+        "destaque": "Consórcio de R$250K\nParcela: R$1.200/mês\nAluguel anterior: R$1.800/mês",
+        "cta": "EU TAMBÉM QUERO →"
+      }
+    },
+    {
+      "id": "CM-06",
+      "name": "Calculadora de Economia",
+      "format": "1080x1080",
+      "pilar": "Matemática que Liberta",
+      "angulo_psicologico": "Lógica + números + economia real",
+      "ref_visual": "Visual fintech com números flutuantes",
+      "prompt": "Professional advertising creative, square format 1080x1080. Dark premium background. A floating modern holographic smartphone screen displaying a simplified financial comparison chart — one bar in red (shorter label area for 'financing') and one bar in green (shorter label area for 'consortium'). The green bar is significantly smaller, showing savings. Around the phone, floating golden coins and emerald green savings arrows pointing upward. Futuristic fintech aesthetic, glass morphism effects, subtle green and gold glow. The mood is clarity, smart decision-making, financial intelligence. 3D render quality. No text on the phone screen, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "headline": "A CONTA QUE O\nBANCO NÃO FAZ\nPRA VOCÊ:",
+        "comparativo": {
+          "financiamento": "Imóvel R$200K\n→ Parcela: R$2.800/mês\n→ Prazo: 30 anos\n→ Total pago: R$374.000",
+          "consorcio": "Imóvel R$200K\n→ Parcela: R$1.400/mês\n→ Prazo: 15 anos\n→ Total pago: R$218.000"
+        },
+        "destaque": "ECONOMIA: R$156.000",
+        "cta": "CALCULAR MINHA ECONOMIA →"
+      }
+    },
+    {
+      "id": "CM-07",
+      "name": "Grupo Exclusivo — Escassez Mensal",
+      "format": "1080x1920",
+      "pilar": "Cultura Rica",
+      "angulo_psicologico": "Escassez + exclusividade + ação imediata",
+      "ref_visual": "Visual VIP com cordão dourado",
+      "prompt": "Professional advertising creative, vertical stories format 1080x1920. Dark premium environment suggesting a VIP entrance. A velvet rope barrier with golden posts and emerald green velvet rope, in a luxurious dark setting. Beyond the rope, a warm golden glow emanates suggesting an exclusive space. On the floor, dark polished marble reflecting the golden light. The mood is exclusivity, limited access, premium experience. Dark moody atmosphere, nightclub/luxury event aesthetic, sharp focus on the rope barrier, blurred glowing background. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "badge": "🔒 ACESSO EXCLUSIVO",
+        "headline": "GRUPO DO MÊS\nCOM AS MENORES\nPARCELAS DE 2026.",
+        "subheadline": "Últimas vagas para o grupo\ncom condições especiais.\n\nQuando fecham, só no próximo mês.",
+        "beneficios_mini": [
+          "✅ Parcelas a partir de R$399",
+          "✅ Sem entrada obrigatória",
+          "✅ Estratégia de lance inclusa",
+          "✅ Consultoria personalizada"
+        ],
+        "cta": "GARANTIR MINHA VAGA →",
+        "urgencia": "O grupo fecha quando as vagas acabam."
+      }
+    }
+  ],
+
+  "uber": [
+    {
+      "id": "UB-01",
+      "name": "Motorista Confiante + Checklist",
+      "format": "1080x1350",
+      "pilar": "Matemática que Liberta",
+      "angulo_psicologico": "Independência + economia + liberdade",
+      "ref_visual": "FiveCred — pessoa profissional + benefícios",
+      "prompt": "Professional advertising creative, vertical format 1080x1350. Warm gradient background from dark emerald green at top to warm amber at bottom. A confident Brazilian ride-share driver in his early 30s, wearing a clean polo shirt, leaning casually against a new white sedan (Hyundai HB20 or similar popular car). He has a proud, confident expression with arms crossed. The car is parked on a clean urban street with warm golden hour light. Professional lifestyle photography, warm tones, the man is the hero of the image. Open space on the right for text overlay. The mood is independence, pride of ownership, freedom. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM — Consultoria Financeira",
+        "badge": "🚗 CARRO PRÓPRIO PARA MOTORISTA",
+        "headline": "PARE DE ENRIQUECER\nA LOCADORA.\nO CARRO É SEU.",
+        "subheadline": "Parcela menor que aluguel de carro.\nSem juros abusivos de financiamento.\nO carro fica sendo SEU.",
+        "beneficios": [
+          {"icon": "💰", "titulo": "Parcela a partir de R$699", "texto": "Menos da metade do aluguel de carro"},
+          {"icon": "🚫", "titulo": "Sem juros compostos", "texto": "Diferente do financiamento que cobra 2x o valor"},
+          {"icon": "🔑", "titulo": "O carro é SEU", "texto": "Não devolve no final do mês, não paga km extra"},
+          {"icon": "📈", "titulo": "Mais lucro por corrida", "texto": "Sem descontar aluguel, seu lucro aumenta R$1.200/mês"},
+          {"icon": "🎯", "titulo": "Aprovação facilitada", "texto": "Consultoria para encontrar a melhor carta"}
+        ],
+        "cta_box": "QUERO MEU CARRO PRÓPRIO →\nSimulação gratuita",
+        "trust_bar": "Regulamentado pelo Banco Central | Sem entrada | Parcela menor que aluguel"
+      }
+    },
+    {
+      "id": "UB-02",
+      "name": "Matemática do Motorista — Números Claros",
+      "format": "1080x1080",
+      "pilar": "Matemática que Liberta",
+      "angulo_psicologico": "Lógica + ROI + impacto financeiro",
+      "ref_visual": "Infográfico com números grandes e claros",
+      "prompt": "Professional advertising creative, square format 1080x1080. Dark premium background with emerald green accent. A floating holographic smartphone showing a ride-hailing app map interface with a green route line. Around the phone, floating semi-transparent financial visualization elements — a simplified bar chart showing two bars (one tall red for expenses, one shorter green for smart plan), golden coins, and green upward arrows. Futuristic fintech aesthetic, clean and organized, glass morphism effects. The mood is financial clarity, smart decision-making for drivers. 3D render quality, emerald green and gold color palette on dark background. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "hook": "MOTORISTA, FAÇA ESSA CONTA:",
+        "headline": "ALUGUEL DE CARRO\nvs CARRO PRÓPRIO",
+        "comparativo": {
+          "aluguel": "🔴 COM ALUGUEL:\nGanho bruto: R$5.500\nAluguel: -R$1.800\nCombustível: -R$1.200\nLucro: R$2.500/mês\n\nDepois de 5 anos:\nVocê tem = NADA",
+          "proprio": "🟢 COM CARRO PRÓPRIO:\nGanho bruto: R$5.500\nParcela: -R$699\nCombustível: -R$1.200\nLucro: R$3.601/mês\n\nDepois de 5 anos:\nVocê tem = UM CARRO"
+        },
+        "destaque": "+R$1.100 DE LUCRO TODO MÊS\n+ UM PATRIMÔNIO SEU",
+        "cta": "AUMENTAR MEU LUCRO →"
+      }
+    },
+    {
+      "id": "UB-03",
+      "name": "Depoimento Motorista — Caso Real",
+      "format": "1080x1080",
+      "pilar": "Prova Social Velada",
+      "angulo_psicologico": "Identificação + resultado + prova",
+      "ref_visual": "Estilo depoimento editorial",
+      "prompt": "Professional advertising creative, square format 1080x1080. Warm ambient scene. A proud Brazilian man in his mid-30s standing next to a clean white sedan car, one hand on the car roof. He is wearing a clean casual outfit (polo shirt, jeans). The car is parked in front of a modest but well-kept Brazilian neighborhood. Warm afternoon sunlight creating a pleasant atmosphere. His expression is proud and content — the pride of ownership. The mood is authentic achievement, relatable success. Lifestyle documentary photography, warm color grading, genuine and not overly produced. Gold quotation marks as design element. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "quote_marks": "\"\"",
+        "headline": "\"EM 10 MESES\nCOMPREI MEU CARRO.\nPARCELA MENOR\nQUE O ALUGUEL.\"",
+        "subheadline": "Carlos, 34 anos — motorista de app há 4 anos\nCarta de crédito veicular de R$65K\nParcela: R$750/mês (aluguel era R$1.800)",
+        "destaque_box": "Economia mensal: R$1.050\nEm 1 ano economizou: R$12.600\nE o carro agora é dele.",
+        "cta": "QUERO FAZER IGUAL →"
+      }
+    },
+    {
+      "id": "UB-04",
+      "name": "Split Emocional — Aluguel vs Próprio",
+      "format": "1080x1920",
+      "pilar": "Psicologia do Dinheiro",
+      "angulo_psicologico": "Contraste emocional + transformação",
+      "ref_visual": "Split vertical — antes frio, depois quente",
+      "prompt": "Professional split advertising creative, vertical stories format 1080x1920. Top half: cold blue-gray color grading, a tired-looking Brazilian man sitting in an old car interior, stressed expression, dark rainy weather outside the window, feeling of frustration and being trapped. The car interior looks worn. Bottom half: warm golden color grading, the same concept but a happy, confident man sitting in a brand new car interior with modern dashboard, warm sunlight streaming through the windshield, satisfied smile, feeling of freedom and achievement. Strong visual contrast between the two halves. A bold emerald green dividing line between them. Professional advertising photography, cinematic quality, emotional storytelling. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "top_label": "❌ CARRO ALUGADO",
+        "top_text": "R$1.800/mês — PRA SEMPRE\nO carro nunca é seu\nKm limitada, regras da locadora\nDinheiro que não volta",
+        "bottom_label": "✅ CARRO PRÓPRIO",
+        "bottom_text": "R$699/mês — POR 5 ANOS\nO carro fica sendo SEU\nSem limite de km, sem devolver\nPatrimônio construído",
+        "headline": "A DIFERENÇA?\nDECISÃO.",
+        "cta": "DECIDIR AGORA →"
+      }
+    },
+    {
+      "id": "UB-05",
+      "name": "Liberdade na Estrada — Aspiracional",
+      "format": "1080x1080",
+      "pilar": "Cultura Rica",
+      "angulo_psicologico": "Liberdade + autonomia + propósito",
+      "ref_visual": "POV estrada + sensação de liberdade",
+      "prompt": "Professional advertising creative, square format 1080x1080. Cinematic POV shot from inside a car, driver's perspective. An open Brazilian highway stretching ahead into a beautiful sunset with warm golden and orange sky. Modern car dashboard visible at the bottom of frame, clean steering wheel, hands visible on the wheel. The road has gentle curves ahead suggesting possibility and journey. Feeling of absolute freedom, open possibilities, and ownership. Warm golden hour lighting, natural lens flare from the sunset, slight motion blur on road markings. The mood is liberation, independence, your own path. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "headline": "SEU CARRO.\nSUA ROTA.\nSEU LUCRO.",
+        "body": "Sem devolver carro no final do mês.\nSem pagar taxa de km extra.\nSem depender de locadora.\nSem enriquecer ninguém — só você.",
+        "destaque": "Cada corrida = lucro SEU\nCada mês = patrimônio SEU",
+        "cta": "CONQUISTAR MINHA LIBERDADE →"
+      }
+    },
+    {
+      "id": "UB-06",
+      "name": "Crédito Especial Motorista — Urgência",
+      "format": "1080x1080",
+      "pilar": "Matemática que Liberta",
+      "angulo_psicologico": "Oferta especial + facilidade + ação",
+      "ref_visual": "Card premium flutuante com oferta",
+      "prompt": "Professional advertising creative, square format 1080x1080. Dark premium background with emerald green glow. A floating 3D credit card with holographic emerald green and gold finish, spinning at a dynamic angle. The card has a reflective metallic surface catching dramatic light. Behind the card, subtle golden spark trails and emerald green light rays emanating outward. Premium fintech aesthetic, luxury product shot quality, dark moody atmosphere with vibrant green and gold accents. The mood is opportunity, access, premium offering for a specific audience. 3D render, Apple-quality product photography. No text on the card, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "badge": "⚡ ESPECIAL MOTORISTA DE APP",
+        "headline": "CARTA DE CRÉDITO\nVEICULAR COM\nCONDIÇÕES EXCLUSIVAS.",
+        "beneficios_mini": [
+          "✅ Parcela a partir de R$599/mês",
+          "✅ Aprovação facilitada",
+          "✅ Sem juros compostos",
+          "✅ Estratégia de contemplação rápida",
+          "✅ Consultoria gratuita e personalizada"
+        ],
+        "cta": "SOLICITAR MINHA CARTA →",
+        "urgencia": "Condições válidas para este mês"
+      }
+    },
+    {
+      "id": "UB-07",
+      "name": "Família — Propósito do Trabalho",
+      "format": "1080x1920",
+      "pilar": "Psicologia do Dinheiro",
+      "angulo_psicologico": "Emocional + propósito + família",
+      "ref_visual": "Cena emocional pai chegando em casa",
+      "prompt": "Professional advertising creative, vertical stories format 1080x1920. Warm emotional scene at golden hour. A Brazilian father arriving home, his young daughter (about 5 years old) running to hug him at the front door of a modest but clean Brazilian home. The father is kneeling to receive her hug, genuine joy on both faces. Behind them, a clean white sedan is parked in the small driveway. Warm golden sunset light streaming through, creating a beautiful emotional atmosphere. The home is modest but well-maintained, representing realistic aspiration. The mood is love, purpose, family motivation. Lifestyle documentary photography, genuine emotion, warm tones, shallow depth of field. No text, no watermarks.",
+      "copy_overlay": {
+        "logo_area": "TITANIUM",
+        "headline": "VOCÊ NÃO DIRIGE\n10 HORAS POR DIA\nPOR DIVERSÃO.",
+        "body": "Dirige pela sua família.\nPelo futuro dos seus filhos.\nPelo teto que eles merecem.",
+        "destaque": "Então por que o lucro\ndo seu trabalho vai\npra conta da locadora?",
+        "final": "Tenha o carro que\nessa missão merece.\nCom parcela que cabe\nno seu bolso.",
+        "cta": "FAZER PELA MINHA FAMÍLIA →\nSimulação gratuita"
+      }
+    }
+  ],
+
+  "compliance_checklist": {
+    "meta_ads": [
+      "✅ Nenhum criativo usa 'sem juros' isolado — sempre 'sem juros abusivos de financiamento'",
+      "✅ Nenhuma promessa de aprovação garantida — usa 'aprovação facilitada'",
+      "✅ Nenhuma foto de dinheiro/cédulas — usa ícones e representações abstratas",
+      "✅ Nenhum antes/depois financeiro direto — usa comparativos educacionais",
+      "✅ CTA consultivo: 'Fale com especialista', 'Simulação gratuita'",
+      "✅ Menção a regulamentação do Banco Central (verdadeiro)",
+      "✅ Sem promessa de contemplação em prazo específico"
+    ],
+    "google_ads": [
+      "✅ Headlines dentro do limite de 30 caracteres",
+      "✅ Descrições dentro do limite de 90 caracteres",
+      "✅ Sem superlativos absolutos ('melhor', 'único')",
+      "✅ Compliance com política de serviços financeiros Google"
+    ]
+  }
+}

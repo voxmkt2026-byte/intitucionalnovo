@@ -1,0 +1,171 @@
+{
+  "name": "Titanium - Lead para Kommo",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "titanium-lead-create",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Webhook Recebe Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "titanium-lead-create"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\n\n// Formata telefone para padrao Kommo\nconst rawPhone = (body.phone || '').replace(/\\D/g, '');\nconst phone = rawPhone.startsWith('55') ? '+' + rawPhone : '+55' + rawPhone;\n\n// Valor do credito em centavos para o Kommo (usa campo price)\nconst creditRaw = String(body.credit || '0').replace(/\\D/g, '');\nconst creditValue = parseInt(creditRaw) || 0;\n\n// Nome do lead no Kommo\nconst leadName = `Lead - ${body.segment || 'Geral'} | ${body.lp || body.utm_source || 'site'}`;\n\n// Tags: LP + UTM source\nconst tags = [];\nif (body.lp) tags.push({ name: body.lp });\nif (body.utm_source) tags.push({ name: body.utm_source });\nif (body.utm_campaign) tags.push({ name: body.utm_campaign });\n\n// Nota com dados completos\nconst nota = [\n  `📋 Lead do formulario`,\n  `Segmento: ${body.segment || '-'}`,\n  `Credito: R$ ${creditValue.toLocaleString('pt-BR')}`,\n  `Prazo: ${body.months || '-'} meses`,\n  `LP: ${body.lp || '-'}`,\n  `UTM Source: ${body.utm_source || '-'}`,\n  `UTM Medium: ${body.utm_medium || '-'}`,\n  `UTM Campaign: ${body.utm_campaign || '-'}`,\n  `Ref: ${body.ref || '-'}`,\n  `Timestamp: ${body.timestamp || new Date().toISOString()}`\n].join('\\n');\n\nreturn [{\n  json: {\n    leadName,\n    contactName: body.name || 'Lead sem nome',\n    phone,\n    email: body.email || '',\n    creditValue,\n    tags,\n    nota,\n    segment: body.segment || '',\n    lp: body.lp || '',\n    ref: body.ref || ''\n  }\n}];"
+      },
+      "id": "a1b2c3d4-0002-0002-0002-000000000002",
+      "name": "Formata Payload Kommo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+      "url": "https://titaniumconsultoriaofc.kommo.com/api/v4/leads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImMwOWEwZGYwODgzNTk5YjMwZGZmZTc5NGZlYWM1ZjFhMzk4ZmFkZTRhNzY0ZjMyMWIyZTJlMDdlZmNiM2RiMzgyMDk5M2U5YmE2NjhmM2I5In0.eyJhdWQiOiI4N2RmNTIzZC00Y2E5LTQyNWEtODBlMS05YzllNzQ0MjgxMzUiLCJqdGkiOiJjMDlhMGRmMDg4MzU5OWIzMGRmZmU3OTRmZWFjNWYxYTM5OGZhZGU0YTc2NGYzMjFiMmUyZTA3ZWZjYjNkYjM4MjA5OTNlOWJhNjY4ZjNiOSIsImlhdCI6MTc4MjQ5OTQyMSwibmJmIjoxNzgyNDk5NDIxLCJleHAiOjE4NDgyNjg4MDAsInN1YiI6IjE1NDM4MDc5IiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjM2NjIwMzg3LCJiYXNlX2RvbWFpbiI6ImtvbW1vLmNvbSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJjcm0iLCJmaWxlcyIsImZpbGVzX2RlbGV0ZSIsIm5vdGlmaWNhdGlvbnMiLCJwdXNoX25vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiMmY0ZTA2MWMtMDA3ZS00M2I2LTk1MTItYmVhNTA5NDdhNTEyIiwiYXBpX2RvbWFpbiI6ImFwaS1jLmtvbW1vLmNvbSJ9.E97CmdCk5hEcHIxb2QgyCVBsxRpohFoHN3eqMUixGwSNqtHMG9QAcmee1C0KM-Wg5-ypXIxXeNzCY_zdMpOKH759lq5VvkeL6v07NMy0KPQgNJk2RogF3vGylgkCzLPNkTISPu9ezV7HL5p8l5Bu_DGEJqaz-y-Hqj0bs5e7lYo9Db5NWN_lb1HZv8E_S6U9IaQpuYD5CQLqkylIFZ5H3njzhnzss3fQs7hDPr8Ig2hsWmdzpIvpmYdlcaA03YlSWQuJT7dWV34tND-cKR6e04Czvia8CPgCz14LZu8KSZRUGcMXDrYEyIKMCxSfl_AytxOLvTKakGz07KtRJqXiTg"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "=[\n  {\n    \"name\": \"{{ $json.leadName }}\",\n    \"price\": {{ $json.creditValue }},\n    \"_embedded\": {\n      \"contacts\": [\n        {\n          \"name\": \"{{ $json.contactName }}\",\n          \"custom_fields_values\": [\n            {\n              \"field_code\": \"PHONE\",\n              \"values\": [{\"value\": \"{{ $json.phone }}\", \"enum_code\": \"WORK\"}]\n            },\n            {\n              \"field_code\": \"EMAIL\",\n              \"values\": [{\"value\": \"{{ $json.email }}\", \"enum_code\": \"WORK\"}]\n            }\n          ]\n        }\n      ],\n      \"tags\": {{ JSON.stringify($json.tags) }}\n    }\n  }\n]",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0003-0003-0003-000000000003",
+      "name": "Cria Lead no Kommo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+      "url": "https://titaniumconsultoriaofc.kommo.com/api/v4/leads/notes",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImMwOWEwZGYwODgzNTk5YjMwZGZmZTc5NGZlYWM1ZjFhMzk4ZmFkZTRhNzY0ZjMyMWIyZTJlMDdlZmNiM2RiMzgyMDk5M2U5YmE2NjhmM2I5In0.eyJhdWQiOiI4N2RmNTIzZC00Y2E5LTQyNWEtODBlMS05YzllNzQ0MjgxMzUiLCJqdGkiOiJjMDlhMGRmMDg4MzU5OWIzMGRmZmU3OTRmZWFjNWYxYTM5OGZhZGU0YTc2NGYzMjFiMmUyZTA3ZWZjYjNkYjM4MjA5OTNlOWJhNjY4ZjNiOSIsImlhdCI6MTc4MjQ5OTQyMSwibmJmIjoxNzgyNDk5NDIxLCJleHAiOjE4NDgyNjg4MDAsInN1YiI6IjE1NDM4MDc5IiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjM2NjIwMzg3LCJiYXNlX2RvbWFpbiI6ImtvbW1vLmNvbSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJjcm0iLCJmaWxlcyIsImZpbGVzX2RlbGV0ZSIsIm5vdGlmaWNhdGlvbnMiLCJwdXNoX25vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiMmY0ZTA2MWMtMDA3ZS00M2I2LTk1MTItYmVhNTA5NDdhNTEyIiwiYXBpX2RvbWFpbiI6ImFwaS1jLmtvbW1vLmNvbSJ9.E97CmdCk5hEcHIxb2QgyCVBsxRpohFoHN3eqMUixGwSNqtHMG9QAcmee1C0KM-Wg5-ypXIxXeNzCY_zdMpOKH759lq5VvkeL6v07NMy0KPQgNJk2RogF3vGylgkCzLPNkTISPu9ezV7HL5p8l5Bu_DGEJqaz-y-Hqj0bs5e7lYo9Db5NWN_lb1HZv8E_S6U9IaQpuYD5CQLqkylIFZ5H3njzhnzss3fQs7hDPr8Ig2hsWmdzpIvpmYdlcaA03YlSWQuJT7dWV34tND-cKR6e04Czvia8CPgCz14LZu8KSZRUGcMXDrYEyIKMCxSfl_AytxOLvTKakGz07KtRJqXiTg"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "=[\n  {\n    \"entity_id\": {{ $('Cria Lead no Kommo').first().json._embedded.leads[0].id }},\n    \"note_type\": \"common\",\n    \"params\": {\n      \"text\": {{ JSON.stringify($('Formata Payload Kommo').first().json.nota) }}\n    }\n  }\n]",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0004-0004-0004-000000000004",
+      "name": "Adiciona Nota no Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'ok', lead_id: $('Cria Lead no Kommo').first().json._embedded.leads[0].id, ref: $('Formata Payload Kommo').first().json.ref }) }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0005-0005-0005-000000000005",
+      "name": "Resposta OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"error\", \"message\": \"Falha ao criar lead no Kommo\" }",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "a1b2c3d4-0006-0006-0006-000000000006",
+      "name": "Resposta Erro",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [960, 500]
+    }
+  ],
+  "connections": {
+    "Webhook Recebe Lead": {
+      "main": [
+        [
+          {
+            "node": "Formata Payload Kommo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Payload Kommo": {
+      "main": [
+        [
+          {
+            "node": "Cria Lead no Kommo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria Lead no Kommo": {
+      "main": [
+        [
+          {
+            "node": "Adiciona Nota no Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Resposta Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adiciona Nota no Lead": {
+      "main": [
+        [
+          {
+            "node": "Resposta OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["titanium", "kommo", "leads"],
+  "triggerCount": 1,
+  "versionId": "titanium-lead-kommo-v1"
+}

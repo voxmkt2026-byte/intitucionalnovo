@@ -1,0 +1,190 @@
+{
+  "name": "Titanium - Ciclo Infinito de Dados",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [{ "mode": "everyMinute", "value": 5 }]
+        },
+        "documentId": {
+          "value": "1meDMu6aVxC6o08eBYu1vu0kLO7Es1BzOzHTbuzdkqkQ",
+          "__rl": true,
+          "mode": "id"
+        },
+        "sheetName": {
+          "value": "Leads",
+          "__rl": true,
+          "mode": "name"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "id": "trigger-leads",
+      "name": "Trigger Leads",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "cond-qual",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Qualificado",
+              "operator": { "type": "string", "operation": "equals" }
+            },
+            {
+              "id": "cond-vend",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Vendido",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ]
+        }
+      },
+      "id": "filter-status",
+      "name": "Filtro Status",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "value": "1meDMu6aVxC6o08eBYu1vu0kLO7Es1BzOzHTbuzdkqkQ",
+          "__rl": true,
+          "mode": "id"
+        },
+        "sheetName": {
+          "value": "Cliques",
+          "__rl": true,
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ref",
+              "lookupValue": "={{ $json.ref }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "lookup-cliques",
+      "name": "Lookup Cliques",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst lead = $('Filtro Status').first().json;\nconst click = $input.first().json;\n\n// Limpar telefone\nlet phone = (lead.telefone || lead.phone || '').replace(/\\D/g, '');\nif (phone.length === 11) phone = '55' + phone;\nelse if (phone.length === 10) phone = '55' + phone;\n\n// SHA256 hash para Meta CAPI\nconst phoneHash = crypto.createHash('sha256').update(phone).digest('hex');\n\n// Evento baseado no status\nconst status = (lead.status || '').toLowerCase();\nconst eventName = status === 'vendido' ? 'Purchase' : 'Lead';\nconst value = parseFloat(lead.valor) || 0;\n\nreturn {\n  json: {\n    event_name: eventName,\n    event_time: Math.floor(Date.now() / 1000),\n    phone_raw: phone,\n    phone_hash: phoneHash,\n    name: lead.nome || lead.name || '',\n    status: lead.status,\n    value: value,\n    segment: lead.segmento || lead.segment || '',\n    ref: lead.ref || '',\n    fbc: click.fbc || '',\n    fbp: click.fbp || '',\n    gclid: click.gclid || '',\n    utm_source: click.utm_source || '',\n    utm_campaign: click.utm_campaign || '',\n    utm_content: click.utm_content || '',\n    lp: click.lp || '',\n    has_meta: !!(click.fbc || click.fbp || phone),\n    has_google: !!click.gclid\n  }\n};"
+      },
+      "id": "merge-hash",
+      "name": "Merge e Hash",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v23.0/1667309107949808/events",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"data\": [{\n    \"event_name\": \"{{ $json.event_name }}\",\n    \"event_time\": {{ $json.event_time }},\n    \"action_source\": \"website\",\n    \"event_source_url\": \"https://www.titaniumconsultorias.com.br/{{ $json.lp }}\",\n    \"user_data\": {\n      {{ $json.fbc ? '\"fbc\": \"' + $json.fbc + '\",' : '' }}\n      {{ $json.fbp ? '\"fbp\": \"' + $json.fbp + '\",' : '' }}\n      \"ph\": [\"{{ $json.phone_hash }}\"],\n      \"country\": [\"br\"]\n    },\n    \"custom_data\": {\n      \"currency\": \"BRL\",\n      \"value\": {{ $json.value || 0 }},\n      \"content_name\": \"{{ $json.segment }}\"\n    }\n  }],\n  \"access_token\": \"EAANm3XxZAvvUBRjHxpcpIZBWrNCbEnzHzHA5p9OE4WZAIlJT6GfNZAf30ops3CS5ZB90tHay9BBjQFq6pj73MmJN2fhQELTZCnDtw40RYAtKYXiJ9EaIzMYE7jbdzujxo6s7LZBYZAKNxFoQfjFGHIYwMpEZA3Ogt2lBP2LaAwLdUqzabFTWmed9qNcW3sgzR8AZDZD\"\n}",
+        "options": {}
+      },
+      "id": "meta-capi",
+      "name": "Meta CAPI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1140, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://googleads.googleapis.com/v17/customers/8875758127:uploadClickConversions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleAdsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"conversions\": [{\n    \"gclid\": \"{{ $json.gclid }}\",\n    \"conversion_action\": \"customers/8875758127/conversionActions/kTjGCO35_r0cELK2ivND\",\n    \"conversion_date_time\": \"{{ new Date().toISOString().replace('T', ' ').substring(0, 19) }}+00:00\",\n    \"conversion_value\": {{ $json.value || 0 }},\n    \"currency_code\": \"BRL\"\n  }],\n  \"partialFailure\": true\n}",
+        "options": {}
+      },
+      "id": "google-oc",
+      "name": "Google Offline Conversions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1140, 420]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "value": "1meDMu6aVxC6o08eBYu1vu0kLO7Es1BzOzHTbuzdkqkQ",
+          "__rl": true,
+          "mode": "id"
+        },
+        "sheetName": {
+          "value": "Log CAPI",
+          "__rl": true,
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ new Date().toISOString() }}",
+            "ref": "={{ $('Merge e Hash').first().json.ref }}",
+            "event": "={{ $('Merge e Hash').first().json.event_name }}",
+            "valor": "={{ $('Merge e Hash').first().json.value }}",
+            "plataforma": "=Meta CAPI",
+            "status_envio": "=ok"
+          }
+        },
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Envio",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1380, 300]
+    }
+  ],
+  "connections": {
+    "Trigger Leads": {
+      "main": [[{ "node": "Filtro Status", "type": "main", "index": 0 }]]
+    },
+    "Filtro Status": {
+      "main": [
+        [{ "node": "Lookup Cliques", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Lookup Cliques": {
+      "main": [[{ "node": "Merge e Hash", "type": "main", "index": 0 }]]
+    },
+    "Merge e Hash": {
+      "main": [[
+        { "node": "Meta CAPI", "type": "main", "index": 0 },
+        { "node": "Google Offline Conversions", "type": "main", "index": 0 }
+      ]]
+    },
+    "Meta CAPI": {
+      "main": [[{ "node": "Log Envio", "type": "main", "index": 0 }]]
+    },
+    "Google Offline Conversions": {
+      "main": [[{ "node": "Log Envio", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    { "name": "Titanium" },
+    { "name": "CAPI" }
+  ]
+}
