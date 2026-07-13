@@ -18,7 +18,7 @@ const personas = [
     question: "Antes de financiar seu próximo carro?",
     pain: "Compare alternativas de aquisição para motoristas de app antes de assumir um financiamento.",
     cta: "Comparar alternativas",
-    href: "#simulador",
+    href: "/uber",
     badge: null,
   },
   {
@@ -35,7 +35,7 @@ const personas = [
     question: "Planejando expandir sua frota?",
     pain: "Avalie alternativas antes de financiar caminhões ou veículos pesados.",
     cta: "Verificar opções",
-    href: "#simulador",
+    href: "/caminhao",
     badge: null,
   },
   {
@@ -51,7 +51,7 @@ const personas = [
     question: "Quer comprar imóvel sem decidir no escuro?",
     pain: "Entenda se uma carta contemplada ou consórcio pode fazer sentido para seu planejamento.",
     cta: "Solicitar análise",
-    href: "#simulador",
+    href: "/carta-comum",
     badge: null,
   },
   {
@@ -68,7 +68,7 @@ const personas = [
     question: "Planejando renovar maquinário?",
     pain: "Compare consórcio, carta contemplada e financiamento para equipamentos agrícolas.",
     cta: "Solicitar análise",
-    href: "#simulador",
+    href: "/maquinas-agricolas",
     badge: null,
   },
   {
@@ -101,7 +101,7 @@ const personas = [
     question: "Pensando em veículo premium?",
     pain: "Antes de financiar, compare custos totais e alternativas de aquisição.",
     cta: "Comparar alternativas",
-    href: "#simulador",
+    href: "/carro-luxo",
     badge: null,
   },
   {
@@ -117,7 +117,7 @@ const personas = [
     question: "Planejando aquisição para sua empresa?",
     pain: "Planeje a compra de veículo, máquina ou imóvel comercial com uma estratégia mais inteligente.",
     cta: "Solicitar análise",
-    href: "#simulador",
+    href: "/empresario",
     badge: null,
   },
   {
@@ -132,7 +132,7 @@ const personas = [
     question: "Profissional autônomo planejando aquisição?",
     pain: "Estruture sua próxima aquisição patrimonial com análise de carta de crédito.",
     cta: "Solicitar análise",
-    href: "#simulador",
+    href: "/medico",
     badge: null,
   },
   {
@@ -147,7 +147,7 @@ const personas = [
     question: "Pensando em energia solar?",
     pain: "Avalie se consórcio ou carta contemplada faz sentido para seu projeto de energia solar.",
     cta: "Verificar opções",
-    href: "#simulador",
+    href: "/placas-solares",
     badge: null,
   },
   {
@@ -162,7 +162,7 @@ const personas = [
     question: "Planejando aquisição de aeronave?",
     pain: "Avalie alternativas de crédito para aviação executiva com orientação especializada.",
     cta: "Solicitar análise",
-    href: "#simulador",
+    href: "/aeronaves",
     badge: null,
   },
 ];

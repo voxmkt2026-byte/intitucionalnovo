@@ -1,11 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import dynamic from "next/dynamic";
-import WebGLErrorBoundary from "./WebGLErrorBoundary";
-
-/* ── Lazy-load LiquidEther (heavy Three.js dep — SSR-skip) ── */
-const LiquidEther = dynamic(() => import("./LiquidEther"), { ssr: false });
+import { useRef, useState, useCallback } from "react";
 
 /* ── Stats data ── */
 const statsData = [
@@ -121,26 +116,14 @@ export default function StatsSection() {
       className="relative py-16 md:py-28 overflow-hidden"
       style={{ backgroundColor: "var(--bg-dark)" }}
     >
-      {/* Background — LiquidEther fluid simulation (replaces city photo) */}
-      <div className="absolute inset-0 z-0" style={{ opacity: 0.35 }}>
-        <WebGLErrorBoundary>
-        <LiquidEther
-          colors={["#0A7B3E", "#06532A", "#15B85C"]}
-          mouseForce={15}
-          cursorSize={120}
-          isViscous={false}
-          resolution={0.4}
-          isBounce={false}
-          autoDemo={true}
-          autoSpeed={0.3}
-          autoIntensity={1.8}
-          takeoverDuration={0.3}
-          autoResumeDelay={2000}
-          autoRampDuration={0.8}
-          style={{ width: "100%", height: "100%" }}
-        />
-        </WebGLErrorBoundary>
-      </div>
+      {/* Background — lightweight CSS gradient (replaces heavy WebGL LiquidEther) */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 70% at 30% 40%, rgba(10,123,62,0.25) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 70% 60%, rgba(6,83,42,0.18) 0%, transparent 55%), radial-gradient(ellipse 40% 30% at 50% 50%, rgba(21,184,92,0.10) 0%, transparent 50%)",
+        }}
+      />
 
       {/* Subtle radial gradients for depth */}
       <div
