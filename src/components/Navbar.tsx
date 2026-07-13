@@ -37,7 +37,19 @@ export default function Navbar() {
         </Link>
 
         {/* Navigation Links */}
-        <nav className="flex items-center gap-6 md:gap-12">
+        <nav className="flex items-center gap-5 md:gap-10">
+          <Link
+            href="/"
+            className="text-[11px] md:text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
+          >
+            Início
+          </Link>
+          <a
+            href="/#sobre"
+            className="text-[11px] md:text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
+          >
+            Sobre
+          </a>
           <a
             href="/#simulador"
             className="text-[11px] md:text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
