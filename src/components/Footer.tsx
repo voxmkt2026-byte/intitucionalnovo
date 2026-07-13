@@ -22,7 +22,7 @@ const serviceLinks = [
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "var(--bg-dark)", color: "var(--ink-white)" }}>
+    <footer id="contato" style={{ backgroundColor: "var(--bg-dark)", color: "var(--ink-white)" }}>
       <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16 pt-16 pb-8">
 
         {/* ── Topo: Logo + Descrição ── */}
@@ -41,31 +41,7 @@ export default function Footer() {
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.9rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.75, maxWidth: "380px" }}>
                 Consultoria especializada em aquisição patrimonial via consórcio e cartas contempladas. Análise consultiva de perfil, comparativo de alternativas e orientação sobre riscos — regulamentada pelo Banco Central.
               </p>
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { label: "CNPJ 46.640.755/0001-51" },
-                  { label: "Banco Central" },
-                  { label: "4 anos de mercado" },
-                ].map((badge) => (
-                  <span
-                    key={badge.label}
-                    style={{
-                      fontFamily: "var(--font-jakarta)",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.06em",
-                      textTransform: "uppercase",
-                      color: "var(--green-vivid)",
-                      backgroundColor: "rgba(21,184,92,0.1)",
-                      border: "1px solid rgba(21,184,92,0.2)",
-                      borderRadius: "999px",
-                      padding: "4px 10px",
-                    }}
-                  >
-                    {badge.label}
-                  </span>
-                ))}
-              </div>
+
               <div style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.55)" }} className="pt-2">
                 <span>E-mail: </span>
                 <a 

@@ -1,113 +1,79 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import StaggeredMenu from "./StaggeredMenu";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-/* ─── Menu items ─────────────────────────────────────────── */
-const menuItems = [
-  { label: "Segmentos",     ariaLabel: "Ver segmentos",              link: "/#segmentos" },
-  { label: "Para Você",     ariaLabel: "Soluções por perfil",        link: "/#para-voce" },
-  { label: "Simulador",     ariaLabel: "Simular carta",              link: "/#simulador" },
-  { label: "Sobre Nós",     ariaLabel: "Sobre a Titanium",           link: "/#sobre" },
-  { label: "Nossos Valores",ariaLabel: "Missão, visão e valores",    link: "/missao-visao-valores" },
-  { label: "Trajetória",    ariaLabel: "Nossa linha do tempo",       link: "/trajetoria" },
-  { label: "Cartas Disponíveis", ariaLabel: "Ver cartas contempladas", link: "/cartas-contempladas" },
-  { label: "Contato",       ariaLabel: "Fale conosco",               link: "https://wa.me/5511930048940" },
-];
-
-const socialItems = [
-  { label: "Instagram", link: "https://www.instagram.com/titaniumconsultoriafinanceira" },
-  { label: "WhatsApp",  link: "https://wa.me/5511930048940" },
-];
-
-/* ─── Navbar ─────────────────────────────────────────────── */
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const rafRef    = useRef<number>(0);
-  const headerRef = useRef<HTMLElement | null>(null);
+  const [scrolled, setScrolled] = useState(false);
 
-  /* Glassmorphism: toggle .scrolled class on header */
   useEffect(() => {
-    headerRef.current = document.querySelector<HTMLElement>(".staggered-menu-header");
-
-    const getHeroBottom = () => {
-      const hero =
-        document.querySelector<HTMLElement>("[data-hero]") ??
-        document.querySelector<HTMLElement>("main > section:first-of-type");
-      return hero ? hero.getBoundingClientRect().bottom + window.scrollY : window.innerHeight * 0.7;
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
     };
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        const pastHero = window.scrollY > getHeroBottom() - 100;
-        headerRef.current?.classList.toggle("scrolled", pastHero);
-      });
-    };
-
-    /* Initial check after DOM settles */
-    const t1 = setTimeout(onScroll, 80);
-    const t2 = setTimeout(onScroll, 350);
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  /* Menu toggle button color — always white (site é escuro) */
-  useEffect(() => {
-    const btn = document.querySelector<HTMLElement>(".sm-toggle");
-    if (!btn) return;
-    btn.style.transition = "color 0.3s ease";
-    btn.style.color = "#ffffff";
-  }, [menuOpen]);
-
-  /* Logo opacity: hide on mobile when scrolled past hero on /trajetoria */
-  useEffect(() => {
-    const isTrajetoria = window.location.pathname.includes("trajetoria");
-    if (!isTrajetoria) return;
-
-    const logoEl  = document.querySelector<HTMLElement>(".sm-logo");
-    const heroEl  = document.querySelector<HTMLElement>("main > section:first-of-type");
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        if (!logoEl) return;
-        const isMobile  = window.innerWidth < 768;
-        const heroBottom = heroEl ? heroEl.getBoundingClientRect().bottom : 999;
-        const pastHero  = isMobile && heroBottom < 0;
-        logoEl.style.transition    = "opacity 0.3s ease";
-        logoEl.style.opacity       = pastHero ? "0" : "1";
-        logoEl.style.pointerEvents = pastHero ? "none" : "auto";
-      });
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <StaggeredMenu
-      position="right"
-      items={menuItems}
-      socialItems={socialItems}
-      displaySocials={true}
-      displayItemNumbering={true}
-      logoUrl="/img/logo-titanium-white.png"
-      menuButtonColor="#ffffff"
-      openMenuButtonColor="#ffffff"
-      changeMenuColorOnOpen={true}
-      colors={["#111", "#1a1a1a"]}
-      accentColor="#C9A84C"
-      isFixed={true}
-      closeOnClickAway={true}
-      onMenuOpen={() => setMenuOpen(true)}
-      onMenuClose={() => setMenuOpen(false)}
-    />
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-bg-dark/95 backdrop-blur-md border-b border-white/[0.08] py-4"
+          : "bg-transparent py-6"
+      }`}
+    >
+      <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/img/logo-titanium-white.png"
+            alt="Titanium Consultoria"
+            width={140}
+            height={35}
+            className="h-8 w-auto object-contain"
+            priority
+          />
+        </Link>
+
+        {/* Navigation Links */}
+        <nav className="flex items-center gap-6 md:gap-12">
+          <a
+            href="/#simulador"
+            className="text-[11px] md:text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
+          >
+            Simulação
+          </a>
+          <Link
+            href="/cartas-contempladas"
+            className="text-[11px] md:text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
+          >
+            Cartas Contempladas
+          </Link>
+          <a
+            href="#contato"
+            className="text-[11px] md:text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
+          >
+            Contato
+          </a>
+        </nav>
+
+        {/* Right CTA Button (Desktop) */}
+        <div className="hidden md:block">
+          <a
+            href="https://wa.me/5511930048940"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
+            style={{
+              backgroundColor: "var(--green-vivid)",
+              color: "#ffffff",
+            }}
+          >
+            Falar com Especialista
+          </a>
+        </div>
+      </div>
+    </header>
   );
 }

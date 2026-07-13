@@ -38,11 +38,11 @@ const personas = [
     badge: null,
   },
   {
-    id: "uber",
-    headline: "Motoristas de App",
-    subtitle: "Seu carro próprio sem aluguel",
-    image: "/img/seg-motorista-app.png",
-    href: "/uber/",
+    id: "motos",
+    headline: "Motos",
+    subtitle: "Trabalho ou lazer — sem juros de financiamento",
+    image: "/img/seg-moto.webp",
+    href: "/carta-comum/",
     badge: null,
   },
   {

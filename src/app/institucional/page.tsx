@@ -234,7 +234,7 @@ export default function InstitucionalPage() {
               Solicitar análise gratuita
             </a>
             <p className="mt-8 text-xs text-green/50 font-[family-name:var(--font-jakarta)] font-semibold">
-              CNPJ 46.640.755/0001-51 · Consultoria especializada em aquisição patrimonial
+              Consultoria especializada em aquisição patrimonial
             </p>
           </div>
         </section>
