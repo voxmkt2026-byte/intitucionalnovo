@@ -6,35 +6,11 @@ import Image from "next/image";
 // ─── PERSONAS (image-first, minimal text) ─────────────────────────────────────
 const personas = [
   {
-    id: "uber",
-    headline: "Motorista de App",
-    subtitle: "Seu carro próprio sem aluguel",
-    image: "/img/seg-motorista-app.png",
-    href: "/uber/",
-    badge: null,
-  },
-  {
-    id: "caminhao",
-    headline: "Caminhão & Frota",
-    subtitle: "Expanda sua frota com parcelas inteligentes",
-    image: "/img/seg-caminhao.png",
-    href: "/caminhao/",
-    badge: null,
-  },
-  {
     id: "imovel",
     headline: "Imóveis",
     subtitle: "Casa ou apartamento sem juros bancários",
     image: "/img/seg-casa-moderna.png",
     href: "/carta-comum/",
-    badge: null,
-  },
-  {
-    id: "alto-padrao",
-    headline: "Alto Padrão",
-    subtitle: "Coberturas e imóveis de alto padrão",
-    image: "/img/seg-imoveis.webp",
-    href: "/carta-contemplada/",
     badge: null,
   },
   {
@@ -46,67 +22,35 @@ const personas = [
     badge: null,
   },
   {
-    id: "contemplada",
-    headline: "Cartas Contempladas",
-    subtitle: "Crédito disponível sem esperar sorteio",
-    image: "/img/seg-carro-popular.png",
-    href: "/cartas-contempladas",
-    badge: "Disponível",
-  },
-  {
-    id: "luxo",
-    headline: "Veículo Premium",
-    subtitle: "Compare taxas antes de financiar",
-    image: "/img/seg-carros.webp",
-    href: "/carro-luxo/",
+    id: "caminhao",
+    headline: "Caminhões e Frotas",
+    subtitle: "Expanda sua frota com parcelas inteligentes",
+    image: "/img/seg-caminhao.png",
+    href: "/caminhao/",
     badge: null,
   },
   {
-    id: "empresario",
-    headline: "Empresários",
-    subtitle: "Veículo, máquina ou imóvel comercial",
-    image: "/img/seg-construcao.webp",
-    href: "/empresario/",
-    badge: null,
-  },
-  {
-    id: "medico",
-    headline: "Profissionais Liberais",
-    subtitle: "Consultório, clínica ou veículo executivo",
+    id: "servicos",
+    headline: "Serviços",
+    subtitle: "Consultório, clínica ou serviços especializados",
     image: "/img/seg-imoveis.webp",
     href: "/medico/",
     badge: null,
   },
   {
-    id: "solar",
-    headline: "Energia Solar",
-    subtitle: "Placas solares via consórcio",
-    image: "/img/seg-placas-solares.webp",
-    href: "/placas-solares/",
+    id: "uber",
+    headline: "Motoristas de App",
+    subtitle: "Seu carro próprio sem aluguel",
+    image: "/img/seg-motorista-app.png",
+    href: "/uber/",
     badge: null,
   },
   {
-    id: "aeronave",
-    headline: "Aeronaves",
-    subtitle: "Jatos executivos e helicópteros",
-    image: "/img/seg-aeronaves.webp",
-    href: "/aeronaves/",
-    badge: null,
-  },
-  {
-    id: "embarcacao",
-    headline: "Embarcações",
-    subtitle: "Lanchas, iates e barcos",
-    image: "/img/seg-embarcacao.webp",
-    href: "/embarcacao/",
-    badge: null,
-  },
-  {
-    id: "terreno",
-    headline: "Terrenos",
-    subtitle: "Urbano, rural ou condomínio fechado",
-    image: "/img/seg-terreno-urbano.webp",
-    href: "/terrenos-agricolas/",
+    id: "veiculos",
+    headline: "Veículos",
+    subtitle: "Compare taxas antes de financiar",
+    image: "/img/seg-carro-popular.png",
+    href: "/carro-luxo/",
     badge: null,
   },
 ];
@@ -160,7 +104,7 @@ export default function PersonaGateway() {
               className="font-[family-name:var(--font-montserrat)] text-xs font-bold uppercase tracking-widest"
               style={{ color: "var(--green-vivid)" }}
             >
-              13 categorias de crédito
+              Categorias de crédito
             </span>
           </div>
 
@@ -179,8 +123,8 @@ export default function PersonaGateway() {
           </div>
         </div>
 
-        {/* ── Grid de cards visuais ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
+        {/* ── Grid de cards visuais (3 colunas para 6 cards) ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6 max-w-[1140px] mx-auto">
           {personas.map((p) => (
             <a
               key={p.id}
