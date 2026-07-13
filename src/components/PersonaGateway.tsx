@@ -8,33 +8,33 @@ const personas = [
   {
     id: "uber",
     headline: "Motorista de App",
-    subtitle: "Seu carro próprio sem financiamento",
-    image: "/img/seg-motorista-app.webp",
-    href: "/uber",
+    subtitle: "Seu carro próprio sem aluguel",
+    image: "/img/seg-motorista-app.png",
+    href: "/uber/",
     badge: null,
   },
   {
     id: "caminhao",
     headline: "Caminhão & Frota",
     subtitle: "Expanda sua frota com parcelas inteligentes",
-    image: "/img/seg-caminhao.webp",
-    href: "/caminhao",
+    image: "/img/seg-caminhao.png",
+    href: "/caminhao/",
     badge: null,
   },
   {
     id: "imovel",
     headline: "Imóveis",
     subtitle: "Casa ou apartamento sem juros bancários",
-    image: "/img/seg-casa-moderna.webp",
-    href: "/carta-comum",
+    image: "/img/seg-casa-moderna.png",
+    href: "/carta-comum/",
     badge: null,
   },
   {
     id: "alto-padrao",
     headline: "Alto Padrão",
-    subtitle: "Coberturas e imóveis exclusivos",
+    subtitle: "Coberturas e imóveis de alto padrão",
     image: "/img/seg-imoveis.webp",
-    href: "/carta-contemplada",
+    href: "/carta-contemplada/",
     badge: null,
   },
   {
@@ -42,23 +42,23 @@ const personas = [
     headline: "Máquinas Agrícolas",
     subtitle: "Trator, colheitadeira e implementos",
     image: "/img/seg-trator.webp",
-    href: "/maquinas-agricolas",
+    href: "/maquinas-agricolas/",
     badge: null,
   },
   {
     id: "contemplada",
     headline: "Cartas Contempladas",
     subtitle: "Crédito disponível sem esperar sorteio",
-    image: "/img/seg-carros.webp",
+    image: "/img/seg-carro-popular.png",
     href: "/cartas-contempladas",
     badge: "Disponível",
   },
   {
     id: "luxo",
     headline: "Veículo Premium",
-    subtitle: "BMW, Mercedes, Porsche — compare antes",
+    subtitle: "Compare taxas antes de financiar",
     image: "/img/seg-carros.webp",
-    href: "/carro-luxo",
+    href: "/carro-luxo/",
     badge: null,
   },
   {
@@ -66,7 +66,7 @@ const personas = [
     headline: "Empresários",
     subtitle: "Veículo, máquina ou imóvel comercial",
     image: "/img/seg-construcao.webp",
-    href: "/empresario",
+    href: "/empresario/",
     badge: null,
   },
   {
@@ -74,7 +74,7 @@ const personas = [
     headline: "Profissionais Liberais",
     subtitle: "Consultório, clínica ou veículo executivo",
     image: "/img/seg-imoveis.webp",
-    href: "/medico",
+    href: "/medico/",
     badge: null,
   },
   {
@@ -82,7 +82,7 @@ const personas = [
     headline: "Energia Solar",
     subtitle: "Placas solares via consórcio",
     image: "/img/seg-placas-solares.webp",
-    href: "/placas-solares",
+    href: "/placas-solares/",
     badge: null,
   },
   {
@@ -90,7 +90,7 @@ const personas = [
     headline: "Aeronaves",
     subtitle: "Jatos executivos e helicópteros",
     image: "/img/seg-aeronaves.webp",
-    href: "/aeronaves",
+    href: "/aeronaves/",
     badge: null,
   },
   {
@@ -98,7 +98,7 @@ const personas = [
     headline: "Embarcações",
     subtitle: "Lanchas, iates e barcos",
     image: "/img/seg-embarcacao.webp",
-    href: "/embarcacao",
+    href: "/embarcacao/",
     badge: null,
   },
   {
@@ -106,15 +106,7 @@ const personas = [
     headline: "Terrenos",
     subtitle: "Urbano, rural ou condomínio fechado",
     image: "/img/seg-terreno-urbano.webp",
-    href: "/terrenos-agricolas",
-    badge: null,
-  },
-  {
-    id: "moto",
-    headline: "Motos",
-    subtitle: "Trabalho ou lazer — carta contemplada",
-    image: "/img/seg-moto.webp",
-    href: "/carta-comum",
+    href: "/terrenos-agricolas/",
     badge: null,
   },
 ];
@@ -168,7 +160,7 @@ export default function PersonaGateway() {
               className="font-[family-name:var(--font-montserrat)] text-xs font-bold uppercase tracking-widest"
               style={{ color: "var(--green-vivid)" }}
             >
-              14 categorias de crédito
+              13 categorias de crédito
             </span>
           </div>
 
