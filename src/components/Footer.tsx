@@ -23,7 +23,7 @@ const serviceLinks = [
 export default function Footer() {
   return (
     <footer id="contato" style={{ backgroundColor: "var(--bg-dark)", color: "var(--ink-white)" }}>
-      <div className="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16 pt-16 pb-8">
+      <div className="max-w-[1140px] mx-auto px-6 md:px-10 lg:px-12 pt-16 pb-8">
 
         {/* ── Topo: Logo + Descrição ── */}
         <div className="pb-12 mb-12" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>

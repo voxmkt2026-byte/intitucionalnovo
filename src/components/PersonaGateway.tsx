@@ -33,7 +33,7 @@ const personas = [
     id: "servicos",
     headline: "Serviços",
     subtitle: "Consultório, clínica ou serviços especializados",
-    image: "/img/seg-imoveis.webp",
+    image: "/img/seg-clinica.png",
     href: "/medico/",
     badge: null,
   },
@@ -92,7 +92,7 @@ export default function PersonaGateway() {
       className="relative overflow-hidden"
       style={{ backgroundColor: "var(--bg-dark)" }}
     >
-      <div className="relative mx-auto max-w-[1400px] px-6 md:px-12 lg:px-16 py-24 md:py-32">
+      <div className="relative mx-auto max-w-[1140px] px-6 md:px-10 lg:px-12 py-24 md:py-32">
         {/* ── Header ── */}
         <div className="mb-16 md:mb-20">
           <div className="flex items-center gap-3 mb-5">

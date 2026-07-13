@@ -49,7 +49,7 @@
   --ease-spring: cubic-bezier(.34,1.56,.64,1);
 
   /* ── Layout ── */
-  --wrap: 1200px;
+  --wrap: 1140px;
   --pad:  clamp(1.15rem, 4vw, 2.2rem);
 
   /* ── Semantic aliases (compatibilidade com componentes existentes) ── */

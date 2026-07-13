@@ -28,7 +28,7 @@ export default function TrustLogos() {
       }}
     >
       {/* Subtítulo */}
-      <div className="max-w-7xl mx-auto px-6 mb-6">
+      <div className="max-w-[1140px] mx-auto px-6 mb-6">
         <p
           className="text-center text-xs font-bold uppercase tracking-[0.25em] font-[family-name:var(--font-montserrat)]"
           style={{ color: 'rgba(255,255,255,0.35)' }}
@@ -47,8 +47,7 @@ export default function TrustLogos() {
           gap={48}
           hoverSpeed={20}
           scaleOnHover
-          fadeOut
-          fadeOutColor="#0a0e0a"
+          fadeOut={false}
           ariaLabel="Parceiros Titanium Consultorias"
         />
       </div>
