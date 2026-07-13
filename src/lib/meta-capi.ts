@@ -1,0 +1,100 @@
+import crypto from "crypto";
+
+const META_PIXEL_ID = process.env.META_PIXEL_ID || "";
+const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "";
+
+function sha256(value: string): string {
+  return crypto.createHash("sha256").update(value.trim().toLowerCase()).digest("hex");
+}
+
+function cleanPhone(phone: string): string {
+  return phone.replace(/\D/g, "");
+}
+
+interface MetaEventParams {
+  eventName: "Lead" | "Purchase";
+  lead: {
+    name?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    segment?: string | null;
+    credit?: string | number | null;
+    ref?: string | null;
+    fbc?: string | null;
+    fbp?: string | null;
+    source_url?: string | null;
+    revenue?: number | null;
+  };
+  clientIp?: string;
+  userAgent?: string;
+}
+
+export async function sendMetaCAPIEvent(params: MetaEventParams): Promise<boolean> {
+  const { eventName, lead, clientIp = "", userAgent = "" } = params;
+
+  if (!META_ACCESS_TOKEN || !META_PIXEL_ID) {
+    console.warn("[MetaCAPI] API ignorada: chaves do Meta Ads não configuradas.");
+    return false;
+  }
+
+  const eventId = lead.ref || crypto.randomUUID();
+  const cleanedPhone = lead.phone ? cleanPhone(lead.phone) : "";
+  const firstName = lead.name ? lead.name.split(" ")[0] : "";
+  
+  let creditValue = 0;
+  if (eventName === "Purchase") {
+    creditValue = lead.revenue ? parseFloat(String(lead.revenue)) : 0;
+  } else {
+    creditValue = typeof lead.credit === "number"
+      ? lead.credit
+      : parseFloat(String(lead.credit || "").replace(/\D/g, "")) || 0;
+  }
+
+  const userData: Record<string, unknown> = {
+    ...(lead.email && { em: [sha256(lead.email)] }),
+    ...(cleanedPhone && { ph: [sha256("55" + cleanedPhone)] }),
+    ...(firstName && { fn: [sha256(firstName)] }),
+    ...(lead.fbc && { fbc: lead.fbc }),
+    ...(lead.fbp && { fbp: lead.fbp }),
+    ...(clientIp && { client_ip_address: clientIp }),
+    client_user_agent: userAgent || "Mozilla/5.0",
+  };
+
+  const payload = {
+    data: [
+      {
+        event_name: eventName,
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        event_source_url: lead.source_url || "https://titaniumconsultoria.com.br",
+        action_source: "website",
+        user_data: userData,
+        custom_data: {
+          currency: "BRL",
+          value: creditValue,
+          content_name: lead.segment || "carta_contemplada",
+          content_category: lead.segment || "carta_contemplada",
+        },
+      },
+    ],
+    access_token: META_ACCESS_TOKEN,
+  };
+
+  try {
+    const res = await fetch(
+      `https://graph.facebook.com/v23.0/${META_PIXEL_ID}/events`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(8000),
+      }
+    );
+    const result = await res.json();
+    console.log(`[MetaCAPI] Evento "${eventName}" enviado. Response:`, JSON.stringify(result));
+    return res.ok;
+  } catch (err) {
+    console.error(`[MetaCAPI] Erro ao enviar evento "${eventName}":`, err);
+    return false;
+  }
+}

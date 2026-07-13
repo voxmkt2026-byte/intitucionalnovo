@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import { z } from "zod";
 import { verifyAdminRequest } from "@/lib/admin-auth";
+import { sendGoogleOfflineConversion } from "@/lib/google-ads";
+import { sendMetaCAPIEvent } from "@/lib/meta-capi";
 
 
 
@@ -128,6 +130,41 @@ export async function PATCH(
         INSERT INTO lead_events (lead_id, tipo, valor)
         VALUES (${leadId}, 'status_change', ${statusValue})
       `;
+
+      // Trigger Google Offline conversion & Meta CAPI Purchase if status is Qualificado or Vendido
+      if (statusValue === "Qualificado" || statusValue === "Vendido") {
+        const leadRow = updatedLead[0];
+        if (leadRow) {
+          const revVal = revenue !== undefined ? revenue : (leadRow.revenue ? parseFloat(String(leadRow.revenue)) : 0);
+          
+          if (leadRow.gclid) {
+            sendGoogleOfflineConversion({
+              gclid: leadRow.gclid,
+              status: statusValue,
+              revenue: revVal,
+              updatedAt: new Date()
+            }).catch(err => console.error("[GoogleOffline] Background trigger error:", err));
+          }
+
+          if (statusValue === "Vendido") {
+            sendMetaCAPIEvent({
+              eventName: "Purchase",
+              lead: {
+                name: leadRow.name,
+                phone: leadRow.phone,
+                email: leadRow.email,
+                segment: leadRow.segment,
+                ref: leadRow.fbc ? `purchase-${leadRow.id}-${Date.now()}` : leadRow.id.toString(),
+                fbc: leadRow.fbc,
+                fbp: leadRow.fbp,
+                revenue: revVal,
+              },
+              clientIp: request.headers.get("x-forwarded-for") || "",
+              userAgent: request.headers.get("user-agent") || "",
+            }).catch(err => console.error("[MetaCAPI] Background Purchase error:", err));
+          }
+        }
+      }
     }
 
     if (notes !== undefined) {

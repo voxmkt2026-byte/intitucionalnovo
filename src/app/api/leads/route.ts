@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import crypto from "crypto";
 import { neon } from "@neondatabase/serverless";
+import { sendMetaCAPIEvent } from "@/lib/meta-capi";
 
 const leadSchema = z.object({
   name: z.string().max(100).default(""),
@@ -40,14 +41,6 @@ const KOMMO_PIPELINE_ID = process.env.KOMMO_PIPELINE_ID ? parseInt(process.env.K
 
 
 // --- Helpers ---
-
-function sha256(value: string): string {
-  return crypto.createHash("sha256").update(value.trim().toLowerCase()).digest("hex");
-}
-
-function cleanPhone(phone: string): string {
-  return phone.replace(/\D/g, "");
-}
 
 // --- Neon Postgres (PRIMARY STORAGE) ---
 
@@ -179,71 +172,7 @@ async function sendClickAttribution(body: LeadData): Promise<void> {
   ]);
 }
 
-// --- Meta CAPI ---
 
-async function sendMetaCAPI(
-  body: LeadData,
-  clientIp: string,
-  userAgent: string
-): Promise<void> {
-  if (!META_ACCESS_TOKEN || !META_PIXEL_ID) return;
-
-  const eventId = body.ref || crypto.randomUUID();
-  const cleanedPhone = cleanPhone(body.phone);
-  const firstName = body.name.split(" ")[0] || "";
-  const creditValue =
-    typeof body.credit === "number"
-      ? body.credit
-      : parseFloat(String(body.credit).replace(/\D/g, "")) || 0;
-
-  // Fix #2: usar IP e User Agent reais da request
-  // Fix #3: não enviar hash de campos vazios
-  const userData: Record<string, unknown> = {
-    ...(body.email && { em: [sha256(body.email)] }),
-    ...(cleanedPhone && { ph: [sha256("55" + cleanedPhone)] }),
-    ...(firstName && { fn: [sha256(firstName)] }),
-    ...(body.fbc && { fbc: body.fbc }),
-    ...(body.fbp && { fbp: body.fbp }),
-    ...(clientIp && { client_ip_address: clientIp }),
-    client_user_agent: userAgent || "Mozilla/5.0",
-  };
-
-  const payload = {
-    data: [
-      {
-        event_name: "Lead",
-        event_time: Math.floor(Date.now() / 1000),
-        event_id: eventId,
-        event_source_url: body.source_url || body.origin || "https://titaniumconsultoria.com.br",
-        action_source: "website",
-        user_data: userData,
-        custom_data: {
-          currency: "BRL",
-          value: creditValue,
-          content_name: body.segment,
-          content_category: body.segment || "carta_contemplada",
-        },
-      },
-    ],
-    access_token: META_ACCESS_TOKEN,
-  };
-
-  try {
-    const res = await fetch(
-      `https://graph.facebook.com/v23.0/${META_PIXEL_ID}/events`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(8000),
-      }
-    );
-    const result = await res.json();
-    console.log("[CAPI] Response:", JSON.stringify(result));
-  } catch (err) {
-    console.error("[CAPI] Error:", err);
-  }
-}
 
 // --- Kommo API Direta ---
 
@@ -393,7 +322,7 @@ export async function POST(request: Request) {
       sendToNeon(body),
       sendToSheets(body),
       sendClickAttribution(body).catch(() => {}),
-      sendMetaCAPI(body, clientIp, userAgent).catch(() => {}),
+      sendMetaCAPIEvent({ eventName: "Lead", lead: body, clientIp, userAgent }).catch(() => {}),
       sendToKommo(body),
     ]);
 
