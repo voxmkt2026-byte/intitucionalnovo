@@ -195,6 +195,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           WHERE created_at >= ${since}::date
             AND created_at <  ${until}::date + INTERVAL '1 day'
             AND utm_campaign IS NOT NULL AND utm_campaign != ''
+            AND (LOWER(utm_source) IN ('facebook', 'meta', 'instagram') OR utm_source IS NULL OR utm_source = '')
           GROUP BY utm_campaign
         ` as Array<{ utm_campaign: string; count: string; total_revenue: string | null }>;
         
@@ -252,13 +253,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       clicks:      campaigns.reduce((s, c) => s + c.clicks, 0),
       leads:       campaigns.reduce((s, c) => s + c.leads, 0),
       revenue:     campaigns.reduce((s, c) => s + (c.revenue || 0), 0),
-      ctr:         campaigns.length
-        ? campaigns.reduce((s, c) => s + c.ctr, 0) / campaigns.length
-        : 0,
+      ctr:         0,
       cpl: null,
       roas: null,
       roi: null,
     };
+    total.ctr = total.impressions > 0 ? Math.round((total.clicks / total.impressions) * 100 * 100) / 100 : 0;
     total.cpl = total.leads > 0 ? Math.round((total.spend / total.leads) * 100) / 100 : null;
     total.roas = total.spend > 0 ? Math.round((total.revenue / total.spend) * 100) / 100 : null;
     total.roi = total.spend > 0 ? Math.round((((total.revenue - total.spend) / total.spend) * 100) * 100) / 100 : null;

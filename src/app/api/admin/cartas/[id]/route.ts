@@ -4,15 +4,16 @@ import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
-const JWT_SECRET   = new TextEncoder().encode(
-  process.env.JWT_SECRET!
-);
-
 async function verifyAdmin() {
   const cookieStore = await cookies();
   const token = cookieStore.get("admin_token")?.value;
   if (!token) throw new Error("Unauthorized");
-  await jwtVerify(token, JWT_SECRET);
+  
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not configured in environment variables.");
+  }
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+  await jwtVerify(token, secret);
 }
 
 async function getDb() {

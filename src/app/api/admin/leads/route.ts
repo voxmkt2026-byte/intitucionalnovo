@@ -38,6 +38,8 @@ interface LeadFullRow {
   utm_source: string | null;
   utm_medium: string | null;
   utm_campaign: string | null;
+  utm_content: string | null;
+  utm_term: string | null;
   fbc: string | null;
   fbp: string | null;
   gclid: string | null;
@@ -78,16 +80,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
   const sql = neon(process.env.DATABASE_URL);
 
-  // ── Schema migration: add optional columns if they don't exist ──────────────
-  // These columns were added later; the table may not have them in production.
-  try {
-    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS status TEXT`;
-    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS notes TEXT`;
-    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ`;
-    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS revenue NUMERIC`;
-  } catch {
-    // Ignore — column may already exist or table not ready yet
-  }
+
 
   const { searchParams } = new URL(request.url);
 
@@ -134,7 +127,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       sql`
         SELECT
           id, name, phone, email, segment, credit, months, lp,
-          utm_source, utm_medium, utm_campaign, fbc, fbp, gclid,
+          utm_source, utm_medium, utm_campaign, utm_content, utm_term, fbc, fbp, gclid,
           status, notes, revenue, created_at, updated_at
         FROM leads
         WHERE

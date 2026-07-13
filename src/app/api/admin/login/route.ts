@@ -4,9 +4,7 @@ import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
-const JWT_SECRET   = new TextEncoder().encode(
-  process.env.JWT_SECRET!
-);
+
 
 async function getDb() {
   if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
@@ -58,6 +56,11 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not configured in environment variables.");
+    }
+    const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
+
     // Generate JWT — 8h expiry
     const token = await new SignJWT({
       sub:   String(user.id),
@@ -67,7 +70,7 @@ export async function POST(request: Request) {
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("8h")
       .setIssuedAt()
-      .sign(JWT_SECRET);
+      .sign(jwtSecret);
 
     const response = NextResponse.json(
       { ok: true, nome: user.nome || "Admin" },

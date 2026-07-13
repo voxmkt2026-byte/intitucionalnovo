@@ -175,7 +175,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       roas: null as number | null,
       roi: null as number | null,
     };
-    total.ctr = total.impressions > 0 ? (total.clicks / total.impressions) * 100 : 0;
+    total.ctr = total.impressions > 0 ? Math.round((total.clicks / total.impressions) * 100 * 100) / 100 : 0;
     total.cpl = total.leads > 0 ? Math.round((total.spend / total.leads) * 100) / 100 : null;
     total.roas = total.spend > 0 ? Math.round((total.revenue / total.spend) * 100) / 100 : null;
     total.roi = total.spend > 0 ? Math.round((((total.revenue - total.spend) / total.spend) * 100) * 100) / 100 : null;

@@ -37,12 +37,7 @@ export async function fetchAdminStats(): Promise<AdminStats> {
   const sql = neon(process.env.DATABASE_URL);
 
   try {
-    // Ensure columns exist (idempotent)
-    await Promise.allSettled([
-      sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'Novo'`,
-      sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS notes TEXT DEFAULT ''`,
-      sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()`,
-    ]);
+
 
     const [
       hojeRows, semanaRows, mesRows, totalRows,

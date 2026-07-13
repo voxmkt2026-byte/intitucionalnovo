@@ -523,7 +523,7 @@
         value: parseInt(data.parcela) || 0,
         currency: 'BRL',
         content_name: 'LP-' + personaId
-      });
+      }, { eventID: ids.ref });
     } catch (e) { /* silent */ }
 
     // Send to Google Sheets via API — enriched with identifiers
@@ -544,6 +544,7 @@
       utm_medium: ids.utm_medium,
       utm_campaign: ids.utm_campaign,
       utm_content: ids.utm_content,
+      utm_term: ids.utm_term,
       lp: ids.lp
     };
 

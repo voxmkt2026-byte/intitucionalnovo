@@ -5,23 +5,7 @@ const DATABASE_URL = process.env.DATABASE_URL || "";
 
 async function getDb() {
   if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
-  const sql = neon(DATABASE_URL);
-  await sql`
-    CREATE TABLE IF NOT EXISTS cartas_contempladas (
-      id                 SERIAL PRIMARY KEY,
-      segmento           TEXT NOT NULL,
-      administradora     TEXT NOT NULL,
-      valor_credito      DECIMAL(12,2) NOT NULL,
-      entrada            DECIMAL(12,2),
-      parcelas           INTEGER NOT NULL,
-      valor_parcela      DECIMAL(10,2) NOT NULL,
-      proximo_vencimento DATE,
-      disponivel         BOOLEAN DEFAULT true,
-      criado_em          TIMESTAMPTZ DEFAULT NOW(),
-      atualizado_em      TIMESTAMPTZ DEFAULT NOW()
-    )
-  `;
-  return sql;
+  return neon(DATABASE_URL);
 }
 
 export async function GET(request: Request) {

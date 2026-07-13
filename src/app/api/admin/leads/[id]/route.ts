@@ -95,11 +95,7 @@ export async function PATCH(
   }
 
   const { status, notes, revenue } = parsed.data;
-
   try {
-    await sql`CREATE TABLE IF NOT EXISTS lead_events (id SERIAL PRIMARY KEY, lead_id INTEGER, tipo TEXT, valor TEXT, criado_em TIMESTAMPTZ DEFAULT NOW())`;
-
-
     // Check lead exists
     const existing = (await sql`
       SELECT id FROM leads WHERE id = ${leadId}

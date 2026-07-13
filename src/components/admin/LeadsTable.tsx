@@ -318,6 +318,8 @@ export default function LeadsTable() {
       setMeta(json.meta ?? { total: 0, page: 1, limit: 20, totalPages: 1 });
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return;
+      console.error('fetchLeads error:', err);
+      alert('Erro ao carregar leads. Verifique a conexão.');
     } finally {
       setLoading(false);
     }
@@ -345,14 +347,22 @@ export default function LeadsTable() {
       document.body.appendChild(a); a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    } catch { /* silencioso */ } finally {
+    } catch (err) {
+      console.error('exportCSV error:', err);
+      alert('Falha ao exportar CSV. Tente novamente.');
+    } finally {
       setExporting(false);
     }
   }
 
-  useEffect(() => { fetchLeads(page, filters, sort, dir); }, [page, filters, sort, dir, fetchLeads]);
+  useEffect(() => { 
+    fetchLeads(page, filters, sort, dir); 
+    return () => {
+      if (abortRef.current) abortRef.current.abort();
+    };
+  }, [page, filters, sort, dir, fetchLeads]);
 
-  function handleUpdate(id: number, updates: { status?: string; notes?: string }) {
+  function handleUpdate(id: number, updates: { status?: string; notes?: string; revenue?: number | null }) {
     setLeads(prev => prev.map(l => l.id === id ? { ...l, ...updates } : l));
     if (selectedLead?.id === id) setSelectedLead(prev => prev ? { ...prev, ...updates } : prev);
   }

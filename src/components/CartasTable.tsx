@@ -44,6 +44,12 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
     const urlParams  = new URLSearchParams(window.location.search);
     const cartaRef   = `carta-${carta.id}-${carta.segmento}-${Math.round(carta.valor_credito / 1000)}k`;
 
+    const getCookie = (name: string) => {
+      if (typeof document === "undefined") return "";
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? match[2] : "";
+    };
+
     try {
       const res = await fetch("/api/leads/", {
         method: "POST",
@@ -61,6 +67,10 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
           utm_medium:           urlParams.get("utm_medium")   || "cartas-page",
           utm_campaign:         urlParams.get("utm_campaign") || "cartas-contempladas",
           utm_content:          urlParams.get("utm_content")  || carta.administradora,
+          utm_term:             urlParams.get("utm_term")     || "",
+          gclid:                urlParams.get("gclid")        || "",
+          fbc:                  getCookie("_fbc"),
+          fbp:                  getCookie("_fbp"),
           carta_id:             String(carta.id),
           carta_administradora: carta.administradora,
           carta_valor:          String(carta.valor_credito),

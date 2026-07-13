@@ -14,8 +14,9 @@ export interface Lead {
   utm_source: string;
   utm_medium: string;
   utm_campaign: string;
+  utm_content?: string;
+  utm_term?: string;
   fbc: string;
-  fbp: string;
   fbp: string;
   gclid: string;
   status: string;
@@ -154,15 +155,27 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
     setSaving(true);
     try {
       const parsedRevenue = localRevenue ? parseFloat(localRevenue.replace(',', '.')) : null;
-      const finalRevenue = isNaN(parsedRevenue as any) ? null : parsedRevenue;
+      const finalRevenue = (parsedRevenue === null || isNaN(parsedRevenue)) ? null : parsedRevenue;
       
-      onUpdate(lead.id, { 
+      const payload = { 
         notes: localNotes, 
         status: localStatus,
         revenue: localStatus === 'Vendido' ? finalRevenue : null
+      };
+
+      const res = await fetch(`/api/admin/leads/${lead.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
+
+      if (!res.ok) throw new Error('Falha ao salvar no servidor');
+
+      onUpdate(lead.id, payload);
       setSavedFlash(true);
       setTimeout(() => setSavedFlash(false), 2000);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Erro ao salvar alterações');
     } finally {
       setSaving(false);
     }
@@ -288,6 +301,8 @@ export default function LeadDrawer({ lead, onClose, onUpdate }: LeadDrawerProps)
                 <DataRow label="UTM Source" value={lead.utm_source} />
                 <DataRow label="UTM Medium" value={lead.utm_medium} />
                 <DataRow label="UTM Campaign" value={lead.utm_campaign} />
+                <DataRow label="UTM Content" value={lead.utm_content} />
+                <DataRow label="UTM Term" value={lead.utm_term} />
                 <DataRow label="Criado em" value={formatDate(lead.created_at)} />
               </section>
 

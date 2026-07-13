@@ -20,6 +20,7 @@ const leadSchema = z.object({
   utm_medium: z.string().max(100).default(""),
   utm_campaign: z.string().max(200).default(""),
   utm_content: z.string().max(200).default(""),
+  utm_term: z.string().max(200).default(""),
   lp: z.string().max(100).default(""),
   source_url: z.string().max(500).default(""),
   timestamp: z.string().max(50).default(""),
@@ -33,11 +34,10 @@ const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "";
 const DATABASE_URL = process.env.DATABASE_URL || "";
 const N8N_KOMMO_WEBHOOK_URL = process.env.N8N_KOMMO_WEBHOOK_URL || "";
 const KOMMO_ACCESS_TOKEN = process.env.KOMMO_ACCESS_TOKEN || "";
-const KOMMO_DOMAIN = "titaniumconsultoriaofc.kommo.com";
-const KOMMO_PIPELINE_ID = 13995439;
+const KOMMO_DOMAIN = process.env.KOMMO_DOMAIN || "titaniumconsultoriaofc.kommo.com";
+const KOMMO_PIPELINE_ID = process.env.KOMMO_PIPELINE_ID ? parseInt(process.env.KOMMO_PIPELINE_ID, 10) : 13995439;
 
-// --- Neon table init flag (executa uma vez por cold start) ---
-let _tableReady = false;
+
 
 // --- Helpers ---
 
@@ -60,56 +60,13 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
   try {
     const sql = neon(DATABASE_URL);
 
-    // Cria tabelas apenas uma vez por cold start
-    if (!_tableReady) {
-      await sql`
-        CREATE TABLE IF NOT EXISTS leads (
-          id SERIAL PRIMARY KEY,
-          name TEXT,
-          email TEXT,
-          phone TEXT,
-          segment TEXT,
-          credit TEXT,
-          months INTEGER,
-          plan TEXT,
-          origin TEXT,
-          ref TEXT,
-          fbc TEXT,
-          fbp TEXT,
-          gclid TEXT,
-          utm_source TEXT,
-          utm_medium TEXT,
-          utm_campaign TEXT,
-          utm_content TEXT,
-          lp TEXT,
-          source_url TEXT,
-          created_at TIMESTAMPTZ DEFAULT NOW()
-        )
-      `;
-      // Tabela de atribuição de cliques (antes só ia pro Sheets)
-      await sql`
-        CREATE TABLE IF NOT EXISTS lead_clicks (
-          id SERIAL PRIMARY KEY,
-          ref TEXT,
-          fbc TEXT,
-          fbp TEXT,
-          gclid TEXT,
-          utm_source TEXT,
-          utm_medium TEXT,
-          utm_campaign TEXT,
-          utm_content TEXT,
-          lp TEXT,
-          created_at TIMESTAMPTZ DEFAULT NOW()
-        )
-      `;
-      _tableReady = true;
-    }
+
 
     await sql`
       INSERT INTO leads (
         name, email, phone, segment, credit, months, plan,
         origin, ref, fbc, fbp, gclid,
-        utm_source, utm_medium, utm_campaign, utm_content,
+        utm_source, utm_medium, utm_campaign, utm_content, utm_term,
         lp, source_url
       ) VALUES (
         ${body.name}, ${body.email}, ${body.phone},
@@ -117,7 +74,7 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
         ${body.plan}, ${body.origin}, ${body.ref},
         ${body.fbc}, ${body.fbp}, ${body.gclid},
         ${body.utm_source}, ${body.utm_medium}, ${body.utm_campaign},
-        ${body.utm_content}, ${body.lp}, ${body.source_url}
+        ${body.utm_content}, ${body.utm_term || null}, ${body.lp}, ${body.source_url}
       )
     `;
 
@@ -130,15 +87,11 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
 }
 
 // --- Google Sheets (OPCIONAL — fallback) ---
-// Fix: Google Apps Script com POST retorna redirect que Node.js não segue corretamente.
-// Solução: GET com payload JSON como query parameter (doGet no Apps Script já suporta isso).
 async function sendToAppsScript(url: string, payload: object, timeoutMs = 10000): Promise<Response> {
-  const jsonPayload = JSON.stringify(payload);
-  const separator = url.includes("?") ? "&" : "?";
-  const getUrl = `${url}${separator}payload=${encodeURIComponent(jsonPayload)}`;
-
-  return fetch(getUrl, {
-    method: "GET",
+  return fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
     redirect: "follow",
     signal: AbortSignal.timeout(timeoutMs),
   });
@@ -169,6 +122,7 @@ async function sendToSheets(body: LeadData): Promise<boolean> {
       utm_medium: body.utm_medium,
       utm_campaign: body.utm_campaign,
       utm_content: body.utm_content,
+      utm_term: body.utm_term,
       lp: body.lp,
       source_url: body.source_url,
       timestamp: body.timestamp || new Date().toISOString(),
@@ -192,11 +146,11 @@ async function sendClickAttribution(body: LeadData): Promise<void> {
       try {
         const sql = neon(DATABASE_URL);
         await sql`
-          INSERT INTO lead_clicks (ref, fbc, fbp, gclid, utm_source, utm_medium, utm_campaign, utm_content, lp)
+          INSERT INTO lead_clicks (ref, fbc, fbp, gclid, utm_source, utm_medium, utm_campaign, utm_content, utm_term, lp)
           VALUES (
             ${body.ref}, ${body.fbc || null}, ${body.fbp || null}, ${body.gclid || null},
             ${body.utm_source || null}, ${body.utm_medium || null},
-            ${body.utm_campaign || null}, ${body.utm_content || null},
+            ${body.utm_campaign || null}, ${body.utm_content || null}, ${body.utm_term || null},
             ${body.lp || body.origin || null}
           )
         `;
@@ -216,6 +170,7 @@ async function sendClickAttribution(body: LeadData): Promise<void> {
           utm_medium: body.utm_medium,
           utm_campaign: body.utm_campaign,
           utm_content: body.utm_content,
+          utm_term: body.utm_term,
           lp: body.lp || body.origin,
           timestamp: new Date().toISOString(),
         });
@@ -259,14 +214,14 @@ async function sendMetaCAPI(
         event_name: "Lead",
         event_time: Math.floor(Date.now() / 1000),
         event_id: eventId,
-        event_source_url: body.source_url || "https://titaniumconsultoria.com.br",
+        event_source_url: body.source_url || body.origin || "https://titaniumconsultoria.com.br",
         action_source: "website",
         user_data: userData,
         custom_data: {
           currency: "BRL",
           value: creditValue,
           content_name: body.segment,
-          content_category: "carta_contemplada",
+          content_category: body.segment || "carta_contemplada",
         },
       },
     ],
@@ -456,14 +411,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        status: saved ? "ok" : "partial",
+        status: saved ? "ok" : "error",
         event_id: body.ref,
         storage: neonOk ? "neon" : sheetsOk ? "sheets" : "none",
         neon: neonOk ? "✅" : "❌",
         sheets: sheetsOk ? "✅" : "❌",
         kommo: kommoOk ? "✅ ok" : (kommoError ?? "❌ failed"),
       },
-      { status: 200 }
+      { status: saved ? 200 : 500 }
     );
   } catch (error) {
     if (error instanceof z.ZodError) {

@@ -4,36 +4,21 @@ import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
-const JWT_SECRET   = new TextEncoder().encode(
-  process.env.JWT_SECRET!
-);
-
 async function verifyAdmin() {
   const cookieStore = await cookies();
   const token = cookieStore.get("admin_token")?.value;
   if (!token) throw new Error("Unauthorized");
-  await jwtVerify(token, JWT_SECRET);
+  
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not configured in environment variables.");
+  }
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+  await jwtVerify(token, secret);
 }
 
 async function getDb() {
   if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
-  const sql = neon(DATABASE_URL);
-  await sql`
-    CREATE TABLE IF NOT EXISTS cartas_contempladas (
-      id                 SERIAL PRIMARY KEY,
-      segmento           TEXT NOT NULL,
-      administradora     TEXT NOT NULL,
-      valor_credito      DECIMAL(12,2) NOT NULL,
-      entrada            DECIMAL(12,2),
-      parcelas           INTEGER NOT NULL,
-      valor_parcela      DECIMAL(10,2) NOT NULL,
-      proximo_vencimento DATE,
-      disponivel         BOOLEAN DEFAULT true,
-      criado_em          TIMESTAMPTZ DEFAULT NOW(),
-      atualizado_em      TIMESTAMPTZ DEFAULT NOW()
-    )
-  `;
-  return sql;
+  return neon(DATABASE_URL);
 }
 
 // GET — lista todas (admin vê disponíveis e indisponíveis)

@@ -113,6 +113,15 @@ export default function AdminNavbar() {
         .admin-nav-link:hover { background: var(--admin-brand-tint) !important; color: var(--admin-brand) !important; }
         .admin-theme-btn:hover { background: var(--admin-brand-tint) !important; color: var(--admin-brand) !important; border-color: var(--admin-brand-tint2) !important; }
         .admin-logout-btn:hover { color: #ef4444 !important; background: rgba(239,68,68,0.08) !important; border-color: rgba(239,68,68,0.28) !important; }
+        @media (max-width: 640px) {
+          .admin-nav-label { display: none !important; }
+          .admin-nav-link { padding: 6px 10px !important; }
+        }
+        @media (max-width: 500px) {
+          .admin-nav-logo-text { display: none !important; }
+          .admin-nav-logo-badge { display: none !important; }
+          .admin-logout-label { display: none !important; }
+        }
       `}</style>
 
       <nav style={{
@@ -140,13 +149,13 @@ export default function AdminNavbar() {
                 <path d="M12 3v18M5 3h14"/>
               </svg>
             </span>
-            <span style={{
+            <span className="admin-nav-logo-text" style={{
               fontSize: '15px', fontWeight: 800, letterSpacing: '0.07em',
               color: 'var(--admin-text)', textTransform: 'uppercase' as const,
             }}>
               TITANIUM
             </span>
-            <span style={{
+            <span className="admin-nav-logo-badge" style={{
               fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em',
               color: 'var(--admin-brand)', background: 'var(--admin-brand-tint)',
               border: '1px solid var(--admin-brand-tint2)', borderRadius: '4px',
@@ -176,7 +185,7 @@ export default function AdminNavbar() {
                   }}
                 >
                   <span style={{ opacity: active ? 1 : 0.6 }}>{icon}</span>
-                  {label}
+                  <span className="admin-nav-label">{label}</span>
                   {active && (
                     <span style={{
                       position: 'absolute' as const, bottom: '-1px', left: '50%',
@@ -219,7 +228,7 @@ export default function AdminNavbar() {
               }}
             >
               {loggingOut ? <SpinnerIcon /> : <LogoutIcon />}
-              {loggingOut ? 'Saindo...' : 'Sair'}
+              <span className="admin-logout-label">{loggingOut ? 'Saindo...' : 'Sair'}</span>
             </button>
 
           </div>

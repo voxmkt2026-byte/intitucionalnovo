@@ -2,7 +2,13 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import type { NextRequest } from "next/server";
 
-const getSecret = () => new TextEncoder().encode(process.env.JWT_SECRET!);
+const getSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error("JWT_SECRET is not configured in environment variables.");
+  }
+  return new TextEncoder().encode(secret);
+};
 
 /** Para Server Components e Server Actions */
 export async function verifyAdminSession(): Promise<boolean> {
