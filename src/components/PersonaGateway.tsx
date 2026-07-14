@@ -221,33 +221,6 @@ export default function PersonaGateway() {
             </a>
           ))}
         </div>
-
-        {/* ── Footer da seção ── */}
-        <div className="mt-14 flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-white/[0.06]">
-          <p className="text-white/30 text-sm font-sans text-center sm:text-left">
-            Não encontrou seu perfil?{" "}
-            <a
-              href="https://wa.me/5511930048940?text=Olá, quero entender qual opção faz sentido para meu perfil"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 hover:text-white transition-colors"
-              style={{ color: "rgba(21, 184, 92, 0.7)" }}
-            >
-              Fale com um especialista
-            </a>
-          </p>
-
-          <Link
-            href="/cartas-contempladas"
-            className="flex items-center gap-3 px-8 py-4 rounded-full font-[family-name:var(--font-montserrat)] font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] hover:shadow-xl"
-            style={{
-              backgroundColor: "var(--green-vivid)",
-              color: "#ffffff",
-            }}
-          >
-            Cartas Contempladas
-          </Link>
-        </div>
       </div>
     </section>
   );
