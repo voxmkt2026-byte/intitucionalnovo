@@ -58,7 +58,7 @@ export default function Navbar() {
           </a>
           <Link
             href="/cartas-contempladas"
-            className="text-[11px] md:text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
+            className="md:hidden text-[11px] md:text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
           >
             Cartas Contempladas
           </Link>
@@ -72,18 +72,16 @@ export default function Navbar() {
 
         {/* Right CTA Button (Desktop) */}
         <div className="hidden md:block">
-          <a
-            href="https://wa.me/5511930048940"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/cartas-contempladas"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
             style={{
               backgroundColor: "var(--green-vivid)",
               color: "#ffffff",
             }}
           >
-            Falar com Especialista
-          </a>
+            Cartas Contempladas
+          </Link>
         </div>
       </div>
     </header>
