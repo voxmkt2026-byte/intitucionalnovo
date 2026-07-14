@@ -46,12 +46,12 @@ export default function Footer() {
               <div style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.55)" }} className="pt-2">
                 <span>E-mail: </span>
                 <a 
-                  href="mailto:titaniumconsultorias@outlook.com"
+                  href="mailto:contato@titaniumconsultorias.com.br"
                   style={{ color: "rgba(255,255,255,0.8)", textDecoration: "none", transition: "color 0.2s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "var(--green-vivid)")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.8)")}
                 >
-                  titaniumconsultorias@outlook.com
+                  contato@titaniumconsultorias.com.br
                 </a>
               </div>
             </div>

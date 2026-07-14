@@ -206,26 +206,7 @@ export default function About() {
                 Quando a carta contemplada faz sentido, apresentamos opções disponíveis — sempre com verificação documental e jurídica pela nossa equipe. Quando não faz, dizemos isso também. Nosso papel é consultoria, não pressão de venda.
               </p>
 
-              {/* Credenciais */}
-              <div
-                className="flex flex-wrap gap-6 pt-4 mt-2"
-                style={{ borderTop: "1px solid var(--bg-3)" }}
-              >
-                {[
-                  { value: "Empresa Ativa", label: "Operação regularizada" },
-                  { value: "Banco Central", label: "Fiscalização ativa" },
-                  { value: "4 anos", label: "de operação" },
-                ].map((item) => (
-                  <div key={item.value}>
-                    <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.8rem", color: "var(--green)", marginBottom: "2px" }}>
-                      {item.value}
-                    </div>
-                    <div style={{ fontSize: "0.7rem", color: "var(--ink-mute)", fontWeight: 500 }}>
-                      {item.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
+
             </div>
           </div>
         </div>
