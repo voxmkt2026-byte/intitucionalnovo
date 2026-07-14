@@ -126,7 +126,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-xs mt-6" style={{ color: "#8A8A8A" }}>
-          Titanium Consultoria Financeira · CNPJ 46.640.755/0001-51
+          Titanium Consultoria Financeira
         </p>
       </div>
     </main>

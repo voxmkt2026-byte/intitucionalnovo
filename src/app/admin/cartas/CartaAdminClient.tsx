@@ -314,7 +314,7 @@ export default function CartaAdminClient() {
       </div>
 
       <p className="text-xs text-center mt-6" style={{ color: "var(--admin-text-mute)" }}>
-        Titanium Consultoria Financeira · CNPJ 46.640.755/0001-51
+        Titanium Consultoria Financeira
       </p>
 
       {showForm && (

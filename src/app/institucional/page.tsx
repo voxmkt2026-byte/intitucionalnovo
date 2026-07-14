@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: "É seguro comprar uma carta contemplada?",
-    a: "A segurança depende da intermediação. Na Titanium, toda operação passa por verificação de documentação e histórico da carta. Recomendamos sempre consultar uma empresa com CNPJ ativo e experiência comprovada no mercado.",
+    a: "A segurança depende da intermediação. Na Titanium, toda operação passa por verificação de documentação e histórico da carta. Recomendamos sempre consultar uma empresa com experiência comprovada no mercado.",
   },
   {
     q: "Consórcio tem juros?",

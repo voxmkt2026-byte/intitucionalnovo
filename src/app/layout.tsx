@@ -13,7 +13,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Titanium Consultoria | Crédito sem banco para quem está construindo",
   description:
-    "Consultoria financeira para produtores rurais, empresários e profissionais liberais que querem expandir patrimônio sem pagar juros bancários. Cartas contempladas auditadas. CNPJ 46.640.755/0001-51.",
+    "Consultoria financeira para produtores rurais, empresários e profissionais liberais que querem expandir patrimônio sem pagar juros bancários. Cartas contempladas auditadas.",
   keywords: [
     "carta contemplada",
     "consórcio contemplado",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Titanium Consultoria | Crédito sem banco para quem está construindo",
     description:
-      "Do agro ao imóvel. Da frota à clínica. Crédito via consórcio contemplado, sem financiamento bancário tradicional. Segurança jurídica, CNPJ ativo, regulamentado pelo Banco Central.",
+      "Do agro ao imóvel. Da frota à clínica. Crédito via consórcio contemplado, sem financiamento bancário tradicional. Segurança jurídica, regulamentado pelo Banco Central.",
     url: "https://titaniumconsultoria.com.br",
     siteName: "Titanium Consultoria",
     locale: "pt_BR",

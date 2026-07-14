@@ -18,7 +18,7 @@ const slides = [
   {
     id: 2,
     image: "/img/hero-agro.webp",
-    kicker: "4 anos · +3.000 clientes* · CNPJ ativo",
+    kicker: "4 anos · +3.000 clientes* · Consultoria Especializada",
     title: ["A parcela não conta", "a história toda."],
     subtitle:
       "Antes de assumir uma compra de longo prazo, compare custos, prazos e alternativas com orientação especializada.",
@@ -28,7 +28,7 @@ const slides = [
   {
     id: 3,
     image: "/img/hero-juridico.webp",
-    kicker: "4 anos · CNPJ ativo · Regulamentado pelo Banco Central",
+    kicker: "4 anos · Regulamentado pelo Banco Central",
     title: ["Comprar bem começa", "antes da assinatura."],
     subtitle:
       "Diagnóstico gratuito de aquisição patrimonial. Avaliamos objetivo, perfil e possibilidades disponíveis.",
@@ -244,7 +244,7 @@ export default function Hero() {
           {[
             { value: "4 anos*", label: "de mercado" },
             { value: "+3.000*", label: "clientes atendidos" },
-            { value: "CNPJ ativo", label: "Banco Central regulado" },
+            { value: "Regulado", label: "pelo Banco Central" },
           ].map((item) => (
             <div key={item.value} className="flex items-center gap-3">
               <span

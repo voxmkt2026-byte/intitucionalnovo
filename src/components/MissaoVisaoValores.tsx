@@ -223,7 +223,7 @@ const valores = [
   {
     iconKey: "shield" as const,
     title: "Segurança Jurídica",
-    text: "Cada carta é auditada pela nossa equipe jurídica. CNPJ ativo, regulamentação do Banco Central e conformidade com a LGPD.",
+    text: "Cada carta é auditada pela nossa equipe jurídica. Regulamentação do Banco Central e conformidade com a LGPD.",
   },
   {
     iconKey: "handshake" as const,
@@ -507,7 +507,7 @@ const faqs = [
   },
   {
     q: "A Titanium é regulamentada?",
-    a: "Sim. A Titanium Consultoria atua como intermediadora de cartas contempladas de administradoras regulamentadas pelo Banco Central do Brasil. Nosso CNPJ (46.640.755/0001-51) está ativo e operamos em conformidade com a LGPD e as normas do setor.",
+    a: "Sim. A Titanium Consultoria atua como intermediadora de cartas contempladas de administradoras regulamentadas pelo Banco Central do Brasil. Operamos em total conformidade com a LGPD e as normas do setor.",
   },
 ];
 

@@ -29,9 +29,9 @@ export default function Navbar() {
           <Image
             src="/img/logo-titanium-white.png"
             alt="Titanium Consultoria"
-            width={140}
-            height={35}
-            className="h-8 w-auto object-contain"
+            width={320}
+            height={80}
+            className="h-20 w-auto object-contain"
             priority
           />
         </Link>

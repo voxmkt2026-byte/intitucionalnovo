@@ -61,7 +61,7 @@ const stats = [
     prefix: "",
     label: "de mercado",
     description:
-      "4 anos operando com CNPJ ativo, regulamentados pelo Banco Central. Zero litígios. NPS de 87 pontos (pesquisa interna, 2025).",
+      "4 anos de mercado, em total conformidade com as diretrizes do Banco Central. Zero litígios. NPS de 87 pontos (pesquisa interna, 2025).",
   },
 ] as const;
 
@@ -212,7 +212,7 @@ export default function About() {
                 style={{ borderTop: "1px solid var(--bg-3)" }}
               >
                 {[
-                  { value: "CNPJ 46.640.755/0001-51", label: "Empresa regulamentada" },
+                  { value: "Empresa Ativa", label: "Operação regularizada" },
                   { value: "Banco Central", label: "Fiscalização ativa" },
                   { value: "4 anos", label: "de operação" },
                 ].map((item) => (

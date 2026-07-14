@@ -27,16 +27,16 @@ export default function Footer() {
 
         {/* ── Topo: Logo + Descrição ── */}
         <div className="pb-12 mb-12" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 items-start">
 
             {/* Logo + brand copy */}
-            <div className="lg:col-span-5 space-y-5">
+            <div className="lg:col-span-4 space-y-5">
               <Image
                 src={LOGO_URL}
                 alt="Titanium Consultoria"
-                width={160}
-                height={40}
-                className="h-10 w-auto"
+                width={320}
+                height={80}
+                className="h-20 w-auto"
               />
               <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.9rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.75, maxWidth: "380px" }}>
                 Consultoria especializada em aquisição patrimonial via consórcio e cartas contempladas. Análise consultiva de perfil, comparativo de alternativas e orientação sobre riscos — regulamentada pelo Banco Central.
@@ -56,7 +56,7 @@ export default function Footer() {
             </div>
 
             {/* Links: Empresa */}
-            <div className="lg:col-span-3 space-y-4">
+            <div className="lg:col-span-2 lg:col-start-6 space-y-4">
               <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", display: "block" }}>
                 Empresa
               </span>
@@ -77,11 +77,11 @@ export default function Footer() {
             </div>
 
             {/* Links: Serviços */}
-            <div className="lg:col-span-4 space-y-4">
+            <div className="lg:col-span-2 space-y-4">
               <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", display: "block" }}>
                 Serviços
               </span>
-              <ul className="space-y-2.5 mb-6">
+              <ul className="space-y-2.5">
                 {serviceLinks.map((link) => (
                   <li key={link.label}>
                     <a
@@ -97,16 +97,18 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
+            </div>
 
-              {/* WhatsApp CTA */}
+            {/* Coluna CTA WhatsApp */}
+            <div className="lg:col-span-3 lg:col-start-10 flex flex-col items-stretch lg:items-end">
               <a
                 href="https://wa.me/5511930048940"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:brightness-110"
+                className="w-full lg:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
                 style={{
                   fontFamily: "var(--font-jakarta)",
-                  backgroundColor: "var(--whatsapp)",
+                  backgroundColor: "var(--green-vivid)",
                   color: "white",
                   textDecoration: "none",
                 }}
@@ -128,7 +130,7 @@ export default function Footer() {
             "Nunca solicitamos depósitos antecipados, pagamentos de taxas de liberação ou qualquer transferência sem formalização contratual prévia. Em caso de contato suspeito em nome da Titanium, interrompa imediatamente e acione nossos canais oficiais.",
             "Informações e privacidade: todas as condições são apresentadas antes de qualquer negociação. Dados tratados conforme LGPD (Lei nº 13.709/2018).",
           ].map((text, i) => (
-            <p key={i} style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.75rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.7 }}>
+            <p key={i} style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.65rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.6 }}>
               {text}
             </p>
           ))}
@@ -143,20 +145,15 @@ export default function Footer() {
           <Image
             src={LOGO_URL}
             alt="Titanium Consultoria"
-            width={112}
-            height={28}
-            className="h-7 w-auto"
+            width={140}
+            height={35}
+            className="h-8 w-auto"
             style={{ opacity: 0.5 }}
           />
 
           {/* Copyright */}
           <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>
             © {new Date().getFullYear()} Titanium Consultoria. Todos os direitos reservados.
-          </span>
-
-          {/* CNPJ */}
-          <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>
-            CNPJ: 46.640.755/0001-51
           </span>
         </div>
 

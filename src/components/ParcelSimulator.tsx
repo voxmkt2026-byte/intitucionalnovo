@@ -264,7 +264,7 @@ export default function ParcelSimulator() {
             >
               {[
                 { icon: "🔒", text: "Regulamentado pelo Banco Central do Brasil" },
-                { icon: "✅", text: "CNPJ 46.640.755/0001-51 — empresa ativa" },
+                { icon: "✅", text: "Empresa ativa e regularizada desde 2022" },
                 { icon: "📋", text: "Nunca cobramos taxa de análise antecipada" },
               ].map((item) => (
                 <div key={item.icon} className="flex items-center gap-3">
