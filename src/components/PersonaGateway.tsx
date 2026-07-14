@@ -35,7 +35,7 @@ const personas = [
     headline: "Serviços",
     subtitle: "Consultório, clínica ou serviços especializados",
     image: "/img/ref-servicos.jpg",
-    href: "/medico/",
+    href: "/servicos/",
     badge: null,
   },
   {
@@ -50,7 +50,7 @@ const personas = [
     id: "veiculos",
     headline: "Veículos",
     subtitle: "Compare taxas antes de financiar",
-    image: "/img/ref-carro.jpg",
+    image: "/img/ref-carro.png",
     href: "/carro-luxo/",
     badge: null,
   },

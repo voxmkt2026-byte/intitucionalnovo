@@ -215,6 +215,20 @@
         ]}
       ]
     },
+    'servicos': {
+      tier: 3, theme: 'dark',
+      proof: '+730 empresas de serviços e clínicas já expandiram seu negócio',
+      badge: 'Atendimento corporativo especializado. Dados protegidos.',
+      wa: 'Olá! Sou prestador de serviços/empresário e tenho interesse em adquirir *{bem}* via consórcio. Gostaria de falar com um consultor.',
+      steps: [
+        { title: 'Planejamento para Clínicas e Empresas de Serviço', sub: 'Consultório, clínica, escritório ou sede própria — sem juros bancários.', cta: 'Falar com Consultor Especializado →', fields: [
+          { id: 'nome', label: 'Nome completo', type: 'text', req: true, ph: 'Como prefere ser chamado?' },
+          { id: 'whatsapp', label: 'WhatsApp de contato', type: 'tel', req: true, ph: '(00) 90000-0000' },
+          { id: 'bem_desejado', label: 'O que deseja adquirir?', type: 'text', req: true, ph: 'Ex: Aparelho de estética, reforma, imóvel comercial...' },
+          { id: 'email', label: 'E-mail corporativo (opcional)', type: 'email', req: false, ph: 'contato@empresa.com' }
+        ]}
+      ]
+    },
     'aeronaves': {
       tier: 3, theme: 'dark',
       proof: 'Crédito aeronáutico de R$ 200k a R$ 2M — sem banco',
@@ -491,7 +505,7 @@
       'terrenos-agricolas': 'propriedade rural', 'maquinas-agricolas': 'maquinário da próxima safra',
       'carta-contemplada': 'crédito aprovado', 'placas-solares': 'economia na conta de luz',
       'carro-luxo': 'veículo premium', 'empresario': 'expansão do seu negócio',
-      'medico': 'clínica dos seus sonhos', 'aeronaves': 'aeronave executiva',
+      'medico': 'clínica dos seus sonhos', 'servicos': 'negócio de serviços', 'aeronaves': 'aeronave executiva',
       'embarcacao': 'embarcação que você merece'
     };
     var titleText = formTitles[personaId] || 'conquista';
