@@ -186,27 +186,17 @@ export default function About() {
 
             {/* Direita */}
             <div className="lg:col-span-7 space-y-6 pt-0 lg:pt-10">
-              <h3
-                style={{
-                  fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                  fontWeight: 700,
-                  fontSize: "clamp(1.1rem, 1.8vw, 1.35rem)",
-                  color: "var(--ink)",
-                  lineHeight: 1.4,
-                }}
-              >
+              <h3 className="font-sans font-bold text-[clamp(1.1rem,1.8vw,1.35rem)] text-ink leading-normal">
                 Por que análise consultiva antes de comprar
               </h3>
 
-              <p style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
-                Antes de financiar ou comprar uma carta no impulso, vale entender as alternativas. Consórcio, carta contemplada e financiamento têm custos, prazos e riscos diferentes — e <strong style={{ color: "var(--ink)", fontWeight: 600 }}>a melhor opção depende do seu perfil e objetivo</strong>. Nossa consultoria avalia seu momento financeiro e apresenta um comparativo real. <span className="text-xs opacity-40">*Taxas médias de financiamento variam de 12% a 24% a.a. (fonte: Banco Central). Valores reais dependem de perfil e instituição.</span>
+              <p className="font-sans text-base text-ink-soft leading-relaxed">
+                Antes de financiar ou comprar uma carta no impulso, vale entender as alternativas. Consórcio, carta contemplada e financiamento têm custos, prazos e riscos diferentes — e <strong className="text-ink font-semibold">a melhor opção depende do seu perfil e objetivo</strong>. Nossa consultoria avalia seu momento financeiro e apresenta um comparativo real. <span className="text-xs opacity-40 font-sans block mt-2">*Taxas médias de financiamento variam de 12% a 24% a.a. (fonte: Banco Central). Valores reais dependem de perfil e instituição.</span>
               </p>
 
-              <p style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
+              <p className="font-sans text-base text-ink-soft leading-relaxed">
                 Quando a carta contemplada faz sentido, apresentamos opções disponíveis — sempre com verificação documental e jurídica pela nossa equipe. Quando não faz, dizemos isso também. Nosso papel é consultoria, não pressão de venda.
               </p>
-
-
             </div>
           </div>
         </div>
