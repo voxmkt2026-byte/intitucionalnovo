@@ -187,7 +187,7 @@ export default function Segments() {
             <span className="inline-block w-6 h-px" style={{ backgroundColor: "var(--green-vivid)" }} />
             <span
               style={{
-                fontFamily: "var(--font-jakarta)",
+                fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                 fontWeight: 600,
                 fontSize: "0.7rem",
                 letterSpacing: "0.1em",
@@ -251,7 +251,7 @@ export default function Segments() {
           onClick={() => setPopupIndex(activeIndex)}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 md:hidden flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 active:scale-95"
           style={{
-            fontFamily: "var(--font-jakarta)",
+            fontFamily: "var(--font-jakarta), system-ui, sans-serif",
             backgroundColor: "var(--green)",
             color: "white",
           }}
@@ -308,7 +308,7 @@ export default function Segments() {
               <div
                 className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"
                 style={{
-                  fontFamily: "var(--font-jakarta)",
+                  fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                   backgroundColor: "rgba(10,123,62,0.25)",
                   color: "var(--green-vivid)",
                   border: "1px solid rgba(21,184,92,0.3)",
@@ -320,7 +320,7 @@ export default function Segments() {
               <h3
                 className="absolute bottom-4 left-6"
                 style={{
-                  fontFamily: "var(--font-jakarta)",
+                  fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                   fontWeight: 800,
                   fontSize: "1.8rem",
                   color: "white",
@@ -332,7 +332,7 @@ export default function Segments() {
 
             {/* Content */}
             <div className="px-6 pb-6 pt-4 space-y-5" style={{ maxWidth: "400px", margin: "0 auto" }}>
-              <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.875rem", color: "rgba(255,255,255,0.55)", lineHeight: 1.7 }}>
+              <p style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif", fontSize: "0.875rem", color: "rgba(255,255,255,0.55)", lineHeight: 1.7 }}>
                 {activeSeg.description}
               </p>
 
@@ -341,14 +341,14 @@ export default function Segments() {
                 className="flex items-center justify-between py-4"
                 style={{ borderTop: "1px solid rgba(255,255,255,0.08)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}
               >
-                <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.75rem", color: "rgba(255,255,255,0.35)" }}>
+                <span style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif", fontSize: "0.75rem", color: "rgba(255,255,255,0.35)" }}>
                   Parcelas a partir de*:
                 </span>
-                <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.25rem", color: "var(--green-vivid)" }}>
+                <span style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif", fontWeight: 800, fontSize: "1.25rem", color: "var(--green-vivid)" }}>
                   {activeSeg.price}
                 </span>
               </div>
-              <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.6rem", color: "rgba(255,255,255,0.25)", lineHeight: 1.5, marginTop: "0.5rem" }}>
+              <p style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif", fontSize: "0.6rem", color: "rgba(255,255,255,0.25)", lineHeight: 1.5, marginTop: "0.5rem" }}>
                 *Valores ilustrativos. Parcelas reais dependem de crédito, prazo e administradora.
               </p>
 
@@ -359,7 +359,7 @@ export default function Segments() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 style={{
-                  fontFamily: "var(--font-jakarta)",
+                  fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                   backgroundColor: "var(--whatsapp)",
                   color: "white",
                 }}

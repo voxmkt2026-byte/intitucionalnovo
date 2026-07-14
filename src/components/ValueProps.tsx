@@ -82,7 +82,7 @@ export default function ValueProps() {
             </h2>
             <p
               style={{
-                fontFamily: "var(--font-jakarta)",
+                fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                 fontSize: "clamp(1rem, 1.4vw, 1.1rem)",
                 color: "var(--ink-soft)",
                 lineHeight: 1.75,
@@ -143,7 +143,7 @@ export default function ValueProps() {
                     <div className="flex items-center gap-3 mb-6">
                       <span
                         style={{
-                          fontFamily: "var(--font-jakarta)",
+                          fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                           fontWeight: 800,
                           fontSize: "0.75rem",
                           color: "var(--green-vivid)",
@@ -154,7 +154,7 @@ export default function ValueProps() {
                       </span>
                       <span
                         style={{
-                          fontFamily: "var(--font-jakarta)",
+                          fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                           fontWeight: 600,
                           fontSize: "0.68rem",
                           letterSpacing: "0.08em",
@@ -167,7 +167,7 @@ export default function ValueProps() {
                     </div>
                     <h3
                       style={{
-                        fontFamily: "var(--font-jakarta)",
+                        fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                         fontWeight: 800,
                         fontSize: "clamp(1.4rem, 2.3vw, 2.1rem)",
                         color: "var(--ink)",
@@ -181,7 +181,7 @@ export default function ValueProps() {
                   <p
                     className="relative z-10 mt-6 sm:mt-auto pr-6 pl-6 sm:px-0"
                     style={{
-                      fontFamily: "var(--font-jakarta)",
+                      fontFamily: "var(--font-jakarta), system-ui, sans-serif",
                       fontSize: "clamp(0.92rem, 1.2vw, 1.05rem)",
                       color: "var(--ink-soft)",
                       lineHeight: 1.7,

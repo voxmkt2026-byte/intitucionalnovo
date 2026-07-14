@@ -198,11 +198,11 @@ export default function About() {
                 Por que análise consultiva antes de comprar
               </h3>
 
-              <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
+              <p style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
                 Antes de financiar ou comprar uma carta no impulso, vale entender as alternativas. Consórcio, carta contemplada e financiamento têm custos, prazos e riscos diferentes — e <strong style={{ color: "var(--ink)", fontWeight: 600 }}>a melhor opção depende do seu perfil e objetivo</strong>. Nossa consultoria avalia seu momento financeiro e apresenta um comparativo real. <span className="text-xs opacity-40">*Taxas médias de financiamento variam de 12% a 24% a.a. (fonte: Banco Central). Valores reais dependem de perfil e instituição.</span>
               </p>
 
-              <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
+              <p style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
                 Quando a carta contemplada faz sentido, apresentamos opções disponíveis — sempre com verificação documental e jurídica pela nossa equipe. Quando não faz, dizemos isso também. Nosso papel é consultoria, não pressão de venda.
               </p>
 
