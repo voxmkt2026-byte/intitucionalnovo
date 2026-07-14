@@ -130,7 +130,7 @@ export default function Footer() {
             "Nunca solicitamos depósitos antecipados, pagamentos de taxas de liberação ou qualquer transferência sem formalização contratual prévia. Em caso de contato suspeito em nome da Titanium, interrompa imediatamente e acione nossos canais oficiais.",
             "Informações e privacidade: todas as condições são apresentadas antes de qualquer negociação. Dados tratados conforme LGPD (Lei nº 13.709/2018).",
           ].map((text, i) => (
-            <p key={i} style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.65rem", color: "rgba(255,255,255,0.3)", lineHeight: 1.6 }}>
+            <p key={i} style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.65rem", color: "#ffffff", lineHeight: 1.6 }}>
               {text}
             </p>
           ))}
