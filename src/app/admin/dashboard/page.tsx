@@ -98,7 +98,26 @@ export default async function DashboardPage() {
   const isAuth = await verifyAdminSession();
   if (!isAuth) redirect("/admin/login");
 
-  const stats = await fetchAdminStats();
+  let stats;
+  let dbError: string | null = null;
+  try {
+    stats = await fetchAdminStats();
+  } catch (err: any) {
+    dbError = err.message || "Falha ao carregar dados do Neon Postgres.";
+    stats = {
+      hoje: 0,
+      semana: 0,
+      mes: 0,
+      total: 0,
+      taxa_conversao: 0,
+      ticket_medio_vendido: 0,
+      por_status: {},
+      por_source: {},
+      por_lp: {},
+      por_segmento: {},
+      recentes: [],
+    };
+  }
 
   const statusPieData = Object.fromEntries(
     Object.entries(stats.por_status ?? {}).filter(([, v]) => v > 0)
@@ -109,6 +128,17 @@ export default async function DashboardPage() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8">
+      {dbError && (
+        <div className="mb-6 p-4 bg-red-900/30 border border-red-500/50 text-red-200 rounded-xl flex flex-col gap-1 text-sm">
+          <p className="font-semibold flex items-center gap-2 text-red-400">
+            ⚠️ Alerta de Degradação de Serviço
+          </p>
+          <p>
+            O painel está operando em modo degradado devido a uma falha na conexão com o banco de dados. Os números mostrados abaixo podem estar desatualizados ou zerados.
+          </p>
+          <p className="text-xs text-red-400/70 font-mono mt-1">Erro: {dbError}</p>
+        </div>
+      )}
 
       {/* Page header */}
       <div className="mb-8 flex items-center justify-between">

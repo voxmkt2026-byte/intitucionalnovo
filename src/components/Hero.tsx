@@ -41,6 +41,11 @@ export default function Hero() {
   const [current, setCurrent] = useState(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const [swipeDir, setSwipeDir] = useState<1 | -1>(1);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [isVisible, setIsVisible] = useState(true);
+  const [inViewport, setInViewport] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   const goTo = useCallback(
     (idx: number) => {
@@ -77,15 +82,45 @@ export default function Hero() {
     [next, prev]
   );
 
+  // Tab Visibility listener
   useEffect(() => {
+    const handleVisibility = () => setIsVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
+  // Prefers Reduced Motion listener
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", listener);
+    return () => mediaQuery.removeEventListener("change", listener);
+  }, []);
+
+  // Intersection Observer
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInViewport(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Carousel Interval
+  useEffect(() => {
+    if (!isVisible || !inViewport || prefersReducedMotion) return;
     const timer = setInterval(next, 7000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, isVisible, inViewport, prefersReducedMotion]);
 
   const slide = slides[current];
 
   return (
     <section
+      ref={containerRef}
       className="relative min-h-[90dvh] flex flex-col justify-between overflow-hidden"
       style={{ backgroundColor: "var(--bg-dark)" }}
       onTouchStart={onTouchStart}

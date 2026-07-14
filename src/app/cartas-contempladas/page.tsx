@@ -31,7 +31,7 @@ export default function CartasContempladasPage() {
           SEÇÃO 1 — PAINEL DE CONSULTA (ACIMA DA DOBRA)
           fundo branco, tabela + filtros no topo
       ═══════════════════════════════════════════════ */}
-      <section className="relative pt-10 pb-16 px-4">
+      <section className="relative pt-32 pb-16 px-4">
 
         {/* Glow verde suave no topo */}
         <div

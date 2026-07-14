@@ -102,6 +102,38 @@ const useAnimationLoop = (
   const offsetRef = useRef(0);
   const velocityRef = useRef(0);
 
+  const [isVisible, setIsVisible] = useState(true);
+  const [inViewport, setInViewport] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Visibility (tab active)
+  useEffect(() => {
+    const handleVisibility = () => setIsVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
+  // Reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", listener);
+    return () => mediaQuery.removeEventListener("change", listener);
+  }, []);
+
+  // Viewport Intersection Observer
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInViewport(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [trackRef]);
+
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -114,6 +146,16 @@ const useAnimationLoop = (
         ? `translate3d(0, ${-offsetRef.current}px, 0)`
         : `translate3d(${-offsetRef.current}px, 0, 0)`;
       track.style.transform = transformValue;
+    }
+
+    // Pause animation if hidden, offscreen or reduced motion active
+    if (!isVisible || !inViewport || prefersReducedMotion) {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      lastTimestampRef.current = null;
+      return;
     }
 
     const animate = (timestamp: number) => {
@@ -152,7 +194,7 @@ const useAnimationLoop = (
       }
       lastTimestampRef.current = null;
     };
-  }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, trackRef]);
+  }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, trackRef, isVisible, inViewport, prefersReducedMotion]);
 };
 
 interface LogoLoopProps {

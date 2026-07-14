@@ -76,6 +76,6 @@ export async function fetchAdminStats(): Promise<AdminStats> {
     };
   } catch (err) {
     console.error("[admin-stats] query error:", err);
-    return ZERO_STATS;
+    throw err;
   }
 }

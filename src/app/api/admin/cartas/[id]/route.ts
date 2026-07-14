@@ -1,19 +1,11 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
-import { jwtVerify } from "jose";
-import { cookies } from "next/headers";
+import { verifyAdminSession } from "@/lib/admin-auth";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
 async function verifyAdmin() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_token")?.value;
-  if (!token) throw new Error("Unauthorized");
-  
-  if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET is not configured in environment variables.");
-  }
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-  await jwtVerify(token, secret);
+  const isAuth = await verifyAdminSession();
+  if (!isAuth) throw new Error("Unauthorized");
 }
 
 async function getDb() {

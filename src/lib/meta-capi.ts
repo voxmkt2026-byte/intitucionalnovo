@@ -50,9 +50,14 @@ export async function sendMetaCAPIEvent(params: MetaEventParams): Promise<boolea
       : parseFloat(String(lead.credit || "").replace(/\D/g, "")) || 0;
   }
 
+  let ph = cleanedPhone;
+  if (ph && !ph.startsWith("55") && ph.length <= 11) {
+    ph = "55" + ph;
+  }
+
   const userData: Record<string, unknown> = {
     ...(lead.email && { em: [sha256(lead.email)] }),
-    ...(cleanedPhone && { ph: [sha256("55" + cleanedPhone)] }),
+    ...(ph && { ph: [sha256(ph)] }),
     ...(firstName && { fn: [sha256(firstName)] }),
     ...(lead.fbc && { fbc: lead.fbc }),
     ...(lead.fbp && { fbp: lead.fbp }),
@@ -66,7 +71,7 @@ export async function sendMetaCAPIEvent(params: MetaEventParams): Promise<boolea
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
         event_id: eventId,
-        event_source_url: lead.source_url || "https://titaniumconsultoria.com.br",
+        event_source_url: lead.source_url || "https://titaniumconsultorias.com.br",
         action_source: "website",
         user_data: userData,
         custom_data: {
@@ -77,7 +82,6 @@ export async function sendMetaCAPIEvent(params: MetaEventParams): Promise<boolea
         },
       },
     ],
-    access_token: META_ACCESS_TOKEN,
   };
 
   try {
@@ -85,7 +89,10 @@ export async function sendMetaCAPIEvent(params: MetaEventParams): Promise<boolea
       `https://graph.facebook.com/v23.0/${META_PIXEL_ID}/events`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${META_ACCESS_TOKEN}`
+        },
         body: JSON.stringify(payload),
         signal: AbortSignal.timeout(8000),
       }

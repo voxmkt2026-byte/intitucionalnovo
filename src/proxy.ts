@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { verifyAdminRequest } from "@/lib/admin-auth";
 
-/* ── Rate-limiter in-memory (Edge Runtime) ── */
 const rateMap = new Map<string, { count: number; resetAt: number }>();
 const WINDOW_MS = 60_000; // 1 minute
 const MAX_REQUESTS = 20;  // 20 requests per minute per IP
 
-function getClientIp(req: NextRequest): string {
+function getClientIp(req: Request): string {
   return (
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     req.headers.get("x-real-ip") ||
@@ -27,7 +26,6 @@ function isRateLimited(ip: string): boolean {
   return entry.count > MAX_REQUESTS;
 }
 
-/* ── Cleanup stale entries every 5 minutes ── */
 let lastCleanup = Date.now();
 function cleanup() {
   const now = Date.now();
@@ -38,7 +36,17 @@ function cleanup() {
   }
 }
 
-/* ── Security headers ── */
+const cspHeader = `
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  img-src 'self' data: https://www.facebook.com https://titaniumconsultorias.com.br;
+  connect-src 'self' https://googleads.googleapis.com https://www.google-analytics.com https://stats.g.doubleclick.net https://connect.facebook.net;
+  font-src 'self' https://fonts.gstatic.com;
+  frame-src 'none';
+  object-src 'none';
+`.replace(/\s{2,}/g, " ").trim();
+
 const securityHeaders = {
   "X-Frame-Options": "DENY",
   "X-Content-Type-Options": "nosniff",
@@ -46,16 +54,18 @@ const securityHeaders = {
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
   "X-XSS-Protection": "1; mode=block",
   "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+  "Content-Security-Policy": cspHeader,
 };
 
-export function middleware(req: NextRequest) {
+export async function proxy(request: Request) {
   cleanup();
 
-  const { pathname } = req.nextUrl;
+  const url = new URL(request.url);
+  const { pathname } = url;
 
-  /* ── Rate-limit API routes only ── */
+  // Rate-limit API routes only
   if (pathname.startsWith("/api/")) {
-    const ip = getClientIp(req);
+    const ip = getClientIp(request);
 
     if (isRateLimited(ip)) {
       return NextResponse.json(
@@ -71,23 +81,19 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  /* ── Proteção de rotas /admin/* ── */
-  // Edge Runtime não suporta jose/Node APIs completos.
-  // Verificamos presença do cookie aqui (barreira leve) +
-  // verificação criptográfica completa nos Server Components e API routes.
+  // Proteção de rotas /admin/*
   if (
     pathname.startsWith("/admin/") &&
     !pathname.startsWith("/admin/login")
   ) {
-    const adminToken = req.cookies.get("admin_token")?.value;
-    if (!adminToken) {
-      const loginUrl = new URL("/admin/login", req.url);
+    const isAuth = await verifyAdminRequest(request);
+    if (!isAuth) {
+      const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("from", pathname);
       return NextResponse.redirect(loginUrl);
     }
   }
 
-  /* ── Apply security headers to all responses ── */
   const response = NextResponse.next();
 
   for (const [key, value] of Object.entries(securityHeaders)) {
@@ -99,13 +105,6 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico
-     * - Static assets (images, fonts, etc.)
-     */
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|woff|woff2|ttf|eot)$).*)",
   ],
 };

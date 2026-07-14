@@ -14,8 +14,8 @@ const navLinks = [
 ];
 
 const serviceLinks = [
-  { label: "Cartas de Imóveis", href: "https://titaniumconsultoria.com.br/cartas/cartas.php?segmento=imovel" },
-  { label: "Cartas de Veículos", href: "https://titaniumconsultoria.com.br/cartas/cartas.php?segmento=veiculo" },
+  { label: "Cartas de Imóveis", href: "/cartas-contempladas?segmento=imovel" },
+  { label: "Cartas de Veículos", href: "/cartas-contempladas?segmento=veiculo" },
   { label: "Caminhões e Frotas", href: "/#segmentos" },
   { label: "Máquinas Agrícolas", href: "/#segmentos" },
   { label: "Simular crédito", href: "/#simulador" },

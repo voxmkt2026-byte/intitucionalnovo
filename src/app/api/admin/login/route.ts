@@ -1,24 +1,13 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcryptjs";
-import { SignJWT } from "jose";
+import { signAdminToken } from "@/lib/admin-auth";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
 
-
-async function getDb() {
+function getDb() {
   if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
-  const sql = neon(DATABASE_URL);
-  await sql`
-    CREATE TABLE IF NOT EXISTS admin_users (
-      id         SERIAL PRIMARY KEY,
-      email      TEXT UNIQUE NOT NULL,
-      senha_hash TEXT NOT NULL,
-      nome       TEXT,
-      criado_em  TIMESTAMPTZ DEFAULT NOW()
-    )
-  `;
-  return sql;
+  return neon(DATABASE_URL);
 }
 
 export async function POST(request: Request) {
@@ -32,7 +21,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const sql = await getDb();
+    const sql = getDb();
     const users = await sql`
       SELECT id, email, nome, senha_hash
       FROM admin_users
@@ -56,21 +45,12 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!process.env.JWT_SECRET) {
-      throw new Error("JWT_SECRET is not configured in environment variables.");
-    }
-    const jwtSecret = new TextEncoder().encode(process.env.JWT_SECRET);
-
-    // Generate JWT — 8h expiry
-    const token = await new SignJWT({
-      sub:   String(user.id),
+    // Generate JWT via unified helper
+    const token = await signAdminToken({
+      id: String(user.id),
       email: user.email,
-      nome:  user.nome || "Admin",
-    })
-      .setProtectedHeader({ alg: "HS256" })
-      .setExpirationTime("8h")
-      .setIssuedAt()
-      .sign(jwtSecret);
+      nome: user.nome || "Admin",
+    });
 
     const response = NextResponse.json(
       { ok: true, nome: user.nome || "Admin" },
@@ -80,7 +60,7 @@ export async function POST(request: Request) {
     response.cookies.set("admin_token", token, {
       httpOnly: true,
       secure:   process.env.NODE_ENV === "production",
-      sameSite: "strict", // CSRF protection: strict > lax para painel admin
+      sameSite: "strict", // CSRF protection: strict
       maxAge:   8 * 60 * 60, // 8h
       path:     "/",
     });

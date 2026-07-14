@@ -83,7 +83,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         AND metrics.cost_micros > 0
     `;
 
-    const adsRes = await fetch(`https://googleads.googleapis.com/v17/customers/${CUSTOMER_ID}/googleAds:search`, {
+    const adsRes = await fetch(`https://googleads.googleapis.com/v21/customers/${CUSTOMER_ID}/googleAds:search`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${access_token}`,

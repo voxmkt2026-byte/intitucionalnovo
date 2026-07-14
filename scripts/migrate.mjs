@@ -52,6 +52,7 @@ async function runMigration() {
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS revenue NUMERIC`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS utm_term TEXT`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS client_ip TEXT`;
 
     // 3. Criar Tabela lead_clicks
     console.log("Criando tabela 'lead_clicks'...");
@@ -110,8 +111,34 @@ async function runMigration() {
         administradora TEXT NOT NULL,
         proximo_vencimento DATE,
         disponivel BOOLEAN DEFAULT TRUE,
-        criado_em TIMESTAMPTZ DEFAULT NOW()
+        criado_em TIMESTAMPTZ DEFAULT NOW(),
+        atualizado_em TIMESTAMPTZ DEFAULT NOW()
       )
+    `;
+
+    console.log("Garantindo colunas na tabela 'cartas_contempladas'...");
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS atualizado_em TIMESTAMPTZ DEFAULT NOW()`;
+
+    console.log("Garantindo constraints na tabela 'cartas_contempladas'...");
+    await sql`
+      ALTER TABLE cartas_contempladas DROP CONSTRAINT IF EXISTS chk_entrada_credito;
+      ALTER TABLE cartas_contempladas ADD CONSTRAINT chk_entrada_credito CHECK (entrada < valor_credito);
+      
+      ALTER TABLE cartas_contempladas DROP CONSTRAINT IF EXISTS chk_valor_credito_positive;
+      ALTER TABLE cartas_contempladas ADD CONSTRAINT chk_valor_credito_positive CHECK (valor_credito > 0);
+      
+      ALTER TABLE cartas_contempladas DROP CONSTRAINT IF EXISTS chk_valor_parcela_positive;
+      ALTER TABLE cartas_contempladas ADD CONSTRAINT chk_valor_parcela_positive CHECK (valor_parcela > 0);
+      
+      ALTER TABLE cartas_contempladas DROP CONSTRAINT IF EXISTS chk_parcelas_positive;
+      ALTER TABLE cartas_contempladas ADD CONSTRAINT chk_parcelas_positive CHECK (parcelas > 0);
+    `;
+
+    console.log("Limpando registros inválidos da tabela 'cartas_contempladas'...");
+    await sql`
+      DELETE FROM cartas_contempladas 
+      WHERE valor_credito < 1000 
+         OR (proximo_vencimento IS NOT NULL AND proximo_vencimento > '2100-01-01')
     `;
 
     // 7. Criar índices de performance

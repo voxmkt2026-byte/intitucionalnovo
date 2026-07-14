@@ -6,9 +6,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/cartas/login.php", "/api/"],
+        disallow: ["/cartas/login.php", "/api/", "/admin/"],
       },
     ],
-    sitemap: "https://titaniumconsultoria.com.br/sitemap.xml",
+    sitemap: "https://titaniumconsultorias.com.br/sitemap.xml",
   };
 }

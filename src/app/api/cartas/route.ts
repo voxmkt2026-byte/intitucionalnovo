@@ -26,78 +26,58 @@ export async function GET(request: Request) {
 
     const sql = await getDb();
 
-    // Busca cartas com filtros dinâmicos via SQL parametrizado
-    let rows;
-    let countRows;
+    // 1. Construir query dinâmica com parâmetros posicionais seguros
+    const params: any[] = [];
+    let queryFilters = "WHERE disponivel = true";
 
-    // Neon template literals não suportam ORDER BY / LIMIT dinâmicos,
-    // então usamos sql.unsafe() apenas para as partes não-user-controlled (sort/dir)
-    if (segmento && administradora && valorMin && valorMax) {
-      rows = await sql`
-        SELECT id, segmento, administradora, valor_credito, entrada, parcelas, valor_parcela, proximo_vencimento, disponivel
-        FROM cartas_contempladas
-        WHERE disponivel = true AND segmento = ${segmento} AND administradora = ${administradora}
-          AND valor_credito >= ${valorMin} AND valor_credito <= ${valorMax}
-        LIMIT ${limit} OFFSET ${offset}`;
-      countRows = await sql`
-        SELECT COUNT(*)::int as total FROM cartas_contempladas
-        WHERE disponivel = true AND segmento = ${segmento} AND administradora = ${administradora}
-          AND valor_credito >= ${valorMin} AND valor_credito <= ${valorMax}`;
-    } else if (segmento && administradora) {
-      rows = await sql`
-        SELECT id, segmento, administradora, valor_credito, entrada, parcelas, valor_parcela, proximo_vencimento, disponivel
-        FROM cartas_contempladas
-        WHERE disponivel = true AND segmento = ${segmento} AND administradora = ${administradora}
-        LIMIT ${limit} OFFSET ${offset}`;
-      countRows = await sql`
-        SELECT COUNT(*)::int as total FROM cartas_contempladas
-        WHERE disponivel = true AND segmento = ${segmento} AND administradora = ${administradora}`;
-    } else if (segmento) {
-      rows = await sql`
-        SELECT id, segmento, administradora, valor_credito, entrada, parcelas, valor_parcela, proximo_vencimento, disponivel
-        FROM cartas_contempladas
-        WHERE disponivel = true AND segmento = ${segmento}
-        LIMIT ${limit} OFFSET ${offset}`;
-      countRows = await sql`
-        SELECT COUNT(*)::int as total FROM cartas_contempladas WHERE disponivel = true AND segmento = ${segmento}`;
-    } else if (administradora) {
-      rows = await sql`
-        SELECT id, segmento, administradora, valor_credito, entrada, parcelas, valor_parcela, proximo_vencimento, disponivel
-        FROM cartas_contempladas
-        WHERE disponivel = true AND administradora = ${administradora}
-        LIMIT ${limit} OFFSET ${offset}`;
-      countRows = await sql`
-        SELECT COUNT(*)::int as total FROM cartas_contempladas WHERE disponivel = true AND administradora = ${administradora}`;
-    } else {
-      rows = await sql`
-        SELECT id, segmento, administradora, valor_credito, entrada, parcelas, valor_parcela, proximo_vencimento, disponivel
-        FROM cartas_contempladas
-        WHERE disponivel = true
-        LIMIT ${limit} OFFSET ${offset}`;
-      countRows = await sql`
-        SELECT COUNT(*)::int as total FROM cartas_contempladas WHERE disponivel = true`;
+    if (segmento) {
+      params.push(segmento);
+      queryFilters += ` AND segmento = $${params.length}`;
     }
 
-    // Sort client-side (safe, já paginado no banco)
-    const sortedRows = [...rows].sort((a, b) => {
-      const av = Number(a[safeSort]) || 0;
-      const bv = Number(b[safeSort]) || 0;
-      if (typeof a[safeSort] === "string") {
-        return dirParam === "ASC"
-          ? String(a[safeSort]).localeCompare(String(b[safeSort]))
-          : String(b[safeSort]).localeCompare(String(a[safeSort]));
-      }
-      return dirParam === "ASC" ? av - bv : bv - av;
-    });
+    if (administradora) {
+      params.push(administradora);
+      queryFilters += ` AND administradora = $${params.length}`;
+    }
 
+    if (valorMin > 0) {
+      params.push(valorMin);
+      queryFilters += ` AND valor_credito >= $${params.length}`;
+    }
+
+    if (valorMax > 0) {
+      params.push(valorMax);
+      queryFilters += ` AND valor_credito <= $${params.length}`;
+    }
+
+    // 2. Query de contagem
+    const countQuery = `SELECT COUNT(*)::int as total FROM cartas_contempladas ${queryFilters}`;
+    const countRows = await runQuery(sql, countQuery, params);
     const total = Number(countRows[0]?.total ?? 0);
+
+    // 3. Adicionar ordenação whitelisted (100% segura contra SQLi)
+    // E paginação (adicionando limit/offset como parâmetros)
+    params.push(limit);
+    const limitPlaceholder = `$${params.length}`;
+    params.push(offset);
+    const offsetPlaceholder = `$${params.length}`;
+
+    const selectQuery = `
+      SELECT id, segmento, administradora, valor_credito, entrada, parcelas, valor_parcela, proximo_vencimento, disponivel
+      FROM cartas_contempladas
+      ${queryFilters}
+      ORDER BY ${safeSort} ${dirParam}
+      LIMIT ${limitPlaceholder} OFFSET ${offsetPlaceholder}
+    `;
+
+    const rows = await runQuery(sql, selectQuery, params);
 
     // Opções de filtro disponíveis
     const segmentos = await sql`SELECT DISTINCT segmento FROM cartas_contempladas WHERE disponivel = true ORDER BY segmento`;
     const admins    = await sql`SELECT DISTINCT administradora FROM cartas_contempladas WHERE disponivel = true ORDER BY administradora`;
 
     return NextResponse.json({
-      data: sortedRows,
+      data: rows,
       meta: { total, page, limit, pages: Math.ceil(total / limit) },
       filters: {
         segmentos:       segmentos.map((r) => r.segmento),
@@ -108,4 +88,17 @@ export async function GET(request: Request) {
     console.error("[/api/cartas] erro:", err);
     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
+}
+
+// Auxiliar para executar queries dinâmicas de forma segura com template literals do Neon
+async function runQuery(sql: any, queryText: string, params: any[]) {
+  if (params.length === 0) {
+    const arr = [queryText] as any;
+    arr.raw = [queryText];
+    return await sql(arr as TemplateStringsArray);
+  }
+  const parts = queryText.split(/\$\d+/);
+  const arr = parts as any;
+  arr.raw = parts;
+  return await sql(arr as TemplateStringsArray, ...params);
 }

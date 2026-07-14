@@ -4,11 +4,13 @@ import crypto from "crypto";
 import { neon } from "@neondatabase/serverless";
 import { sendMetaCAPIEvent } from "@/lib/meta-capi";
 
+import { after } from "next/server";
+
 const leadSchema = z.object({
-  name: z.string().max(100).default(""),
+  name: z.string().min(2, "Nome é obrigatório").max(100),
   email: z.string().email().or(z.literal("")).default(""),
-  phone: z.string().max(20).default(""),
-  segment: z.string().max(50).default(""),
+  phone: z.string().min(8, "Telefone inválido").max(20),
+  segment: z.string().min(2, "Segmento é obrigatório").max(50),
   credit: z.union([z.string(), z.number()]).default(""),
   months: z.number().default(0),
   plan: z.string().max(50).default(""),
@@ -25,7 +27,7 @@ const leadSchema = z.object({
   lp: z.string().max(100).default(""),
   source_url: z.string().max(500).default(""),
   timestamp: z.string().max(50).default(""),
-});
+}).strict();
 
 type LeadData = z.infer<typeof leadSchema>;
 
@@ -44,7 +46,7 @@ const KOMMO_PIPELINE_ID = process.env.KOMMO_PIPELINE_ID ? parseInt(process.env.K
 
 // --- Neon Postgres (PRIMARY STORAGE) ---
 
-async function sendToNeon(body: LeadData): Promise<boolean> {
+async function sendToNeon(body: LeadData, clientIp: string): Promise<boolean> {
   if (!DATABASE_URL) {
     console.warn("[Neon] DATABASE_URL não configurada — pulando Neon.");
     return false;
@@ -53,21 +55,20 @@ async function sendToNeon(body: LeadData): Promise<boolean> {
   try {
     const sql = neon(DATABASE_URL);
 
-
-
     await sql`
       INSERT INTO leads (
         name, email, phone, segment, credit, months, plan,
         origin, ref, fbc, fbp, gclid,
         utm_source, utm_medium, utm_campaign, utm_content, utm_term,
-        lp, source_url
+        lp, source_url, client_ip
       ) VALUES (
         ${body.name}, ${body.email}, ${body.phone},
         ${body.segment}, ${String(body.credit)}, ${body.months},
         ${body.plan}, ${body.origin}, ${body.ref},
         ${body.fbc}, ${body.fbp}, ${body.gclid},
         ${body.utm_source}, ${body.utm_medium}, ${body.utm_campaign},
-        ${body.utm_content}, ${body.utm_term || null}, ${body.lp}, ${body.source_url}
+        ${body.utm_content}, ${body.utm_term || null}, ${body.lp}, ${body.source_url},
+        ${clientIp}
       )
     `;
 
@@ -308,6 +309,15 @@ async function sendToKommo(body: LeadData): Promise<boolean> {
 
 export async function POST(request: Request) {
   try {
+    // 1. Limitar tamanho do body para 5KB
+    const contentLength = parseInt(request.headers.get("content-length") || "0", 10);
+    if (contentLength > 5120) {
+      return NextResponse.json(
+        { status: "error", message: "Payload too large" },
+        { status: 413 }
+      );
+    }
+
     // Fix #2: extrair IP e User Agent reais para o CAPI
     const clientIp =
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -315,44 +325,68 @@ export async function POST(request: Request) {
       "";
     const userAgent = request.headers.get("user-agent") || "";
 
-    const body = leadSchema.parse(await request.json());
+    const jsonBody = await request.json();
+    const body = leadSchema.parse(jsonBody);
 
-    // Dispara tudo em paralelo
-    const [neonResult, sheetsResult, , , kommoResult] = await Promise.allSettled([
-      sendToNeon(body),
-      sendToSheets(body),
-      sendClickAttribution(body).catch(() => {}),
-      sendMetaCAPIEvent({ eventName: "Lead", lead: body, clientIp, userAgent }).catch(() => {}),
-      sendToKommo(body),
-    ]);
+    const sql = DATABASE_URL ? neon(DATABASE_URL) : null;
 
-    // Salvo = Neon OU Sheets (redundância: Sheets é backup enquanto DATABASE_URL não está configurado)
-    const neonOk   = neonResult.status   === "fulfilled" && neonResult.value   === true;
-    const sheetsOk = sheetsResult.status === "fulfilled" && sheetsResult.value  === true;
-    const saved    = neonOk || sheetsOk;
+    // 2. Verificação de idempotência por ref no banco
+    if (sql && body.ref) {
+      const existing = await sql`SELECT id FROM leads WHERE ref = ${body.ref} LIMIT 1`;
+      if (existing.length > 0) {
+        return NextResponse.json({
+          status: "ok",
+          event_id: body.ref,
+          message: "Duplicate lead, ignored"
+        });
+      }
+    }
 
-    const kommoOk    = kommoResult.status === "fulfilled" && kommoResult.value === true;
-    const kommoError = kommoResult.status === "rejected"
-      ? String((kommoResult as PromiseRejectedResult).reason)
-      : null;
+    // 3. Rate limiting distribuído no Neon DB (limite de 5 leads por minuto por IP)
+    if (sql && clientIp) {
+      const recentLeads = await sql`
+        SELECT COUNT(*)::int as count FROM leads
+        WHERE client_ip = ${clientIp} AND created_at > NOW() - INTERVAL '1 minute'
+      `;
+      if (recentLeads[0] && recentLeads[0].count >= 5) {
+        return NextResponse.json(
+          { status: "error", message: "Muitas submissões de leads. Tente novamente mais tarde." },
+          { status: 429 }
+        );
+      }
+    }
 
-    console.log(`[API] neon=${neonOk} sheets=${sheetsOk} kommo=${kommoOk}`);
+    // 4. Salvar no Neon (Síncrono)
+    const neonOk = await sendToNeon(body, clientIp);
+    if (!neonOk) {
+      return NextResponse.json(
+        { status: "error", message: "Falha ao salvar lead" },
+        { status: 500 }
+      );
+    }
 
-    return NextResponse.json(
-      {
-        status: saved ? "ok" : "error",
-        event_id: body.ref,
-        storage: neonOk ? "neon" : sheetsOk ? "sheets" : "none",
-        neon: neonOk ? "✅" : "❌",
-        sheets: sheetsOk ? "✅" : "❌",
-        kommo: kommoOk ? "✅ ok" : (kommoError ?? "❌ failed"),
-      },
-      { status: saved ? 200 : 500 }
-    );
+    // 5. Integrações em background (Assíncrono via after)
+    after(async () => {
+      try {
+        await Promise.allSettled([
+          sendToSheets(body),
+          sendClickAttribution(body).catch(() => {}),
+          sendMetaCAPIEvent({ eventName: "Lead", lead: body, clientIp, userAgent }).catch(() => {}),
+          sendToKommo(body),
+        ]);
+      } catch (err) {
+        console.error("[leads/after] Background integrations failure:", err);
+      }
+    });
+
+    return NextResponse.json({
+      status: "ok",
+      event_id: body.ref,
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { status: "error", message: "Invalid input data" },
+        { status: "error", message: "Invalid input data", details: error.issues },
         { status: 400 }
       );
     }

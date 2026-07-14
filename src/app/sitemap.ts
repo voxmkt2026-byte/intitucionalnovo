@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://titaniumconsultoria.com.br";
+  const baseUrl = "https://titaniumconsultorias.com.br";
   const lastModified = new Date("2026-06-17");
 
   // Persona landing pages (static HTML in /public/)
@@ -37,13 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/cartas/cartas.php?segmento=imovel`,
-      lastModified,
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/cartas/cartas.php?segmento=veiculo`,
+      url: `${baseUrl}/cartas-contempladas`,
       lastModified,
       changeFrequency: "daily",
       priority: 0.9,

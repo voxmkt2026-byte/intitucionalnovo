@@ -83,8 +83,8 @@ export async function sendGoogleOfflineConversion(params: {
 
     const { access_token } = await tokenRes.json();
 
-    // 3. Upload da conversão via Google Ads API v17
-    const url = `https://googleads.googleapis.com/v17/customers/${CUSTOMER_ID}/clickConversions:upload`;
+    // 3. Upload da conversão via Google Ads API v21
+    const url = `https://googleads.googleapis.com/v21/customers/${CUSTOMER_ID}/clickConversions:upload`;
     const payload = {
       conversions: [
         {

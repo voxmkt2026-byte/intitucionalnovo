@@ -13,7 +13,7 @@ export default function ParcelSimulator() {
   const [credit, setCredit] = useState<string>("500000");
   const [months, setMonths] = useState<string>("180");
   const [selectedPlan, setSelectedPlan] = useState<"titanium" | "conforto">("titanium");
-  const [consent, setConsent] = useState(true);
+  const [consent, setConsent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [contactError, setContactError] = useState<string | null>(null);
   const [hasCalculated, setHasCalculated] = useState<boolean>(true);

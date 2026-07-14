@@ -15,9 +15,14 @@ if (!DATABASE_URL) {
   process.exit(1);
 }
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@titaniumconsultoria.com.br";
-const ADMIN_SENHA = process.env.ADMIN_SENHA || "Titanium@2024";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_SENHA = process.env.ADMIN_SENHA;
 const ADMIN_NOME  = process.env.ADMIN_NOME  || "Consultor Titanium";
+
+if (!ADMIN_EMAIL || !ADMIN_SENHA) {
+  console.error("❌  ADMIN_EMAIL e ADMIN_SENHA são obrigatórios e devem estar configurados no .env.local!");
+  process.exit(1);
+}
 
 async function seed() {
   const sql = neon(DATABASE_URL!);
@@ -48,7 +53,7 @@ async function seed() {
 
   console.log("✅  Admin criado com sucesso!");
   console.log(`   Email: ${ADMIN_EMAIL}`);
-  console.log(`   Senha: ${ADMIN_SENHA}`);
+  console.log("   Senha: [CONFIGURADA NO AMBIENTE]");
   console.log("\n⚠️  Altere a senha após o primeiro acesso!");
 }
 

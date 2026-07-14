@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import CookieConsent from "@/components/CookieConsent";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -31,13 +32,13 @@ export const metadata: Metadata = {
     title: "Titanium Consultoria | Crédito sem banco para quem está construindo",
     description:
       "Do agro ao imóvel. Da frota à clínica. Crédito via consórcio contemplado, sem financiamento bancário tradicional. Segurança jurídica, regulamentado pelo Banco Central.",
-    url: "https://titaniumconsultoria.com.br",
+    url: "https://titaniumconsultorias.com.br",
     siteName: "Titanium Consultoria",
     locale: "pt_BR",
     type: "website",
     images: [
       {
-        url: "https://titaniumconsultoria.com.br/og-image.png",
+        url: "https://titaniumconsultorias.com.br/og-image.png",
         width: 1200,
         height: 630,
         alt: "Titanium Consultoria — Crédito inteligente para construtores de patrimônio",
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     title: "Titanium Consultoria | Crédito sem banco",
     description:
       "Acesse crédito com taxas menores que o financiamento tradicional",
-    images: ["https://titaniumconsultoria.com.br/cartas/titanium-logo.png"],
+    images: ["https://titaniumconsultorias.com.br/cartas/titanium-logo.png"],
   },
   robots: {
     index: true,
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://titaniumconsultoria.com.br",
+    canonical: "https://titaniumconsultorias.com.br",
   },
 };
 
@@ -77,10 +78,10 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "@id": "https://titaniumconsultoria.com.br/#organization",
+    "@id": "https://titaniumconsultorias.com.br/#organization",
     "name": "Titanium Consultoria",
-    "url": "https://titaniumconsultoria.com.br",
-    "logo": "https://titaniumconsultoria.com.br/cartas/titanium-logo.png",
+    "url": "https://titaniumconsultorias.com.br",
+    "logo": "https://titaniumconsultorias.com.br/cartas/titanium-logo.png",
     "description": "Consultoria financeira especializada em cartas contempladas para produtores rurais, empresários e profissionais liberais.",
     "contactPoint": {
       "@type": "ContactPoint",
@@ -97,9 +98,9 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": "https://titaniumconsultoria.com.br/#service-imovel",
+    "@id": "https://titaniumconsultorias.com.br/#service-imovel",
     "name": "Carta Contemplada de Imóveis",
-    "provider": { "@id": "https://titaniumconsultoria.com.br/#organization" },
+    "provider": { "@id": "https://titaniumconsultorias.com.br/#organization" },
     "description": "Intermediação de cartas contempladas para aquisição de imóveis, sem financiamento bancário tradicional.",
     "areaServed": "BR",
     "serviceType": "FinancialService"
@@ -107,9 +108,9 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": "https://titaniumconsultoria.com.br/#service-veiculo",
+    "@id": "https://titaniumconsultorias.com.br/#service-veiculo",
     "name": "Carta Contemplada de Veículos e Frota",
-    "provider": { "@id": "https://titaniumconsultoria.com.br/#organization" },
+    "provider": { "@id": "https://titaniumconsultorias.com.br/#organization" },
     "description": "Crédito aprovado para aquisição de veículos, caminhões e frota sem financiamento bancário.",
     "areaServed": "BR",
     "serviceType": "FinancialService"
@@ -129,8 +130,21 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-
-
+        {/* Google Consent Mode Default Setup */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied'
+              });
+            `,
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col" style={{ background: "var(--bg)", color: "var(--ink)" }}>
         <a
@@ -167,6 +181,7 @@ export default function RootLayout({
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('consent', 'revoke'); // revoke by default
             fbq('init', '1667309107949808');
             fbq('track', 'PageView');
           `}
@@ -181,6 +196,9 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
+        
+        {/* Banner de consentimento da LGPD */}
+        <CookieConsent />
       </body>
     </html>
   );
