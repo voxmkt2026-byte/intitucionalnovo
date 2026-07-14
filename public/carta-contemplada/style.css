@@ -530,3 +530,14 @@ img.quote-wall__avatar{width:52px;height:52px;border-radius:50%;object-fit:cover
   .sticky__btn{min-height:44px;padding:.85rem 1.4rem}
   .foot__link{min-height:44px;display:inline-flex;align-items:center}
 }
+
+.disclaimer {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+  font-size: 0.78rem;
+  color: var(--ink-mute);
+  line-height: 1.6;
+  margin-top: 3rem;
+  text-align: center;
+}
