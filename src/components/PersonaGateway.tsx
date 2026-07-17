@@ -11,7 +11,7 @@ const personas = [
     headline: "Imóveis",
     subtitle: "Casa ou apartamento sem juros bancários",
     image: "/img/ref-imovel.png",
-    href: "/carta-comum/",
+    href: "/imoveis/",
     badge: null,
   },
   {
@@ -43,7 +43,7 @@ const personas = [
     headline: "Motos",
     subtitle: "Trabalho ou lazer — sem juros de financiamento",
     image: "/img/ref-moto.png",
-    href: "/carta-comum/",
+    href: "/motos/",
     badge: null,
   },
   {

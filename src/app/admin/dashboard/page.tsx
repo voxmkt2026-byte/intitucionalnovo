@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 function IntegrationStatus() {
   const integrations = [
     { key: "neon",   label: "Neon DB",    ok: !!process.env.DATABASE_URL },
-    { key: "capi",   label: "Meta CAPI",  ok: !!(process.env.META_ACCESS_TOKEN && process.env.META_PIXEL_ID) },
+    { key: "capi",   label: "Meta CAPI",  ok: !!(process.env.META_CAPI_ACCESS_TOKEN && process.env.META_PIXEL_ID) },
     { key: "kommo",  label: "Kommo CRM",  ok: !!process.env.KOMMO_ACCESS_TOKEN },
     { key: "sheets", label: "Sheets",     ok: !!process.env.SHEETS_WEBHOOK_URL },
     { key: "n8n",    label: "N8n",        ok: !!process.env.N8N_KOMMO_WEBHOOK_URL },

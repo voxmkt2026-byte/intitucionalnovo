@@ -56,15 +56,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const tokenConfigs = [
-    { token: process.env.META_INSIGHTS_TOKEN || process.env.META_ACCESS_TOKEN, source: "primary" },
-    { token: process.env.META_INSIGHTS_TOKEN_2 || process.env.META_ACCESS_TOKEN_2, source: "secondary" },
-  ].filter((config): config is { token: string; source: string } => Boolean(config.token));
-
-  if (!tokenConfigs.length) {
-    return NextResponse.json({ error: "Meta Insights tokens not configured" }, { status: 503 });
-  }
-
   const { searchParams } = new URL(request.url);
   const period = searchParams.get("period") ?? "30d";
   const { since, until } = periodToDates(period);
@@ -103,6 +94,26 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return [];
     }
   };
+
+  const tokenConfigs = [
+    { token: process.env.META_MARKETING_ACCESS_TOKEN, source: "primary" },
+    { token: process.env.META_MARKETING_ACCESS_TOKEN_2, source: "secondary" },
+  ].filter((config): config is { token: string; source: string } => Boolean(config.token));
+
+  if (!tokenConfigs.length) {
+    return NextResponse.json({
+      campaigns: await getNeonCampaigns(),
+      total: totals([]),
+      period,
+      since,
+      until,
+      accounts_found: 0,
+      accounts: [],
+      meta_available: false,
+      meta_error: "META_MARKETING_ACCESS_TOKEN_NOT_CONFIGURED",
+      warnings: ["META_MARKETING_ACCESS_TOKEN não configurado"],
+    });
+  }
 
   const accountResults = await Promise.allSettled(
     tokenConfigs.map(async ({ token, source }) => {

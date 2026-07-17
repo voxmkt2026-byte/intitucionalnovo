@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const personas = [
     "uber", "caminhao", "carta-contemplada", "carro-luxo", "empresario",
     "servicos", "maquinas-agricolas", "aeronaves", "placas-solares",
-    "embarcacao", "terrenos-construcao", "terrenos-agricolas", "corretor", "carta-comum",
+    "embarcacao", "terrenos-construcao", "terrenos-agricolas", "corretor", "carta-comum", "imoveis", "motos",
   ];
 
   return [

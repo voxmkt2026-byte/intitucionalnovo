@@ -1,8 +1,8 @@
 import crypto from "crypto";
 
 const META_DESTINATIONS = [
-  { pixelId: process.env.META_PIXEL_ID, token: process.env.META_ACCESS_TOKEN, label: "primary" },
-  { pixelId: process.env.META_PIXEL_ID_2, token: process.env.META_ACCESS_TOKEN_2, label: "secondary" },
+  { pixelId: process.env.META_PIXEL_ID, token: process.env.META_CAPI_ACCESS_TOKEN, label: "primary" },
+  { pixelId: process.env.META_PIXEL_ID_2, token: process.env.META_CAPI_ACCESS_TOKEN_2, label: "secondary" },
 ].filter((destination): destination is { pixelId: string; token: string; label: string } =>
   Boolean(destination.pixelId && destination.token)
 );

@@ -272,11 +272,10 @@ export default function CampaignTable() {
                 Dados Meta Ads incompletos — leads internos exibidos
               </div>
               <div style={{ fontSize: '11px', color: 'var(--admin-text-mute)', lineHeight: 1.5 }}>
-                O <code style={{ background: 'var(--admin-border)', padding: '1px 4px', borderRadius: '3px' }}>META_ACCESS_TOKEN</code> atual é um token CAPI e <strong>não tem permissão ads_read</strong>.
-                Para ver spend, CPL e CTR do Meta, gere um token de Marketing API em&nbsp;
+                Falha ao consultar dados da Meta Marketing API. Verifique se o <code style={{ background: 'var(--admin-border)', padding: '1px 4px', borderRadius: '3px' }}>META_MARKETING_ACCESS_TOKEN</code> possui a permissão <strong>ads_read</strong> em&nbsp;
                 <a href="https://business.facebook.com" target="_blank" rel="noreferrer"
                    style={{ color: '#0A7B3E', textDecoration: 'underline' }}>business.facebook.com</a>
-                &nbsp;→ Usuários do sistema → Gerar token → marcar <em>ads_read</em> e <em>ads_management</em>.
+                &nbsp;→ Usuários do sistema.
               </div>
             </div>
           </div>

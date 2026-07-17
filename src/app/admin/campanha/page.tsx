@@ -13,8 +13,8 @@ export default async function CampanhaPage() {
   if (!isAuth) redirect("/admin/login");
 
   const hasMetaToken = !!(
-    process.env.META_ACCESS_TOKEN &&
-    process.env.META_ACCESS_TOKEN.length > 10
+    process.env.META_MARKETING_ACCESS_TOKEN &&
+    process.env.META_MARKETING_ACCESS_TOKEN.length > 10
   );
 
   return (
@@ -49,7 +49,7 @@ export default async function CampanhaPage() {
             className="text-xs font-medium"
             style={{ color: hasMetaToken ? "var(--admin-brand)" : "#ef4444" }}
           >
-            {hasMetaToken ? "Meta API conectada" : "META_ACCESS_TOKEN ausente"}
+            {hasMetaToken ? "Meta API conectada" : "META_MARKETING_ACCESS_TOKEN ausente"}
           </span>
         </div>
       </div>
@@ -72,7 +72,7 @@ export default async function CampanhaPage() {
             <circle cx="12" cy="18" r=".5" fill="currentColor"/>
           </svg>
           <h2 style={{ fontSize: "18px", fontWeight: 700, color: "var(--admin-text)", marginBottom: "8px" }}>
-            META_ACCESS_TOKEN não configurado
+            META_MARKETING_ACCESS_TOKEN não configurado
           </h2>
           <p style={{ fontSize: "13px", color: "var(--admin-text-mute)", maxWidth: "420px", margin: "0 auto 20px" }}>
             Para ver os dados de campanha, adicione o token de acesso da Meta no painel do Vercel.
@@ -89,7 +89,7 @@ export default async function CampanhaPage() {
             <ol style={{ fontSize: "12px", color: "var(--admin-text-soft)", lineHeight: "1.8", paddingLeft: "16px", margin: 0 }}>
               <li>Acesse vercel.com → seu projeto</li>
               <li>Settings → Environment Variables</li>
-              <li>Adicione <code style={{ background: "var(--admin-border)", padding: "1px 5px", borderRadius: "3px" }}>META_ACCESS_TOKEN</code></li>
+              <li>Adicione <code style={{ background: "var(--admin-border)", padding: "1px 5px", borderRadius: "3px" }}>META_MARKETING_ACCESS_TOKEN</code></li>
               <li>Redeploy o projeto</li>
             </ol>
           </div>

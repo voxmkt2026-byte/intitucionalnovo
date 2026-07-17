@@ -33,7 +33,7 @@ type LeadData = z.infer<typeof leadSchema>;
 
 const SHEETS_WEBHOOK_URL = process.env.SHEETS_WEBHOOK_URL;
 const META_PIXEL_ID = process.env.META_PIXEL_ID || "";
-const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "";
+const META_CAPI_ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN || "";
 const DATABASE_URL = process.env.DATABASE_URL || "";
 const N8N_KOMMO_WEBHOOK_URL = process.env.N8N_KOMMO_WEBHOOK_URL || "";
 const KOMMO_ACCESS_TOKEN = process.env.KOMMO_ACCESS_TOKEN || "";
@@ -433,7 +433,7 @@ export async function GET(request: Request) {
     neon: DATABASE_URL ? "configured ✅" : "missing ⚠️",
     sheets: SHEETS_WEBHOOK_URL ? "configured ✅" : "not configured",
     pixel: META_PIXEL_ID ? "configured ✅" : "missing ⚠️",
-    capi: META_ACCESS_TOKEN && META_ACCESS_TOKEN.length > 10 ? "configured ✅" : "missing ⚠️",
+    capi: META_CAPI_ACCESS_TOKEN && META_CAPI_ACCESS_TOKEN.length > 10 ? "configured ✅" : "missing ⚠️",
     kommo: KOMMO_ACCESS_TOKEN && KOMMO_ACCESS_TOKEN.length > 10 ? "configured ✅" : "missing ⚠️",
     kommo_n8n: N8N_KOMMO_WEBHOOK_URL ? "configured ✅" : "(fallback não configurado)",
   });
