@@ -183,6 +183,7 @@ export default function RootLayout({
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('consent', 'revoke'); // revoke by default
             fbq('init', '1667309107949808');
+            fbq('init', '2950291541973242');
             fbq('track', 'PageView');
           `}
         </Script>
@@ -193,6 +194,16 @@ export default function RootLayout({
             width="1"
             style={{ display: "none" }}
             src="https://www.facebook.com/tr?id=1667309107949808&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=2950291541973242&ev=PageView&noscript=1"
             alt=""
           />
         </noscript>

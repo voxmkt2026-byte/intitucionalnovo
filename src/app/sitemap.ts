@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Persona landing pages (static HTML in /public/)
   const personas = [
     "uber", "caminhao", "carta-contemplada", "carro-luxo", "empresario",
-    "medico", "maquinas-agricolas", "aeronaves", "placas-solares",
+    "servicos", "maquinas-agricolas", "aeronaves", "placas-solares",
     "embarcacao", "terrenos-construcao", "terrenos-agricolas", "corretor", "carta-comum",
   ];
 

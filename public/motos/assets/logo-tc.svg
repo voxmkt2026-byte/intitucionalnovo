@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" fill="currentColor">
+  <!-- TC Shield Logo - Titanium Consultoria Financeira -->
+  <!-- T top bar -->
+  <path d="M0,0 H100 V22 H0 Z"/>
+  <!-- T left vertical stem -->
+  <path d="M0,0 H26 V88 H0 Z"/>
+  <!-- C vertical left -->
+  <path d="M38,22 H64 V120 H38 Z"/>
+  <!-- C top right arm -->
+  <path d="M64,22 H100 V44 H64 Z"/>
+  <!-- C bottom right arm -->
+  <path d="M64,98 H100 V120 H64 Z"/>
+  <!-- Shield point connector (left diagonal going to center bottom) -->
+  <polygon points="0,88 26,88 38,120 38,88 26,88 0,88"/>
+  <!-- Fill gap between T stem and C -->
+  <polygon points="26,88 38,88 38,120 26,108"/>
+</svg>

@@ -386,24 +386,24 @@ export const personasConfig: Record<string, PersonaConfig> = {
     ],
   },
 
-  /* ─── TIER 3: MÉDICO ─── */
-  'medico': {
-    id: 'medico',
-    slug: 'medico',
-    name: 'Médico / Profissional de Saúde',
+  /* ─── TIER 3: SERVIÇOS ─── */
+  'servicos': {
+    id: 'servicos',
+    slug: 'servicos',
+    name: 'Serviços / Clínicas / Escritórios',
     tier: 3,
     theme: 'dark',
-    whatsappTemplate: 'Olá! Sou profissional de saúde e tenho interesse em adquirir *[bem_desejado]* via consórcio. Gostaria de falar com um consultor especializado.',
+    whatsappTemplate: 'Olá! Sou prestador de serviços/empresário e tenho interesse em adquirir *[bem_desejado]* via consórcio. Gostaria de falar com um consultor especializado.',
     steps: [
       {
-        title: 'Planejamento Financeiro para Profissionais de Saúde',
-        subtitle: 'Consultório, clínica ou imóvel de alto padrão — sem juros bancários.',
+        title: 'Planejamento para Clínicas e Empresas de Serviço',
+        subtitle: 'Consultório, clínica, escritório ou sede própria — sem juros bancários.',
         ctaText: 'Falar com Consultor Especializado →',
         fields: [
-          { id: 'nome', label: 'Nome completo', type: 'text', required: true, placeholder: 'Dr(a). ...' },
+          { id: 'nome', label: 'Nome completo', type: 'text', required: true, placeholder: 'Como prefere ser chamado?' },
           { id: 'whatsapp', label: 'WhatsApp direto', type: 'tel', required: true, placeholder: '(00) 90000-0000' },
-          { id: 'bem_desejado', label: 'O que deseja adquirir?', type: 'text', required: true, placeholder: 'Ex: Consultório, clínica, apartamento...' },
-          { id: 'email', label: 'E-mail (opcional)', type: 'email', required: false, placeholder: 'exemplo@clinica.com' },
+          { id: 'bem_desejado', label: 'O que deseja adquirir?', type: 'text', required: true, placeholder: 'Ex: Aparelho de estética, reforma, imóvel comercial...' },
+          { id: 'email', label: 'E-mail corporativo (opcional)', type: 'email', required: false, placeholder: 'contato@empresa.com' },
         ],
       },
     ],

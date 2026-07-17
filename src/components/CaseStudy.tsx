@@ -176,25 +176,22 @@ export default function CaseStudy() {
                 width: 72,
                 height: 72,
                 borderRadius: "50%",
-                background:
-                  "linear-gradient(135deg, var(--green), var(--green-vivid))",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                overflow: "hidden",
                 marginBottom: "1.25rem",
+                border: "2px solid var(--green)",
+                boxShadow: "0 4px 12px rgba(10,123,62,0.3)",
               }}
             >
-              <span
+              <img
+                src="/img/wellington.jpg"
+                alt="Wellington S."
                 style={{
-                  fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                  fontWeight: 800,
-                  fontSize: "1.75rem",
-                  color: "white",
-                  lineHeight: 1,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center top",
                 }}
-              >
-                W
-              </span>
+              />
             </div>
 
             <h3

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 interface Testimonial {
   initial: string;
+  image?: string;
   name: string;
   role: string;
   quote: string;
@@ -15,6 +16,7 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     initial: "W",
+    image: "/img/wellington.jpg",
     name: "Wellington S.",
     role: "Motorista de app · São Paulo",
     quote:
@@ -23,6 +25,7 @@ const testimonials: Testimonial[] = [
   },
   {
     initial: "R",
+    image: "/img/rodrigo.jpg",
     name: "Dr. Rodrigo A.",
     role: "Cirurgião-Dentista · Campinas",
     quote:
@@ -31,6 +34,7 @@ const testimonials: Testimonial[] = [
   },
   {
     initial: "P",
+    image: "/img/patricia.jpg",
     name: "Patrícia S.",
     role: "Investidora · Belo Horizonte",
     quote:
@@ -204,7 +208,7 @@ function TestimonialCard({
   delay: number;
   visible: boolean;
 }) {
-  const { initial, name, role, quote, badge } = testimonial;
+  const { initial, image, name, role, quote, badge } = testimonial;
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -232,30 +236,54 @@ function TestimonialCard({
     >
       {/* Avatar + Name */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.875rem" }}>
-        <div
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: "50%",
-            background: "linear-gradient(135deg, var(--green), var(--green-vivid))",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}
-        >
-          <span
+        {image ? (
+          <div
             style={{
-              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-              fontWeight: 800,
-              fontSize: "1.2rem",
-              color: "white",
-              lineHeight: 1,
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              overflow: "hidden",
+              flexShrink: 0,
+              border: "2px solid var(--green)",
             }}
           >
-            {initial}
-          </span>
-        </div>
+            <img
+              src={image}
+              alt={name}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center top",
+              }}
+            />
+          </div>
+        ) : (
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, var(--green), var(--green-vivid))",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+                fontWeight: 800,
+                fontSize: "1.2rem",
+                color: "white",
+                lineHeight: 1,
+              }}
+            >
+              {initial}
+            </span>
+          </div>
+        )}
         <div>
           <div
             style={{

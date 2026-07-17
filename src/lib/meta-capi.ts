@@ -1,7 +1,11 @@
 import crypto from "crypto";
 
-const META_PIXEL_ID = process.env.META_PIXEL_ID || "";
-const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || "";
+const META_DESTINATIONS = [
+  { pixelId: process.env.META_PIXEL_ID, token: process.env.META_ACCESS_TOKEN, label: "primary" },
+  { pixelId: process.env.META_PIXEL_ID_2, token: process.env.META_ACCESS_TOKEN_2, label: "secondary" },
+].filter((destination): destination is { pixelId: string; token: string; label: string } =>
+  Boolean(destination.pixelId && destination.token)
+);
 
 function sha256(value: string): string {
   return crypto.createHash("sha256").update(value.trim().toLowerCase()).digest("hex");
@@ -32,7 +36,7 @@ interface MetaEventParams {
 export async function sendMetaCAPIEvent(params: MetaEventParams): Promise<boolean> {
   const { eventName, lead, clientIp = "", userAgent = "" } = params;
 
-  if (!META_ACCESS_TOKEN || !META_PIXEL_ID) {
+  if (!META_DESTINATIONS.length) {
     console.warn("[MetaCAPI] API ignorada: chaves do Meta Ads não configuradas.");
     return false;
   }
@@ -84,24 +88,29 @@ export async function sendMetaCAPIEvent(params: MetaEventParams): Promise<boolea
     ],
   };
 
-  try {
-    const res = await fetch(
-      `https://graph.facebook.com/v23.0/${META_PIXEL_ID}/events`,
-      {
+  const results = await Promise.allSettled(
+    META_DESTINATIONS.map(async ({ pixelId, token, label }) => {
+      const res = await fetch(`https://graph.facebook.com/v23.0/${pixelId}/events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${META_ACCESS_TOKEN}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
         signal: AbortSignal.timeout(8000),
-      }
-    );
-    const result = await res.json();
-    console.log(`[MetaCAPI] Evento "${eventName}" enviado. Response:`, JSON.stringify(result));
-    return res.ok;
-  } catch (err) {
-    console.error(`[MetaCAPI] Erro ao enviar evento "${eventName}":`, err);
-    return false;
-  }
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(`${label}: ${JSON.stringify(result)}`);
+      console.log(`[MetaCAPI] Evento "${eventName}" enviado ao pixel ${label}.`);
+      return true;
+    })
+  );
+
+  results.forEach((result) => {
+    if (result.status === "rejected") {
+      console.error(`[MetaCAPI] Falha parcial no evento "${eventName}":`, result.reason);
+    }
+  });
+
+  return results.some((result) => result.status === "fulfilled");
 }

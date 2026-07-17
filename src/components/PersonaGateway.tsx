@@ -50,7 +50,7 @@ const personas = [
     id: "veiculos",
     headline: "Veículos",
     subtitle: "Compare taxas antes de financiar",
-    image: "/img/ref-carro.png",
+    image: "/img/seg-carro-popular.png",
     href: "/carro-luxo/",
     badge: null,
   },

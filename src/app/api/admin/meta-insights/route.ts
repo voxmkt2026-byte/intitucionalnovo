@@ -2,280 +2,219 @@ import { NextRequest, NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import { verifyAdminRequest } from "@/lib/admin-auth";
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 interface MetaInsight {
   campaign_name: string;
-  campaign_id:   string;
-  spend:         string;
-  impressions:   string;
-  clicks:        string;
-  ctr:           string;
-  cpc:           string;
-  reach:         string;
-  date_start:    string;
-  date_stop:     string;
+  campaign_id: string;
+  spend: string;
+  impressions: string;
+  clicks: string;
+  ctr: string;
+  cpc: string;
+  reach: string;
 }
 
 interface AdAccount {
-  id:            string;
-  name:          string;
-  currency:      string;
+  id: string;
+  name: string;
   account_status: number;
 }
 
-interface MetaAdAccountsResponse {
-  data: AdAccount[];
+interface AccountWithToken extends AdAccount {
+  token: string;
+  source: string;
 }
 
-interface MetaInsightsResponse {
-  data: MetaInsight[];
-  error?: { message: string; code: number };
-}
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function periodToDates(period: string): { since: string; until: string } {
+function periodToDates(period: string) {
   const now = new Date();
-  const fmt = (d: Date) => d.toISOString().slice(0, 10);
-
-  switch (period) {
-    case "today":
-      return { since: fmt(now), until: fmt(now) };
-    case "7d":
-      return { since: fmt(new Date(Date.now() - 6 * 86400000)), until: fmt(now) };
-    case "30d":
-    default:
-      return { since: fmt(new Date(Date.now() - 29 * 86400000)), until: fmt(now) };
-  }
+  const fmt = (date: Date) => date.toISOString().slice(0, 10);
+  if (period === "today") return { since: fmt(now), until: fmt(now) };
+  const days = period === "7d" ? 6 : 29;
+  return { since: fmt(new Date(Date.now() - days * 86400000)), until: fmt(now) };
 }
 
-// ---------------------------------------------------------------------------
-// GET /api/admin/meta-insights?period=7d|30d|today
-// ---------------------------------------------------------------------------
+function totals(campaigns: Array<Record<string, number | string | null>>) {
+  const total = {
+    spend: campaigns.reduce((sum, item) => sum + Number(item.spend), 0),
+    impressions: campaigns.reduce((sum, item) => sum + Number(item.impressions), 0),
+    clicks: campaigns.reduce((sum, item) => sum + Number(item.clicks), 0),
+    leads: campaigns.reduce((sum, item) => sum + Number(item.leads), 0),
+    revenue: campaigns.reduce((sum, item) => sum + Number(item.revenue), 0),
+    ctr: 0,
+    cpl: null as number | null,
+    roas: null as number | null,
+    roi: null as number | null,
+  };
+  total.ctr = total.impressions ? Math.round((total.clicks / total.impressions) * 10000) / 100 : 0;
+  total.cpl = total.leads ? Math.round((total.spend / total.leads) * 100) / 100 : null;
+  total.roas = total.spend ? Math.round((total.revenue / total.spend) * 100) / 100 : null;
+  total.roi = total.spend ? Math.round(((total.revenue - total.spend) / total.spend) * 10000) / 100 : null;
+  return total;
+}
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   if (!(await verifyAdminRequest(request))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const META_TOKEN = process.env.META_ACCESS_TOKEN;
-  if (!META_TOKEN) {
-    return NextResponse.json({ error: "META_ACCESS_TOKEN not configured" }, { status: 503 });
+  const tokenConfigs = [
+    { token: process.env.META_INSIGHTS_TOKEN || process.env.META_ACCESS_TOKEN, source: "primary" },
+    { token: process.env.META_INSIGHTS_TOKEN_2 || process.env.META_ACCESS_TOKEN_2, source: "secondary" },
+  ].filter((config): config is { token: string; source: string } => Boolean(config.token));
+
+  if (!tokenConfigs.length) {
+    return NextResponse.json({ error: "Meta Insights tokens not configured" }, { status: 503 });
   }
 
   const { searchParams } = new URL(request.url);
   const period = searchParams.get("period") ?? "30d";
   const { since, until } = periodToDates(period);
 
-  // ── Helper: Neon-only campaign data (leads grouped by utm_campaign) ──────────
-  async function getNeonOnlyCampaigns() {
+  const getNeonCampaigns = async () => {
     if (!process.env.DATABASE_URL) return [];
     try {
       const sql = neon(process.env.DATABASE_URL);
       const rows = await sql`
-        SELECT utm_campaign AS campaign_name, COUNT(*) AS leads
+        SELECT utm_campaign AS campaign_name, COUNT(*) AS leads,
+               COALESCE(SUM(revenue), 0) AS total_revenue
         FROM leads
         WHERE created_at >= ${since}::date
-          AND created_at <  ${until}::date + INTERVAL '1 day'
+          AND created_at < ${until}::date + INTERVAL '1 day'
           AND utm_campaign IS NOT NULL AND utm_campaign != ''
         GROUP BY utm_campaign
         ORDER BY leads DESC
         LIMIT 50
-      ` as Array<{ campaign_name: string; leads: string; total_revenue: string | null }>;
-      return rows.map(r => ({
-        id: r.campaign_name,
-        name: r.campaign_name,
-        spend: 0, impressions: 0, clicks: 0, ctr: 0, cpc: 0, reach: 0,
-        leads: parseInt(r.leads, 10),
-        revenue: parseFloat(r.total_revenue || "0"),
+      ` as Array<{ campaign_name: string; leads: string; total_revenue: string }>;
+      return rows.map((row) => ({
+        id: row.campaign_name,
+        name: row.campaign_name,
+        spend: 0,
+        impressions: 0,
+        clicks: 0,
+        ctr: 0,
+        cpc: 0,
+        reach: 0,
+        leads: Number(row.leads),
+        revenue: Number(row.total_revenue),
         cpl: null,
         roas: null,
         roi: null,
       }));
-    } catch { return []; }
-  }
-
-  try {
-    // ── Step 1: Obter ad accounts do token ──────────────────────────────────────
-    const accountsRes = await fetch(
-      `https://graph.facebook.com/v23.0/me/adaccounts?fields=id,name,currency,account_status&access_token=${META_TOKEN}`,
-      { signal: AbortSignal.timeout(8000) }
-    );
-
-    if (!accountsRes.ok) {
-      const errText = await accountsRes.text();
-      let errJson: { error?: { code?: number; message?: string } } = {};
-      try { errJson = JSON.parse(errText); } catch { /* ignore */ }
-
-      const isMissingPerms = errJson?.error?.code === 200;
-
-      console.error("[MetaInsights] Erro ao buscar ad accounts:", errText);
-
-      // Se for erro de permissão — retornar dados do Neon com flag de aviso
-      if (isMissingPerms) {
-        const neonCampaigns = await getNeonOnlyCampaigns();
-        return NextResponse.json({
-          campaigns: neonCampaigns,
-          total: {
-            spend: 0, impressions: 0, clicks: 0,
-            leads: neonCampaigns.reduce((s, c) => s + c.leads, 0),
-            revenue: neonCampaigns.reduce((s, c) => s + c.revenue, 0),
-            ctr: 0, cpl: null, roas: null, roi: null
-          },
-          period, since, until,
-          accounts_found: 0,
-          accounts: [],
-          meta_available: false,
-          meta_error: "missing_permissions",
-          meta_error_message: "O token configurado não tem permissão ads_read. Configure um token de Marketing API para ver spend, CPL e CTR.",
-        });
-      }
-
-      return NextResponse.json({ error: "Falha ao conectar com Meta API", detail: errText }, { status: 502 });
+    } catch {
+      return [];
     }
+  };
 
-    const accountsData = await accountsRes.json() as MetaAdAccountsResponse;
-    const accounts = accountsData.data?.filter(a => a.account_status === 1) ?? [];
+  const accountResults = await Promise.allSettled(
+    tokenConfigs.map(async ({ token, source }) => {
+      const url = "https://graph.facebook.com/v23.0/me/adaccounts?fields=id,name,account_status&limit=100";
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!response.ok) throw new Error(`${source}: ${response.status}`);
+      const json = await response.json() as { data?: AdAccount[] };
+      return (json.data ?? [])
+        .filter((account) => account.account_status === 1)
+        .map((account): AccountWithToken => ({ ...account, token, source }));
+    })
+  );
 
-    if (!accounts.length) {
-      const neonCampaigns = await getNeonOnlyCampaigns();
-      return NextResponse.json({
-        campaigns: neonCampaigns,
-        total: { 
-          spend: 0, impressions: 0, clicks: 0, 
-          leads: neonCampaigns.reduce((s, c) => s + c.leads, 0), 
-          revenue: neonCampaigns.reduce((s, c) => s + c.revenue, 0),
-          ctr: 0, cpl: null, roas: null, roi: null 
-        },
-        period, since, until, accounts_found: 0, accounts: [], meta_available: true,
+  const warnings = accountResults
+    .filter((result) => result.status === "rejected")
+    .map((result) => String((result as PromiseRejectedResult).reason));
+  const accountMap = new Map<string, AccountWithToken>();
+  accountResults.forEach((result) => {
+    if (result.status === "fulfilled") {
+      result.value.forEach((account) => {
+        if (!accountMap.has(account.id)) accountMap.set(account.id, account);
       });
     }
+  });
+  const accounts = [...accountMap.values()];
 
-    // ── Step 2: Buscar insights de todas as contas ativadas em paralelo ──
-    const allInsights = await Promise.allSettled(
-      accounts.map(async (account) => {
-        const fields = [
-          "campaign_name", "campaign_id", "spend", "impressions",
-          "clicks", "ctr", "cpc", "reach",
-        ].join(",");
-
-        const insightsUrl = new URL(`https://graph.facebook.com/v23.0/${account.id}/insights`);
-        insightsUrl.searchParams.set("fields", fields);
-        insightsUrl.searchParams.set("level", "campaign");
-        insightsUrl.searchParams.set("time_range", JSON.stringify({ since, until }));
-        insightsUrl.searchParams.set("access_token", META_TOKEN);
-        insightsUrl.searchParams.set("limit", "50");
-
-        const res = await fetch(insightsUrl.toString(), { signal: AbortSignal.timeout(10000) });
-        if (!res.ok) throw new Error(`Account ${account.id}: ${res.status}`);
-
-        const json = await res.json() as MetaInsightsResponse;
-        if (json.error) throw new Error(json.error.message);
-        return json.data ?? [];
-      })
-    );
-
-    const insights: MetaInsight[] = allInsights
-      .filter(r => r.status === "fulfilled")
-      .flatMap(r => (r as PromiseFulfilledResult<MetaInsight[]>).value);
-
-    // ── Step 3: Cruzar com leads do Neon por utm_campaign ──
-    const leadsByCampaign: Record<string, { leads: number; revenue: number }> = {};
-    if (process.env.DATABASE_URL) {
-      try {
-        const sql = neon(process.env.DATABASE_URL);
-        const rows = await sql`
-          SELECT utm_campaign, COUNT(*) as count, SUM(revenue) as total_revenue
-          FROM leads
-          WHERE created_at >= ${since}::date
-            AND created_at <  ${until}::date + INTERVAL '1 day'
-            AND utm_campaign IS NOT NULL AND utm_campaign != ''
-            AND (LOWER(utm_source) IN ('facebook', 'meta', 'instagram') OR utm_source IS NULL OR utm_source = '')
-          GROUP BY utm_campaign
-        ` as Array<{ utm_campaign: string; count: string; total_revenue: string | null }>;
-        
-        rows.forEach(r => {
-          leadsByCampaign[r.utm_campaign] = {
-            leads: parseInt(r.count, 10),
-            revenue: parseFloat(r.total_revenue || "0")
-          };
-        });
-      } catch (e) {
-        console.warn("[MetaInsights] Falha ao cruzar com Neon:", e);
-      }
-    }
-
-    // ── Step 4: Montar resposta ──
-    const campaigns = insights.map(c => {
-      const spend       = parseFloat(c.spend ?? "0");
-      const impressions = parseInt(c.impressions ?? "0", 10);
-      const clicks      = parseInt(c.clicks ?? "0", 10);
-      const ctr         = parseFloat(c.ctr ?? "0");
-      const cpc         = parseFloat(c.cpc ?? "0");
-      const reach       = parseInt(c.reach ?? "0", 10);
-      const leadsInfo   = leadsByCampaign[c.campaign_name] ?? { leads: 0, revenue: 0 };
-      const leads       = leadsInfo.leads;
-      const revenue     = leadsInfo.revenue;
-      const cpl         = leads > 0 ? spend / leads : null;
-      const roas        = spend > 0 ? revenue / spend : null;
-      const roi         = spend > 0 ? ((revenue - spend) / spend) * 100 : null;
-
-      return {
-        id:           c.campaign_id,
-        name:         c.campaign_name,
-        spend,
-        impressions,
-        clicks,
-        ctr:          Math.round(ctr * 100) / 100,
-        cpc:          Math.round(cpc * 100) / 100,
-        reach,
-        leads,
-        cpl:          cpl !== null ? Math.round(cpl * 100) / 100 : null,
-        revenue,
-        roas:         roas !== null ? Math.round(roas * 100) / 100 : null,
-        roi:          roi !== null ? Math.round(roi * 100) / 100 : null,
-      };
-    }).sort((a, b) => b.spend - a.spend); // maior gasto primeiro
-
-    // Totais
-    const total: {
-      spend: number; impressions: number; clicks: number;
-      leads: number; ctr: number; cpl: number | null;
-      revenue: number; roas: number | null; roi: number | null;
-    } = {
-      spend:       campaigns.reduce((s, c) => s + c.spend, 0),
-      impressions: campaigns.reduce((s, c) => s + c.impressions, 0),
-      clicks:      campaigns.reduce((s, c) => s + c.clicks, 0),
-      leads:       campaigns.reduce((s, c) => s + c.leads, 0),
-      revenue:     campaigns.reduce((s, c) => s + (c.revenue || 0), 0),
-      ctr:         0,
-      cpl: null,
-      roas: null,
-      roi: null,
-    };
-    total.ctr = total.impressions > 0 ? Math.round((total.clicks / total.impressions) * 100 * 100) / 100 : 0;
-    total.cpl = total.leads > 0 ? Math.round((total.spend / total.leads) * 100) / 100 : null;
-    total.roas = total.spend > 0 ? Math.round((total.revenue / total.spend) * 100) / 100 : null;
-    total.roi = total.spend > 0 ? Math.round((((total.revenue - total.spend) / total.spend) * 100) * 100) / 100 : null;
-
-
+  if (!accounts.length) {
+    const campaigns = await getNeonCampaigns();
     return NextResponse.json({
       campaigns,
-      total,
+      total: totals(campaigns),
       period,
       since,
       until,
-      accounts_found: accounts.length,
-      accounts: accounts.map(a => ({ id: a.id, name: a.name })),
+      accounts_found: 0,
+      accounts: [],
+      meta_available: false,
+      meta_error: "no_accessible_accounts",
+      warnings,
     });
-
-  } catch (err) {
-    console.error("[MetaInsights] Erro:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
+
+  const fields = "campaign_name,campaign_id,spend,impressions,clicks,ctr,cpc,reach";
+  const insightResults = await Promise.allSettled(
+    accounts.map(async (account) => {
+      const url = new URL(`https://graph.facebook.com/v23.0/${account.id}/insights`);
+      url.searchParams.set("fields", fields);
+      url.searchParams.set("level", "campaign");
+      url.searchParams.set("time_range", JSON.stringify({ since, until }));
+      url.searchParams.set("limit", "100");
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${account.token}` },
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!response.ok) throw new Error(`${account.source}/${account.id}: ${response.status}`);
+      const json = await response.json() as { data?: MetaInsight[]; error?: { message: string } };
+      if (json.error) throw new Error(json.error.message);
+      return (json.data ?? []).map((insight) => ({
+        ...insight,
+        account_id: account.id,
+        account_name: account.name,
+        business_source: account.source,
+      }));
+    })
+  );
+
+  insightResults.forEach((result) => {
+    if (result.status === "rejected") warnings.push(String(result.reason));
+  });
+  const insights = insightResults.flatMap((result) =>
+    result.status === "fulfilled" ? result.value : []
+  );
+
+  const neonCampaigns = await getNeonCampaigns();
+  const leadsByCampaign = new Map(neonCampaigns.map((campaign) => [campaign.name, campaign]));
+  const campaigns = insights.map((insight) => {
+    const spend = Number(insight.spend || 0);
+    const leadData = leadsByCampaign.get(insight.campaign_name);
+    const leads = Number(leadData?.leads || 0);
+    const revenue = Number(leadData?.revenue || 0);
+    return {
+      id: insight.campaign_id,
+      name: insight.campaign_name,
+      account_id: insight.account_id,
+      account_name: insight.account_name,
+      business_source: insight.business_source,
+      spend,
+      impressions: Number(insight.impressions || 0),
+      clicks: Number(insight.clicks || 0),
+      ctr: Math.round(Number(insight.ctr || 0) * 100) / 100,
+      cpc: Math.round(Number(insight.cpc || 0) * 100) / 100,
+      reach: Number(insight.reach || 0),
+      leads,
+      revenue,
+      cpl: leads ? Math.round((spend / leads) * 100) / 100 : null,
+      roas: spend ? Math.round((revenue / spend) * 100) / 100 : null,
+      roi: spend ? Math.round(((revenue - spend) / spend) * 10000) / 100 : null,
+    };
+  }).sort((a, b) => b.spend - a.spend);
+
+  return NextResponse.json({
+    campaigns,
+    total: totals(campaigns),
+    period,
+    since,
+    until,
+    accounts_found: accounts.length,
+    accounts: accounts.map(({ id, name, source }) => ({ id, name, source })),
+    meta_available: true,
+    warnings,
+  });
 }

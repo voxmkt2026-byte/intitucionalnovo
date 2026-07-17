@@ -46,6 +46,25 @@ const KOMMO_PIPELINE_ID = process.env.KOMMO_PIPELINE_ID ? parseInt(process.env.K
 
 // --- Neon Postgres (PRIMARY STORAGE) ---
 
+let leadStorageReady: Promise<void> | null = null;
+
+async function ensureLeadStorage(): Promise<void> {
+  if (!DATABASE_URL) return;
+
+  if (!leadStorageReady) {
+    leadStorageReady = (async () => {
+      const sql = neon(DATABASE_URL);
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS client_ip TEXT`;
+      await sql`CREATE INDEX IF NOT EXISTS leads_client_ip_created_at_idx ON leads (client_ip, created_at DESC)`;
+    })().catch((error) => {
+      leadStorageReady = null;
+      throw error;
+    });
+  }
+
+  await leadStorageReady;
+}
+
 async function sendToNeon(body: LeadData, clientIp: string): Promise<boolean> {
   if (!DATABASE_URL) {
     console.warn("[Neon] DATABASE_URL não configurada — pulando Neon.");
@@ -53,6 +72,7 @@ async function sendToNeon(body: LeadData, clientIp: string): Promise<boolean> {
   }
 
   try {
+    await ensureLeadStorage();
     const sql = neon(DATABASE_URL);
 
     await sql`
