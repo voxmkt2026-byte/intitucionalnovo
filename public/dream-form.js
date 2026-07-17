@@ -12,6 +12,42 @@
 
   /* ── PERSONA CONFIGS ── */
   var PERSONAS = {
+    'imoveis': {
+      tier: 2, theme: 'light',
+      proof: '1.890 famílias já adquiriram o imóvel próprio com a Titanium',
+      badge: 'Sem juros bancários compostos. Dados protegidos.',
+      wa: 'Olá! Estou buscando um imóvel *{bem}* com parcelas de aproximadamente *R$ {parcela}*. Quero receber uma simulação consultiva.',
+      steps: [
+        { title: 'Qual tipo de imóvel você deseja adquirir?', sub: 'Casa, apartamento, terreno ou construção com planejamento inteligente.', cta: 'Avançar para Proposta →', fields: [
+          { id: 'bem_desejado', label: 'Descreva o imóvel ou projeto dos seus sonhos', type: 'text', req: true, ph: 'Ex: Casa residencial, apartamento 2qts, terreno...' },
+          { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 800, max: 10000, step: 200, def: 2000 }
+        ]},
+        { title: 'Para onde enviamos sua simulação?', sub: 'Análise transparente e sem juros bancários. Receba no WhatsApp.', cta: 'Receber Simulação Completa →', fields: [
+          { id: 'nome', label: 'Nome completo', type: 'text', req: true, ph: 'Ex: Carlos Silva' },
+          { id: 'whatsapp', label: 'WhatsApp de contato', type: 'tel', req: true, ph: '(00) 90000-0000' },
+          { id: 'email', label: 'E-mail (opcional)', type: 'email', req: false, ph: 'nome@exemplo.com' }
+        ]}
+      ]
+    },
+    'motos': {
+      tier: 1, theme: 'light',
+      proof: '1.420+ motociclistas já conquistaram sua moto com consórcio',
+      badge: 'Sem juros abusivos de financiamento. Dados protegidos.',
+      wa: 'Olá! Quero conquistar uma moto *{bem}* com parcelas de aproximadamente *R$ {parcela}*. Pode me enviar as opções disponíveis?',
+      steps: [
+        { title: 'Qual moto você quer colocar na garagem?', sub: 'Para trabalho, delivery ou lazer — sem entrada e sem juros bancários.', cta: 'Avançar →', fields: [
+          { id: 'bem_desejado', label: 'Escreva a marca/modelo da moto desejada', type: 'text', req: true, ph: 'Ex: Honda CG 160, XRE 300, Yamaha Fazer, BMW GS...' }
+        ]},
+        { title: 'Quanto você pode investir por mês?', sub: 'Parcelas flexíveis que cabem no seu orçamento.', cta: 'Simular Parcelas →', fields: [
+          { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', req: true, min: 150, max: 1500, step: 50, def: 350 }
+        ]},
+        { title: 'Garanta suas condições de crédito!', sub: 'Preencha seus dados para receber o comparativo no WhatsApp.', cta: 'Receber Proposta no WhatsApp →', fields: [
+          { id: 'nome', label: 'Seu nome completo', type: 'text', req: true, ph: 'Como quer ser chamado?' },
+          { id: 'whatsapp', label: 'Seu WhatsApp com DDD', type: 'tel', req: true, ph: '(00) 90000-0000' },
+          { id: 'email', label: 'E-mail (opcional)', type: 'email', req: false, ph: 'nome@exemplo.com' }
+        ]}
+      ]
+    },
     'uber': {
       tier: 1, theme: 'light',
       proof: '2.847 motoristas já conquistaram o carro próprio',
@@ -500,7 +536,7 @@
     container.className = 'df-section';
     container.style.background = isDark ? '#0a0e0a' : '#f5f4f0';
     var formTitles = {
-      'uber': 'carro próprio', 'caminhao': 'caminhão próprio', 'carta-comum': 'crédito ideal',
+      'imoveis': 'imóvel próprio', 'motos': 'moto própria',       'uber': 'carro próprio', 'caminhao': 'caminhão próprio', 'carta-comum': 'crédito ideal',
       'corretor': 'imóvel que você merece', 'terrenos-construcao': 'terreno dos seus planos',
       'terrenos-agricolas': 'propriedade rural', 'maquinas-agricolas': 'maquinário da próxima safra',
       'carta-contemplada': 'crédito aprovado', 'placas-solares': 'economia na conta de luz',

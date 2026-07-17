@@ -74,6 +74,60 @@ const TIER2_DATA_STEP: FormStep = {
    ══════════════════════════════════════════════════════════ */
 
 export const personasConfig: Record<string, PersonaConfig> = {
+  /* ─── TIER 2: IMÓVEIS ─── */
+  'imoveis': {
+    id: 'imoveis',
+    slug: 'imoveis',
+    name: 'Imóveis Residencial e Comercial',
+    tier: 2,
+    theme: 'light',
+    proofText: '1.890 famílias já adquiriram o imóvel próprio com a Titanium',
+    securityBadge: 'Sem juros bancários compostos. Dados protegidos.',
+    whatsappTemplate: 'Olá! Estou buscando um imóvel *[bem_desejado]* com parcelas de aproximadamente *R$ [parcela]*. Quero receber uma simulação consultiva.',
+    steps: [
+      {
+        title: '🏠 Qual tipo de imóvel você deseja adquirir?',
+        subtitle: 'Casa, apartamento, terreno ou construção com planejamento inteligente.',
+        ctaText: 'Avançar para Proposta →',
+        fields: [
+          { id: 'bem_desejado', label: 'Descreva o imóvel ou projeto dos seus sonhos', type: 'text', required: true, placeholder: 'Ex: Casa residencial, apartamento 2qts, terreno...' },
+          { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', required: true, min: 800, max: 10000, step: 200, defaultValue: 2000, prefix: 'R$', suffix: '/mês' },
+        ],
+      },
+      { ...TIER2_DATA_STEP },
+    ],
+  },
+
+  /* ─── TIER 1: MOTOS ─── */
+  'motos': {
+    id: 'motos',
+    slug: 'motos',
+    name: 'Consórcio de Motos',
+    tier: 1,
+    theme: 'light',
+    proofText: '1.420+ motociclistas já conquistaram sua moto com consórcio',
+    securityBadge: 'Sem juros abusivos de financiamento. Dados protegidos.',
+    whatsappTemplate: 'Olá! Quero conquistar uma moto *[bem_desejado]* com parcelas de aproximadamente *R$ [parcela]*. Pode me enviar as opções disponíveis?',
+    steps: [
+      {
+        title: '🏍️ Qual moto você quer colocar na garagem?',
+        subtitle: 'Para trabalho, delivery ou lazer — sem entrada e sem juros bancários.',
+        ctaText: 'Avançar →',
+        fields: [
+          { id: 'bem_desejado', label: 'Escreva a marca/modelo da moto desejada', type: 'text', required: true, placeholder: 'Ex: Honda CG 160, XRE 300, Yamaha Fazer, BMW GS...' },
+        ],
+      },
+      {
+        title: '💰 Quanto você pode investir por mês?',
+        subtitle: 'Parcelas flexíveis que cabem no seu orçamento.',
+        ctaText: 'Simular Parcelas →',
+        fields: [
+          { id: 'parcela', label: 'Parcela mensal desejada', type: 'range', required: true, min: 150, max: 1500, step: 50, defaultValue: 350, prefix: 'R$', suffix: '/mês' },
+        ],
+      },
+      { ...TIER1_DATA_STEP },
+    ],
+  },
 
   /* ─── TIER 1: MOTORISTA DE APP ─── */
   'uber': {
