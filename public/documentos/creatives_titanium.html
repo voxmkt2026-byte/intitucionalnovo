@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Titanium — Criativos Instagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #0D6B3F;
+      --green-light: #1a8a52;
+      --cream: #F8F7F4;
+      --dark: #111110;
+      --gold: #C9A84C;
+      --white: #FFFFFF;
+      --grey: #888;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0f0f0e;
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #222;
+    }
+    .logo-mark {
+      width: 36px; height: 36px;
+      background: var(--green);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 14px; color: white;
+    }
+    header h1 { font-size: 14px; font-weight: 600; color: #aaa; letter-spacing: .05em; text-transform: uppercase; }
+    header span { font-size: 12px; color: #555; margin-left: auto; }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 73px);
+    }
+
+    /* ── Sidebar ── */
+    aside {
+      border-right: 1px solid #1a1a1a;
+      padding: 32px 20px;
+    }
+    aside h2 { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #444; margin-bottom: 20px; }
+    .carousel-nav { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .carousel-nav li {
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .15s;
+      border: 1px solid transparent;
+    }
+    .carousel-nav li:hover { background: #1a1a1a; }
+    .carousel-nav li.active { background: #111; border-color: var(--green); }
+    .carousel-nav li .nav-num { font-size: 10px; color: var(--green); font-weight: 700; margin-bottom: 4px; display: block; }
+    .carousel-nav li .nav-title { font-size: 12px; color: #ccc; line-height: 1.4; }
+    .carousel-nav li .nav-persona { font-size: 10px; color: #555; margin-top: 4px; display: block; }
+
+    .slide-dots {
+      display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap;
+    }
+    .dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: #222; border: 1px solid #333;
+      cursor: pointer; font-size: 9px;
+      display: flex; align-items: center; justify-content: center;
+      color: #555; transition: all .15s;
+    }
+    .dot.active { background: var(--green); border-color: var(--green); color: white; }
+
+    /* ── Main area ── */
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      gap: 32px;
+    }
+
+    .slide-wrapper {
+      position: relative;
+      width: 480px;
+      height: 480px;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.8);
+    }
+
+    .slide { display: none; width: 100%; height: 100%; position: relative; }
+    .slide.active { display: block; }
+
+    /* ── Slide styles ── */
+
+    /* Type A: Full photo with overlay text */
+    .slide-photo {
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .slide-photo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.3) 50%, rgba(0,0,0,.1) 100%);
+    }
+    .slide-photo-content {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 32px;
+      z-index: 1;
+    }
+
+    /* Type B: Light editorial */
+    .slide-light {
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-light .photo-strip {
+      height: 52%;
+      background-size: cover;
+      background-position: center top;
+      flex-shrink: 0;
+    }
+    .slide-light .text-block {
+      padding: 24px 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* Type C: Dark stat */
+    .slide-dark {
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 36px;
+      position: relative;
+    }
+    .slide-dark::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: var(--green);
+    }
+
+    /* Type D: CTA green */
+    .slide-cta {
+      background: var(--green);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide-cta::after {
+      content: 'TC';
+      position: absolute;
+      bottom: -20px; right: -10px;
+      font-size: 160px;
+      font-weight: 900;
+      color: rgba(255,255,255,.06);
+      line-height: 1;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* ── Typography ── */
+    .kicker {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--green);
+      display: block;
+      margin-bottom: 10px;
+    }
+    .kicker-light { color: var(--green); }
+    .kicker-gold { color: var(--gold); }
+
+    .headline-xl {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: white;
+      letter-spacing: -.02em;
+    }
+    .headline-xl em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--green);
+    }
+    .headline-xl em.gold { color: var(--gold); }
+
+    .headline-dark {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--dark);
+      letter-spacing: -.02em;
+    }
+    .headline-dark em {
+      font-style: italic;
+      color: var(--green);
+      font-weight: 300;
+    }
+
+    .stat-number {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1;
+      color: white;
+      letter-spacing: -.04em;
+    }
+    .stat-number span { color: var(--green); }
+
+    .body-white {
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(255,255,255,.75);
+      margin-top: 8px;
+    }
+    .body-white strong { color: white; }
+    .body-white em { color: var(--green); font-style: normal; font-weight: 700; }
+
+    .body-dark {
+      font-size: 13px;
+      line-height: 1.65;
+      color: #444;
+    }
+    .body-dark strong { color: var(--dark); }
+    .body-dark em { color: var(--green); font-style: normal; font-weight: 700; }
+
+    .accent-line {
+      width: 32px; height: 2px;
+      background: var(--green);
+      margin-bottom: 14px;
+    }
+    .accent-line.gold { background: var(--gold); }
+
+    .slide-brand {
+      position: absolute;
+      top: 18px; left: 20px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      z-index: 2;
+    }
+    .slide-brand-dark { color: rgba(0,0,0,.35); position: absolute; top: 18px; left: 20px; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+
+    .slide-num {
+      position: absolute;
+      top: 18px; right: 20px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      color: rgba(255,255,255,.35);
+      z-index: 2;
+    }
+    .slide-num-dark { position: absolute; top: 18px; right: 20px; font-size: 9px; font-weight: 600; color: rgba(0,0,0,.25); }
+
+    .cta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 100px;
+      margin-top: 20px;
+      width: fit-content;
+      letter-spacing: .04em;
+    }
+
+    .swipe-hint {
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .swipe-hint::after { content: '→'; }
+
+    /* ── Comparison block ── */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .compare-col {
+      padding: 14px;
+      border-radius: 8px;
+    }
+    .compare-col.bad { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
+    .compare-col.good { background: rgba(13,107,63,.15); border: 1px solid rgba(13,107,63,.3); }
+    .compare-col .col-label { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #555; margin-bottom: 8px; display: block; }
+    .compare-col.good .col-label { color: var(--green); }
+    .compare-col .col-val { font-size: 22px; font-weight: 900; color: white; line-height: 1; }
+    .compare-col.bad .col-val { color: rgba(255,255,255,.5); }
+    .compare-col .col-sub { font-size: 10px; color: #555; margin-top: 6px; line-height: 1.4; }
+    .compare-col.good .col-sub { color: rgba(13,107,63,.8); }
+
+    /* ── Controls ── */
+    .controls {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .btn-nav {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid #333;
+      background: #1a1a1a;
+      color: white;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      transition: all .15s;
+    }
+    .btn-nav:hover { background: var(--green); border-color: var(--green); }
+    .slide-indicator { font-size: 12px; color: #555; min-width: 60px; text-align: center; }
+
+    .carousel-title {
+      font-size: 11px;
+      color: #555;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .carousel-title strong { color: #999; }
+
+    /* ── Caption box ── */
+    .caption-box {
+      width: 480px;
+      background: #111;
+      border: 1px solid #1e1e1e;
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+    .caption-box h3 { font-size: 11px; color: var(--green); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; }
+    .caption-text { font-size: 13px; color: #aaa; line-height: 1.6; }
+    .caption-tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: 10px; color: #555; background: #1a1a1a; padding: 4px 10px; border-radius: 100px; border: 1px solid #222; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">TC</div>
+  <h1>Titanium Consultoria — Criativos Instagram</h1>
+  <span>3 carrosséis · 15 slides</span>
+</header>
+
+<div class="layout">
+  <aside>
+    <h2>Carrosséis</h2>
+    <ul class="carousel-nav">
+      <li class="active" onclick="selectCarousel(0)">
+        <span class="nav-num">01</span>
+        <span class="nav-title">A conta que o banco não faz pra você</span>
+        <span class="nav-persona">Empresário em geral</span>
+        <div class="slide-dots" id="dots-0"></div>
+      </li>
+      <li onclick="selectCarousel(1)">
+        <span class="nav-num">02</span>
+        <span class="nav-title">Você vende imóvel todo dia. Tem o seu?</span>
+        <span class="nav-persona">Corretor de imóveis</span>
+        <div class="slide-dots" id="dots-1"></div>
+      </li>
+      <li onclick="selectCarousel(2)">
+        <span class="nav-num">03</span>
+        <span class="nav-title">Sua clínica. Sem banco. Sem juros.</span>
+        <span class="nav-persona">Médico e Dentista</span>
+        <div class="slide-dots" id="dots-2"></div>
+      </li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="carousel-title" id="carousel-label"><strong>Carrossel 01</strong> · A conta que o banco não faz pra você</div>
+
+    <div class="slide-wrapper" id="stage">
+
+      <!-- ══════════════════════════════════════════════
+           CARROSSEL 1 — A conta que o banco não faz pra você
+           ══════════════════════════════════════════════ -->
+
+      <!-- Slide 1/5 · Capa · Foto full-bleed com headline -->
+      <div class="slide active" data-carousel="0" data-idx="0">
+        <div class="slide-photo" style="background-image:url('C:/Users/callo/.gemini/antigravity/brain/ce0551ae-21d6-411c-934d-fd9216bef12a/bg_financas_contrato_1781639547163.png')">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">1 · 5</span>
+          <div class="slide-photo-content">
+            <span class="kicker kicker-gold">A conta que o banco não faz pra você</span>
+            <h2 class="headline-xl">Financiamento de<br>R$ 200 mil custou<br><em class="gold">R$ 374 mil.</em></h2>
+            <p class="swipe-hint">continue lendo</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2/5 · Dark stat -->
+      <div class="slide" data-carousel="0" data-idx="1">
+        <div class="slide-dark" style="height:100%">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">2 · 5</span>
+          <div class="accent-line"></div>
+          <p class="kicker">O que o banco cobra</p>
+          <div class="stat-number">R$ 174<span>mil</span></div>
+          <p class="body-white" style="margin-top:12px">Em juros compostos.<br>Em <strong>5 anos</strong>. Em uma operação de <em>R$ 200 mil.</em></p>
+          <div class="compare" style="margin-top: 20px">
+            <div class="compare-col bad">
+              <span class="col-label">Banco</span>
+              <div class="col-val">22%</div>
+              <div class="col-sub">ao ano, compostos</div>
+            </div>
+            <div class="compare-col good">
+              <span class="col-label">Consórcio</span>
+              <div class="col-val">17%</div>
+              <div class="col-sub">total do contrato</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3/5 · Light editorial -->
+      <div class="slide" data-carousel="0" data-idx="2">
+        <div class="slide-light" style="height:100%; position:relative">
+          <span class="slide-brand-dark">Titanium Consultoria</span>
+          <span class="slide-num-dark">3 · 5</span>
+          <div class="photo-strip" style="background-image:url('C:/Users/callo/.gemini/antigravity/brain/ce0551ae-21d6-411c-934d-fd9216bef12a/bg_empresario_escritorio_1781639602021.png')"></div>
+          <div class="text-block">
+            <div class="accent-line"></div>
+            <p class="kicker kicker-light">Por que a diferença é tão grande?</p>
+            <h3 class="headline-dark">Juros compostos<br><em>vs</em> taxa de<br>administração.</h3>
+            <p class="body-dark">O banco cobra <strong>sobre o que você ainda deve</strong>. Todo mês, sobre o saldo devedor. O consórcio cobra uma taxa fixa, diluída nas parcelas, <em>sem surpresas.</em></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4/5 · Dark stat 2 -->
+      <div class="slide" data-carousel="0" data-idx="3">
+        <div class="slide-dark" style="height:100%">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">4 · 5</span>
+          <div class="accent-line"></div>
+          <p class="kicker">O que você poderia fazer com</p>
+          <div class="stat-number">R$ 157<span>mil</span></div>
+          <p class="body-white" style="margin-top:12px">Esse é o dinheiro que <em>fica com você</em> usando consórcio.<br><br>Em vez de ir pro banco em forma de juros.</p>
+          <p class="body-white" style="margin-top: 12px; font-size: 11px; color: rgba(255,255,255,.4)">Cálculo: R$ 200k, 60 meses. Banco a 22% a.a. vs consórcio c/ tx adm de 17%.</p>
+        </div>
+      </div>
+
+      <!-- Slide 5/5 · CTA -->
+      <div class="slide" data-carousel="0" data-idx="4">
+        <div class="slide-cta" style="height:100%">
+          <span class="slide-num">5 · 5</span>
+          <div class="accent-line" style="background:rgba(255,255,255,.3)"></div>
+          <p class="kicker" style="color:rgba(255,255,255,.6)">Próximo passo</p>
+          <h2 class="headline-xl">A Titanium calcula<br>a diferença no<br><em style="color:rgba(255,255,255,.6)">seu caso.</em></h2>
+          <p class="body-white" style="margin-top:12px; font-size:13px">Veículo, imóvel, equipamento ou expansão de negócio.<br>Simule sem compromisso.</p>
+          <div class="cta-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Simular agora · Link na bio
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           CARROSSEL 2 — Você vende imóvel. Tem o seu?
+           ══════════════════════════════════════════════ -->
+
+      <!-- Slide 1/5 -->
+      <div class="slide" data-carousel="1" data-idx="0">
+        <div class="slide-photo" style="background-image:url('C:/Users/callo/.gemini/antigravity/brain/ce0551ae-21d6-411c-934d-fd9216bef12a/bg_imovel_editorial_1781639559369.png')">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">1 · 5</span>
+          <div class="slide-photo-content">
+            <span class="kicker kicker-gold">Para corretores de imóveis</span>
+            <h2 class="headline-xl">Você vende imóvel<br>todo dia.<br><em class="gold">Já tem o seu?</em></h2>
+            <p class="swipe-hint">continue lendo</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2/5 -->
+      <div class="slide" data-carousel="1" data-idx="1">
+        <div class="slide-dark" style="height:100%">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">2 · 5</span>
+          <div class="accent-line"></div>
+          <p class="kicker">O que o banco diz pra você</p>
+          <h2 class="headline-xl" style="font-size:26px">"Renda variável não<br>nos permite<br><em>aprovar o crédito."</em></h2>
+          <p class="body-white" style="margin-top: 16px">Você que vende <em>R$ 1 milhão em imóveis por mês</em> — e o banco não aprova seu financiamento.</p>
+          <p class="body-white" style="margin-top: 8px">Isso não é coincidência.</p>
+        </div>
+      </div>
+
+      <!-- Slide 3/5 · Light -->
+      <div class="slide" data-carousel="1" data-idx="2">
+        <div class="slide-light" style="height:100%; position:relative">
+          <span class="slide-brand-dark">Titanium Consultoria</span>
+          <span class="slide-num-dark">3 · 5</span>
+          <div class="photo-strip" style="background-image:url('C:/Users/callo/.gemini/antigravity/brain/ce0551ae-21d6-411c-934d-fd9216bef12a/bg_imovel_editorial_1781639559369.png'); background-position: center 30%"></div>
+          <div class="text-block">
+            <div class="accent-line"></div>
+            <p class="kicker kicker-light">A alternativa que o banco não conta</p>
+            <h3 class="headline-dark">Consórcio imobiliário<br>aceita <em>autônomo.</em></h3>
+            <p class="body-dark">Financiamento bancário: 12-16% a.a. de juros compostos. Consórcio: <em>15-18% total</em> do contrato. Economia de até <strong>R$ 300 mil</strong> numa operação de R$ 400 mil.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4/5 · Dark stat -->
+      <div class="slide" data-carousel="1" data-idx="3">
+        <div class="slide-dark" style="height:100%">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">4 · 5</span>
+          <div class="accent-line"></div>
+          <p class="kicker">Imóvel de R$ 400 mil. No banco:</p>
+          <div class="stat-number">R$ 780<span>mil</span></div>
+          <p class="body-white" style="margin-top:12px">É quanto você paga ao longo de <strong>20 anos</strong> de financiamento imobiliário a 12% a.a.</p>
+          <p class="body-white" style="margin-top: 12px">Via consórcio: <em>R$ 460-472 mil</em>. Economia real de mais de R$ 300 mil.</p>
+        </div>
+      </div>
+
+      <!-- Slide 5/5 · CTA -->
+      <div class="slide" data-carousel="1" data-idx="4">
+        <div class="slide-cta" style="height:100%">
+          <span class="slide-num">5 · 5</span>
+          <div class="accent-line" style="background:rgba(255,255,255,.3)"></div>
+          <p class="kicker" style="color:rgba(255,255,255,.6)">Você conhece o mercado</p>
+          <h2 class="headline-xl">Agora é hora de<br>investir <em style="color:rgba(255,255,255,.6)">nele.</em></h2>
+          <p class="body-white" style="margin-top:12px; font-size:13px">Consórcio imobiliário para corretor. Aceita renda variável. Parcela até 5x menor que financiamento.</p>
+          <div class="cta-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero meu imóvel · Link na bio
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           CARROSSEL 3 — Sua clínica. Sem banco.
+           ══════════════════════════════════════════════ -->
+
+      <!-- Slide 1/5 -->
+      <div class="slide" data-carousel="2" data-idx="0">
+        <div class="slide-photo" style="background-image:url('C:/Users/callo/.gemini/antigravity/brain/ce0551ae-21d6-411c-934d-fd9216bef12a/bg_clinica_moderna_1781639568820.png')">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">1 · 5</span>
+          <div class="slide-photo-content">
+            <span class="kicker kicker-gold">Para médicos e dentistas</span>
+            <h2 class="headline-xl">Equipar sua clínica<br>no banco custa<br><em class="gold">o dobro.</em></h2>
+            <p class="swipe-hint">os números são reais</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2/5 -->
+      <div class="slide" data-carousel="2" data-idx="1">
+        <div class="slide-dark" style="height:100%">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">2 · 5</span>
+          <div class="accent-line"></div>
+          <p class="kicker">Tomógrafo de R$ 200 mil. No banco:</p>
+          <div class="stat-number">R$ 336<span>mil</span></div>
+          <p class="body-white" style="margin-top:12px">É quanto você paga financiando a <strong>22% ao ano</strong> por 5 anos.</p>
+          <p class="body-white" style="margin-top: 10px"><em>R$ 136 mil a mais</em>. Por equipamento. Que ainda desvaloriza.</p>
+          <p class="body-white" style="margin-top: 8px; font-size: 11px; color: rgba(255,255,255,.35)">Base de cálculo: R$ 200k, 60 meses, 22% a.a. SAC.</p>
+        </div>
+      </div>
+
+      <!-- Slide 3/5 · Light -->
+      <div class="slide" data-carousel="2" data-idx="2">
+        <div class="slide-light" style="height:100%; position:relative">
+          <span class="slide-brand-dark">Titanium Consultoria</span>
+          <span class="slide-num-dark">3 · 5</span>
+          <div class="photo-strip" style="background-image:url('C:/Users/callo/.gemini/antigravity/brain/ce0551ae-21d6-411c-934d-fd9216bef12a/bg_clinica_moderna_1781639568820.png')"></div>
+          <div class="text-block">
+            <div class="accent-line"></div>
+            <p class="kicker kicker-light">O caminho diferente</p>
+            <h3 class="headline-dark">Taxa de administração.<br><em>Não juros compostos.</em></h3>
+            <p class="body-dark">Consórcio de equipamento: taxa total de 15-18%. <em>O mesmo tomógrafo custa R$ 230-236 mil</em>. Economia de até <strong>R$ 100 mil</strong>. Por equipamento.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4/5 -->
+      <div class="slide" data-carousel="2" data-idx="3">
+        <div class="slide-dark" style="height:100%">
+          <span class="slide-brand">Titanium Consultoria</span>
+          <span class="slide-num">4 · 5</span>
+          <div class="accent-line"></div>
+          <p class="kicker">Sua clínica. Sem comprometer o caixa.</p>
+          <h2 class="headline-xl" style="font-size:26px">Cadeira. Tomógrafo.<br>Imóvel próprio.<br><em>Tudo via consórcio.</em></h2>
+          <p class="body-white" style="margin-top: 16px">De R$ 50 mil a R$ 600 mil.<br>Aceita <em>autônomo e PJ</em>. Parcela compat. com faturamento de clínica.</p>
+        </div>
+      </div>
+
+      <!-- Slide 5/5 · CTA -->
+      <div class="slide" data-carousel="2" data-idx="4">
+        <div class="slide-cta" style="height:100%">
+          <span class="slide-num">5 · 5</span>
+          <div class="accent-line" style="background:rgba(255,255,255,.3)"></div>
+          <p class="kicker" style="color:rgba(255,255,255,.6)">Próximo passo</p>
+          <h2 class="headline-xl">Sua clínica<br>crescendo. Seu<br>caixa <em style="color:rgba(255,255,255,.6)">intacto.</em></h2>
+          <p class="body-white" style="margin-top:12px; font-size:13px">A Titanium simula o consórcio ideal para o seu equipamento ou imóvel. Sem compromisso.</p>
+          <div class="cta-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Simular minha clínica · Link na bio
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /stage -->
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn-nav" onclick="prevSlide()">←</button>
+      <span class="slide-indicator" id="slide-indicator">1 / 5</span>
+      <button class="btn-nav" onclick="nextSlide()">→</button>
+    </div>
+
+    <!-- Caption / legenda do post -->
+    <div class="caption-box" id="caption-box">
+      <h3>Legenda sugerida para o post</h3>
+      <p class="caption-text" id="caption-text"></p>
+      <div class="caption-tags" id="caption-tags"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const carousels = [
+    {
+      label: 'Carrossel 01 · A conta que o banco não faz pra você',
+      slides: 5,
+      caption: `Financiamento de R$ 200 mil custou R$ 374 mil. ↑
+
+A diferença: R$ 174 mil em juros compostos, pagos ao banco em 5 anos.
+
+O consórcio não cobra juros — cobra taxa de administração. Fixa, diluída nas parcelas, sem surpresa.
+
+A diferença fica no seu negócio.
+
+👇 Simule agora. Link na bio.`,
+      tags: ['#consorcio', '#financiamento', '#educacaofinanceira', '#titaniumconsultoria', '#creditosemjuros', '#microempresario']
+    },
+    {
+      label: 'Carrossel 02 · Você vende imóvel. Tem o seu?',
+      slides: 5,
+      caption: `Você sabe mais sobre imóvel do que 99% dos compradores.
+
+E ainda assim paga aluguel — ou financia com 14% ao ano de juros.
+
+Renda variável não é impedimento. É só o pretexto que o banco usa.
+
+Consórcio imobiliário aceita autônomo. E custa até 5x menos que financiamento.
+
+👇 Quero meu imóvel sem banco. Link na bio.`,
+      tags: ['#corretordeimoveis', '#consorcio', '#imobiliario', '#titaniumconsultoria', '#creditoimobiliario', '#rendavariavel']
+    },
+    {
+      label: 'Carrossel 03 · Sua clínica. Sem banco.',
+      slides: 5,
+      caption: `Tomógrafo de R$ 200 mil. Financiado no banco a 22% ao ano: R$ 336 mil.
+
+A diferença de R$ 136 mil vai pro banco — não pra sua clínica.
+
+Via consórcio, o mesmo equipamento custa R$ 230-236 mil. Economia de até R$ 100 mil. Por equipamento.
+
+De cadeira odontológica a imóvel próprio — a Titanium estrutura o crédito ideal para médicos e dentistas.
+
+👇 Simule sua clínica. Link na bio.`,
+      tags: ['#medico', '#dentista', '#clinica', '#consorcio', '#titaniumconsultoria', '#creditomedicina', '#equipamentoodontologico']
+    }
+  ];
+
+  let currentCarousel = 0;
+  let currentSlide = 0;
+
+  function buildDots() {
+    carousels.forEach((c, ci) => {
+      const el = document.getElementById('dots-' + ci);
+      el.innerHTML = '';
+      for (let i = 0; i < c.slides; i++) {
+        const d = document.createElement('div');
+        d.className = 'dot' + (ci === currentCarousel && i === currentSlide ? ' active' : '');
+        d.textContent = i + 1;
+        d.onclick = (e) => { e.stopPropagation(); selectCarousel(ci, i); };
+        el.appendChild(d);
+      }
+    });
+  }
+
+  function showSlide() {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    const target = document.querySelector(`.slide[data-carousel="${currentCarousel}"][data-idx="${currentSlide}"]`);
+    if (target) target.classList.add('active');
+
+    document.getElementById('slide-indicator').textContent = `${currentSlide + 1} / ${carousels[currentCarousel].slides}`;
+    document.getElementById('carousel-label').innerHTML = `<strong>${carousels[currentCarousel].label.split('·')[0].trim()}</strong> · ${carousels[currentCarousel].label.split('·')[1].trim()}`;
+
+    // Caption
+    const c = carousels[currentCarousel];
+    document.getElementById('caption-text').textContent = c.caption;
+    const tagsEl = document.getElementById('caption-tags');
+    tagsEl.innerHTML = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+    // Nav highlight
+    document.querySelectorAll('.carousel-nav li').forEach((li, i) => {
+      li.classList.toggle('active', i === currentCarousel);
+    });
+
+    buildDots();
+  }
+
+  function selectCarousel(ci, si = 0) {
+    currentCarousel = ci;
+    currentSlide = si;
+    showSlide();
+  }
+
+  function nextSlide() {
+    const max = carousels[currentCarousel].slides;
+    if (currentSlide < max - 1) { currentSlide++; }
+    else { currentCarousel = (currentCarousel + 1) % carousels.length; currentSlide = 0; }
+    showSlide();
+  }
+
+  function prevSlide() {
+    if (currentSlide > 0) { currentSlide--; }
+    else {
+      currentCarousel = (currentCarousel - 1 + carousels.length) % carousels.length;
+      currentSlide = carousels[currentCarousel].slides - 1;
+    }
+    showSlide();
+  }
+
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+  });
+
+  showSlide();
+</script>
+</body>
+</html>
