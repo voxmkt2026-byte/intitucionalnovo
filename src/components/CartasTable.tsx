@@ -57,7 +57,6 @@ function triggerWhatsAppClick(carta: Carta) {
   const msg = buildWhatsAppMessage(carta);
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-  // Registrar lead / evento de clique no backend (para aparecer no admin/leads)
   try {
     const urlParams = new URLSearchParams(window.location.search);
     const getCookie = (name: string) => {
@@ -100,7 +99,6 @@ function triggerWhatsAppClick(carta: Carta) {
     console.error("Erro ao registrar clique wpp", e);
   }
 
-  // Abrir WhatsApp em nova aba
   window.open(url, "_blank");
 }
 
@@ -203,9 +201,12 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
           </button>
           <div className="flex items-center gap-2 mb-1">
             <span
-              className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
+              className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full"
               style={{ backgroundColor: adminCfg.bgTint, color: adminCfg.color }}
             >
+              {adminCfg.logoImg ? (
+                <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="w-3.5 h-3.5 rounded-full object-cover bg-white" />
+              ) : null}
               {adminCfg.shortName}
             </span>
           </div>
@@ -317,7 +318,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
   );
 }
 
-/* ── Carta Row (Desktop - 7 Spreadsheet Columns + WhatsApp CTA) ─────── */
+/* ── Carta Row (Desktop - 7 Spreadsheet Columns + Official Logo) ─────── */
 function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
   const adminCfg = getAdminBadgeConfig(carta.administradora);
   const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
@@ -348,7 +349,7 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         {carta.taxa_transferencia || "R$ 0,00"}
       </td>
 
-      {/* 5. Administradora com Badge / Logo Colorido */}
+      {/* 5. Administradora com Badge & Logo Oficial (Caixa / CNP / Bradesco) */}
       <td className="px-4 py-4 whitespace-nowrap">
         <span
           className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-[11px] shadow-2xs"
@@ -358,7 +359,11 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
             border: `1px solid ${adminCfg.borderColor}`,
           }}
         >
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: adminCfg.color }} />
+          {adminCfg.logoImg ? (
+            <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="w-4 h-4 rounded-full object-cover bg-white" />
+          ) : (
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: adminCfg.color }} />
+          )}
           {adminCfg.shortName}
         </span>
       </td>
@@ -381,7 +386,7 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         </span>
       </td>
 
-      {/* Botões de Ação Direct WhatsApp & Modal */}
+      {/* Botões de Ação Direct WhatsApp */}
       <td className="px-4 py-4 text-right whitespace-nowrap">
         <button
           onClick={() => triggerWhatsAppClick(carta)}
@@ -414,7 +419,11 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
             border: `1px solid ${adminCfg.borderColor}`,
           }}
         >
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: adminCfg.color }} />
+          {adminCfg.logoImg ? (
+            <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="w-4 h-4 rounded-full object-cover bg-white" />
+          ) : (
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: adminCfg.color }} />
+          )}
           {adminCfg.shortName}
         </span>
 

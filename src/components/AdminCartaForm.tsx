@@ -6,6 +6,7 @@ import type { Carta } from "@/app/admin/cartas/CartaAdminClient";
 const SEGMENTOS = ["imoveis", "veiculos", "agronegocio", "servicos"];
 const ADMINISTRADORAS = [
   "Caixa Consórcios",
+  "CNP Consórcio",
   "Bradesco Consórcios",
   "Itaú Consórcios",
   "Banco do Brasil",

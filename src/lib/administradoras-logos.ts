@@ -1,12 +1,10 @@
-import React from "react";
-
 export interface AdministradoraConfig {
   name: string;
   shortName: string;
   color: string;
   bgTint: string;
   borderColor: string;
-  logoSvg: string; // inline SVG string or path
+  logoImg?: string;
 }
 
 export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
@@ -16,7 +14,15 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#005CA9",
     bgTint: "rgba(0, 92, 169, 0.08)",
     borderColor: "rgba(0, 92, 169, 0.25)",
-    logoSvg: "caixa",
+    logoImg: "/img/administradoras/caixa.jpg",
+  },
+  cnp: {
+    name: "CNP Consórcio",
+    shortName: "CNP",
+    color: "#182353",
+    bgTint: "rgba(24, 35, 83, 0.08)",
+    borderColor: "rgba(24, 35, 83, 0.25)",
+    logoImg: "/img/administradoras/cnp.jpg",
   },
   bradesco: {
     name: "Bradesco Consórcios",
@@ -24,7 +30,7 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#CC092F",
     bgTint: "rgba(204, 9, 47, 0.08)",
     borderColor: "rgba(204, 9, 47, 0.25)",
-    logoSvg: "bradesco",
+    logoImg: "/img/administradoras/bradesco.jpg",
   },
   itau: {
     name: "Itaú Consórcios",
@@ -32,7 +38,6 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#EC7000",
     bgTint: "rgba(236, 112, 0, 0.08)",
     borderColor: "rgba(236, 112, 0, 0.25)",
-    logoSvg: "itau",
   },
   bb: {
     name: "Banco do Brasil",
@@ -40,7 +45,6 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#0038A8",
     bgTint: "rgba(0, 56, 168, 0.08)",
     borderColor: "rgba(0, 56, 168, 0.25)",
-    logoSvg: "bb",
   },
   porto: {
     name: "Porto Seguro Consórcio",
@@ -48,7 +52,6 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#004B93",
     bgTint: "rgba(0, 75, 147, 0.08)",
     borderColor: "rgba(0, 75, 147, 0.25)",
-    logoSvg: "porto",
   },
   sicredi: {
     name: "Sicredi",
@@ -56,7 +59,6 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#3F7A00",
     bgTint: "rgba(63, 122, 0, 0.08)",
     borderColor: "rgba(63, 122, 0, 0.25)",
-    logoSvg: "sicredi",
   },
   santander: {
     name: "Santander Consórcios",
@@ -64,7 +66,6 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#EC0000",
     bgTint: "rgba(236, 0, 0, 0.08)",
     borderColor: "rgba(236, 0, 0, 0.25)",
-    logoSvg: "santander",
   },
   ademicon: {
     name: "Ademicon",
@@ -72,7 +73,6 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#002B49",
     bgTint: "rgba(0, 43, 73, 0.08)",
     borderColor: "rgba(0, 43, 73, 0.25)",
-    logoSvg: "ademicon",
   },
   rodobens: {
     name: "Rodobens",
@@ -80,7 +80,6 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#003A70",
     bgTint: "rgba(0, 58, 112, 0.08)",
     borderColor: "rgba(0, 58, 112, 0.25)",
-    logoSvg: "rodobens",
   },
   hs: {
     name: "HS Consórcios",
@@ -88,7 +87,6 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#007A3D",
     bgTint: "rgba(0, 122, 61, 0.08)",
     borderColor: "rgba(0, 122, 61, 0.25)",
-    logoSvg: "hs",
   },
   embracon: {
     name: "Embracon",
@@ -96,13 +94,13 @@ export const ADMINISTRADORAS_MAP: Record<string, AdministradoraConfig> = {
     color: "#D91B24",
     bgTint: "rgba(217, 27, 36, 0.08)",
     borderColor: "rgba(217, 27, 36, 0.25)",
-    logoSvg: "embracon",
   },
 };
 
 export function getAdminKey(name: string): string {
   const norm = (name || "").toLowerCase().trim();
   if (norm.includes("caixa")) return "caixa";
+  if (norm.includes("cnp")) return "cnp";
   if (norm.includes("bradesco")) return "bradesco";
   if (norm.includes("itaú") || norm.includes("itau")) return "itau";
   if (norm.includes("brasil") || norm.includes("bb")) return "bb";
@@ -127,6 +125,5 @@ export function getAdminBadgeConfig(name: string): AdministradoraConfig {
     color: "#0A7B3E",
     bgTint: "rgba(10, 123, 62, 0.08)",
     borderColor: "rgba(10, 123, 62, 0.25)",
-    logoSvg: "default",
   };
 }

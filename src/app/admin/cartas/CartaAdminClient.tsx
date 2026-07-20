@@ -107,7 +107,7 @@ export default function CartaAdminClient() {
       if (buffer) {
         const rows = parseSpreadsheetToCartas(buffer);
         if (rows.length === 0) {
-          alert("Nenhuma carta válida encontrada na planilha. Verifique o formato do arquivo.");
+          alert("Nenhuma carta válida encontrada na planilha. Verifique a estrutura do arquivo.");
         } else {
           setParsedRows(rows);
           setShowUploadModal(true);
@@ -189,7 +189,7 @@ export default function CartaAdminClient() {
             Cartas Contempladas
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--admin-text-mute)" }}>
-            Gerencie, importe planilhas (.xlsx / .csv) e edite as cartas com as 7 colunas oficiais
+            Gerencie, importe planilhas (.xlsx / .csv) e edite as cartas com os logos oficiais
           </p>
         </div>
 
@@ -243,7 +243,7 @@ export default function CartaAdminClient() {
               borderColor: "rgba(239, 68, 68, 0.2)",
             }}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="3 6 5 6 21 6" />
               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
             </svg>
@@ -311,6 +311,11 @@ export default function CartaAdminClient() {
                 borderColor: cfg.borderColor,
               }}
             >
+              {cfg.logoImg ? (
+                <img src={cfg.logoImg} alt={cfg.shortName} className="w-4 h-4 rounded-full object-cover bg-white" />
+              ) : (
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: isSelected ? "#FFFFFF" : cfg.color }} />
+              )}
               <span>{cfg.shortName}</span>
               <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${isSelected ? "bg-white/20 text-white" : "bg-gray-100 text-gray-700"}`}>
                 {count}
@@ -382,7 +387,7 @@ export default function CartaAdminClient() {
                         {c.taxa_transferencia || "R$ 0,00"}
                       </td>
 
-                      {/* 5. Administradora */}
+                      {/* 5. Administradora com Logo Oficial */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <span
                           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[11px]"
@@ -392,7 +397,11 @@ export default function CartaAdminClient() {
                             border: `1px solid ${cfg.borderColor}`,
                           }}
                         >
-                          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.color }} />
+                          {cfg.logoImg ? (
+                            <img src={cfg.logoImg} alt={cfg.shortName} className="w-4 h-4 rounded-full object-cover bg-white" />
+                          ) : (
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.color }} />
+                          )}
                           {cfg.shortName}
                         </span>
                       </td>
@@ -530,15 +539,25 @@ export default function CartaAdminClient() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {parsedRows.slice(0, 5).map((r, idx) => (
-                    <tr key={idx}>
-                      <td className="p-2 font-bold">{formatBRL(r.credito)}</td>
-                      <td className="p-2 text-emerald-700">{formatBRL(r.entrada)}</td>
-                      <td className="p-2">{r.parcelas}x {formatBRL(r.valor_parcela)}</td>
-                      <td className="p-2">{r.administradora}</td>
-                      <td className="p-2">{r.observacoes}</td>
-                    </tr>
-                  ))}
+                  {parsedRows.slice(0, 5).map((r, idx) => {
+                    const cfg = getAdminBadgeConfig(r.administradora);
+                    return (
+                      <tr key={idx}>
+                        <td className="p-2 font-bold">{formatBRL(r.credito)}</td>
+                        <td className="p-2 text-emerald-700">{formatBRL(r.entrada)}</td>
+                        <td className="p-2">{r.parcelas}x {formatBRL(r.valor_parcela)}</td>
+                        <td className="p-2 flex items-center gap-1.5 font-bold" style={{ color: cfg.color }}>
+                          {cfg.logoImg ? (
+                            <img src={cfg.logoImg} alt={cfg.shortName} className="w-3.5 h-3.5 rounded-full object-cover" />
+                          ) : (
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.color }} />
+                          )}
+                          {cfg.shortName}
+                        </td>
+                        <td className="p-2">{r.observacoes}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
               {parsedRows.length > 5 && (
