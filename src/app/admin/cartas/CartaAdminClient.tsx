@@ -312,7 +312,7 @@ export default function CartaAdminClient() {
               }}
             >
               {cfg.logoImg ? (
-                <img src={cfg.logoImg} alt={cfg.shortName} className="w-4 h-4 rounded-full object-cover bg-white" />
+                <img src={cfg.logoImg} alt={cfg.shortName} className="h-5 max-w-[60px] object-contain rounded-sm" />
               ) : (
                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: isSelected ? "#FFFFFF" : cfg.color }} />
               )}
@@ -387,23 +387,27 @@ export default function CartaAdminClient() {
                         {c.taxa_transferencia || "R$ 0,00"}
                       </td>
 
-                      {/* 5. Administradora com Logo Oficial */}
+                      {/* 5. Administradora (Logo Direto) */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[11px]"
-                          style={{
-                            backgroundColor: cfg.bgTint,
-                            color: cfg.color,
-                            border: `1px solid ${cfg.borderColor}`,
-                          }}
-                        >
-                          {cfg.logoImg ? (
-                            <img src={cfg.logoImg} alt={cfg.shortName} className="w-4 h-4 rounded-full object-cover bg-white" />
-                          ) : (
+                        {cfg.logoImg ? (
+                          <img
+                            src={cfg.logoImg}
+                            alt={cfg.shortName}
+                            className="h-8 max-w-[100px] object-contain rounded-md shadow-2xs"
+                          />
+                        ) : (
+                          <span
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[11px]"
+                            style={{
+                              backgroundColor: cfg.bgTint,
+                              color: cfg.color,
+                              border: `1px solid ${cfg.borderColor}`,
+                            }}
+                          >
                             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.color }} />
-                          )}
-                          {cfg.shortName}
-                        </span>
+                            {cfg.shortName}
+                          </span>
+                        )}
                       </td>
 
                       {/* 6. Vencimento da Parcela */}
@@ -546,13 +550,12 @@ export default function CartaAdminClient() {
                         <td className="p-2 font-bold">{formatBRL(r.credito)}</td>
                         <td className="p-2 text-emerald-700">{formatBRL(r.entrada)}</td>
                         <td className="p-2">{r.parcelas}x {formatBRL(r.valor_parcela)}</td>
-                        <td className="p-2 flex items-center gap-1.5 font-bold" style={{ color: cfg.color }}>
+                        <td className="p-2 font-bold">
                           {cfg.logoImg ? (
-                            <img src={cfg.logoImg} alt={cfg.shortName} className="w-3.5 h-3.5 rounded-full object-cover" />
+                            <img src={cfg.logoImg} alt={cfg.shortName} className="h-6 max-w-[80px] object-contain rounded-md" />
                           ) : (
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.color }} />
+                            <span style={{ color: cfg.color }}>{cfg.shortName}</span>
                           )}
-                          {cfg.shortName}
                         </td>
                         <td className="p-2">{r.observacoes}</td>
                       </tr>

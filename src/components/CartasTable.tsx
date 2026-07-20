@@ -200,15 +200,16 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
             </svg>
           </button>
           <div className="flex items-center gap-2 mb-1">
-            <span
-              className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full"
-              style={{ backgroundColor: adminCfg.bgTint, color: adminCfg.color }}
-            >
-              {adminCfg.logoImg ? (
-                <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="w-3.5 h-3.5 rounded-full object-cover bg-white" />
-              ) : null}
-              {adminCfg.shortName}
-            </span>
+            {adminCfg.logoImg ? (
+              <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="h-6 max-w-[90px] object-contain rounded-md bg-white p-0.5" />
+            ) : (
+              <span
+                className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full"
+                style={{ backgroundColor: adminCfg.bgTint, color: adminCfg.color }}
+              >
+                {adminCfg.shortName}
+              </span>
+            )}
           </div>
           <p className="text-3xl font-bold" style={{ color: "#34d399" }}>
             {formatBRL(carta.valor_credito)}
@@ -318,7 +319,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
   );
 }
 
-/* ── Carta Row (Desktop - 7 Spreadsheet Columns + Official Logo) ─────── */
+/* ── Carta Row (Desktop - 7 Spreadsheet Columns + Direct Logo Display) ─── */
 function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
   const adminCfg = getAdminBadgeConfig(carta.administradora);
   const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
@@ -349,23 +350,27 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         {carta.taxa_transferencia || "R$ 0,00"}
       </td>
 
-      {/* 5. Administradora com Badge & Logo Oficial (Caixa / CNP / Bradesco) */}
+      {/* 5. Administradora (Logo Direto / Badge Limpa) */}
       <td className="px-4 py-4 whitespace-nowrap">
-        <span
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-[11px] shadow-2xs"
-          style={{
-            backgroundColor: adminCfg.bgTint,
-            color: adminCfg.color,
-            border: `1px solid ${adminCfg.borderColor}`,
-          }}
-        >
-          {adminCfg.logoImg ? (
-            <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="w-4 h-4 rounded-full object-cover bg-white" />
-          ) : (
+        {adminCfg.logoImg ? (
+          <img
+            src={adminCfg.logoImg}
+            alt={adminCfg.shortName}
+            className="h-8 max-w-[100px] object-contain rounded-md shadow-2xs"
+          />
+        ) : (
+          <span
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-[11px]"
+            style={{
+              backgroundColor: adminCfg.bgTint,
+              color: adminCfg.color,
+              border: `1px solid ${adminCfg.borderColor}`,
+            }}
+          >
             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: adminCfg.color }} />
-          )}
-          {adminCfg.shortName}
-        </span>
+            {adminCfg.shortName}
+          </span>
+        )}
       </td>
 
       {/* 6. Vencimento da Parcela */}
@@ -411,21 +416,21 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
     <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
       {/* Topo: Logo Admin & Status */}
       <div className="flex items-center justify-between">
-        <span
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-xs"
-          style={{
-            backgroundColor: adminCfg.bgTint,
-            color: adminCfg.color,
-            border: `1px solid ${adminCfg.borderColor}`,
-          }}
-        >
-          {adminCfg.logoImg ? (
-            <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="w-4 h-4 rounded-full object-cover bg-white" />
-          ) : (
+        {adminCfg.logoImg ? (
+          <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="h-7 max-w-[90px] object-contain rounded-md" />
+        ) : (
+          <span
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-xs"
+            style={{
+              backgroundColor: adminCfg.bgTint,
+              color: adminCfg.color,
+              border: `1px solid ${adminCfg.borderColor}`,
+            }}
+          >
             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: adminCfg.color }} />
-          )}
-          {adminCfg.shortName}
-        </span>
+            {adminCfg.shortName}
+          </span>
+        )}
 
         <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
           {obs}
