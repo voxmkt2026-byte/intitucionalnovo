@@ -30,9 +30,78 @@ interface Filters {
   administradoras: string[];
 }
 
+const WHATSAPP_NUMBER = "5511930048940";
+
 function formatBRL(v: number | null | undefined) {
   if (v == null || isNaN(v)) return "—";
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+}
+
+function buildWhatsAppMessage(carta: Carta): string {
+  const adminName = carta.administradora || "Consórcio";
+  const creditoStr = formatBRL(carta.valor_credito);
+  const entradaStr = formatBRL(carta.entrada);
+  const parcelaStr = formatBRL(carta.valor_parcela);
+  const vencStr = carta.vencimento_parcela || carta.proximo_vencimento || "Dia 10";
+
+  return `Olá! Vi no site da Titanium e tenho interesse na seguinte carta contemplada:\n\n` +
+    `• Crédito: ${creditoStr}\n` +
+    `• Entrada: ${entradaStr}\n` +
+    `• Parcelas: ${carta.parcelas}x de ${parcelaStr}\n` +
+    `• Administradora: ${adminName}\n` +
+    `• Vencimento: ${vencStr}\n\n` +
+    `Gostaria de verificar a disponibilidade para transferência imediata.`;
+}
+
+function triggerWhatsAppClick(carta: Carta) {
+  const msg = buildWhatsAppMessage(carta);
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+
+  // Registrar lead / evento de clique no backend (para aparecer no admin/leads)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const getCookie = (name: string) => {
+      if (typeof document === "undefined") return "";
+      const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+      return match ? match[2] : "";
+    };
+
+    fetch("/api/leads/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: "Interesse WhatsApp Vitrine",
+        phone: "WhatsApp Direct",
+        email: "",
+        segment: carta.segmento,
+        credit: String(Math.round(carta.valor_credito)),
+        months: carta.parcelas,
+        plan: "whatsapp",
+        lp: "cartas-contempladas",
+        ref: `wpp-carta-${carta.id}-${Math.round(carta.valor_credito / 1000)}k`,
+        source_url: window.location.href,
+        utm_source: urlParams.get("utm_source") || "organico",
+        utm_medium: urlParams.get("utm_medium") || "cartas-page",
+        utm_campaign: urlParams.get("utm_campaign") || "cartas-contempladas",
+        utm_content: urlParams.get("utm_content") || carta.administradora,
+        utm_term: urlParams.get("utm_term") || "",
+        gclid: urlParams.get("gclid") || "",
+        fbc: getCookie("_fbc"),
+        fbp: getCookie("_fbp"),
+        carta_id: String(carta.id),
+        carta_administradora: carta.administradora,
+        carta_valor: String(carta.valor_credito),
+        carta_entrada: String(carta.entrada ?? ""),
+        carta_parcelas: String(carta.parcelas),
+        timestamp: new Date().toISOString(),
+      }),
+    }).catch(() => {});
+  } catch (e) {
+    console.error("Erro ao registrar clique wpp", e);
+  }
+
+  // Abrir WhatsApp em nova aba
+  window.open(url, "_blank");
 }
 
 type SortKey = "valor_credito" | "entrada" | "parcelas" | "valor_parcela" | "administradora";
@@ -159,75 +228,96 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
               </svg>
             </div>
             <h3 className="text-lg font-bold mb-2 text-gray-900">Solicitação recebida</h3>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              Um especialista Titanium entrará em contato para verificar a disponibilidade imediata e orientar a transferência.
+            <p className="text-xs text-gray-600 leading-relaxed mb-6">
+              Um especialista Titanium entrará em contato para orientar a transferência.
             </p>
-            <button onClick={onClose} className="mt-5 text-xs font-semibold text-emerald-600 hover:underline cursor-pointer">
+            <button
+              onClick={() => triggerWhatsAppClick(carta)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-full text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md cursor-pointer transition-all mb-3"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+              </svg>
+              Falar Direto no WhatsApp
+            </button>
+            <button onClick={onClose} className="text-xs font-semibold text-gray-400 hover:underline cursor-pointer">
               Fechar janela
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            <p className="text-xs font-bold text-gray-900 uppercase tracking-wide">
-              Preencha para verificar reserva imediata:
-            </p>
-
-            <div>
-              <label className="block text-[11px] font-semibold text-gray-500 mb-1 uppercase tracking-wide">
-                Nome completo *
-              </label>
-              <input
-                type="text"
-                required
-                value={form.name}
-                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                placeholder="Seu nome"
-                style={inputStyle}
-              />
-            </div>
-            <div>
-              <label className="block text-[11px] font-semibold text-gray-500 mb-1 uppercase tracking-wide">
-                WhatsApp *
-              </label>
-              <input
-                type="tel"
-                required
-                value={form.phone}
-                onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                placeholder="(11) 99999-9999"
-                style={inputStyle}
-              />
-            </div>
-            <div>
-              <label className="block text-[11px] font-semibold text-gray-500 mb-1 uppercase tracking-wide">
-                E-mail
-              </label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                placeholder="seu@email.com"
-                style={inputStyle}
-              />
+          <div className="p-6 space-y-4">
+            {/* WhatsApp Direct Option */}
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+              <p className="text-xs font-bold text-emerald-900 mb-1">
+                Atendimento Instantâneo via WhatsApp
+              </p>
+              <p className="text-[11px] text-emerald-700 mb-3">
+                Clique para enviar a proposta desta carta diretamente ao especialista no WhatsApp.
+              </p>
+              <button
+                type="button"
+                onClick={() => triggerWhatsAppClick(carta)}
+                className="w-full flex items-center justify-center gap-2 font-bold py-3 rounded-full cursor-pointer text-xs uppercase tracking-wider text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition-all"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+                Conversar no WhatsApp (11 93004-8940)
+              </button>
             </div>
 
-            {error && <p className="text-xs p-3 rounded-xl bg-red-50 text-red-600">{error}</p>}
+            <div className="flex items-center gap-3 my-2">
+              <div className="flex-1 h-px bg-gray-200" />
+              <span className="text-[10px] uppercase font-bold text-gray-400">ou preencha os dados</span>
+              <div className="flex-1 h-px bg-gray-200" />
+            </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full font-bold py-3.5 rounded-full cursor-pointer text-xs uppercase tracking-wider text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition-all disabled:opacity-60"
-            >
-              {loading ? "Reservando..." : "Quero esta carta contemplada"}
-            </button>
-          </form>
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <div>
+                <label className="block text-[11px] font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+                  Nome completo *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={form.name}
+                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  placeholder="Seu nome"
+                  style={inputStyle}
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-semibold text-gray-500 mb-1 uppercase tracking-wide">
+                  WhatsApp *
+                </label>
+                <input
+                  type="tel"
+                  required
+                  value={form.phone}
+                  onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                  placeholder="(11) 99999-9999"
+                  style={inputStyle}
+                />
+              </div>
+
+              {error && <p className="text-xs p-3 rounded-xl bg-red-50 text-red-600">{error}</p>}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full font-bold py-3 rounded-full cursor-pointer text-xs uppercase tracking-wider text-gray-800 border border-gray-300 hover:bg-gray-50 transition-all disabled:opacity-60"
+              >
+                {loading ? "Solicitando..." : "Solicitar Contato Especializado"}
+              </button>
+            </form>
+          </div>
         )}
       </div>
     </div>
   );
 }
 
-/* ── Carta Row (Desktop - 7 Spreadsheet Columns) ───────────────────── */
+/* ── Carta Row (Desktop - 7 Spreadsheet Columns + WhatsApp CTA) ─────── */
 function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
   const adminCfg = getAdminBadgeConfig(carta.administradora);
   const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
@@ -291,12 +381,15 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         </span>
       </td>
 
-      {/* Botão de Ação */}
+      {/* Botões de Ação Direct WhatsApp & Modal */}
       <td className="px-4 py-4 text-right whitespace-nowrap">
         <button
-          onClick={onCTA}
-          className="text-xs font-bold px-4 py-2 rounded-full cursor-pointer transition-all bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm"
+          onClick={() => triggerWhatsAppClick(carta)}
+          className="text-xs font-bold px-4 py-2 rounded-full cursor-pointer transition-all bg-[#0A7B3E] hover:bg-[#086332] text-white shadow-sm flex items-center gap-1.5 ml-auto"
         >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
           Tenho Interesse
         </button>
       </td>
@@ -359,10 +452,13 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
       </div>
 
       <button
-        onClick={onCTA}
-        className="w-full font-bold py-2.5 rounded-full text-xs text-white bg-emerald-600 hover:bg-emerald-700 transition-all shadow-sm"
+        onClick={() => triggerWhatsAppClick(carta)}
+        className="w-full font-bold py-2.5 rounded-full text-xs text-white bg-[#0A7B3E] hover:bg-[#086332] transition-all shadow-sm flex items-center justify-center gap-2"
       >
-        Tenho Interesse nesta Carta
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+        Tenho Interesse no WhatsApp
       </button>
     </div>
   );
@@ -449,7 +545,7 @@ export default function CartasTable() {
                 <th className="px-4 py-3.5">5. Administradora</th>
                 <th className="px-4 py-3.5">6. Vencimento</th>
                 <th className="px-4 py-3.5">7. Observações</th>
-                <th className="px-4 py-3.5 text-right">Interesse</th>
+                <th className="px-4 py-3.5 text-right">Contato Direto</th>
               </tr>
             </thead>
             <tbody>
