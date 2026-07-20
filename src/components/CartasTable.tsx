@@ -201,7 +201,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
           </button>
           <div className="flex items-center gap-2 mb-1">
             {adminCfg.logoImg ? (
-              <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="h-6 max-w-[90px] object-contain rounded-md bg-white p-0.5" />
+              <img src={adminCfg.logoImg} alt={adminCfg.shortName} width={80} height={80} className="w-8 h-8 object-contain rounded-md bg-white p-0.5" />
             ) : (
               <span
                 className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full"
@@ -319,7 +319,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
   );
 }
 
-/* ── Carta Row (Desktop - 7 Spreadsheet Columns + Direct Logo Display) ─── */
+/* ── Carta Row (Desktop - 7 Spreadsheet Columns + 80x80 Direct Logo) ───── */
 function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
   const adminCfg = getAdminBadgeConfig(carta.administradora);
   const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
@@ -350,13 +350,15 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         {carta.taxa_transferencia || "R$ 0,00"}
       </td>
 
-      {/* 5. Administradora (Logo Direto / Badge Limpa) */}
+      {/* 5. Administradora (Logo Direto 80x80) */}
       <td className="px-4 py-4 whitespace-nowrap">
         {adminCfg.logoImg ? (
           <img
             src={adminCfg.logoImg}
             alt={adminCfg.shortName}
-            className="h-8 max-w-[100px] object-contain rounded-md shadow-2xs"
+            width={80}
+            height={80}
+            className="w-10 h-10 object-contain rounded-lg shadow-2xs inline-block"
           />
         ) : (
           <span
@@ -417,7 +419,7 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
       {/* Topo: Logo Admin & Status */}
       <div className="flex items-center justify-between">
         {adminCfg.logoImg ? (
-          <img src={adminCfg.logoImg} alt={adminCfg.shortName} className="h-7 max-w-[90px] object-contain rounded-md" />
+          <img src={adminCfg.logoImg} alt={adminCfg.shortName} width={80} height={80} className="w-9 h-9 object-contain rounded-md" />
         ) : (
           <span
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-xs"
