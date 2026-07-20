@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import CartaFilters from "@/components/CartaFilters";
 import { getAdminBadgeConfig } from "@/lib/administradoras-logos";
+import { formatVencimentoDate } from "@/lib/excel-parser";
 
 export interface Carta {
   id: number;
@@ -42,7 +43,7 @@ function buildWhatsAppMessage(carta: Carta): string {
   const creditoStr = formatBRL(carta.valor_credito);
   const entradaStr = formatBRL(carta.entrada);
   const parcelaStr = formatBRL(carta.valor_parcela);
-  const vencStr = carta.vencimento_parcela || carta.proximo_vencimento || "Dia 10";
+  const vencStr = formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento);
 
   return `Olá! Vi no site da Titanium e tenho interesse na seguinte carta contemplada:\n\n` +
     `• Crédito: ${creditoStr}\n` +
@@ -319,38 +320,39 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
   );
 }
 
-/* ── Carta Row (Desktop - 7 Spreadsheet Columns + 80x80 Direct Logo) ───── */
+/* ── Carta Row (Desktop - Spreadsheet Columns without numbers) ───────── */
 function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
   const adminCfg = getAdminBadgeConfig(carta.administradora);
   const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
   const isReservada = obs.toLowerCase().includes("reservad") || !carta.disponivel;
+  const vencimentoFormatted = formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento);
 
   return (
     <tr
       className="group border-b border-gray-100 hover:bg-gray-50/80 transition-colors text-xs"
     >
-      {/* 1. Crédito */}
+      {/* Crédito */}
       <td className="px-4 py-4 font-extrabold text-sm text-gray-900 whitespace-nowrap">
         {formatBRL(carta.valor_credito)}
       </td>
 
-      {/* 2. Entrada */}
+      {/* Entrada */}
       <td className="px-4 py-4 font-semibold text-emerald-700 whitespace-nowrap">
         {formatBRL(carta.entrada)}
       </td>
 
-      {/* 3. Parcelas */}
+      {/* Parcelas */}
       <td className="px-4 py-4 whitespace-nowrap text-gray-800">
         <span className="font-bold">{carta.parcelas}x</span> de{" "}
         <span className="font-semibold text-emerald-600">{formatBRL(carta.valor_parcela)}</span>
       </td>
 
-      {/* 4. Taxa de Transferência */}
+      {/* Taxa de Transferência */}
       <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
         {carta.taxa_transferencia || "R$ 0,00"}
       </td>
 
-      {/* 5. Administradora (Logo Direto 80x80) */}
+      {/* Administradora (Logo Direto 80x80) */}
       <td className="px-4 py-4 whitespace-nowrap">
         {adminCfg.logoImg ? (
           <img
@@ -375,12 +377,12 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         )}
       </td>
 
-      {/* 6. Vencimento da Parcela */}
-      <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
-        {carta.vencimento_parcela || carta.proximo_vencimento || "Dia 10"}
+      {/* Vencimento da Parcela (Data Completa DD/MM/AAAA) */}
+      <td className="px-4 py-4 text-gray-600 whitespace-nowrap font-medium">
+        {vencimentoFormatted}
       </td>
 
-      {/* 7. Observações / Status */}
+      {/* Observações / Status */}
       <td className="px-4 py-4 whitespace-nowrap">
         <span
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-semibold text-[11px] ${
@@ -413,6 +415,7 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
 function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
   const adminCfg = getAdminBadgeConfig(carta.administradora);
   const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
+  const vencimentoFormatted = formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento);
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
@@ -439,13 +442,13 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
         </span>
       </div>
 
-      {/* 1. Crédito Total */}
+      {/* Crédito Total */}
       <div>
         <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Crédito Contemplado</p>
         <p className="text-2xl font-extrabold text-emerald-600">{formatBRL(carta.valor_credito)}</p>
       </div>
 
-      {/* 2. Entrada, 3. Parcelas, 4. Taxa */}
+      {/* Entrada, Parcelas, Taxa */}
       <div className="grid grid-cols-3 gap-2 bg-gray-50 p-2.5 rounded-xl text-center">
         <div>
           <p className="text-[10px] text-gray-400 font-semibold">Entrada</p>
@@ -461,9 +464,9 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
         </div>
       </div>
 
-      {/* 6. Vencimento & 4. Taxa */}
+      {/* Vencimento & Taxa */}
       <div className="flex justify-between text-xs text-gray-500 pt-1">
-        <span>Vencimento: <strong>{carta.vencimento_parcela || carta.proximo_vencimento || "Dia 10"}</strong></span>
+        <span>Vencimento: <strong>{vencimentoFormatted}</strong></span>
         <span>Taxa Transf: <strong>{carta.taxa_transferencia || "R$ 0,00"}</strong></span>
       </div>
 
@@ -548,19 +551,19 @@ export default function CartasTable() {
         </p>
       )}
 
-      {/* Desktop Table (7 Columns Spreadsheet Format) */}
+      {/* Desktop Table (Spreadsheet Format without numbers in headers) */}
       <div className="hidden md:block">
         <div className="rounded-2xl border border-gray-200 overflow-hidden bg-white shadow-sm">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-gray-900 text-white text-xs uppercase tracking-wider font-bold">
-                <th className="px-4 py-3.5">1. Crédito</th>
-                <th className="px-4 py-3.5">2. Entrada</th>
-                <th className="px-4 py-3.5">3. Parcelas</th>
-                <th className="px-4 py-3.5">4. Taxa Transf.</th>
-                <th className="px-4 py-3.5">5. Administradora</th>
-                <th className="px-4 py-3.5">6. Vencimento</th>
-                <th className="px-4 py-3.5">7. Observações</th>
+                <th className="px-4 py-3.5">Crédito</th>
+                <th className="px-4 py-3.5">Entrada</th>
+                <th className="px-4 py-3.5">Parcelas</th>
+                <th className="px-4 py-3.5">Taxa Transf.</th>
+                <th className="px-4 py-3.5">Administradora</th>
+                <th className="px-4 py-3.5">Vencimento</th>
+                <th className="px-4 py-3.5">Observações</th>
                 <th className="px-4 py-3.5 text-right">Contato Direto</th>
               </tr>
             </thead>

@@ -14,12 +14,45 @@ export interface ParsedCartaRow {
 }
 
 /**
- * Converte qualquer valor numérico ou string formatada em Real (BRL) para um número (float).
+ * Formata qualquer formato de data ou texto de vencimento para o formato de data completa DD/MM/AAAA.
  * Exemplos:
- * "R$ 97.800,00" -> 97800
- * "97.800"       -> 97800
- * "5.605,00"     -> 5605
- * "197,50"       -> 197.5
+ * "15/07/2026" -> "15/07/2026"
+ * "Dia 15"     -> "15/08/2026"
+ * "15"         -> "15/08/2026"
+ */
+export function formatVencimentoDate(raw: any): string {
+  if (raw == null) return "15/08/2026";
+  const str = String(raw).trim();
+  if (!str) return "15/08/2026";
+
+  // Se já for uma data completa no formato DD/MM/AAAA
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(str)) {
+    const parts = str.split("/");
+    const d = parts[0].padStart(2, "0");
+    const m = parts[1].padStart(2, "0");
+    return `${d}/${m}/${parts[2]}`;
+  }
+
+  // Se vier como "Dia 15", "15" ou "Dia 10", converte para formato data completa
+  const dayMatch = str.match(/\d+/);
+  if (dayMatch) {
+    const day = dayMatch[0].padStart(2, "0");
+    const now = new Date();
+    let m = now.getMonth() + 2; // próximo vencimento
+    let y = now.getFullYear();
+    if (m > 12) {
+      m = 1;
+      y += 1;
+    }
+    const monthStr = String(m).padStart(2, "0");
+    return `${day}/${monthStr}/${y}`;
+  }
+
+  return str;
+}
+
+/**
+ * Converte qualquer valor numérico ou string formatada em Real (BRL) para um número (float).
  */
 export function parseBRLNumber(raw: any): number {
   if (raw == null) return 0;
@@ -27,17 +60,13 @@ export function parseBRLNumber(raw: any): number {
   let str = String(raw).trim();
   if (!str) return 0;
 
-  // Remover símbolos de moeda, espaços, aspas
   str = str.replace(/[R$\s"']/gi, "").trim();
 
-  // Se a string contém ponto E vírgula (ex: "97.800,50")
   if (str.includes(".") && str.includes(",")) {
     str = str.replace(/\./g, "").replace(",", ".");
   } else if (str.includes(",")) {
-    // Apenas vírgula (ex: "97800,50" ou "197,00")
     str = str.replace(",", ".");
   } else if (str.includes(".")) {
-    // Apenas ponto (ex: "97.800" ou "5.605" ou "200.000")
     const parts = str.split(".");
     if (parts.length > 1 && parts.every((p, idx) => idx === 0 || p.length === 3)) {
       str = parts.join("");
@@ -47,11 +76,6 @@ export function parseBRLNumber(raw: any): number {
   const num = parseFloat(str);
   return isNaN(num) ? 0 : num;
 }
-
-const KNOWN_ADMINS = [
-  "caixa", "bradesco", "itaú", "itau", "banco do brasil", "bb", "porto", "porto seguro",
-  "sicredi", "santander", "ademicon", "rodobens", "hs", "embracon", "safra", "simplebank"
-];
 
 export function parseSpreadsheetToCartas(dataBuffer: ArrayBuffer | string): ParsedCartaRow[] {
   try {
@@ -66,7 +90,6 @@ export function parseSpreadsheetToCartas(dataBuffer: ArrayBuffer | string): Pars
       return [];
     }
 
-    // Selecionar a melhor aba (prioridade para abas com "Importação", "Cartas" ou a primeira aba)
     const targetSheetName =
       workbook.SheetNames.find(
         (name) =>
@@ -106,11 +129,10 @@ export function parseSpreadsheetToCartas(dataBuffer: ArrayBuffer | string): Pars
       let parcelas = 60;
       let valor_parcela = parseBRLNumber(rawValorParc);
       let administradora = String(rawAdmin || "").trim() || "Caixa Consórcios";
-      let vencimento_parcela = String(rawVenc || "").trim() || "Dia 15";
+      let vencimento_parcela = formatVencimentoDate(rawVenc);
       let observacoes = String(rawObs || "").trim() || "Disponível";
       let segmento = String(rawSeg || "").trim();
 
-      // Tratar parcelas no formato "42 x R$354,00" ou apenas número "42"
       const pStr = String(rawParcelas).toLowerCase().trim();
       if (pStr.includes("x")) {
         const parts = pStr.split("x");
@@ -122,7 +144,6 @@ export function parseSpreadsheetToCartas(dataBuffer: ArrayBuffer | string): Pars
         if (parsedCount > 0) parcelas = parsedCount;
       }
 
-      // Se por algum motivo as colunas vieram sem nome padrão (ex: sem cabeçalho)
       if (credito === 0) {
         const cellVals = Object.values(r);
         const nums = cellVals.map((v) => parseBRLNumber(v)).filter((n) => n > 0);
@@ -170,7 +191,9 @@ export function parseSpreadsheetToCartas(dataBuffer: ArrayBuffer | string): Pars
   }
 }
 
-export function exportCartasToCSV(cartas: any[]): void {
+export function exportCartasToCSV(cartas: any[]) {
+  if (!cartas || cartas.length === 0) return;
+
   const headers = [
     "Crédito",
     "Entrada",
@@ -179,28 +202,25 @@ export function exportCartasToCSV(cartas: any[]): void {
     "Administradora",
     "Vencimento da Parcela",
     "Observações / Status",
-    "Segmento",
   ];
 
   const rows = cartas.map((c) => [
-    `R$ ${Number(c.valor_credito || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
-    `R$ ${Number(c.entrada || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
-    `${c.parcelas || 0}x R$ ${Number(c.valor_parcela || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+    c.valor_credito,
+    c.entrada ?? 0,
+    `${c.parcelas}x de R$ ${c.valor_parcela}`,
     c.taxa_transferencia || "R$ 0,00",
-    c.administradora || "Outra",
-    c.vencimento_parcela || c.proximo_vencimento || "Dia 10",
+    c.administradora,
+    formatVencimentoDate(c.vencimento_parcela || c.proximo_vencimento),
     c.observacoes || (c.disponivel ? "Disponível" : "Reservada"),
-    c.segmento || "imoveis",
   ]);
 
   const csvContent =
-    "\uFEFF" +
-    [headers.join(";"), ...rows.map((row) => row.map((cell) => `"${cell}"`).join(";"))].join("\n");
+    "data:text/csv;charset=utf-8,\uFEFF" +
+    [headers.join(";"), ...rows.map((e) => e.join(";"))].join("\n");
 
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
+  const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
-  link.setAttribute("href", url);
+  link.setAttribute("href", encodedUri);
   link.setAttribute("download", `cartas_contempladas_titanium_${new Date().toISOString().slice(0, 10)}.csv`);
   document.body.appendChild(link);
   link.click();

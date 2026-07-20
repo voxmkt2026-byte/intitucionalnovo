@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import AdminCartaForm from "@/components/AdminCartaForm";
+import { parseSpreadsheetToCartas, exportCartasToCSV, formatVencimentoDate, ParsedCartaRow } from "@/lib/excel-parser";
 import { getAdminBadgeConfig } from "@/lib/administradoras-logos";
-import { parseSpreadsheetToCartas, exportCartasToCSV, ParsedCartaRow } from "@/lib/excel-parser";
 
-export interface Carta {
+interface Carta {
   id: number;
   segmento: string;
   administradora: string;
@@ -18,7 +18,10 @@ export interface Carta {
   vencimento_parcela?: string | null;
   observacoes?: string | null;
   disponivel: boolean;
-  criado_em: string;
+}
+
+interface CartaAdminClientProps {
+  initialCartas?: Carta[];
 }
 
 function formatBRL(v: number | null | undefined) {
@@ -26,88 +29,86 @@ function formatBRL(v: number | null | undefined) {
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 }
 
-export default function CartaAdminClient() {
-  const [cartas, setCartas] = useState<Carta[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClientProps) {
+  const [cartas, setCartas] = useState<Carta[]>(initialCartas);
+  const [editingCarta, setEditingCarta] = useState<Carta | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [editCarta, setEditCarta] = useState<Carta | null>(null);
-  const [deleting, setDeleting] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
   const [selectedAdminFilter, setSelectedAdminFilter] = useState<string>("todas");
+  const [selectedSegFilter, setSelectedSegFilter] = useState<string>("todos");
 
-  // Modais de Upload e Confirmação de Exclusão Total
+  // Modal de Upload
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
   const [parsedRows, setParsedRows] = useState<ParsedCartaRow[]>([]);
   const [uploadMode, setUploadMode] = useState<"replace" | "append">("replace");
-  const [uploading, setUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  async function fetchCartas() {
+  // Modal de Excluir Todas
+  const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
+
+  // Recarregar cartas da API
+  async function reloadCartas() {
     setLoading(true);
     try {
       const res = await fetch("/api/admin/cartas");
-      if (res.status === 401) {
-        window.location.href = "/admin/login";
-        return;
-      }
-      const json = await res.json();
-      setCartas(json.data || []);
-    } catch {
-      setCartas([]);
+      const data = await res.json();
+      if (Array.isArray(data)) setCartas(data);
+    } catch (err) {
+      console.error("[reloadCartas]", err);
     } finally {
       setLoading(false);
     }
   }
 
-  useEffect(() => {
-    fetchCartas();
-  }, []);
-
-  async function handleToggle(carta: Carta) {
-    await fetch(`/api/admin/cartas/${carta.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ disponivel: !carta.disponivel }),
-    });
-    await fetchCartas();
-  }
-
-  async function handleDeleteSingle(id: number) {
-    if (!confirm("Remover esta carta do sistema?")) return;
-    setDeleting(id);
-    await fetch(`/api/admin/cartas/${id}`, { method: "DELETE" });
-    await fetchCartas();
-    setDeleting(null);
-  }
-
-  async function handleDeleteAll() {
-    setUploading(true);
+  // Deletar uma carta específica
+  async function handleDeleteCarta(id: number) {
+    if (!confirm("Tem certeza que deseja excluir esta carta contemplada?")) return;
     try {
-      const res = await fetch("/api/admin/cartas?all=true", { method: "DELETE" });
+      const res = await fetch(`/api/admin/cartas/${id}`, { method: "DELETE" });
       if (res.ok) {
-        await fetchCartas();
-        setShowDeleteAllModal(false);
+        setCartas((prev) => prev.filter((c) => c.id !== id));
       } else {
-        alert("Erro ao excluir todas as cartas.");
+        alert("Erro ao excluir carta.");
       }
     } catch {
       alert("Erro de conexão ao excluir.");
-    } finally {
-      setUploading(false);
     }
   }
 
+  // Deletar todas as cartas
+  async function handleDeleteAllCartas() {
+    setIsUploading(true);
+    try {
+      const res = await fetch("/api/admin/cartas?all=true", { method: "DELETE" });
+      if (res.ok) {
+        setCartas([]);
+        setShowDeleteAllModal(false);
+        alert("Todas as cartas foram removidas com sucesso!");
+      } else {
+        alert("Erro ao remover cartas.");
+      }
+    } catch {
+      alert("Erro ao remover cartas.");
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  // Lidar com seleção de arquivo .xlsx/.csv
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setUploadMessage("");
     const reader = new FileReader();
-    reader.onload = (event) => {
-      const buffer = event.target?.result as ArrayBuffer;
-      if (buffer) {
-        const rows = parseSpreadsheetToCartas(buffer);
+    reader.onload = (evt) => {
+      const bstr = evt.target?.result;
+      if (bstr) {
+        const rows = parseSpreadsheetToCartas(bstr as ArrayBuffer);
         if (rows.length === 0) {
-          alert("Nenhuma carta válida encontrada na planilha. Verifique a estrutura do arquivo.");
+          setUploadMessage("Nenhuma carta válida foi encontrada na planilha. Verifique a formatação das colunas.");
         } else {
           setParsedRows(rows);
           setShowUploadModal(true);
@@ -115,102 +116,94 @@ export default function CartaAdminClient() {
       }
     };
     reader.readAsArrayBuffer(file);
-    e.target.value = "";
   }
 
-  async function handleConfirmBulkUpload() {
+  // Confirmar Importação em Lote
+  async function handleConfirmImport() {
     if (parsedRows.length === 0) return;
-    setUploading(true);
+    setIsUploading(true);
+    setUploadMessage("");
+
     try {
       const res = await fetch("/api/admin/cartas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          bulk: true,
-          replace: uploadMode === "replace",
-          cartas: parsedRows.map((r) => ({
-            segmento: r.segmento,
-            administradora: r.administradora,
-            valor_credito: r.credito,
-            entrada: r.entrada,
-            parcelas: r.parcelas,
-            valor_parcela: r.valor_parcela,
-            taxa_transferencia: r.taxa_transferencia,
-            vencimento_parcela: r.vencimento_parcela,
-            observacoes: r.observacoes,
-            disponivel: r.disponivel,
-          })),
+          mode: uploadMode,
+          cartas: parsedRows,
         }),
       });
 
       if (res.ok) {
-        const resJson = await res.json();
-        await fetchCartas();
         setShowUploadModal(false);
         setParsedRows([]);
-        alert(`Planilha importada com sucesso! ${resJson.count || 0} cartas publicadas na vitrine.`);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        await reloadCartas();
+        alert(`${parsedRows.length} cartas importadas com sucesso!`);
       } else {
         const errJson = await res.json();
-        alert(`Erro ao importar planilha: ${errJson.error || "Erro no servidor"}`);
+        setUploadMessage(`Erro ao importar: ${errJson.error || "Falha no servidor"}`);
       }
     } catch {
-      alert("Erro de conexão ao enviar planilha.");
+      setUploadMessage("Erro de conexão ao importar planilha.");
     } finally {
-      setUploading(false);
+      setIsUploading(false);
     }
   }
 
-  // Filtro por Administradora
-  const administradorasUnicas = Array.from(new Set(cartas.map((c) => c.administradora))).filter(Boolean);
-  const cartasFiltradas = selectedAdminFilter === "todas"
-    ? cartas
-    : cartas.filter((c) => c.administradora.toLowerCase().includes(selectedAdminFilter.toLowerCase()));
+  // Filtragem de Administradoras e Segmentos
+  const adminCounts: Record<string, number> = {};
+  cartas.forEach((c) => {
+    const adm = (c.administradora || "Outra").trim();
+    adminCounts[adm] = (adminCounts[adm] || 0) + 1;
+  });
 
-  const disponiveisCount = cartas.filter((c) => c.disponivel).length;
+  const cartasFiltradas = cartas.filter((c) => {
+    if (selectedAdminFilter !== "todas" && c.administradora.toLowerCase() !== selectedAdminFilter.toLowerCase()) {
+      return false;
+    }
+    if (selectedSegFilter !== "todos" && c.segmento !== selectedSegFilter) {
+      return false;
+    }
+    return true;
+  });
 
   return (
-    <main className="max-w-7xl mx-auto px-4 py-8">
-      {/* Dynamic Hidden File Input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileSelect}
-        accept=".xlsx,.xls,.csv,.txt"
-        className="hidden"
-      />
-
-      {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div className="space-y-6">
+      {/* Top Header & Controles de Planilha */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest mb-0.5" style={{ color: "var(--admin-text-mute)" }}>
-            Gestão de Vitrine
-          </p>
-          <h1 className="text-2xl font-bold" style={{ color: "var(--admin-text)" }}>
-            Cartas Contempladas
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--admin-text)" }}>
+            Gestão de Cartas Contempladas
           </h1>
-          <p className="text-sm mt-1" style={{ color: "var(--admin-text-mute)" }}>
-            Gerencie, importe planilhas (.xlsx / .csv) e edite as cartas com os logos oficiais
+          <p className="text-xs mt-1" style={{ color: "var(--admin-text-mute)" }}>
+            Suba planilhas em lote, exporte dados ou gerencie cartas individualmente na vitrine.
           </p>
         </div>
 
-        {/* Action Buttons Toolbar */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          {/* Upload Planilha */}
+        {/* Botões de Ação da Planilha */}
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Input invisível para upload de planilha */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+            accept=".xlsx, .xls, .csv"
+            className="hidden"
+          />
+
+          {/* Subir Planilha */}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 font-semibold px-4 py-2.5 rounded-full text-sm cursor-pointer border transition-all shadow-2xs"
-            style={{
-              backgroundColor: "#FFFFFF",
-              color: "#1A1A1A",
-              borderColor: "var(--admin-border)",
-            }}
+            className="flex items-center gap-2 font-bold px-4 py-2.5 rounded-full text-sm cursor-pointer transition-all text-white shadow-sm hover:opacity-90"
+            style={{ backgroundColor: "#0A7B3E" }}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
-            Subir Planilha (.xlsx / .csv)
+            Subir Planilha (.xlsx)
           </button>
 
           {/* Exportar Planilha */}
@@ -236,12 +229,7 @@ export default function CartaAdminClient() {
           <button
             onClick={() => setShowDeleteAllModal(true)}
             disabled={cartas.length === 0}
-            className="flex items-center gap-2 font-semibold px-4 py-2.5 rounded-full text-sm cursor-pointer border transition-all disabled:opacity-50"
-            style={{
-              backgroundColor: "rgba(239, 68, 68, 0.08)",
-              color: "#DC2626",
-              borderColor: "rgba(239, 68, 68, 0.2)",
-            }}
+            className="flex items-center gap-2 font-semibold px-4 py-2.5 rounded-full text-sm cursor-pointer border transition-all text-red-600 bg-red-50 hover:bg-red-100 border-red-200 disabled:opacity-50"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="3 6 5 6 21 6" />
@@ -250,63 +238,44 @@ export default function CartaAdminClient() {
             Excluir Todas
           </button>
 
-          {/* Nova Carta Individual */}
+          {/* Adicionar Carta Manual */}
           <button
             onClick={() => {
-              setEditCarta(null);
+              setEditingCarta(null);
               setShowForm(true);
             }}
-            className="flex items-center gap-2 font-semibold px-5 py-2.5 rounded-full text-sm cursor-pointer shadow-sm text-white"
-            style={{ backgroundColor: "var(--admin-brand, #0A7B3E)" }}
+            className="flex items-center gap-2 font-semibold px-4 py-2.5 rounded-full text-sm cursor-pointer transition-all border border-gray-300 hover:bg-gray-50"
+            style={{ backgroundColor: "var(--admin-surface)", color: "var(--admin-text)" }}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-              <path d="M12 4v16m8-8H4" />
-            </svg>
-            Nova Carta
+            + Nova Carta Manual
           </button>
         </div>
       </div>
 
-      {/* KPI Cards & Filter Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="p-4 rounded-2xl border" style={{ backgroundColor: "var(--admin-surface)", borderColor: "var(--admin-border)" }}>
-          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--admin-text-mute)" }}>Total Cadastradas</span>
-          <p className="text-2xl font-bold mt-1" style={{ color: "var(--admin-text)" }}>{cartas.length}</p>
-        </div>
-        <div className="p-4 rounded-2xl border" style={{ backgroundColor: "var(--admin-surface)", borderColor: "var(--admin-border)" }}>
-          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--admin-text-mute)" }}>Disponíveis na Vitrine</span>
-          <p className="text-2xl font-bold mt-1" style={{ color: "var(--admin-brand)" }}>{disponiveisCount}</p>
-        </div>
-        <div className="p-4 rounded-2xl border" style={{ backgroundColor: "var(--admin-surface)", borderColor: "var(--admin-border)" }}>
-          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--admin-text-mute)" }}>Reservadas / Indisponíveis</span>
-          <p className="text-2xl font-bold mt-1 text-amber-600">{cartas.length - disponiveisCount}</p>
-        </div>
-      </div>
-
-      {/* Abas de Administradoras */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 scrollbar-none">
+      {/* Tabs / Badges de Administradoras */}
+      <div className="flex items-center gap-2 flex-wrap pt-2 border-b pb-4" style={{ borderColor: "var(--admin-border)" }}>
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider mr-2">Filtrar Administradora:</span>
         <button
           onClick={() => setSelectedAdminFilter("todas")}
-          className={`px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+          className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border ${
             selectedAdminFilter === "todas"
-              ? "bg-[#0A7B3E] text-white shadow-sm"
-              : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+              ? "bg-gray-900 text-white border-gray-900 shadow-xs"
+              : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
           }`}
         >
-          Todas as Administradoras ({cartas.length})
+          Todas ({cartas.length})
         </button>
-        {administradorasUnicas.map((adminName) => {
-          const cfg = getAdminBadgeConfig(adminName);
-          const count = cartas.filter((c) => c.administradora === adminName).length;
-          const isSelected = selectedAdminFilter === adminName;
 
+        {Object.entries(adminCounts).map(([admName, count]) => {
+          const cfg = getAdminBadgeConfig(admName);
+          const isSelected = selectedAdminFilter.toLowerCase() === admName.toLowerCase();
           return (
             <button
-              key={adminName}
-              onClick={() => setSelectedAdminFilter(adminName)}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap border"
+              key={admName}
+              onClick={() => setSelectedAdminFilter(admName)}
+              className="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border flex items-center gap-2 shadow-2xs"
               style={{
-                backgroundColor: isSelected ? cfg.color : "#FFFFFF",
+                backgroundColor: isSelected ? cfg.color : cfg.bgTint,
                 color: isSelected ? "#FFFFFF" : cfg.color,
                 borderColor: cfg.borderColor,
               }}
@@ -325,7 +294,7 @@ export default function CartaAdminClient() {
         })}
       </div>
 
-      {/* Table Container — 7 Columns Spreadsheet Style */}
+      {/* Table Container — Spreadsheet Style without Numbers */}
       <div className="rounded-2xl border overflow-hidden shadow-sm" style={{ backgroundColor: "var(--admin-surface)", borderColor: "var(--admin-border)" }}>
         {loading ? (
           <div className="p-12 text-center text-sm" style={{ color: "var(--admin-text-mute)" }}>
@@ -345,13 +314,13 @@ export default function CartaAdminClient() {
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b bg-gray-50/80 font-bold uppercase tracking-wider text-gray-500" style={{ borderColor: "var(--admin-border)" }}>
-                  <th className="py-3.5 px-4">1. Crédito</th>
-                  <th className="py-3.5 px-4">2. Entrada</th>
-                  <th className="py-3.5 px-4">3. Parcelas</th>
-                  <th className="py-3.5 px-4">4. Taxa Transferência</th>
-                  <th className="py-3.5 px-4">5. Administradora</th>
-                  <th className="py-3.5 px-4">6. Vencimento</th>
-                  <th className="py-3.5 px-4">7. Observações / Status</th>
+                  <th className="py-3.5 px-4">Crédito</th>
+                  <th className="py-3.5 px-4">Entrada</th>
+                  <th className="py-3.5 px-4">Parcelas</th>
+                  <th className="py-3.5 px-4">Taxa Transferência</th>
+                  <th className="py-3.5 px-4">Administradora</th>
+                  <th className="py-3.5 px-4">Vencimento</th>
+                  <th className="py-3.5 px-4">Observações / Status</th>
                   <th className="py-3.5 px-4 text-right">Ações</th>
                 </tr>
               </thead>
@@ -360,10 +329,11 @@ export default function CartaAdminClient() {
                   const cfg = getAdminBadgeConfig(c.administradora);
                   const obs = c.observacoes || (c.disponivel ? "Disponível" : "Reservada");
                   const isReservada = obs.toLowerCase().includes("reservad") || !c.disponivel;
+                  const vencimentoFormatted = formatVencimentoDate(c.vencimento_parcela || c.proximo_vencimento);
 
                   return (
                     <tr key={c.id} className="hover:bg-gray-50/60 transition-colors">
-                      {/* 1. Crédito */}
+                      {/* Crédito */}
                       <td className="py-3.5 px-4 font-bold text-gray-900 text-sm whitespace-nowrap">
                         {formatBRL(c.valor_credito)}
                         <span className="block text-[10px] font-normal text-gray-400 uppercase tracking-wide">
@@ -371,29 +341,31 @@ export default function CartaAdminClient() {
                         </span>
                       </td>
 
-                      {/* 2. Entrada */}
+                      {/* Entrada */}
                       <td className="py-3.5 px-4 font-semibold text-emerald-700 whitespace-nowrap">
                         {formatBRL(c.entrada)}
                       </td>
 
-                      {/* 3. Parcelas */}
+                      {/* Parcelas */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <span className="font-semibold text-gray-900">{c.parcelas}x</span> de{" "}
                         <span className="font-medium text-gray-700">{formatBRL(c.valor_parcela)}</span>
                       </td>
 
-                      {/* 4. Taxa de Transferência */}
+                      {/* Taxa de Transferência */}
                       <td className="py-3.5 px-4 text-gray-600 whitespace-nowrap">
                         {c.taxa_transferencia || "R$ 0,00"}
                       </td>
 
-                      {/* 5. Administradora (Logo Direto) */}
+                      {/* Administradora (Logo Direto 80x80) */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         {cfg.logoImg ? (
                           <img
                             src={cfg.logoImg}
                             alt={cfg.shortName}
-                            className="h-8 max-w-[100px] object-contain rounded-md shadow-2xs"
+                            width={80}
+                            height={80}
+                            className="w-10 h-10 object-contain rounded-lg shadow-2xs inline-block"
                           />
                         ) : (
                           <span
@@ -410,12 +382,12 @@ export default function CartaAdminClient() {
                         )}
                       </td>
 
-                      {/* 6. Vencimento da Parcela */}
-                      <td className="py-3.5 px-4 text-gray-600 whitespace-nowrap">
-                        {c.vencimento_parcela || c.proximo_vencimento || "Dia 10"}
+                      {/* Vencimento da Parcela (Data Completa DD/MM/AAAA) */}
+                      <td className="py-3.5 px-4 text-gray-600 whitespace-nowrap font-medium">
+                        {vencimentoFormatted}
                       </td>
 
-                      {/* 7. Observações / Status */}
+                      {/* Observações / Status */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-semibold text-[11px] ${
@@ -431,46 +403,20 @@ export default function CartaAdminClient() {
                       {/* Ações */}
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-2">
-                          {/* Toggle Disponível */}
-                          <button
-                            onClick={() => handleToggle(c)}
-                            title={c.disponivel ? "Ocultar da vitrine" : "Mostrar na vitrine"}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-                          >
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              {c.disponivel ? (
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                              ) : (
-                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
-                              )}
-                            </svg>
-                          </button>
-
-                          {/* Editar */}
                           <button
                             onClick={() => {
-                              setEditCarta(c);
+                              setEditingCarta(c);
                               setShowForm(true);
                             }}
-                            title="Editar carta"
-                            className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors"
+                            className="px-2.5 py-1 rounded-md border text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
                           >
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
+                            Editar
                           </button>
-
-                          {/* Excluir */}
                           <button
-                            onClick={() => handleDeleteSingle(c.id)}
-                            disabled={deleting === c.id}
-                            title="Excluir carta"
-                            className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40"
+                            onClick={() => handleDeleteCarta(c.id)}
+                            className="px-2.5 py-1 rounded-md border text-xs font-semibold text-red-600 border-red-200 hover:bg-red-50 transition-colors"
                           >
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <polyline points="3 6 5 6 21 6" />
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                            </svg>
+                            Excluir
                           </button>
                         </div>
                       </td>
@@ -483,29 +429,43 @@ export default function CartaAdminClient() {
         )}
       </div>
 
-      {/* Modal Formulário Individual */}
+      {/* Modal de Formulário Manual */}
       {showForm && (
         <AdminCartaForm
-          carta={editCarta}
-          onClose={() => setShowForm(false)}
-          onSave={fetchCartas}
+          carta={editingCarta}
+          onClose={() => {
+            setShowForm(false);
+            setEditingCarta(null);
+          }}
+          onSave={async () => {
+            setShowForm(false);
+            setEditingCarta(null);
+            await reloadCartas();
+          }}
         />
       )}
 
-      {/* Modal de Prévia de Upload de Planilha */}
+      {/* Modal de Prévia do Upload de Planilha */}
       {showUploadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}>
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Confirmar Importação de Planilha</h2>
-            <p className="text-xs text-gray-500 mb-4">
-              Encontramos <strong>{parsedRows.length} cartas</strong> na planilha.
-            </p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="w-full max-w-2xl bg-white rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b pb-3">
+              <h3 className="text-lg font-bold text-gray-900">
+                Confirmar Importação de Planilha ({parsedRows.length} Cartas)
+              </h3>
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="text-gray-400 hover:text-gray-600 text-lg font-bold"
+              >
+                ✕
+              </button>
+            </div>
 
             {/* Opções de Upload */}
-            <div className="bg-gray-50 p-4 rounded-xl mb-4 border border-gray-200">
-              <span className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Modo de Importação:</span>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-gray-800">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Modo de Importação:</p>
+              <div className="flex items-center gap-4 text-xs font-medium">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     name="uploadMode"
@@ -514,9 +474,9 @@ export default function CartaAdminClient() {
                     onChange={() => setUploadMode("replace")}
                     className="accent-emerald-600"
                   />
-                  <span>Substituir TODAS as cartas atuais por esta planilha</span>
+                  <span className="font-bold text-red-600">Substituir TODAS as cartas da vitrine</span>
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-gray-800">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     name="uploadMode"
@@ -535,11 +495,12 @@ export default function CartaAdminClient() {
               <table className="w-full text-left text-[11px]">
                 <thead className="bg-gray-100 font-bold text-gray-600">
                   <tr>
-                    <th className="p-2">1. Crédito</th>
-                    <th className="p-2">2. Entrada</th>
-                    <th className="p-2">3. Parcelas</th>
-                    <th className="p-2">5. Admin</th>
-                    <th className="p-2">7. Status</th>
+                    <th className="p-2">Crédito</th>
+                    <th className="p-2">Entrada</th>
+                    <th className="p-2">Parcelas</th>
+                    <th className="p-2">Admin</th>
+                    <th className="p-2">Vencimento</th>
+                    <th className="p-2">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -557,6 +518,7 @@ export default function CartaAdminClient() {
                             <span style={{ color: cfg.color }}>{cfg.shortName}</span>
                           )}
                         </td>
+                        <td className="p-2">{r.vencimento_parcela}</td>
                         <td className="p-2">{r.observacoes}</td>
                       </tr>
                     );
@@ -564,64 +526,69 @@ export default function CartaAdminClient() {
                 </tbody>
               </table>
               {parsedRows.length > 5 && (
-                <div className="p-2 text-center text-[10px] text-gray-400 bg-gray-50 border-t">
-                  + {parsedRows.length - 5} outras cartas na planilha...
-                </div>
+                <p className="p-2 text-center text-[10px] text-gray-400 bg-gray-50 border-t">
+                  + {parsedRows.length - 5} outras cartas nesta planilha...
+                </p>
               )}
             </div>
 
-            <div className="flex gap-3">
+            {uploadMessage && (
+              <p className="text-xs p-3 rounded-xl bg-red-50 text-red-600 font-medium">{uploadMessage}</p>
+            )}
+
+            <div className="flex items-center justify-end gap-3 pt-2 border-t">
               <button
                 onClick={() => setShowUploadModal(false)}
-                className="flex-1 py-2.5 border border-gray-200 text-gray-600 font-semibold rounded-xl text-xs hover:bg-gray-50"
+                className="px-4 py-2 rounded-full text-xs font-bold text-gray-600 border hover:bg-gray-50"
               >
                 Cancelar
               </button>
               <button
-                onClick={handleConfirmBulkUpload}
-                disabled={uploading}
-                className="flex-1 py-2.5 bg-emerald-600 text-white font-semibold rounded-xl text-xs hover:bg-emerald-700 disabled:opacity-50 shadow-md"
+                onClick={handleConfirmImport}
+                disabled={isUploading}
+                className="px-5 py-2 rounded-full text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all disabled:opacity-50"
               >
-                {uploading ? "Importando..." : "Confirmar e Publicar Planilha"}
+                {isUploading ? "Importando..." : `Confirmar Importação (${parsedRows.length} Cartas)`}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Modal de Confirmação para Excluir Todas as Cartas */}
+      {/* Modal Confirmar Excluir Todas */}
       {showDeleteAllModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}>
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl text-center">
-            <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl text-center space-y-4">
+            <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="3 6 5 6 21 6" />
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <path d="M3 6h18" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
               </svg>
             </div>
-            <h2 className="text-base font-bold text-gray-900 mb-1">Excluir TODAS as cartas?</h2>
-            <p className="text-xs text-gray-500 mb-6">
-              Esta ação removerá permanentemente as <strong>{cartas.length} cartas</strong> cadastradas na vitrine. Esta ação não poderá ser desfeita.
+            <h3 className="text-lg font-bold text-gray-900">Excluir TODAS as cartas?</h3>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Esta ação apagar totalmente as {cartas.length} cartas da vitrine. Essa operação não pode ser desfeita.
             </p>
 
-            <div className="flex gap-3">
+            <div className="flex items-center justify-center gap-3 pt-2">
               <button
                 onClick={() => setShowDeleteAllModal(false)}
-                className="flex-1 py-2.5 border border-gray-200 text-gray-600 font-semibold rounded-xl text-xs hover:bg-gray-50"
+                className="px-5 py-2.5 rounded-full text-xs font-bold text-gray-600 border hover:bg-gray-50"
               >
                 Cancelar
               </button>
               <button
-                onClick={handleDeleteAll}
-                disabled={uploading}
-                className="flex-1 py-2.5 bg-red-600 text-white font-semibold rounded-xl text-xs hover:bg-red-700 disabled:opacity-50"
+                onClick={handleDeleteAllCartas}
+                disabled={isUploading}
+                className="px-5 py-2.5 rounded-full text-xs font-bold text-white bg-red-600 hover:bg-red-700 transition-all disabled:opacity-50"
               >
-                {uploading ? "Excluindo..." : "Sim, Excluir Todas"}
+                {isUploading ? "Excluindo..." : "Sim, Excluir Todas"}
               </button>
             </div>
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

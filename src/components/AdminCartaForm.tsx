@@ -1,50 +1,72 @@
 "use client";
 
 import { useState } from "react";
-import type { Carta } from "@/app/admin/cartas/CartaAdminClient";
 
-const SEGMENTOS = ["imoveis", "veiculos", "agronegocio", "servicos"];
-const ADMINISTRADORAS = [
-  "Caixa Consórcios",
-  "CNP Consórcio",
-  "Bradesco Consórcios",
-  "Itaú Consórcios",
-  "Banco do Brasil",
-  "Porto Seguro Consórcio",
-  "Sicredi",
-  "Santander Consórcios",
-  "Ademicon",
-  "Rodobens",
-  "HS Consórcios",
-  "Embracon",
-  "Outra"
-];
+interface Carta {
+  id?: number;
+  segmento: string;
+  administradora: string;
+  valor_credito: number;
+  entrada: number | null;
+  parcelas: number;
+  valor_parcela: number;
+  proximo_vencimento?: string | null;
+  taxa_transferencia?: string | null;
+  vencimento_parcela?: string | null;
+  observacoes?: string | null;
+  disponivel: boolean;
+}
 
-interface Props {
-  carta?: Carta | null;
+interface AdminCartaFormProps {
+  carta?: Carta | null; // se fornecido, modo edição
   onClose: () => void;
   onSave: () => void;
 }
 
-export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
+const SEGMENTOS = [
+  "imoveis",
+  "veiculos",
+  "caminhoes",
+  "servicos",
+];
+
+const ADMINISTRADORAS = [
+  "Caixa Consórcios",
+  "CNP Consórcio",
+  "Bradesco Consórcios",
+  "Banco do Brasil",
+  "Itaú Consórcios",
+  "Porto Seguro Consórcio",
+  "Santander Consórcios",
+  "Sicredi Consórcios",
+  "Ademicon",
+  "Rodobens Consórcios",
+  "HS Consórcios",
+  "Embracon",
+  "Outra",
+];
+
+export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFormProps) {
   const isEdit = Boolean(carta?.id);
+
   const [form, setForm] = useState({
     segmento: carta?.segmento || "imoveis",
     administradora: carta?.administradora || "Caixa Consórcios",
-    valor_credito: carta?.valor_credito != null ? String(carta.valor_credito) : "",
+    valor_credito: carta?.valor_credito ? String(carta.valor_credito) : "",
     entrada: carta?.entrada != null ? String(carta.entrada) : "",
-    parcelas: carta?.parcelas != null ? String(carta.parcelas) : "",
-    valor_parcela: carta?.valor_parcela != null ? String(carta.valor_parcela) : "",
+    parcelas: carta?.parcelas ? String(carta.parcelas) : "60",
+    valor_parcela: carta?.valor_parcela ? String(carta.valor_parcela) : "",
     taxa_transferencia: carta?.taxa_transferencia || "R$ 0,00",
-    vencimento_parcela: carta?.vencimento_parcela || carta?.proximo_vencimento || "Dia 10",
+    vencimento_parcela: carta?.vencimento_parcela || carta?.proximo_vencimento || "15/08/2026",
     observacoes: carta?.observacoes || "Disponível",
     disponivel: carta?.disponivel ?? true,
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function update(field: string, value: string | boolean) {
-    setForm((f) => ({ ...f, [field]: value }));
+  function update(field: string, val: any) {
+    setForm((prev) => ({ ...prev, [field]: val }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -52,50 +74,50 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
     setError("");
     setLoading(true);
 
-    const url = isEdit ? `/api/admin/cartas/${carta!.id}` : "/api/admin/cartas";
-    const method = isEdit ? "PUT" : "POST";
+    const payload = {
+      segmento: form.segmento,
+      administradora: form.administradora,
+      valor_credito: parseFloat(form.valor_credito) || 0,
+      entrada: parseFloat(form.entrada) || 0,
+      parcelas: parseInt(form.parcelas, 10) || 60,
+      valor_parcela: parseFloat(form.valor_parcela) || 0,
+      taxa_transferencia: form.taxa_transferencia,
+      vencimento_parcela: form.vencimento_parcela,
+      observacoes: form.observacoes,
+      disponivel: form.disponivel,
+    };
 
     try {
+      const url = isEdit ? `/api/admin/cartas/${carta!.id}` : "/api/admin/cartas";
+      const method = isEdit ? "PUT" : "POST";
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
         onSave();
-        onClose();
       } else {
-        const json = await res.json();
-        setError(json.error || "Erro ao salvar carta");
+        const data = await res.json();
+        setError(data.error || "Erro ao salvar carta.");
       }
     } catch {
-      setError("Erro de conexão. Tente novamente.");
+      setError("Erro de conexão com o servidor.");
     } finally {
       setLoading(false);
     }
   }
 
   const inputCls =
-    "w-full rounded-xl px-3 py-2.5 text-sm outline-none transition-colors border border-gray-200 focus:border-[#0A7B3E]";
+    "w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-xs text-gray-900 focus:bg-white focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all";
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: "rgba(26,26,26,0.6)", backdropFilter: "blur(4px)" }}
-    >
-      <div
-        className="w-full max-w-xl max-h-[90vh] overflow-y-auto"
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderRadius: "20px",
-          boxShadow: "0 4px 12px rgba(0,0,0,.05), 0 16px 48px rgba(0,0,0,.12)",
-        }}
-      >
-        <div
-          className="flex items-center justify-between"
-          style={{ padding: "20px 24px", borderBottom: "1px solid #E5E2DC" }}
-        >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+        {/* Top Header */}
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#8A8A8A" }}>
               Curadoria de Cartas
@@ -112,11 +134,11 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {/* 1. Crédito & 2. Entrada */}
+          {/* Crédito & Entrada */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                1. Crédito (R$) *
+                Crédito (R$) *
               </label>
               <input
                 type="number"
@@ -131,7 +153,7 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                2. Entrada (R$) *
+                Entrada (R$) *
               </label>
               <input
                 type="number"
@@ -146,11 +168,11 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
             </div>
           </div>
 
-          {/* 3. Parcelas & Valor Parcela */}
+          {/* Parcelas & Valor Parcela */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                3a. Qtd. Parcelas *
+                Qtd. Parcelas *
               </label>
               <input
                 type="number"
@@ -164,7 +186,7 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                3b. Valor da Parcela (R$) *
+                Valor da Parcela (R$) *
               </label>
               <input
                 type="number"
@@ -179,11 +201,11 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
             </div>
           </div>
 
-          {/* 4. Taxa de Transferência & 5. Administradora */}
+          {/* Taxa de Transferência & Administradora */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                4. Taxa de Transferência
+                Taxa de Transferência
               </label>
               <input
                 type="text"
@@ -195,7 +217,7 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                5. Administradora *
+                Administradora *
               </label>
               <select
                 value={form.administradora}
@@ -212,18 +234,18 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
             </div>
           </div>
 
-          {/* 6. Vencimento da Parcela & Segmento */}
+          {/* Vencimento da Parcela & Segmento */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                6. Vencimento da Parcela
+                Vencimento da Parcela (Data Completa)
               </label>
               <input
                 type="text"
                 value={form.vencimento_parcela}
                 onChange={(e) => update("vencimento_parcela", e.target.value)}
                 className={inputCls}
-                placeholder="Ex: Dia 10 ou 15/08/2026"
+                placeholder="Ex: 15/08/2026"
               />
             </div>
             <div>
@@ -238,67 +260,65 @@ export default function AdminCartaForm({ carta, onClose, onSave }: Props) {
               >
                 {SEGMENTOS.map((s) => (
                   <option key={s} value={s}>
-                    {s.charAt(0).toUpperCase() + s.slice(1)}
+                    {s === "imoveis"
+                      ? "Imóveis"
+                      : s === "veiculos"
+                      ? "Veículos"
+                      : s === "caminhoes"
+                      ? "Caminhões"
+                      : "Serviços"}
                   </option>
                 ))}
               </select>
             </div>
           </div>
 
-          {/* 7. Observações */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-              7. Observações / Status
-            </label>
-            <input
-              type="text"
-              value={form.observacoes}
-              onChange={(e) => update("observacoes", e.target.value)}
-              className={inputCls}
-              placeholder="Ex: Reservada, Disponível para pronta transferência, etc."
-            />
-          </div>
-
-          <div className="flex items-center gap-3 py-1">
-            <button
-              type="button"
-              onClick={() => update("disponivel", !form.disponivel)}
-              className={`relative w-12 h-6 rounded-full transition-colors duration-200 cursor-pointer ${
-                form.disponivel ? "bg-green-600" : "bg-gray-300"
-              }`}
-            >
-              <span
-                className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${
-                  form.disponivel ? "translate-x-6" : "translate-x-0"
-                }`}
+          {/* Observações / Status & Disponibilidade */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
+                Observações / Status
+              </label>
+              <input
+                type="text"
+                value={form.observacoes}
+                onChange={(e) => update("observacoes", e.target.value)}
+                className={inputCls}
+                placeholder="Ex: Disponível, Reservada..."
               />
-            </button>
-            <span className="text-sm font-medium text-gray-700">
-              {form.disponivel ? "Visível na vitrine pública" : "Oculta na vitrine"}
-            </span>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
+                Disponibilidade na Vitrine
+              </label>
+              <select
+                value={form.disponivel ? "true" : "false"}
+                onChange={(e) => update("disponivel", e.target.value === "true")}
+                className={inputCls}
+              >
+                <option value="true">Disponível (Ativa)</option>
+                <option value="false">Reservada / Indisponível</option>
+              </select>
+            </div>
           </div>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
-              {error}
-            </div>
-          )}
+          {error && <p className="text-xs p-3 rounded-xl bg-red-50 text-red-600 font-medium">{error}</p>}
 
-          <div className="flex gap-3 pt-2">
+          {/* Submit buttons */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-gray-200 text-gray-600 font-medium py-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer text-sm"
+              className="px-4 py-2.5 rounded-full text-xs font-bold text-gray-600 border hover:bg-gray-50 transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 text-white font-semibold py-3 rounded-xl transition-colors duration-200 cursor-pointer text-sm shadow-md"
-              style={{ backgroundColor: "var(--admin-brand, #0A7B3E)" }}
+              className="px-6 py-2.5 rounded-full text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-all shadow-sm disabled:opacity-50"
             >
-              {loading ? "Salvando..." : isEdit ? "Salvar alterações" : "Adicionar carta"}
+              {loading ? "Salva..." : isEdit ? "Salvar Alterações" : "Criar Carta"}
             </button>
           </div>
         </form>
