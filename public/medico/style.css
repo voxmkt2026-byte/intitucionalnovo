@@ -196,7 +196,7 @@ h1,h2,h3{font-family:var(--font-display);text-wrap:balance}
 .hero__bg{
   position:absolute;z-index:0;
   top:clamp(5.4rem,10vh,7rem);bottom:clamp(2rem,5vh,3.5rem);right:0;
-  width:min(46vw,680px);
+  width:min(41vw,580px);
   border-radius:var(--r-xl) 0 0 var(--r-xl);
   overflow:hidden;
   box-shadow:var(--card-shadow-lg);
@@ -211,7 +211,12 @@ h1,h2,h3{font-family:var(--font-display);text-wrap:balance}
 }
 
 .hero__in{position:relative;z-index:2;width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:var(--pad)}
-.hero__copy{max-width:600px}
+.hero__copy{max-width:min(530px, 48%);padding-right:clamp(1rem,2.5vw,3rem)}
+
+@media(max-width:1280px) and (min-width:981px){
+  .hero__copy{max-width:min(490px, 46%);padding-right:1.5rem}
+  .hero__bg{width:min(42vw,500px)}
+}
 
 .hero h1{margin:1.4rem 0 1.4rem;color:var(--ink)}
 .hero .lead{margin-bottom:2rem;color:var(--ink-soft)}
