@@ -13,7 +13,7 @@ async function getDb() {
   return neon(DATABASE_URL);
 }
 
-// PUT — atualiza carta
+// PUT — atualiza carta com suporte às 7 colunas
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -25,18 +25,22 @@ export async function PUT(
     const {
       segmento, administradora, valor_credito, entrada,
       parcelas, valor_parcela, proximo_vencimento, disponivel,
+      taxa_transferencia, vencimento_parcela, observacoes,
     } = body;
 
     const sql = await getDb();
     const result = await sql`
       UPDATE cartas_contempladas SET
-        segmento           = COALESCE(${segmento},           segmento),
-        administradora     = COALESCE(${administradora},     administradora),
+        segmento           = COALESCE(${segmento ?? null},           segmento),
+        administradora     = COALESCE(${administradora ?? null},     administradora),
         valor_credito      = COALESCE(${valor_credito ? parseFloat(valor_credito) : null}, valor_credito),
         entrada            = COALESCE(${entrada != null ? parseFloat(entrada) : null}, entrada),
         parcelas           = COALESCE(${parcelas ? parseInt(parcelas) : null},     parcelas),
         valor_parcela      = COALESCE(${valor_parcela ? parseFloat(valor_parcela) : null}, valor_parcela),
-        proximo_vencimento = COALESCE(${proximo_vencimento ?? null}, proximo_vencimento),
+        proximo_vencimento = COALESCE(${proximo_vencimento ?? vencimento_parcela ?? null}, proximo_vencimento),
+        taxa_transferencia = COALESCE(${taxa_transferencia ?? null}, taxa_transferencia),
+        vencimento_parcela = COALESCE(${vencimento_parcela ?? proximo_vencimento ?? null}, vencimento_parcela),
+        observacoes        = COALESCE(${observacoes ?? null},        observacoes),
         disponivel         = COALESCE(${disponivel != null ? disponivel : null},   disponivel),
         atualizado_em      = NOW()
       WHERE id = ${parseInt(id)}
@@ -55,7 +59,7 @@ export async function PUT(
   }
 }
 
-// DELETE — soft delete (disponivel = false)
+// DELETE — deleta carta permanentemente do banco
 export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -65,9 +69,7 @@ export async function DELETE(
     const { id } = await params;
     const sql = await getDb();
     await sql`
-      UPDATE cartas_contempladas
-      SET disponivel = false, atualizado_em = NOW()
-      WHERE id = ${parseInt(id)}
+      DELETE FROM cartas_contempladas WHERE id = ${parseInt(id)}
     `;
     return NextResponse.json({ ok: true });
   } catch (err) {
