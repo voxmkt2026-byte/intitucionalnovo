@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import AdminCartaForm from "@/components/AdminCartaForm";
 import { getAdminBadgeConfig } from "@/lib/administradoras-logos";
-import { parseCSVToCartas, exportCartasToCSV, ParsedCartaRow, parseBRLNumber } from "@/lib/excel-parser";
+import { parseSpreadsheetToCartas, exportCartasToCSV, ParsedCartaRow } from "@/lib/excel-parser";
 
 export interface Carta {
   id: number;
@@ -103,18 +103,19 @@ export default function CartaAdminClient() {
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      const text = event.target?.result as string;
-      if (text) {
-        const rows = parseCSVToCartas(text);
+      const buffer = event.target?.result as ArrayBuffer;
+      if (buffer) {
+        const rows = parseSpreadsheetToCartas(buffer);
         if (rows.length === 0) {
-          alert("Nenhuma carta válida encontrada na planilha. Salve seu arquivo como .CSV (separado por vírgula ou ponto e vírgula) e tente novamente.");
+          alert("Nenhuma carta válida encontrada na planilha. Verifique o formato do arquivo.");
         } else {
           setParsedRows(rows);
           setShowUploadModal(true);
         }
       }
     };
-    reader.readAsText(file, "UTF-8");
+    reader.readAsArrayBuffer(file);
+    e.target.value = "";
   }
 
   async function handleConfirmBulkUpload() {
@@ -174,7 +175,7 @@ export default function CartaAdminClient() {
         type="file"
         ref={fileInputRef}
         onChange={handleFileSelect}
-        accept=".csv,.txt,.xlsx,.xls"
+        accept=".xlsx,.xls,.csv,.txt"
         className="hidden"
       />
 
@@ -188,7 +189,7 @@ export default function CartaAdminClient() {
             Cartas Contempladas
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--admin-text-mute)" }}>
-            Gerencie, importe planilhas e edite as cartas com as 7 colunas oficiais
+            Gerencie, importe planilhas (.xlsx / .csv) e edite as cartas com as 7 colunas oficiais
           </p>
         </div>
 
@@ -197,7 +198,7 @@ export default function CartaAdminClient() {
           {/* Upload Planilha */}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 font-semibold px-4 py-2.5 rounded-full text-sm cursor-pointer border transition-all"
+            className="flex items-center gap-2 font-semibold px-4 py-2.5 rounded-full text-sm cursor-pointer border transition-all shadow-2xs"
             style={{
               backgroundColor: "#FFFFFF",
               color: "#1A1A1A",
@@ -209,7 +210,7 @@ export default function CartaAdminClient() {
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
-            Subir Planilha (.csv / .xlsx)
+            Subir Planilha (.xlsx / .csv)
           </button>
 
           {/* Exportar Planilha */}
@@ -331,7 +332,7 @@ export default function CartaAdminClient() {
               Nenhuma carta encontrada
             </p>
             <p className="text-xs mt-1" style={{ color: "var(--admin-text-mute)" }}>
-              Suba uma planilha (.csv) ou adicione uma nova carta manualmente.
+              Suba uma planilha (.xlsx / .csv) ou adicione uma nova carta manualmente.
             </p>
           </div>
         ) : (
@@ -484,7 +485,7 @@ export default function CartaAdminClient() {
           <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl max-h-[85vh] overflow-y-auto">
             <h2 className="text-lg font-bold text-gray-900 mb-1">Confirmar Importação de Planilha</h2>
             <p className="text-xs text-gray-500 mb-4">
-              Encontramos <strong>{parsedRows.length} cartas</strong> organizadas nas 7 colunas da planilha.
+              Encontramos <strong>{parsedRows.length} cartas</strong> na planilha.
             </p>
 
             {/* Opções de Upload */}

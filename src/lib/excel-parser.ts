@@ -1,3 +1,5 @@
+import * as XLSX from "xlsx";
+
 export interface ParsedCartaRow {
   credito: number;
   entrada: number;
@@ -17,7 +19,6 @@ export interface ParsedCartaRow {
  * "R$ 97.800,00" -> 97800
  * "97.800"       -> 97800
  * "5.605,00"     -> 5605
- * "5.605"        -> 5605
  * "197,50"       -> 197.5
  */
 export function parseBRLNumber(raw: any): number {
@@ -38,7 +39,6 @@ export function parseBRLNumber(raw: any): number {
   } else if (str.includes(".")) {
     // Apenas ponto (ex: "97.800" ou "5.605" ou "200.000")
     const parts = str.split(".");
-    // Se as partes seguem o padrão de milhar (.800, .605, .000)
     if (parts.length > 1 && parts.every((p, idx) => idx === 0 || p.length === 3)) {
       str = parts.join("");
     }
@@ -53,173 +53,121 @@ const KNOWN_ADMINS = [
   "sicredi", "santander", "ademicon", "rodobens", "hs", "embracon", "safra", "simplebank"
 ];
 
-export function parseCSVToCartas(csvText: string): ParsedCartaRow[] {
-  const lines = csvText.split(/\r?\n/).filter((l) => l.trim().length > 0);
-  if (lines.length === 0) return [];
-
-  // Verificar se a primeira linha é cabeçalho ou se já são dados
-  const firstLine = lines[0].toLowerCase();
-  const hasHeader =
-    firstLine.includes("crédito") ||
-    firstLine.includes("credito") ||
-    firstLine.includes("entrada") ||
-    firstLine.includes("parcela") ||
-    firstLine.includes("admin") ||
-    firstLine.includes("empresa") ||
-    firstLine.includes("vencimento");
-
-  const headers = hasHeader
-    ? lines[0].split(/[,;\t]/).map((h) => h.replace(/["']/g, "").trim().toLowerCase())
-    : [];
-
-  const startIdx = hasHeader ? 1 : 0;
-  const results: ParsedCartaRow[] = [];
-
-  for (let i = startIdx; i < lines.length; i++) {
-    const cols = parseCSVLine(lines[i]);
-    if (!cols || cols.length === 0) continue;
-
-    let credito = 0;
-    let entrada = 0;
-    let parcelas = 60;
-    let valor_parcela = 0;
-    let taxa_transferencia = "R$ 0,00";
-    let administradora = "Caixa Consórcios";
-    let vencimento_parcela = "Dia 10";
-    let observacoes = "Disponível";
-
-    if (hasHeader && headers.length > 0) {
-      // 1. Mapeamento por Nomes de Cabeçalho (Header Search)
-      const idxCredito = headers.findIndex((h) => h.includes("crédito") || h.includes("credito") || h.includes("valor total") || h.includes("valor_credito"));
-      const idxEntrada = headers.findIndex((h) => h.includes("entrada"));
-      const idxParcelas = headers.findIndex((h) => h.includes("parcela") || h.includes("qtd") || h.includes("nº"));
-      const idxTaxa = headers.findIndex((h) => h.includes("taxa") || h.includes("transferência") || h.includes("transferencia"));
-      const idxAdmin = headers.findIndex((h) => h.includes("admin") || h.includes("empresa") || h.includes("banco") || h.includes("grupo"));
-      const idxVenc = headers.findIndex((h) => h.includes("vencimento") || h.includes("data"));
-      const idxObs = headers.findIndex((h) => h.includes("obs") || h.includes("status") || h.includes("reserva"));
-
-      if (idxCredito >= 0 && cols[idxCredito]) credito = parseBRLNumber(cols[idxCredito]);
-      if (idxEntrada >= 0 && cols[idxEntrada]) entrada = parseBRLNumber(cols[idxEntrada]);
-
-      if (idxParcelas >= 0 && cols[idxParcelas]) {
-        const rawP = cols[idxParcelas];
-        if (rawP.toLowerCase().includes("x")) {
-          const parts = rawP.toLowerCase().split("x");
-          parcelas = parseInt(parts[0].replace(/\D/g, ""), 10) || 60;
-          valor_parcela = parseBRLNumber(parts[1]);
-        } else {
-          parcelas = parseInt(rawP.replace(/\D/g, ""), 10) || 60;
-        }
-      }
-
-      if (idxTaxa >= 0 && cols[idxTaxa]) taxa_transferencia = cols[idxTaxa].trim();
-      if (idxAdmin >= 0 && cols[idxAdmin]) administradora = cols[idxAdmin].trim();
-      if (idxVenc >= 0 && cols[idxVenc]) vencimento_parcela = cols[idxVenc].trim();
-      if (idxObs >= 0 && cols[idxObs]) observacoes = cols[idxObs].trim();
-    }
-
-    // 2. Se a análise por cabeçalho não capturou Crédito ou Administradora, aplicar Detecção Heurística Inteligente
-    if (credito === 0 || administradora === "Caixa Consórcios") {
-      const numbers: number[] = [];
-      const strings: string[] = [];
-
-      for (let j = 0; j < cols.length; j++) {
-        const cell = cols[j].trim();
-        if (!cell) continue;
-
-        // Verificar se contém Administradora conhecida
-        const lowerCell = cell.toLowerCase();
-        if (KNOWN_ADMINS.some((a) => lowerCell.includes(a))) {
-          administradora = cell;
-          continue;
-        }
-
-        // Verificar se é texto de observação
-        if (lowerCell.includes("disponív") || lowerCell.includes("disponiv") || lowerCell.includes("reservad") || lowerCell.includes("vendid")) {
-          observacoes = cell;
-          continue;
-        }
-
-        // Verificar se é formato "120x R$ 1.850" ou "19x 5605"
-        if (lowerCell.includes("x")) {
-          const parts = lowerCell.split("x");
-          const pCount = parseInt(parts[0].replace(/\D/g, ""), 10);
-          const pVal = parseBRLNumber(parts[1]);
-          if (pCount > 0) parcelas = pCount;
-          if (pVal > 0) valor_parcela = pVal;
-          continue;
-        }
-
-        const numVal = parseBRLNumber(cell);
-        if (numVal > 0) {
-          numbers.push(numVal);
-        } else {
-          strings.push(cell);
-        }
-      }
-
-      // Atribuir números encontrados por magnitude
-      if (credito === 0 && numbers.length > 0) {
-        numbers.sort((a, b) => b - a); // Ordenar do maior para o menor
-        credito = numbers[0]; // Maior valor é o Crédito
-
-        // Se o segundo maior for significativamente grande (ex: > 10.000) e menor que crédito, é a Entrada
-        if (numbers.length > 1 && numbers[1] < credito && numbers[1] > 1000) {
-          if (entrada === 0) entrada = numbers[1];
-        }
-
-        // Se houver valor na faixa de parcelas (ex: 500 a 15.000)
-        const possibleParcelaVal = numbers.find((n) => n > 200 && n < 25000 && n !== entrada && n !== credito);
-        if (possibleParcelaVal && valor_parcela === 0) {
-          valor_parcela = possibleParcelaVal;
-        }
-
-        // Se houver número inteiro pequeno (12 a 240), é a quantidade de parcelas
-        const possibleParcelasCount = numbers.find((n) => Number.isInteger(n) && n >= 12 && n <= 300);
-        if (possibleParcelasCount && (parcelas === 60 || parcelas === 1)) {
-          parcelas = possibleParcelasCount;
-        }
-      }
-    }
-
-    if (credito > 0) {
-      const isReservada = observacoes.toLowerCase().includes("reservad") || observacoes.toLowerCase().includes("vendid");
-      results.push({
-        credito,
-        entrada,
-        parcelas: parcelas || 60,
-        valor_parcela: valor_parcela || Math.round((credito - entrada) / (parcelas || 60)),
-        taxa_transferencia: taxa_transferencia || "R$ 0,00",
-        administradora: administradora || "Outra",
-        vencimento_parcela: vencimento_parcela || "Dia 10",
-        observacoes: observacoes || "Disponível",
-        segmento: credito >= 180000 ? "imoveis" : "veiculos",
-        disponivel: !isReservada,
-      });
-    }
-  }
-
-  return results;
-}
-
-function parseCSVLine(line: string): string[] {
-  const result: string[] = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"' || char === "'") {
-      inQuotes = !inQuotes;
-    } else if ((char === "," || char === ";" || char === "\t") && !inQuotes) {
-      result.push(current.trim().replace(/^["']|["']$/g, ""));
-      current = "";
+export function parseSpreadsheetToCartas(dataBuffer: ArrayBuffer | string): ParsedCartaRow[] {
+  try {
+    let workbook: XLSX.WorkBook;
+    if (typeof dataBuffer === "string") {
+      workbook = XLSX.read(dataBuffer, { type: "string" });
     } else {
-      current += char;
+      workbook = XLSX.read(dataBuffer, { type: "array" });
     }
+
+    if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
+      return [];
+    }
+
+    // Selecionar a melhor aba (prioridade para abas com "Importação", "Cartas" ou a primeira aba)
+    const targetSheetName =
+      workbook.SheetNames.find(
+        (name) =>
+          name.toLowerCase().includes("import") ||
+          name.toLowerCase().includes("carta") ||
+          name.toLowerCase().includes("dados")
+      ) || workbook.SheetNames[0];
+
+    const worksheet = workbook.Sheets[targetSheetName];
+    if (!worksheet) return [];
+
+    const jsonRows = XLSX.utils.sheet_to_json<Record<string, any>>(worksheet, { defval: "" });
+    if (jsonRows.length === 0) return [];
+
+    const results: ParsedCartaRow[] = [];
+
+    for (const r of jsonRows) {
+      const findVal = (keywords: string[]): any => {
+        for (const k of Object.keys(r)) {
+          const lk = k.toLowerCase().trim();
+          if (keywords.some((kw) => lk.includes(kw))) return r[k];
+        }
+        return "";
+      };
+
+      const rawCredito = findVal(["crédito", "credito", "valor credito", "valor_credito", "valor total"]);
+      const rawEntrada = findVal(["entrada", "valor entrada"]);
+      const rawParcelas = findVal(["qtd. parcelas", "qtd_parcelas", "nº parcelas", "parcelas", "qtd"]);
+      const rawValorParc = findVal(["valor da parcela", "valor_parcela", "por mês", "parcela (r$)"]);
+      const rawAdmin = findVal(["administradora", "admin", "empresa", "banco"]);
+      const rawVenc = findVal(["vencimento", "data"]);
+      const rawObs = findVal(["observações", "observacoes", "obs", "status"]);
+      const rawSeg = findVal(["segmento", "tipo"]);
+
+      let credito = parseBRLNumber(rawCredito);
+      let entrada = parseBRLNumber(rawEntrada);
+      let parcelas = 60;
+      let valor_parcela = parseBRLNumber(rawValorParc);
+      let administradora = String(rawAdmin || "").trim() || "Caixa Consórcios";
+      let vencimento_parcela = String(rawVenc || "").trim() || "Dia 15";
+      let observacoes = String(rawObs || "").trim() || "Disponível";
+      let segmento = String(rawSeg || "").trim();
+
+      // Tratar parcelas no formato "42 x R$354,00" ou apenas número "42"
+      const pStr = String(rawParcelas).toLowerCase().trim();
+      if (pStr.includes("x")) {
+        const parts = pStr.split("x");
+        const parsedCount = parseInt(parts[0].replace(/\D/g, ""), 10);
+        if (parsedCount > 0) parcelas = parsedCount;
+        if (valor_parcela === 0) valor_parcela = parseBRLNumber(parts[1]);
+      } else if (pStr) {
+        const parsedCount = parseInt(pStr.replace(/\D/g, ""), 10);
+        if (parsedCount > 0) parcelas = parsedCount;
+      }
+
+      // Se por algum motivo as colunas vieram sem nome padrão (ex: sem cabeçalho)
+      if (credito === 0) {
+        const cellVals = Object.values(r);
+        const nums = cellVals.map((v) => parseBRLNumber(v)).filter((n) => n > 0);
+        if (nums.length > 0) {
+          nums.sort((a, b) => b - a);
+          credito = nums[0];
+          if (nums.length > 1 && nums[1] < credito && nums[1] > 1000) entrada = nums[1];
+        }
+      }
+
+      if (credito > 0) {
+        const isReservada =
+          observacoes.toLowerCase().includes("reservad") ||
+          observacoes.toLowerCase().includes("vendid") ||
+          observacoes === "0" ||
+          observacoes === "false";
+
+        if (!segmento) {
+          segmento = credito >= 180000 ? "imoveis" : "veiculos";
+        } else {
+          segmento = segmento.toLowerCase().includes("veíc") || segmento.toLowerCase().includes("veic") || segmento.toLowerCase().includes("car") || segmento.toLowerCase().includes("moto")
+            ? "veiculos"
+            : "imoveis";
+        }
+
+        results.push({
+          credito,
+          entrada,
+          parcelas: parcelas || 60,
+          valor_parcela: valor_parcela || Math.round((credito - entrada) / (parcelas || 60)),
+          taxa_transferencia: String(r["TAXA DE TRANSFERÊNCIA"] || r["taxa_transferencia"] || "R$ 0,00"),
+          administradora,
+          vencimento_parcela,
+          observacoes,
+          segmento,
+          disponivel: !isReservada,
+        });
+      }
+    }
+
+    return results;
+  } catch (err) {
+    console.error("[parseSpreadsheetToCartas error]", err);
+    return [];
   }
-  result.push(current.trim().replace(/^["']|["']$/g, ""));
-  return result;
 }
 
 export function exportCartasToCSV(cartas: any[]): void {
