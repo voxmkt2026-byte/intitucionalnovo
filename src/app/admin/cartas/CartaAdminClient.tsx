@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import AdminCartaForm from "@/components/AdminCartaForm";
 import { getAdminBadgeConfig } from "@/lib/administradoras-logos";
-import { parseCSVToCartas, exportCartasToCSV, ParsedCartaRow } from "@/lib/excel-parser";
+import { parseCSVToCartas, exportCartasToCSV, ParsedCartaRow, parseBRLNumber } from "@/lib/excel-parser";
 
 export interface Carta {
   id: number;
@@ -90,7 +90,7 @@ export default function CartaAdminClient() {
       } else {
         alert("Erro ao excluir todas as cartas.");
       }
-    } catch (err) {
+    } catch {
       alert("Erro de conexão ao excluir.");
     } finally {
       setUploading(false);
@@ -107,7 +107,7 @@ export default function CartaAdminClient() {
       if (text) {
         const rows = parseCSVToCartas(text);
         if (rows.length === 0) {
-          alert("Nenhuma carta válida encontrada na planilha. Verifique os cabeçalhos das 7 colunas.");
+          alert("Nenhuma carta válida encontrada na planilha. Salve seu arquivo como .CSV (separado por vírgula ou ponto e vírgula) e tente novamente.");
         } else {
           setParsedRows(rows);
           setShowUploadModal(true);
@@ -143,11 +143,14 @@ export default function CartaAdminClient() {
       });
 
       if (res.ok) {
+        const resJson = await res.json();
         await fetchCartas();
         setShowUploadModal(false);
         setParsedRows([]);
+        alert(`Planilha importada com sucesso! ${resJson.count || 0} cartas publicadas na vitrine.`);
       } else {
-        alert("Erro ao importar cartas da planilha.");
+        const errJson = await res.json();
+        alert(`Erro ao importar planilha: ${errJson.error || "Erro no servidor"}`);
       }
     } catch {
       alert("Erro de conexão ao enviar planilha.");
@@ -171,7 +174,7 @@ export default function CartaAdminClient() {
         type="file"
         ref={fileInputRef}
         onChange={handleFileSelect}
-        accept=".csv,.txt,.xlsx"
+        accept=".csv,.txt,.xlsx,.xls"
         className="hidden"
       />
 
@@ -518,11 +521,11 @@ export default function CartaAdminClient() {
               <table className="w-full text-left text-[11px]">
                 <thead className="bg-gray-100 font-bold text-gray-600">
                   <tr>
-                    <th className="p-2">Crédito</th>
-                    <th className="p-2">Entrada</th>
-                    <th className="p-2">Parcelas</th>
-                    <th className="p-2">Admin</th>
-                    <th className="p-2">Status</th>
+                    <th className="p-2">1. Crédito</th>
+                    <th className="p-2">2. Entrada</th>
+                    <th className="p-2">3. Parcelas</th>
+                    <th className="p-2">5. Admin</th>
+                    <th className="p-2">7. Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -554,7 +557,7 @@ export default function CartaAdminClient() {
               <button
                 onClick={handleConfirmBulkUpload}
                 disabled={uploading}
-                className="flex-1 py-2.5 bg-emerald-600 text-white font-semibold rounded-xl text-xs hover:bg-emerald-700 disabled:opacity-50"
+                className="flex-1 py-2.5 bg-emerald-600 text-white font-semibold rounded-xl text-xs hover:bg-emerald-700 disabled:opacity-50 shadow-md"
               >
                 {uploading ? "Importando..." : "Confirmar e Publicar Planilha"}
               </button>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import { verifyAdminSession } from "@/lib/admin-auth";
+import { parseBRLNumber } from "@/lib/excel-parser";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
 
@@ -13,10 +14,16 @@ async function getDb() {
   if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
   const sql = neon(DATABASE_URL);
   
-  // Migration: ensure extra columns for 7 spreadsheet fields exist
-  await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS taxa_transferencia TEXT`;
-  await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS vencimento_parcela TEXT`;
-  await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS observacoes TEXT`;
+  try {
+    // Migration: garantir colunas das 7 colunas da planilha
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS taxa_transferencia TEXT`;
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS vencimento_parcela TEXT`;
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS observacoes TEXT`;
+    await sql`ALTER TABLE cartas_contempladas ALTER COLUMN proximo_vencimento TYPE TEXT USING proximo_vencimento::text`;
+  } catch (mErr) {
+    console.warn("[admin/cartas getDb migration warning]", mErr);
+  }
+
   return sql;
 }
 
@@ -60,30 +67,34 @@ export async function POST(request: Request) {
 
       let insertedCount = 0;
       for (const item of cartas) {
-        const segmento = item.segmento || "Imóvel";
-        const administradora = item.administradora || "Outra";
-        const valor_credito = parseFloat(String(item.valor_credito || item.credito || 0).replace(/[^\d.,]/g, "").replace(",", "."));
-        const entrada = parseFloat(String(item.entrada || 0).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-        const parcelas = parseInt(String(item.parcelas || 0).replace(/\D/g, ""), 10) || 1;
-        const valor_parcela = parseFloat(String(item.valor_parcela || item.parcela || 0).replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
-        const taxa_transferencia = item.taxa_transferencia || "R$ 0,00";
-        const vencimento_parcela = item.vencimento_parcela || item.proximo_vencimento || "Dia 10";
-        const observacoes = item.observacoes || (item.disponivel === false ? "Reservada" : "Disponível");
-        const disponivel = item.disponivel !== false && !String(observacoes).toLowerCase().includes("reservad");
+        try {
+          const segmento = item.segmento || "imoveis";
+          const administradora = item.administradora || "Outra";
+          const valor_credito = parseBRLNumber(item.valor_credito ?? item.credito);
+          const entrada = parseBRLNumber(item.entrada);
+          const parcelas = parseInt(String(item.parcelas || 0).replace(/\D/g, ""), 10) || 60;
+          const valor_parcela = parseBRLNumber(item.valor_parcela ?? item.parcela);
+          const taxa_transferencia = String(item.taxa_transferencia || "R$ 0,00");
+          const vencimento_parcela = String(item.vencimento_parcela || item.proximo_vencimento || "Dia 10");
+          const observacoes = String(item.observacoes || (item.disponivel === false ? "Reservada" : "Disponível"));
+          const disponivel = item.disponivel !== false && !observacoes.toLowerCase().includes("reservad");
 
-        if (valor_credito > 0) {
-          await sql`
-            INSERT INTO cartas_contempladas (
-              segmento, administradora, valor_credito, entrada,
-              parcelas, valor_parcela, proximo_vencimento, disponivel,
-              taxa_transferencia, vencimento_parcela, observacoes
-            ) VALUES (
-              ${segmento}, ${administradora}, ${valor_credito}, ${entrada},
-              ${parcelas}, ${valor_parcela}, ${vencimento_parcela}, ${disponivel},
-              ${taxa_transferencia}, ${vencimento_parcela}, ${observacoes}
-            )
-          `;
-          insertedCount++;
+          if (valor_credito > 0) {
+            await sql`
+              INSERT INTO cartas_contempladas (
+                segmento, administradora, valor_credito, entrada,
+                parcelas, valor_parcela, proximo_vencimento, disponivel,
+                taxa_transferencia, vencimento_parcela, observacoes
+              ) VALUES (
+                ${segmento}, ${administradora}, ${valor_credito}, ${entrada},
+                ${parcelas}, ${valor_parcela}, ${vencimento_parcela}, ${disponivel},
+                ${taxa_transferencia}, ${vencimento_parcela}, ${observacoes}
+              )
+            `;
+            insertedCount++;
+          }
+        } catch (itemErr) {
+          console.error("[admin/cartas POST item error]", itemErr, item);
         }
       }
 
@@ -92,7 +103,7 @@ export async function POST(request: Request) {
 
     // Inserção individual
     const {
-      segmento = "Imóvel", administradora, valor_credito, entrada,
+      segmento = "imoveis", administradora, valor_credito, entrada,
       parcelas, valor_parcela, proximo_vencimento, disponivel = true,
       taxa_transferencia = "R$ 0,00", vencimento_parcela = "Dia 10", observacoes = "Disponível"
     } = body;
@@ -101,16 +112,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Campos obrigatórios faltando" }, { status: 400 });
     }
 
+    const parsedCredito = parseBRLNumber(valor_credito);
+    const parsedEntrada = parseBRLNumber(entrada);
+    const parsedParcela = parseBRLNumber(valor_parcela);
+    const parsedCount = parseInt(String(parcelas), 10) || 60;
+    const vencStr = String(vencimento_parcela || proximo_vencimento || "Dia 10");
+
     const result = await sql`
       INSERT INTO cartas_contempladas (
         segmento, administradora, valor_credito, entrada,
         parcelas, valor_parcela, proximo_vencimento, disponivel,
         taxa_transferencia, vencimento_parcela, observacoes
       ) VALUES (
-        ${segmento}, ${administradora}, ${parseFloat(valor_credito)},
-        ${entrada ? parseFloat(entrada) : null}, ${parseInt(parcelas)},
-        ${parseFloat(valor_parcela)}, ${vencimento_parcela || proximo_vencimento || null}, ${disponivel},
-        ${taxa_transferencia}, ${vencimento_parcela || proximo_vencimento || null}, ${observacoes}
+        ${segmento}, ${administradora}, ${parsedCredito}, ${parsedEntrada},
+        ${parsedCount}, ${parsedParcela}, ${vencStr}, ${disponivel},
+        ${taxa_transferencia}, ${vencStr}, ${observacoes}
       )
       RETURNING *
     `;
