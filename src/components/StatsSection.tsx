@@ -18,11 +18,11 @@ const statsData = [
   {
     number: "307",
     prefix: "R$",
-    suffix: "bi+",
+    suffix: "mi+",
     subtitle: "em crédito",
     description: (
       <>
-        <strong className="text-white font-semibold">+ de R$ 307 bi em créditos</strong>
+        <strong className="text-white font-semibold">+ de R$ 307 mi em créditos</strong>
         <br />
         já foram comercializados pelo sistema de consórcio nos últimos 12 meses
       </>
@@ -181,14 +181,14 @@ export default function StatsSection() {
         <div className="grid grid-cols-12 gap-12 items-center">
           <div className="col-span-7">
             <p className="font-[family-name:var(--font-montserrat)] text-lg md:text-xl lg:text-2xl text-white/60 leading-relaxed font-normal text-right">
-              <strong className="text-white font-semibold">+ de R$ 307 bi em créditos</strong><br />
+              <strong className="text-white font-semibold">+ de R$ 307 mi em créditos</strong><br />
               já foram comercializados pelo sistema de consórcio nos últimos 12 meses
             </p>
           </div>
           <div className="col-span-5">
             <h3 className="font-[family-name:var(--font-montserrat)] text-right">
               <span className="font-black text-6xl md:text-7xl lg:text-8xl leading-[0.9] block" style={{ color: "var(--green-vivid)" }}>
-                <span className="text-[0.35em] text-white/50 align-top mr-1">R$</span>307<span className="text-[0.45em] text-white">bi+</span>
+                <span className="text-[0.35em] text-white/50 align-top mr-1">R$</span>307<span className="text-[0.45em] text-white">mi+</span>
               </span>
               <span className="font-bold text-lg md:text-xl text-white/80 block mt-2">
                 em crédito
