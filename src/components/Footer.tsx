@@ -151,6 +151,11 @@ export default function Footer() {
           <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>
             © {new Date().getFullYear()} Titanium Consultoria. Todos os direitos reservados.
           </span>
+
+          {/* CNPJ */}
+          <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>
+            CNPJ: 46.640.755/0001-51
+          </span>
         </div>
 
       </div>
