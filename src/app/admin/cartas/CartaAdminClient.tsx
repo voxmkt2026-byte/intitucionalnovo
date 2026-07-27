@@ -350,8 +350,18 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
                       </td>
 
                       {/* Taxa de Transferência */}
-                      <td className="py-3.5 px-4 text-gray-600 whitespace-nowrap">
-                        {c.taxa_transferencia || "R$ 0,00"}
+                      <td className="py-3.5 px-4 text-gray-600 whitespace-nowrap font-medium">
+                        {(!c.taxa_transferencia || 
+                          c.taxa_transferencia.trim() === "R$ 0,00" || 
+                          c.taxa_transferencia.trim() === "0" || 
+                          c.taxa_transferencia.trim() === "0,00" || 
+                          c.taxa_transferencia.trim() === "R$ 0" || 
+                          c.taxa_transferencia.trim() === "R$0,00"
+                        ) ? (
+                          <span className="text-gray-400 italic">Sob Consulta</span>
+                        ) : (
+                          c.taxa_transferencia
+                        )}
                       </td>
 
                       {/* Administradora (Logo Direto 80x80) */}

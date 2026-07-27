@@ -348,8 +348,18 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
       </td>
 
       {/* Taxa de Transferência */}
-      <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
-        {carta.taxa_transferencia || "R$ 0,00"}
+      <td className="px-4 py-4 text-gray-600 whitespace-nowrap font-medium">
+        {(!carta.taxa_transferencia || 
+          carta.taxa_transferencia.trim() === "R$ 0,00" || 
+          carta.taxa_transferencia.trim() === "0" || 
+          carta.taxa_transferencia.trim() === "0,00" || 
+          carta.taxa_transferencia.trim() === "R$ 0" || 
+          carta.taxa_transferencia.trim() === "R$0,00"
+        ) ? (
+          <span className="text-gray-400 italic">Sob Consulta</span>
+        ) : (
+          carta.taxa_transferencia
+        )}
       </td>
 
       {/* Administradora (Logo Direto 80x80) */}
@@ -467,7 +477,15 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
       {/* Vencimento & Taxa */}
       <div className="flex justify-between text-xs text-gray-500 pt-1">
         <span>Vencimento: <strong>{vencimentoFormatted}</strong></span>
-        <span>Taxa Transf: <strong>{carta.taxa_transferencia || "R$ 0,00"}</strong></span>
+        <span>Taxa Transf: <strong>
+          {(!carta.taxa_transferencia || 
+            carta.taxa_transferencia.trim() === "R$ 0,00" || 
+            carta.taxa_transferencia.trim() === "0" || 
+            carta.taxa_transferencia.trim() === "0,00" || 
+            carta.taxa_transferencia.trim() === "R$ 0" || 
+            carta.taxa_transferencia.trim() === "R$0,00"
+          ) ? "Sob Consulta" : carta.taxa_transferencia}
+        </strong></span>
       </div>
 
       <button
