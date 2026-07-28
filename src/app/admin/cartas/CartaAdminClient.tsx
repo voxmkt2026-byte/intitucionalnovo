@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import AdminCartaForm from "@/components/AdminCartaForm";
 import { parseSpreadsheetToCartas, exportCartasToCSV, formatVencimentoDate, ParsedCartaRow } from "@/lib/excel-parser";
-import { getAdminBadgeConfig } from "@/lib/administradoras-logos";
 
 export interface Carta {
   id: number;
@@ -268,25 +267,18 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
         </button>
 
         {Object.entries(adminCounts).map(([admName, count]) => {
-          const cfg = getAdminBadgeConfig(admName);
           const isSelected = selectedAdminFilter.toLowerCase() === admName.toLowerCase();
           return (
             <button
               key={admName}
               onClick={() => setSelectedAdminFilter(admName)}
-              className="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border flex items-center gap-2 shadow-2xs"
-              style={{
-                backgroundColor: isSelected ? cfg.color : cfg.bgTint,
-                color: isSelected ? "#FFFFFF" : cfg.color,
-                borderColor: cfg.borderColor,
-              }}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer border flex items-center gap-2 shadow-2xs ${
+                isSelected
+                  ? "bg-gray-900 text-white border-gray-900 shadow-xs"
+                  : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+              }`}
             >
-              {cfg.logoImg ? (
-                <img src={cfg.logoImg} alt={cfg.shortName} width={80} height={80} className="w-5 h-5 object-contain rounded-sm" />
-              ) : (
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: isSelected ? "#FFFFFF" : cfg.color }} />
-              )}
-              <span>{cfg.shortName}</span>
+              <span>{admName}</span>
               <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${isSelected ? "bg-white/20 text-white" : "bg-gray-100 text-gray-700"}`}>
                 {count}
               </span>
@@ -323,7 +315,6 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {cartasFiltradas.map((c) => {
-                  const cfg = getAdminBadgeConfig(c.administradora);
                   const obs = c.observacoes || (c.disponivel ? "Disponível" : "Reservada");
                   const isReservada = obs.toLowerCase().includes("reservad") || !c.disponivel;
                   const vencimentoFormatted = formatVencimentoDate(c.vencimento_parcela || c.proximo_vencimento);
@@ -364,29 +355,9 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
                         )}
                       </td>
 
-                      {/* Administradora (Logo Direto 80x80) */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        {cfg.logoImg ? (
-                          <img
-                            src={cfg.logoImg}
-                            alt={cfg.shortName}
-                            width={80}
-                            height={80}
-                            className="w-10 h-10 object-contain rounded-lg shadow-2xs inline-block"
-                          />
-                        ) : (
-                          <span
-                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-[11px]"
-                            style={{
-                              backgroundColor: cfg.bgTint,
-                              color: cfg.color,
-                              border: `1px solid ${cfg.borderColor}`,
-                            }}
-                          >
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.color }} />
-                            {cfg.shortName}
-                          </span>
-                        )}
+                      {/* Administradora */}
+                      <td className="py-3.5 px-4 whitespace-nowrap font-bold text-gray-700 text-xs">
+                        {c.administradora}
                       </td>
 
                       {/* Vencimento da Parcela (Data Completa DD/MM/AAAA) */}
@@ -508,18 +479,13 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {parsedRows.slice(0, 5).map((r, idx) => {
-                    const cfg = getAdminBadgeConfig(r.administradora);
                     return (
                       <tr key={idx}>
                         <td className="p-2 font-bold">{formatBRL(r.credito)}</td>
                         <td className="p-2 text-emerald-700">{formatBRL(r.entrada)}</td>
                         <td className="p-2">{r.parcelas}x {formatBRL(r.valor_parcela)}</td>
-                        <td className="p-2 font-bold">
-                          {cfg.logoImg ? (
-                            <img src={cfg.logoImg} alt={cfg.shortName} width={80} height={80} className="w-6 h-6 object-contain rounded-md" />
-                          ) : (
-                            <span style={{ color: cfg.color }}>{cfg.shortName}</span>
-                          )}
+                        <td className="p-2 font-bold text-gray-700">
+                          {r.administradora}
                         </td>
                         <td className="p-2">{r.vencimento_parcela}</td>
                         <td className="p-2">{r.observacoes}</td>

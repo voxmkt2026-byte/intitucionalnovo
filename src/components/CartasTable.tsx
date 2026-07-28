@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import CartaFilters from "@/components/CartaFilters";
-import { getAdminBadgeConfig } from "@/lib/administradoras-logos";
 import { formatVencimentoDate } from "@/lib/excel-parser";
 
 export interface Carta {
@@ -112,7 +111,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
-  const adminCfg = getAdminBadgeConfig(carta.administradora);
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -201,16 +200,9 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
             </svg>
           </button>
           <div className="flex items-center gap-2 mb-1">
-            {adminCfg.logoImg ? (
-              <img src={adminCfg.logoImg} alt={adminCfg.shortName} width={80} height={80} className="w-8 h-8 object-contain rounded-md bg-white p-0.5" />
-            ) : (
-              <span
-                className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full"
-                style={{ backgroundColor: adminCfg.bgTint, color: adminCfg.color }}
-              >
-                {adminCfg.shortName}
-              </span>
-            )}
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              {carta.administradora}
+            </span>
           </div>
           <p className="text-3xl font-bold" style={{ color: "#34d399" }}>
             {formatBRL(carta.valor_credito)}
@@ -322,7 +314,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
 
 /* ── Carta Row (Desktop - Spreadsheet Columns without numbers) ───────── */
 function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
-  const adminCfg = getAdminBadgeConfig(carta.administradora);
+
   const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
   const isReservada = obs.toLowerCase().includes("reservad") || !carta.disponivel;
   const vencimentoFormatted = formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento);
@@ -362,29 +354,9 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         )}
       </td>
 
-      {/* Administradora (Logo Direto 80x80) */}
-      <td className="px-4 py-4 whitespace-nowrap">
-        {adminCfg.logoImg ? (
-          <img
-            src={adminCfg.logoImg}
-            alt={adminCfg.shortName}
-            width={80}
-            height={80}
-            className="w-10 h-10 object-contain rounded-lg shadow-2xs inline-block"
-          />
-        ) : (
-          <span
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-[11px]"
-            style={{
-              backgroundColor: adminCfg.bgTint,
-              color: adminCfg.color,
-              border: `1px solid ${adminCfg.borderColor}`,
-            }}
-          >
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: adminCfg.color }} />
-            {adminCfg.shortName}
-          </span>
-        )}
+      {/* Administradora */}
+      <td className="px-4 py-4 whitespace-nowrap font-bold text-gray-700 text-xs">
+        {carta.administradora}
       </td>
 
       {/* Vencimento da Parcela (Data Completa DD/MM/AAAA) */}
@@ -423,29 +395,17 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
 
 /* ── Carta Mobile Card ─────────────────────────────────────────────── */
 function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
-  const adminCfg = getAdminBadgeConfig(carta.administradora);
+
   const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
   const vencimentoFormatted = formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento);
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm space-y-3">
-      {/* Topo: Logo Admin & Status */}
+      {/* Topo: Nome Admin & Status */}
       <div className="flex items-center justify-between">
-        {adminCfg.logoImg ? (
-          <img src={adminCfg.logoImg} alt={adminCfg.shortName} width={80} height={80} className="w-9 h-9 object-contain rounded-md" />
-        ) : (
-          <span
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-bold text-xs"
-            style={{
-              backgroundColor: adminCfg.bgTint,
-              color: adminCfg.color,
-              border: `1px solid ${adminCfg.borderColor}`,
-            }}
-          >
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: adminCfg.color }} />
-            {adminCfg.shortName}
-          </span>
-        )}
+        <span className="font-bold text-gray-800 text-sm">
+          {carta.administradora}
+        </span>
 
         <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
           {obs}
