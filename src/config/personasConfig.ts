@@ -227,14 +227,14 @@ export const personasConfig: Record<string, PersonaConfig> = {
     ],
   },
 
-  /* ─── TIER 1: CORRETOR PARCEIRO ─── */
+  /* ─── TIER 1: CORRETOR COLABORADOR ─── */
   'corretor': {
     id: 'corretor',
     slug: 'corretor',
-    name: 'Corretor Parceiro',
+    name: 'Corretor Colaborador',
     tier: 1,
     theme: 'light',
-    proofText: '380 corretores parceiros ativos na rede Titanium',
+    proofText: '380 corretores colaboradores ativos na rede Titanium',
     securityBadge: 'Programa de parceria oficial. Dados protegidos.',
     whatsappTemplate: 'Olá! Sou corretor e tenho interesse no programa de parceria da Titanium. Trabalho com *[bem_desejado]* e quero entender as comissões e ferramentas disponíveis.',
     steps: [
@@ -258,7 +258,7 @@ export const personasConfig: Record<string, PersonaConfig> = {
         ...TIER1_DATA_STEP,
         title: 'Entre para a rede Titanium!',
         subtitle: 'Preencha e um gestor de parceria entra em contato.',
-        ctaText: 'Quero Ser Parceiro →',
+        ctaText: 'Quero Ser Colaborador →',
       },
     ],
   },

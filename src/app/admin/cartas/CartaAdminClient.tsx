@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import AdminCartaForm from "@/components/AdminCartaForm";
 import { parseSpreadsheetToCartas, exportCartasToCSV, formatVencimentoDate, ParsedCartaRow } from "@/lib/excel-parser";
+import AdministradoraLogo from "@/components/AdministradoraLogo";
 
 export interface Carta {
   id: number;
@@ -357,7 +358,7 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
 
                       {/* Administradora */}
                       <td className="py-3.5 px-4 whitespace-nowrap font-bold text-gray-700 text-xs">
-                        {c.administradora}
+                        <AdministradoraLogo name={c.administradora} />
                       </td>
 
                       {/* Vencimento da Parcela (Data Completa DD/MM/AAAA) */}

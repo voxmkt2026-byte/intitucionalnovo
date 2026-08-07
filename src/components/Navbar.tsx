@@ -73,6 +73,12 @@ export default function Navbar() {
           >
             Contato
           </a>
+          <Link
+            href="/colaboradores"
+            className="text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
+          >
+            Colaboradores
+          </Link>
         </nav>
 
         {/* Right CTA Button (Desktop) */}
@@ -137,6 +143,13 @@ export default function Navbar() {
           >
             Contato
           </a>
+          <Link
+            href="/colaboradores"
+            onClick={() => setIsOpen(false)}
+            className="text-lg font-semibold tracking-widest text-white hover:text-green-vivid transition-colors uppercase"
+          >
+            Colaboradores
+          </Link>
           <Link
             href="/cartas-contempladas"
             onClick={() => setIsOpen(false)}
