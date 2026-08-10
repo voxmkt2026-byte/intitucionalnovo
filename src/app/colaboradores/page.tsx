@@ -17,85 +17,86 @@ export default function ColaboradoresPage() {
       <main className="flex-1 bg-white text-slate-800 font-jakarta selection:bg-[#0A7B3E] selection:text-white overflow-hidden">
         
         {/* ═══════════════════════════════════════════════════════
-            SEÇÃO 1 — HERO (Dark, full-width, sem formulário)
-            Foco: capturar atenção e gerar interesse
+            SEÇÃO 1 — HERO COM FORMULÁRIO EM 1º LUGAR (Dark, 2 colunas)
+            REGRA: O formulário fica no topo da página acima da dobra
         ═══════════════════════════════════════════════════════ */}
-        <section className="relative pt-28 pb-24 md:pt-36 md:pb-32 overflow-hidden min-h-[85vh] flex items-center bg-[#0b0f19]">
-          {/* Beams Background */}
+        <section className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden min-h-[90vh] flex items-center bg-[#0b0f19]">
+          {/* Beams Background Overlay */}
           <div className="absolute inset-0 z-0 opacity-80">
             <BeamsWrapper />
           </div>
           
-          {/* Gradient Overlays */}
+          {/* Dark overlay to ensure text contrast */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-[#0b0f19]/70 z-[1] pointer-events-none" />
 
-          <div className="max-w-4xl mx-auto px-4 w-full relative z-10 text-center space-y-8">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#15B85C]/10 border border-[#15B85C]/20 text-[#15B85C] text-[10px] font-bold tracking-wider uppercase">
-              Programa de Parcerias Titanium
-            </span>
-
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1]">
-              Monetize sua rede de contatos com{" "}
-              <span className="bg-gradient-to-r from-[#15B85C] to-[#0D9E50] bg-clip-text text-transparent">
-                crédito inteligente
+          <div className="max-w-6xl mx-auto px-4 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Copywriting & Value Prop */}
+            <div className="lg:col-span-6 space-y-6 text-left">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#15B85C]/10 border border-[#15B85C]/20 text-[#15B85C] text-[10px] font-bold tracking-wider uppercase">
+                Programa de Parcerias Titanium
               </span>
-            </h1>
+              
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+                Monetize sua rede de contatos com{" "}
+                <span className="bg-gradient-to-r from-[#15B85C] to-[#0D9E50] bg-clip-text text-transparent">
+                  crédito inteligente
+                </span>
+              </h1>
+              
+              <p className="text-slate-300 text-sm sm:text-base font-light leading-relaxed max-w-xl">
+                Indique produtores rurais, empresários e investidores que necessitam de liquidez imediata para expandir patrimônio ou frotas, livre de juros bancários.
+              </p>
+              
+              <div className="space-y-3.5 pt-4 border-t border-slate-800">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-200 text-xs font-semibold">Comissão direta creditada na sua conta PIX</span>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-200 text-xs font-semibold">Blindagem de leads permanente vinculada ao seu ID</span>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-200 text-xs font-semibold">Dashboard exclusivo com login e senha</span>
+                </div>
+              </div>
 
-            <p className="text-slate-300 text-sm sm:text-base md:text-lg font-light leading-relaxed max-w-2xl mx-auto">
-              Indique produtores rurais, empresários e investidores que necessitam de liquidez imediata para expandir patrimônio ou frotas, livre de juros bancários.
-            </p>
-            
-            {/* Value Props — horizontal pills */}
-            <div className="flex flex-wrap justify-center gap-3 pt-2">
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2">
-                <div className="w-4 h-4 rounded-full bg-[#15B85C]/20 flex items-center justify-center text-[#15B85C] shrink-0">
-                  <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                </div>
-                <span className="text-slate-200 text-xs font-medium">Comissão direta no PIX</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2">
-                <div className="w-4 h-4 rounded-full bg-[#15B85C]/20 flex items-center justify-center text-[#15B85C] shrink-0">
-                  <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                </div>
-                <span className="text-slate-200 text-xs font-medium">Blindagem de leads</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2">
-                <div className="w-4 h-4 rounded-full bg-[#15B85C]/20 flex items-center justify-center text-[#15B85C] shrink-0">
-                  <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                </div>
-                <span className="text-slate-200 text-xs font-medium">Kit comercial completo</span>
+              <div className="pt-2 flex items-center gap-4">
+                <Link
+                  href="/colaboradores/portal/"
+                  className="px-6 py-3 border border-slate-700 hover:border-slate-500 hover:bg-slate-800/40 text-white font-bold rounded-xl transition-all text-xs tracking-wider uppercase cursor-pointer"
+                >
+                  Acessar meu Portal
+                </Link>
               </div>
             </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <a
-                href="#cadastro"
-                className="px-8 py-3.5 bg-[#0A7B3E] hover:bg-[#086332] text-white font-bold rounded-xl transition-all text-sm tracking-wider uppercase cursor-pointer shadow-lg shadow-[#0A7B3E]/20 hover:shadow-xl hover:shadow-[#0A7B3E]/30"
-              >
-                Quero ser Parceiro
-              </a>
-              <Link
-                href="/colaboradores/portal/"
-                className="px-6 py-3 border border-slate-700 hover:border-slate-500 hover:bg-slate-800/30 text-white font-bold rounded-xl transition-all text-xs tracking-wider uppercase cursor-pointer"
-              >
-                Acessar meu Portal
-              </Link>
+            {/* Right Column: Multi-Step Registration Form Card (Hero First) */}
+            <div className="lg:col-span-6 w-full" id="cadastro">
+              <CadastroForm />
             </div>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════
             SEÇÃO 2 — COMO FUNCIONA (Light, 3 cards Bento)
-            Foco: explicar o processo em 3 etapas
         ═══════════════════════════════════════════════════════ */}
-        <section className="py-20 bg-gradient-to-b from-white to-slate-50/50">
+        <section className="py-20 bg-white">
           <div className="max-w-6xl mx-auto px-4">
             <div className="text-center space-y-3 mb-16">
               <span className="text-[10px] font-bold text-[#0A7B3E] uppercase tracking-widest bg-[#E8F5EE] px-3 py-1.5 rounded-full">
@@ -112,18 +113,18 @@ export default function ColaboradoresPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
               {/* Card 1 */}
-              <div className="p-8 rounded-2xl bg-white border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
+              <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
                 <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-extrabold text-sm group-hover:scale-105 transition-transform shadow-sm">
                   1
                 </div>
-                <h3 className="text-lg font-bold text-slate-900">Cadastro Exclusivo</h3>
+                <h3 className="text-lg font-bold text-slate-900">Cadastro Rápido</h3>
                 <p className="text-slate-500 text-xs font-light leading-relaxed">
-                  Preencha o formulário operacional contendo seu perfil e dados bancários e assine digitalmente em minutos.
+                  Preencha o formulário em 3 etapas simples, crie sua senha de acesso e gere seu código exclusivo.
                 </p>
               </div>
 
               {/* Card 2 */}
-              <div className="p-8 rounded-2xl bg-white border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
+              <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
                 <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-extrabold text-sm group-hover:scale-105 transition-transform shadow-sm">
                   2
                 </div>
@@ -134,13 +135,13 @@ export default function ColaboradoresPage() {
               </div>
 
               {/* Card 3 */}
-              <div className="p-8 rounded-2xl bg-white border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
+              <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
                 <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-extrabold text-sm group-hover:scale-105 transition-transform shadow-sm">
                   3
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">Receba sua Comissão</h3>
                 <p className="text-slate-500 text-xs font-light leading-relaxed">
-                  Acompanhe o fechamento das propostas. A comissão é apurada e creditada na sua conta PIX cadastrada.
+                  Acompanhe o fechamento das propostas pelo seu painel. A comissão é creditada na sua chave PIX.
                 </p>
               </div>
             </div>
@@ -149,13 +150,11 @@ export default function ColaboradoresPage() {
 
         {/* ═══════════════════════════════════════════════════════
             SEÇÃO 3 — PROVA SOCIAL (Testimonials de Colaboradores)
-            Foco: construir confiança com relatos reais
         ═══════════════════════════════════════════════════════ */}
         <ColabTestimonials />
 
         {/* ═══════════════════════════════════════════════════════
-            SEÇÃO 4 — DIFERENCIAIS + COMPLIANCE (Slate)
-            Foco: reforçar segurança e profissionalismo
+            SEÇÃO 4 — DIFERENCIAIS + COMPLIANCE
         ═══════════════════════════════════════════════════════ */}
         <section className="bg-slate-50 py-20 border-t border-slate-100">
           <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -226,72 +225,29 @@ export default function ColaboradoresPage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════
-            SEÇÃO 5 — FORMULÁRIO DE CADASTRO (Dark, dedicado)
-            Foco: converter — o visitante chega aqui convencido
+            SEÇÃO 5 — CTA FINAL
         ═══════════════════════════════════════════════════════ */}
-        <section id="cadastro" className="relative py-20 md:py-28 bg-[#0b0f19] overflow-hidden">
-          {/* Subtle background glow */}
-          <div className="absolute inset-0 opacity-30 pointer-events-none">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#0A7B3E]/10 rounded-full blur-[120px]" />
-          </div>
-
-          <div className="max-w-6xl mx-auto px-4 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            {/* Left Column: Headline + Trust signals */}
-            <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-32">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#15B85C]/10 border border-[#15B85C]/20 text-[#15B85C] text-[10px] font-bold tracking-wider uppercase">
-                Cadastro Gratuito
-              </span>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white leading-tight">
-                Pronto para{" "}
-                <span className="bg-gradient-to-r from-[#15B85C] to-[#0D9E50] bg-clip-text text-transparent">
-                  comissionar?
-                </span>
-              </h2>
-              <p className="text-slate-400 text-sm font-light leading-relaxed">
-                Preencha o formulário rápido ao lado, crie sua senha de acesso e entre para a rede de parceiros da Titanium com dashboard exclusivo para acompanhar suas indicações e comissões.
-              </p>
-
-              <div className="space-y-3 pt-4 border-t border-slate-800">
-                <div className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-300 text-xs font-medium">Cadastro rápido em 3 etapas simples</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-300 text-xs font-medium">Acesso imediato com e-mail e senha</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-300 text-xs font-medium">Dashboard exclusivo com rastreamento de vendas</span>
-                </div>
-              </div>
-
-              {/* Compliance badge */}
-              <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-xl px-4 py-3 mt-4">
-                <svg className="w-5 h-5 text-[#15B85C] shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                </svg>
-                <span className="text-slate-400 text-[11px] font-light leading-relaxed">
-                  Operação regulada pelo Banco Central. Compliance comercial auditável.
-                </span>
-              </div>
-            </div>
-
-            {/* Right Column: Registration Form */}
-            <div className="lg:col-span-7 w-full">
-              <CadastroForm />
+        <section className="py-16 bg-[#0b0f19] text-center border-t border-slate-800">
+          <div className="max-w-3xl mx-auto px-4 space-y-6">
+            <h3 className="text-2xl sm:text-3xl font-bold text-white">
+              Pronto para começar a comissionar?
+            </h3>
+            <p className="text-slate-400 text-sm font-light leading-relaxed">
+              Junte-se a centenas de consultores, corretores e profissionais em todo o Brasil.
+            </p>
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="#cadastro"
+                className="px-8 py-3.5 bg-[#0A7B3E] hover:bg-[#086332] text-white font-bold rounded-xl transition-all text-xs uppercase tracking-wider shadow-lg shadow-[#0A7B3E]/20 hover:shadow-xl hover:shadow-[#0A7B3E]/30 cursor-pointer"
+              >
+                Preencher Cadastro no Topo ↑
+              </a>
+              <Link
+                href="/colaboradores/portal/"
+                className="px-6 py-3.5 border border-slate-700 hover:border-slate-500 hover:bg-slate-800/40 text-white font-bold rounded-xl transition-all text-xs tracking-wider uppercase cursor-pointer"
+              >
+                Já sou parceiro (Login)
+              </Link>
             </div>
           </div>
         </section>
