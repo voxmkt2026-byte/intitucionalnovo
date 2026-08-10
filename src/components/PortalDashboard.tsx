@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
 import AdministradoraLogo from "@/components/AdministradoraLogo";
 
 interface Lead {
@@ -54,7 +53,6 @@ interface ChatMessage {
 
 // Números Oficiais da Titanium
 const WPP_AFILIADOS = "5511958340753"; // Suporte Exclusivo a Afiliados / Mesa de Parcerias
-const WPP_OFICIAL = "5511930048940";   // Atendimento Geral / Clientes
 
 export default function PortalDashboard({
   partnerName,
@@ -90,23 +88,48 @@ export default function PortalDashboard({
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
+  // Carta selecionada para reserva e cadastro
+  const [selectedCarta, setSelectedCarta] = useState<Carta | null>(null);
+
   // AI Copilot State
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
-  // Form State for new client
+  // Form State para CADASTRO OBRIGATÓRIO DE CLIENTE & RESERVA DE COTA
   const [clientForm, setClientForm] = useState({
     name: "",
     phone: "",
+    doc: "",      // CPF ou CNPJ do comprador
     email: "",
-    credit: "",
+    city: "",     // Cidade / UF
     segment: "Imóveis",
+    credit: "",
+    selectedCartaId: "",
+    obs: "",      // Intenção de uso / Observações da negociação
   });
   const [clientLoading, setClientLoading] = useState(false);
   const [clientError, setClientError] = useState("");
   const [clientSuccess, setClientSuccess] = useState("");
+
+  // Handler para abrir o formulário de cadastro de cliente
+  const handleOpenClientForm = (carta: Carta | null = null) => {
+    setSelectedCarta(carta);
+    setClientError("");
+    setClientSuccess("");
+
+    if (carta) {
+      setClientForm((prev) => ({
+        ...prev,
+        segment: carta.segmento || "Imóveis",
+        credit: String(carta.valor_credito),
+        selectedCartaId: String(carta.id),
+      }));
+    }
+
+    setIsNewClientOpen(true);
+  };
 
   // Handler para Navegação do Menu Lateral
   const handleNavClick = (navId: "dashboard" | "cartas" | "clientes" | "extrato" | "scripts") => {
@@ -164,6 +187,7 @@ export default function PortalDashboard({
     setTimeout(() => setReferralCopied(false), 2500);
   };
 
+  // SUBMISSÃO DO CADASTRO OBRIGATÓRIO DE CLIENTE & SOLICITAÇÃO DE RESERVA
   const handleCreateClient = async (e: React.FormEvent) => {
     e.preventDefault();
     setClientError("");
@@ -171,12 +195,24 @@ export default function PortalDashboard({
     setClientLoading(true);
 
     if (!clientForm.name.trim() || !clientForm.phone.trim()) {
-      setClientError("Nome e WhatsApp/Celular são obrigatórios.");
+      setClientError("Nome completo e WhatsApp/Celular do cliente são obrigatórios.");
       setClientLoading(false);
       return;
     }
 
+    const activeCarta = selectedCarta || cartas.find((c) => String(c.id) === clientForm.selectedCartaId) || null;
+    const formattedCredit = activeCarta
+      ? Number(activeCarta.valor_credito).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+      : clientForm.credit
+      ? `R$ ${clientForm.credit}`
+      : "A definir";
+
+    const formattedEntrada = activeCarta
+      ? Number(activeCarta.entrada).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+      : "A definir";
+
     try {
+      // 1. Grava no banco de dados via API /api/leads
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -185,9 +221,10 @@ export default function PortalDashboard({
           phone: clientForm.phone,
           email: clientForm.email,
           segment: clientForm.segment,
-          credit: clientForm.credit || "0",
+          credit: String(activeCarta?.valor_credito || clientForm.credit || "0"),
+          plan: activeCarta ? `${activeCarta.administradora} (Entrada: ${formattedEntrada})` : "Cadastrado no Portal",
           ref: partnerRef,
-          origin: "Portal do Colaborador",
+          origin: "Portal do Colaborador - Cadastro de Cliente & Reserva",
           lp: "portal",
           source_url: window.location.href,
         }),
@@ -199,31 +236,65 @@ export default function PortalDashboard({
         throw new Error(result.error || "Erro ao cadastrar cliente.");
       }
 
+      // 2. Adiciona o cliente na lista local do CRM
       const newClientObj: Lead = {
         id: result.id || Math.random(),
         name: clientForm.name,
         phone: clientForm.phone,
         email: clientForm.email,
         segment: clientForm.segment,
-        credit: clientForm.credit || "—",
-        status: "Novo",
+        credit: formattedCredit,
+        status: activeCarta ? "Reserva Solicitada" : "Novo Lead",
         created_at: new Date().toISOString(),
       };
 
       setClients((prev) => [newClientObj, ...prev]);
-      setClientSuccess("Cliente cadastrado com sucesso e blindado no seu CRM!");
-      setClientForm({
-        name: "",
-        phone: "",
-        email: "",
-        credit: "",
-        segment: "Imóveis",
-      });
-      
+      setClientSuccess("Cliente cadastrado com sucesso e blindado sob seu ID no CRM!");
+
+      // 3. Constrói a mensagem profissional formatada para o WhatsApp da Mesa de Afiliados
+      const textMessage = `📌 SOLICITAÇÃO DE RESERVA DE COTA & CADASTRO DE CLIENTE
+--------------------------------------------------
+👤 OPERADOR / PARCEIRO: ${partnerName} (REF: #${partnerRef})
+
+📋 DADOS DO CLIENTE ADQUIRENTE:
+• Nome: ${clientForm.name}
+• WhatsApp: ${clientForm.phone}
+${clientForm.doc ? `• CPF/CNPJ: ${clientForm.doc}\n` : ""}${clientForm.city ? `• Cidade/UF: ${clientForm.city}\n` : ""}${clientForm.email ? `• E-mail: ${clientForm.email}\n` : ""}
+${
+  activeCarta
+    ? `🎯 COTA SELECIONADA PARA O CLIENTE:
+• Administradora: ${activeCarta.administradora}
+• Segmento: ${activeCarta.segmento}
+• Crédito Líquido: ${formattedCredit}
+• Entrada: ${formattedEntrada}
+• Parcelas: ${activeCarta.parcelas}x de R$ ${Number(activeCarta.valor_parcela).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+`
+    : `🎯 SEGMENTO DESEJADO: ${clientForm.segment} (Crédito Aprox: ${formattedCredit})
+`
+}${clientForm.obs ? `\n💬 OBSERVAÇÕES DA NEGOCIAÇÃO: ${clientForm.obs}\n` : ""}--------------------------------------------------
+Por favor, registrar a blindagem deste cliente no meu REF ID e iniciar a validação cadastral com a mesa técnica.`;
+
+      const wppLink = `https://wa.me/${WPP_AFILIADOS}?text=${encodeURIComponent(textMessage)}`;
+
+      // Abre o WhatsApp imediatamente após gravar no CRM
       setTimeout(() => {
+        window.open(wppLink, "_blank");
         setIsNewClientOpen(false);
         setClientSuccess("");
-      }, 1500);
+        setClientForm({
+          name: "",
+          phone: "",
+          doc: "",
+          email: "",
+          city: "",
+          segment: "Imóveis",
+          credit: "",
+          selectedCartaId: "",
+          obs: "",
+        });
+        setSelectedCarta(null);
+      }, 1000);
+
     } catch (err: any) {
       setClientError(err.message || "Erro de conexão com o servidor.");
     } finally {
@@ -235,23 +306,6 @@ export default function PortalDashboard({
     navigator.clipboard.writeText(text);
     setCopiedIndex(index);
     setTimeout(() => setCopiedIndex(null), 2000);
-  };
-
-  const handleReserveLetter = (carta: Carta) => {
-    const formattedCredit = Number(carta.valor_credito).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    const formattedEntrada = Number(carta.entrada).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    const textMessage = `Olá! Sou o parceiro ${partnerName} (REF: ${partnerRef}) e gostaria de solicitar a reserva da seguinte carta contemplada para o meu cliente:
-    
-• Administradora: ${carta.administradora}
-• Segmento: ${carta.segmento}
-• Crédito: ${formattedCredit}
-• Entrada: ${formattedEntrada}
-• Parcelas: ${carta.parcelas}x de R$ ${Number(carta.valor_parcela).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-
-Poderiam verificar a documentação e me orientar no fechamento?`;
-
-    const wppLink = `https://wa.me/${WPP_AFILIADOS}?text=${encodeURIComponent(textMessage)}`;
-    window.open(wppLink, "_blank");
   };
 
   // Motor Inteligente do Chat Titanium AI
@@ -287,9 +341,6 @@ Poderiam verificar a documentação e me orientar no fechamento?`;
       } else if (lower.includes("objeç") || lower.includes("financiamento") || lower.includes("juro") || lower.includes("argumento")) {
         replyText = `Argumento de impacto: no financiamento bancário comum, o cliente paga de 2 a 3 vezes o valor do bem por conta dos juros compostos. Na carta contemplada, o custo total é até 60% menor pois não há juros compostos, apenas taxa administrativa diluída.`;
         actionWppText = `Olá! Gostaria de uma simulação comparativa (Financiamento vs Consórcio) para apresentar a um cliente.`;
-      } else if (lower.includes("número") || lower.includes("telefone") || lower.includes("contato") || lower.includes("whatsapp")) {
-        replyText = `Canais Oficiais da Titanium:\n1. 📲 WhatsApp de Afiliados: (11) 95834-0753 (mesa direta para você).\n2. 🏢 WhatsApp Geral & Clientes: (11) 93004-8940.`;
-        actionWppText = `Olá, equipe Titanium! Sou o parceiro ${partnerName} e preciso de atendimento da mesa de afiliados.`;
       } else {
         replyText = `Excelente pergunta! Nossa mesa técnica comercial está disponível em linha direta para te apoiar em qualquer negociação ou simulação sob medida.`;
         actionWppText = `Olá mesa técnica! Sou o parceiro ${partnerName} (REF: ${partnerRef}) e gostaria de apoio para: "${message}"`;
@@ -317,7 +368,6 @@ Poderiam verificar a documentação e me orientar no fechamento?`;
 
   {/* ═══════════════════════════════════════════════════════
       HORMOZI $100M OFFERS & DIRECT RESPONSE SALES SCRIPTS
-      Framework: Hook + Value Stack + Anti-Risco + Matrix de Objeção + CTA
   ═══════════════════════════════════════════════════════ */}
   const salesScripts = [
     {
@@ -441,7 +491,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
               <span className="absolute right-2.5 top-2 text-[10px] text-slate-500 font-mono">⌘+F</span>
             </div>
 
-            {/* Navigation Menu (CLIQUE ATIVO FUNCIONAL!) */}
+            {/* Navigation Menu */}
             <div className="space-y-1">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-2 block mb-2">
                 Navegação
@@ -539,11 +589,13 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 <span>{referralCopied ? "Copiado!" : "Copiar Link"}</span>
               </button>
 
+              {/* BOTÃO CENTRAL DE CADASTRO OBRIGATÓRIO DE CLIENTE & RESERVA */}
               <button
-                onClick={() => setIsNewClientOpen(true)}
-                className="crm-pill bg-[#0A7B3E] hover:bg-[#086332] text-white cursor-pointer shadow-sm border-none"
+                onClick={() => handleOpenClientForm(null)}
+                className="crm-pill bg-[#0A7B3E] hover:bg-[#086332] text-white cursor-pointer shadow-sm border-none font-extrabold"
               >
-                <span>+ Indicar Cliente</span>
+                <span>+ Cadastrar Cliente</span>
+                <span className="bg-white/20 text-white text-[9px] px-1.5 py-0.5 rounded-full font-mono uppercase ml-1">Obrigatório</span>
               </button>
             </div>
           </div>
@@ -551,7 +603,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
           {/* ══ ROW 1: TOP 3 BENTO KPI TILES ════════════════════ */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             
-            {/* Card 1 (Dark Emerald Hero Accent - como o card 1 do Aeux) */}
+            {/* Card 1 */}
             <div className="crm-card-dark p-5 flex flex-col justify-between text-left">
               <div>
                 <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider block mb-1">
@@ -565,7 +617,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 </div>
               </div>
 
-              {/* Mini Bar Chart Indicator */}
               <div className="flex items-end gap-1.5 h-7 mt-4 pt-1">
                 <div className="w-2 bg-emerald-500/30 rounded-t h-3" />
                 <div className="w-2 bg-emerald-500/50 rounded-t h-4" />
@@ -574,7 +625,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
               </div>
             </div>
 
-            {/* Card 2 (Light Glass Card) */}
+            {/* Card 2 */}
             <div className="crm-card p-5 flex flex-col justify-between text-left">
               <div>
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">
@@ -588,7 +639,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 </div>
               </div>
 
-              {/* Mini Trend Line Sparkline */}
               <div className="flex items-center justify-between mt-4">
                 <span className="text-[10px] text-slate-400 font-semibold">Previsão 15 dias</span>
                 <div className="flex items-end gap-1 h-5">
@@ -599,7 +649,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
               </div>
             </div>
 
-            {/* Card 3 (Light Glass Card) */}
+            {/* Card 3 */}
             <div className="crm-card p-5 flex flex-col justify-between text-left">
               <div>
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">
@@ -613,7 +663,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 </div>
               </div>
 
-              {/* Mini Sparkline Bars */}
               <div className="flex items-end gap-1.5 h-6 mt-4">
                 <div className="w-2 bg-slate-200 rounded-t h-2.5" />
                 <div className="w-2 bg-slate-200 rounded-t h-3.5" />
@@ -626,7 +675,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
           {/* ══ ROW 2: MIDDLE BENTO GRID (ESTEIRA + HERO SAGE CARD) ══ */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
             
-            {/* Left Large Card (Esteira & Projeção) - Col 8 */}
             <div className="lg:col-span-8 crm-card p-6 flex flex-col justify-between text-left space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -638,7 +686,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 </span>
               </div>
 
-              {/* Dual-color Bar Chart */}
               <div className="space-y-2 pt-2">
                 <div className="h-36 w-full flex items-end justify-between gap-2 sm:gap-4 px-2 border-b border-dashed border-slate-200 pb-1">
                   {[
@@ -676,7 +723,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
               </div>
             </div>
 
-            {/* Right Tall Card (Soft Sage Green) - Col 4 */}
             <div className="lg:col-span-4 crm-card-sage p-6 flex flex-col justify-between text-left space-y-4">
               <div>
                 <span className="text-[10px] font-bold text-[#0A7B3E] uppercase tracking-widest block mb-1">
@@ -690,7 +736,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 </div>
               </div>
 
-              {/* Segment Breakdown com Ícones Circulares */}
               <div className="space-y-2.5 pt-2">
                 <div className="bg-white/80 p-3 rounded-2xl border border-emerald-900/5 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
@@ -726,10 +771,9 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h3 className="text-sm font-extrabold text-slate-900">Oportunidades em Destaque (Estoque de Cotas)</h3>
-                <p className="text-[11px] text-slate-400 font-light">Cotas verificadas prontas para transferência e comissão garantida no PIX</p>
+                <p className="text-[11px] text-slate-400 font-light">Selecione uma cota e cadastre o cliente adquirente para registrar a reserva</p>
               </div>
 
-              {/* Segment Filter Pills */}
               <div className="flex gap-1.5 flex-wrap">
                 {["Todos", "Imóveis", "Veículos", "Agro"].map((seg) => (
                   <button
@@ -747,9 +791,8 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
               </div>
             </div>
 
-            {/* Table with Sparklines & Soft Pastel Tags */}
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs min-w-[550px]">
+              <table className="w-full text-left text-xs min-w-[600px]">
                 <thead>
                   <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                     <th className="py-2.5 px-3">Administradora</th>
@@ -757,7 +800,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                     <th className="py-2.5 px-3">Entrada</th>
                     <th className="py-2.5 px-3">Dinâmica</th>
                     <th className="py-2.5 px-3">Segmento</th>
-                    <th className="py-2.5 px-3 text-right">Ação</th>
+                    <th className="py-2.5 px-3 text-right">Ação Obrigatória</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -773,7 +816,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                         {Number(carta.entrada).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })}
                       </td>
                       
-                      {/* Wave Sparkline SVG */}
                       <td className="py-3 px-3">
                         <svg className="w-16 h-5" viewBox="0 0 64 20" fill="none">
                           <path
@@ -785,7 +827,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                         </svg>
                       </td>
 
-                      {/* Soft Tag */}
                       <td className="py-3 px-3">
                         <span className={`crm-pill text-[10px] py-0.5 px-2 ${
                           carta.segmento.toLowerCase().includes("veic")
@@ -798,12 +839,13 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                         </span>
                       </td>
 
+                      {/* BOTAO OBRIGATORIO: RESERVAR COTA / CADASTRAR CLIENTE */}
                       <td className="py-3 px-3 text-right">
                         <button
-                          onClick={() => handleReserveLetter(carta)}
-                          className="px-3 py-1 bg-[#0A7B3E] hover:bg-[#086332] text-white text-[10px] font-bold rounded-lg transition-all border-none cursor-pointer"
+                          onClick={() => handleOpenClientForm(carta)}
+                          className="px-3.5 py-1.5 bg-[#0A7B3E] hover:bg-[#086332] text-white text-[10px] font-extrabold rounded-xl transition-all border-none cursor-pointer shadow-xs"
                         >
-                          Reservar (Wpp)
+                          Reservar Cota (Cadastrar Cliente)
                         </button>
                       </td>
                     </tr>
@@ -816,18 +858,17 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
           {/* ══ ROW 4: CLIENTES E EXTRATO (ANCHOR REFS) ════════════ */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
             
-            {/* Carteira de Clientes - Col 8 */}
             <div ref={clientesRef} className="lg:col-span-8 crm-card p-6 space-y-4 text-left">
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-sm font-extrabold text-slate-900">Meus Clientes Indicados</h3>
-                  <p className="text-[11px] text-slate-400 font-light">Leads blindados sob seu ID. Mesa conduz o fechamento.</p>
+                  <h3 className="text-sm font-extrabold text-slate-900">Meus Clientes Indicados & Cotas Reservadas</h3>
+                  <p className="text-[11px] text-slate-400 font-light">Leads blindados sob seu ID. Mesa técnica conduz a validação.</p>
                 </div>
                 <button
-                  onClick={() => setIsNewClientOpen(true)}
+                  onClick={() => handleOpenClientForm(null)}
                   className="crm-pill bg-slate-900 hover:bg-slate-800 text-white text-[10px] cursor-pointer"
                 >
-                  + Indicar Cliente
+                  + Cadastrar Cliente
                 </button>
               </div>
 
@@ -864,11 +905,11 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                           <td className="py-3 px-3 font-semibold text-slate-900 tabular-nums">
                             {client.credit && !isNaN(Number(client.credit.replace(/[^\d.]/g, "")))
                               ? Number(client.credit.replace(/[^\d.]/g, "")).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })
-                              : `R$ ${client.credit}`}
+                              : client.credit}
                           </td>
                           <td className="py-3 px-3 text-right">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
-                              client.status === "Vendido" || client.status === "Ganho" || client.status === "Contemplado"
+                              client.status.includes("Reservad") || client.status === "Vendido"
                                 ? "bg-emerald-100 text-emerald-800 border-emerald-200"
                                 : client.status === "Perdido"
                                 ? "bg-rose-100 text-rose-800 border-rose-200"
@@ -885,7 +926,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
               )}
             </div>
 
-            {/* Extrato PIX - Col 4 */}
             <div ref={extratoRef} className="lg:col-span-4 crm-card p-6 space-y-4 text-left">
               <div>
                 <h3 className="text-sm font-extrabold text-slate-900">Extrato de Comissões PIX</h3>
@@ -927,7 +967,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
       </div>
 
       {/* ═══════════════════════════════════════════════════════
-          WIDGET FLUTUANTE DO COPILOTO IA (LATERAL POP-UP)
+          WIDGET FLUTUANTE DO COPILOTO IA
       ═══════════════════════════════════════════════════════ */}
       {!isAIChatOpen && (
         <button
@@ -949,7 +989,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
       {isAIChatOpen && (
         <div className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[400px] max-h-[560px] h-[80vh] rounded-3xl liquid-glass-modal shadow-2xl flex flex-col border border-white/95 overflow-hidden animate-popUp text-left">
           
-          {/* Header do Pop-up Lateral */}
           <div className="p-4 bg-[#0C130F] text-white flex items-center justify-between border-b border-slate-800">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
@@ -967,18 +1006,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
             </div>
 
             <div className="flex items-center gap-2">
-              <a
-                href={`https://wa.me/${WPP_AFILIADOS}?text=${encodeURIComponent(`Olá equipe Titanium! Sou o parceiro ${partnerName} (REF: ${partnerRef}) e preciso de suporte da mesa de afiliados.`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-emerald-400 hover:text-white transition-colors"
-                title="Abrir WhatsApp de Afiliados"
-              >
-                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.534 4.055 1.475 5.77L0 24l6.407-1.453A11.957 11.957 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.497-5.22-1.367l-.375-.222-3.887.882.913-3.781-.244-.39A9.941 9.941 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
-                </svg>
-              </a>
               <button
                 onClick={() => setIsAIChatOpen(false)}
                 className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer border-none font-bold text-xs"
@@ -988,7 +1015,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
             </div>
           </div>
 
-          {/* Feed de Mensagens */}
           <div className="flex-1 p-3.5 overflow-y-auto space-y-3 bg-slate-50/60 text-xs">
             {messages.map((m) => (
               <div
@@ -1003,19 +1029,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                   }`}
                 >
                   <p className="whitespace-pre-line text-[11px] sm:text-xs">{m.text}</p>
-                  
-                  {m.actionWpp && (
-                    <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between">
-                      <a
-                        href={`https://wa.me/${WPP_AFILIADOS}?text=${encodeURIComponent(m.actionWpp)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[#0A7B3E] font-bold text-[10px] hover:underline"
-                      >
-                        Acionar Mesa no WhatsApp →
-                      </a>
-                    </div>
-                  )}
                 </div>
                 <span className="text-[9px] text-slate-400 mt-0.5 px-1">{m.timestamp}</span>
               </div>
@@ -1026,13 +1039,11 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" />
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce [animation-delay:0.2s]" />
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce [animation-delay:0.4s]" />
-                <span className="text-slate-500 font-medium ml-1">Digitando...</span>
               </div>
             )}
             <div ref={chatBottomRef} />
           </div>
 
-          {/* Sugestões Rápidas (Chips) */}
           <div className="p-2.5 bg-white border-t border-slate-100 flex flex-wrap gap-1.5">
             {quickPrompts.map((prompt, idx) => (
               <button
@@ -1046,7 +1057,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
             ))}
           </div>
 
-          {/* Form Input */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -1075,7 +1085,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
       )}
 
       {/* ═══════════════════════════════════════════════════════
-          MODAL DE SCRIPTS DE VENDAS HORMOZI $100M OFFERS
+          MODAL DE SCRIPTS DE VENDAS HORMOZI
       ═══════════════════════════════════════════════════════ */}
       {isScriptsOpen && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -1140,120 +1150,253 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
       )}
 
       {/* ═══════════════════════════════════════════════════════
-          MODAL DE CADASTRO DE NOVO CLIENTE
+          MODAL DE CADASTRO OBRIGATÓRIO DE CLIENTE & RESERVA DE COTA
       ═══════════════════════════════════════════════════════ */}
       {isNewClientOpen && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col text-left">
-            <div className="p-6 border-b border-slate-100 flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-[#E8F5EE] flex items-center justify-center text-[#0A7B3E]">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-slate-200 rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-hidden shadow-2xl flex flex-col text-left">
+            
+            {/* Modal Header */}
+            <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] shrink-0">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">Indicar Novo Cliente</h3>
-                  <p className="text-[11px] text-slate-400 font-light">Seu ID será blindado no CRM da Titanium.</p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-extrabold text-slate-900">Cadastro de Cliente & Reserva</h3>
+                    <span className="crm-tag-mint text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Obrigatório</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-light mt-0.5">Etapa mandatória para demonstrar interesse ou reservar cota para o adquirente.</p>
                 </div>
               </div>
               <button
-                onClick={() => setIsNewClientOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors cursor-pointer border-none font-bold text-sm"
+                onClick={() => {
+                  setIsNewClientOpen(false);
+                  setSelectedCarta(null);
+                }}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors cursor-pointer border-none font-bold text-sm"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreateClient} className="p-6 space-y-4">
+            {/* Modal Form Content */}
+            <form onSubmit={handleCreateClient} className="p-5 sm:p-6 space-y-4 overflow-y-auto flex-1">
+              
               {clientError && (
-                <div className="p-3 bg-rose-50 text-rose-600 text-xs font-semibold rounded-xl border border-rose-200">
+                <div className="p-3.5 bg-rose-50 text-rose-700 text-xs font-semibold rounded-2xl border border-rose-200">
                   {clientError}
                 </div>
               )}
               {clientSuccess && (
-                <div className="p-3 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-xl border border-emerald-200">
-                  {clientSuccess}
+                <div className="p-3.5 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-2xl border border-emerald-200 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                  <span>{clientSuccess}</span>
                 </div>
               )}
 
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Nome Completo do Cliente</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Ex: Roberto Silveira"
-                  value={clientForm.name}
-                  onChange={(e) => setClientForm({ ...clientForm, name: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors text-slate-800"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">WhatsApp / Celular com DDD</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Ex: (11) 99999-9999"
-                  value={clientForm.phone}
-                  onChange={(e) => setClientForm({ ...clientForm, phone: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors text-slate-800"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">E-mail (opcional)</label>
-                <input
-                  type="email"
-                  placeholder="Ex: roberto@empresa.com.br"
-                  value={clientForm.email}
-                  onChange={(e) => setClientForm({ ...clientForm, email: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors text-slate-800"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
+              {/* CARD DE COTA SELECIONADA */}
+              {selectedCarta ? (
+                <div className="p-3.5 bg-gradient-to-r from-emerald-900 to-[#0A7B3E] rounded-2xl text-white space-y-1.5 shadow-sm">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300">Cota Selecionada para Reserva</span>
+                    <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-mono">#{selectedCarta.id}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-extrabold text-white">{selectedCarta.administradora}</div>
+                      <div className="text-xs text-emerald-200">{selectedCarta.segmento}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-base font-extrabold text-white">
+                        {Number(selectedCarta.valor_credito).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })}
+                      </div>
+                      <div className="text-[11px] text-emerald-200">
+                        Entrada: {Number(selectedCarta.entrada).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Segmento</label>
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Vincular a Cota do Estoque (Opcional)</label>
                   <select
-                    value={clientForm.segment}
-                    onChange={(e) => setClientForm({ ...clientForm, segment: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors text-slate-800"
+                    value={clientForm.selectedCartaId}
+                    onChange={(e) => {
+                      const found = cartas.find((c) => String(c.id) === e.target.value) || null;
+                      setSelectedCarta(found);
+                      setClientForm({
+                        ...clientForm,
+                        selectedCartaId: e.target.value,
+                        segment: found ? found.segmento : clientForm.segment,
+                        credit: found ? String(found.valor_credito) : clientForm.credit,
+                      });
+                    }}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors text-slate-800 font-medium"
                   >
-                    <option value="Imóveis">Imóveis</option>
-                    <option value="Veículos">Veículos</option>
-                    <option value="Agro">Agro</option>
-                    <option value="Pesados">Pesados</option>
+                    <option value="">Selecione uma cota do estoque ativo...</option>
+                    {cartas.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.administradora} — Crédito: R$ {Number(c.valor_credito).toLocaleString("pt-BR")} (Entr: R$ {Number(c.entrada).toLocaleString("pt-BR")})
+                      </option>
+                    ))}
                   </select>
                 </div>
+              )}
+
+              {/* BLOCO 1: DADOS DO CLIENTE ADQUIRENTE */}
+              <div className="space-y-3 pt-1">
+                <span className="text-[11px] font-extrabold text-slate-900 uppercase tracking-wider block border-b border-slate-100 pb-1">
+                  1. Dados do Cliente Adquirente
+                </span>
+
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Crédito Pretendido (R$)</label>
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Nome Completo do Cliente *</label>
                   <input
                     type="text"
-                    placeholder="Ex: 500.000"
-                    value={clientForm.credit}
-                    onChange={(e) => setClientForm({ ...clientForm, credit: e.target.value })}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors text-slate-800"
+                    required
+                    placeholder="Ex: Roberto Silveira de Oliveira"
+                    value={clientForm.name}
+                    onChange={(e) => setClientForm({ ...clientForm, name: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-colors text-slate-800"
                   />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">WhatsApp / Telefone *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex: (11) 99999-9999"
+                      value={clientForm.phone}
+                      onChange={(e) => setClientForm({ ...clientForm, phone: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-colors text-slate-800"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">CPF ou CNPJ do Cliente</label>
+                    <input
+                      type="text"
+                      placeholder="Ex: 123.456.789-00"
+                      value={clientForm.doc}
+                      onChange={(e) => setClientForm({ ...clientForm, doc: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-colors text-slate-800"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">E-mail do Cliente</label>
+                    <input
+                      type="email"
+                      placeholder="Ex: roberto@empresa.com.br"
+                      value={clientForm.email}
+                      onChange={(e) => setClientForm({ ...clientForm, email: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-colors text-slate-800"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Cidade / Estado (UF)</label>
+                    <input
+                      type="text"
+                      placeholder="Ex: São Paulo / SP"
+                      value={clientForm.city}
+                      onChange={(e) => setClientForm({ ...clientForm, city: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-colors text-slate-800"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="pt-3 flex gap-3">
+              {/* BLOCO 2: ESPECIFICAÇÕES DO CRÉDITO (QUANDO SEM COTA FIXA) */}
+              {!selectedCarta && (
+                <div className="space-y-3 pt-1">
+                  <span className="text-[11px] font-extrabold text-slate-900 uppercase tracking-wider block border-b border-slate-100 pb-1">
+                    2. Especificação do Crédito Pretendido
+                  </span>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Segmento</label>
+                      <select
+                        value={clientForm.segment}
+                        onChange={(e) => setClientForm({ ...clientForm, segment: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors text-slate-800"
+                      >
+                        <option value="Imóveis">Imóveis</option>
+                        <option value="Veículos">Veículos</option>
+                        <option value="Agro">Agro</option>
+                        <option value="Pesados">Pesados</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Valor do Crédito (R$)</label>
+                      <input
+                        type="text"
+                        placeholder="Ex: 500.000"
+                        value={clientForm.credit}
+                        onChange={(e) => setClientForm({ ...clientForm, credit: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors text-slate-800"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* BLOCO 3: OBSERVACÕES DA NEGOCIAÇÃO */}
+              <div className="space-y-1 pt-1">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Observações / Intenção de Uso</label>
+                <textarea
+                  rows={2}
+                  placeholder="Ex: Cliente tem R$ 130 mil em mãos para entrada. Compra de casa própria em 15 dias."
+                  value={clientForm.obs}
+                  onChange={(e) => setClientForm({ ...clientForm, obs: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-colors text-slate-800"
+                />
+              </div>
+
+              {/* BUTTONS */}
+              <div className="pt-2 flex gap-3">
                 <button
                   type="button"
-                  onClick={() => setIsNewClientOpen(false)}
+                  onClick={() => {
+                    setIsNewClientOpen(false);
+                    setSelectedCarta(null);
+                  }}
                   className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold uppercase rounded-xl transition-all border-none cursor-pointer"
                 >
                   Cancelar
                 </button>
+
                 <button
                   type="submit"
                   disabled={clientLoading}
-                  className="flex-1 py-3 bg-[#0A7B3E] hover:bg-[#086332] disabled:bg-slate-200 text-white text-xs font-bold uppercase rounded-xl transition-all shadow-md border-none cursor-pointer"
+                  className="flex-2 py-3 bg-[#0A7B3E] hover:bg-[#086332] disabled:bg-slate-200 text-white text-xs font-extrabold uppercase rounded-xl transition-all shadow-md border-none cursor-pointer flex items-center justify-center gap-2"
                 >
-                  {clientLoading ? "Gravando..." : "Gravar Indicação"}
+                  {clientLoading ? (
+                    "Cadastrando & Reservando..."
+                  ) : (
+                    <>
+                      <span>Gravar Cliente & Enviar à Mesa</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </>
+                  )}
                 </button>
               </div>
+
+              <p className="text-[10px] text-slate-400 text-center font-light pt-1">
+                🔒 Ao clicar em Gravar, o lead é blindado sob seu ID #{partnerRef} e o payload oficial é formatado para a mesa.
+              </p>
             </form>
           </div>
         </div>
