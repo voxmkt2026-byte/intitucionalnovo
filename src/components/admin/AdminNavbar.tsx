@@ -103,6 +103,8 @@ export default function AdminNavbar() {
   const [loggingOut, setLoggingOut] = useState(false);
   const isDark = theme === 'dark';
 
+  if (pathname.startsWith('/admin/login')) return null;
+
   async function handleLogout() {
     if (loggingOut) return;
     setLoggingOut(true);

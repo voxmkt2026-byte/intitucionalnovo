@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcryptjs";
+import { z } from "zod";
 import { signColaboradorToken } from "@/lib/colaborador-auth";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
+const credentialsSchema = z.object({
+  email: z.email().trim().toLowerCase(),
+  senha: z.string().min(1).max(100),
+});
 
 function getDb() {
   if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
@@ -12,9 +18,8 @@ function getDb() {
 
 export async function POST(request: Request) {
   try {
-    const { email, senha, documento } = await request.json();
-
-    if (!email || (!senha && !documento)) {
+    const parsed = credentialsSchema.safeParse(await request.json());
+    if (!parsed.success) {
       return NextResponse.json(
         { error: "Informe seu e-mail e senha cadastrados para acessar." },
         { status: 400 }
@@ -22,61 +27,30 @@ export async function POST(request: Request) {
     }
 
     const sql = getDb();
-    
-    // Clean inputs
-    const cleanEmail = email.toLowerCase().trim();
-
-    const affiliates = await sql`
-      SELECT id, nome, email, documento_cpf_cnpj, status_onboarding, codigo_ref, senha_hash
-      FROM afiliados
-      WHERE email = ${cleanEmail}
-      LIMIT 1
-    `;
-
-    const affiliate = affiliates[0];
-    if (!affiliate) {
+    const { email, senha } = parsed.data;
+    const rateLimit = await checkRateLimit(
+      sql,
+      `colaboradores-login:${getClientIp(request)}:${email}`,
+      8,
+      15 * 60
+    );
+    if (!rateLimit.allowed) {
       return NextResponse.json(
-        { error: "Colaborador não encontrado com este e-mail." },
-        { status: 401 }
+        { error: "Muitas tentativas. Aguarde alguns minutos e tente novamente." },
+        { status: 429 }
       );
     }
 
-    // Validar por senha se fornecida e usuário possui senha_hash
-    if (senha) {
-      if (affiliate.senha_hash) {
-        const isValid = await bcrypt.compare(senha, affiliate.senha_hash);
-        if (!isValid) {
-          return NextResponse.json(
-            { error: "E-mail ou senha incorretos." },
-            { status: 401 }
-          );
-        }
-      } else if (documento) {
-        // Fallback para conta legada sem senha_hash
-        const cleanDoc = documento.replace(/[^\d]/g, "").trim();
-        const dbDoc = affiliate.documento_cpf_cnpj.replace(/[^\d]/g, "").trim();
-        if (cleanDoc !== dbDoc) {
-          return NextResponse.json(
-            { error: "Documento (CPF/CNPJ) incorreto." },
-            { status: 401 }
-          );
-        }
-      } else {
-        return NextResponse.json(
-          { error: "Senha inválida para esta conta." },
-          { status: 401 }
-        );
-      }
-    } else if (documento) {
-      // Login direto por documento
-      const cleanDoc = documento.replace(/[^\d]/g, "").trim();
-      const dbDoc = affiliate.documento_cpf_cnpj.replace(/[^\d]/g, "").trim();
-      if (cleanDoc !== dbDoc) {
-        return NextResponse.json(
-          { error: "Documento (CPF/CNPJ) incorreto." },
-          { status: 401 }
-        );
-      }
+    const affiliates = await sql`
+      SELECT id, nome, email, status_onboarding, codigo_ref, senha_hash
+      FROM afiliados
+      WHERE LOWER(email) = ${email}
+      LIMIT 1
+    `;
+    const affiliate = affiliates[0];
+
+    if (!affiliate?.senha_hash || !(await bcrypt.compare(senha, affiliate.senha_hash))) {
+      return NextResponse.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
     }
 
     if (affiliate.status_onboarding === "Bloqueado") {
@@ -88,28 +62,22 @@ export async function POST(request: Request) {
 
     if (affiliate.status_onboarding === "Pendente") {
       return NextResponse.json(
-        { 
+        {
           error: "Seu cadastro está em análise comercial. Enviaremos uma notificação no WhatsApp assim que for ativado.",
-          status: "Pendente" 
+          status: "Pendente",
         },
         { status: 403 }
       );
     }
 
-    // Generate JWT via unified helper
     const token = await signColaboradorToken({
       id: String(affiliate.id),
       email: affiliate.email,
       nome: affiliate.nome,
       codigo_ref: affiliate.codigo_ref,
     });
-
     const response = NextResponse.json(
-      { 
-        ok: true, 
-        nome: affiliate.nome, 
-        codigo_ref: affiliate.codigo_ref 
-      },
+      { ok: true, nome: affiliate.nome, codigo_ref: affiliate.codigo_ref },
       { status: 200 }
     );
 
@@ -117,10 +85,9 @@ export async function POST(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 24 * 60 * 60, // 24h
+      maxAge: 24 * 60 * 60,
       path: "/",
     });
-
     return response;
   } catch (err) {
     console.error("[colaboradores/login] falha na autenticação:", err);
@@ -128,7 +95,6 @@ export async function POST(request: Request) {
   }
 }
 
-// Logout
 export async function DELETE() {
   const response = NextResponse.json({ ok: true });
   response.cookies.delete("colaborador_token");

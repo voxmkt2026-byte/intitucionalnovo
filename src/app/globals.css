@@ -1,68 +1,68 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════
-   TITANIUM CONSULTORIA — Master Liquid Glass Design System
-   Philosophy: High-Tech Liquid Glass Light Theme · Deep Emerald Accents · Specular Sheen
-   Tier-1 Fintech Aesthetic (No generic AI templates, crisp visual engineering)
+   TITANIUM CONSULTORIA — Masterclass CRM Design System
+   Inspired by: AeuxGlobal / EcoPlastic Bento Grid Architecture
+   Theme: Light Professional · Deep Emerald Accents · Proportional Bento Cards · Micro-Sparklines
    ═══════════════════════════════════════════════ */
 
 :root {
-  /* ── Backgrounds & Canvas ── */
-  --bg:           #F8FAF9;   /* Fundo principal luminoso de alta precisão */
-  --bg-2:         #F0F4F2;   /* Seções alternadas translúcidas */
-  --bg-3:         #E6ECE9;   /* Destaques estruturais */
+  /* ── Backgrounds & Canvas (Luminous Light Theme) ── */
+  --bg:           #F4F7F5;   /* Canvas principal suave e elegante */
+  --bg-2:         #EAEFEA;   /* Seções alternadas translúcidas */
+  --bg-3:         #DEE5DF;   /* Bordas e divisores sutis */
   --bg-white:     #FFFFFF;   /* Superfícies sólidas de apoio */
-  --bg-dark:      #0B0F19;   /* Seções de alto contraste dark tech */
+  --bg-dark:      #0C130F;   /* Elementos de alto contraste e hero cards */
+  --bg-sage:      #EAF4ED;   /* Fundo verde suave estilo CRM AeuxGlobal */
 
-  /* ── Liquid Glass Light Engine Tokens ── */
-  --glass-bg:          rgba(255, 255, 255, 0.72);
-  --glass-bg-subtle:   rgba(255, 255, 255, 0.50);
-  --glass-bg-elevated: rgba(255, 255, 255, 0.88);
+  /* ── CRM Bento Surface Tokens ── */
+  --crm-card-bg:       rgba(255, 255, 255, 0.92);
+  --crm-card-border:   rgba(15, 23, 42, 0.07);
+  --crm-card-shadow:   0 1px 3px rgba(0,0,0,0.02), 0 12px 32px -4px rgba(10, 123, 62, 0.05);
+  --crm-card-hover:    0 8px 30px -4px rgba(10, 123, 62, 0.10), 0 20px 48px -10px rgba(15, 23, 42, 0.06);
+
+  /* ── Liquid Glass Light Engine ── */
+  --glass-bg:          rgba(255, 255, 255, 0.78);
   --glass-border:      rgba(255, 255, 255, 0.95);
-  --glass-border-soft: rgba(15, 23, 42, 0.08);
+  --glass-border-soft: rgba(15, 23, 42, 0.06);
   --glass-blur:        blur(20px) saturate(190%);
-  --glass-blur-heavy:  blur(32px) saturate(210%);
-  --glass-specular:    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.02);
 
   /* ── Texto & Tipografia ── */
-  --ink:          #0F172A;   /* Texto principal ultra legível */
-  --ink-soft:     #475569;   /* Texto secundário */
-  --ink-mute:     #94A3B8;   /* Labels, captions e metadados */
-  --ink-white:    #FFFFFF;   /* Texto puro sobre superfícies escuras */
+  --ink:          #0B130E;   /* Texto principal */
+  --ink-soft:     #4A5568;   /* Texto secundário */
+  --ink-mute:     #8C9BAE;   /* Labels, captions e metadados */
+  --ink-white:    #FFFFFF;
 
   /* ── Verde — Deep Emerald High-Tech ── */
-  --green:         #0A7B3E;  /* Cor primária institucional */
-  --green-mid:     #0D9E50;  /* Hover primário */
-  --green-vivid:   #15B85C;  /* Destaques, gradientes e glows */
+  --green:         #0A7B3E;  /* Cor primária da marca */
+  --green-mid:     #0D9E50;  /* Hover */
+  --green-vivid:   #15B85C;  /* Destaques e gráficos */
   --green-deep:    #06532A;  /* Sombras e profundidade */
-  --green-tint:    #E8F5EE;  /* Fundo de chips/badges */
-  --green-tint-2:  #D1ECDD;  /* Bordas de chips/badges */
+  --green-tint:    #E8F5EE;  /* Fundo de chips e tags */
+  --green-tint-2:  #D1ECDD;  /* Bordas de chips */
 
-  /* ── Funcionais & Acentos ── */
+  /* ── Funcionais & Tags Coloridas ── */
   --good:         #0D9E50;
   --bad:          #E11D48;
   --whatsapp:     #25D366;
+  --tag-peach:    #FEF3C7;  /* Tag laranja suave */
+  --tag-peach-ink:#B45309;
+  --tag-mint:     #D1FAE5;  /* Tag menta suave */
+  --tag-mint-ink: #065F46;
+  --tag-sky:      #E0F2FE;  /* Tag azul suave */
+  --tag-sky-ink:  #0369A1;
 
-  /* ── Border Radius ── */
-  --r:            12px;
-  --r-lg:         18px;
-  --r-xl:         24px;
-  --r-2xl:        32px;
+  /* ── Border Radius CRM Ultra-Arredondado ── */
+  --r-sm:         10px;
+  --r-md:         16px;
+  --r-lg:         22px;
+  --r-xl:         28px;
+  --r-2xl:        36px;
   --r-pill:       9999px;
 
-  /* ── Sombras Volumétricas & Ambientais ── */
-  --shadow-glass:       0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 20px 40px -15px rgba(10, 123, 62, 0.06);
-  --shadow-glass-hover: 0 8px 30px -4px rgba(10, 123, 62, 0.12), 0 25px 60px -12px rgba(15, 23, 42, 0.08);
-  --shadow-glow-green:  0 0 24px -2px rgba(21, 184, 92, 0.35);
-
-  /* ── Motion Curves ── */
+  /* ── Motion ── */
   --ease:         cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* ── Layout ── */
-  --wrap: 1160px;
-  --pad:  clamp(1.2rem, 4vw, 2.4rem);
 
   /* ── Aliases ── */
   --background:    var(--bg);
@@ -73,13 +73,13 @@
   --white-bg:      var(--bg);
 }
 
-/* ── Tailwind v4 Theme Tokens ── */
 @theme inline {
   --color-bg:          var(--bg);
   --color-bg-2:        var(--bg-2);
   --color-bg-3:        var(--bg-3);
   --color-bg-white:    var(--bg-white);
   --color-bg-dark:     var(--bg-dark);
+  --color-bg-sage:     var(--bg-sage);
 
   --color-ink:         var(--ink);
   --color-ink-soft:    var(--ink-soft);
@@ -98,7 +98,7 @@
 }
 
 /* ═══════════════════════════════════════════════
-   BASE & TECH CANVAS
+   BASE & CANVAS
    ═══════════════════════════════════════════════ */
 
 html {
@@ -114,8 +114,8 @@ body {
   overflow-x: hidden;
   line-height: 1.6;
   background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.08), transparent 70%),
-    radial-gradient(circle at 100% 100%, rgba(10, 123, 62, 0.04), transparent 40%);
+    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(16, 185, 129, 0.07), transparent 70%),
+    radial-gradient(circle at 100% 100%, rgba(10, 123, 62, 0.03), transparent 40%);
   background-attachment: fixed;
 }
 
@@ -125,121 +125,131 @@ body {
 }
 
 /* ═══════════════════════════════════════════════
-   LIQUID GLASS LIGHT DESIGN UTILITIES
+   CRM BENTO CARD UTILITIES
    ═══════════════════════════════════════════════ */
 
-/* 1. Base Liquid Glass Container */
+/* 1. Standard Bento Card (Tema Claro) */
+.crm-card {
+  background: var(--crm-card-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--crm-card-border);
+  border-top-color: rgba(255, 255, 255, 0.95);
+  border-radius: var(--r-xl);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9), var(--crm-card-shadow);
+  transition: all 0.3s var(--ease);
+}
+
+.crm-card:hover {
+  border-color: rgba(16, 185, 129, 0.25);
+  border-top-color: #FFFFFF;
+  box-shadow: inset 0 1px 2px 0 #FFFFFF, var(--crm-card-hover);
+  transform: translateY(-2px);
+}
+
+/* 2. Hero Dark Accent Bento Card (Como no card verde escuro Aeux) */
+.crm-card-dark {
+  background: linear-gradient(145deg, #0D1711 0%, #06110A 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(21, 184, 92, 0.4);
+  border-radius: var(--r-xl);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  transition: all 0.3s var(--ease);
+}
+
+.crm-card-dark:hover {
+  border-top-color: rgba(21, 184, 92, 0.7);
+  box-shadow: 0 16px 40px -4px rgba(10, 123, 62, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* 3. Soft Sage Green Bento Card (Como o card 99,681m TONS do Aeux) */
+.crm-card-sage {
+  background: linear-gradient(160deg, #EAF4ED 0%, #E2EFE6 100%);
+  border: 1px solid rgba(10, 123, 62, 0.12);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-radius: var(--r-xl);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.8), 0 8px 24px -4px rgba(10, 123, 62, 0.05);
+  transition: all 0.3s var(--ease);
+}
+
+.crm-card-sage:hover {
+  border-color: rgba(10, 123, 62, 0.25);
+  box-shadow: inset 0 1px 2px 0 #FFFFFF, 0 12px 32px -4px rgba(10, 123, 62, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 4. CRM Pill Buttons & Tags */
+.crm-pill {
+  border-radius: var(--r-pill);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s var(--ease);
+}
+
+.crm-tag-mint {
+  background: var(--tag-mint);
+  color: var(--tag-mint-ink);
+  border: 1px solid rgba(6, 95, 70, 0.15);
+}
+
+.crm-tag-peach {
+  background: var(--tag-peach);
+  color: var(--tag-peach-ink);
+  border: 1px solid rgba(180, 83, 9, 0.15);
+}
+
+.crm-tag-sky {
+  background: var(--tag-sky);
+  color: var(--tag-sky-ink);
+  border: 1px solid rgba(3, 105, 161, 0.15);
+}
+
+/* 5. Liquid Glass Utilities */
 .liquid-glass {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border-soft);
   border-top-color: var(--glass-border);
-  box-shadow: var(--glass-specular), var(--shadow-glass);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.95), var(--crm-card-shadow);
 }
 
-/* 2. Liquid Glass Card com Hover Interativo */
-.liquid-glass-card {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border-soft);
-  border-top-color: var(--glass-border);
-  border-radius: var(--r-xl);
-  box-shadow: var(--glass-specular), var(--shadow-glass);
-  transition: all 0.35s var(--ease);
-}
-
-.liquid-glass-card:hover {
-  background: var(--glass-bg-elevated);
-  border-top-color: rgba(255, 255, 255, 1);
-  border-color: rgba(16, 185, 129, 0.25);
-  box-shadow: var(--glass-specular), var(--shadow-glass-hover);
-  transform: translateY(-3px);
-}
-
-/* 3. Liquid Glass Elevated (Modais e Pop-ups) */
 .liquid-glass-modal {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: var(--glass-blur-heavy);
-  -webkit-backdrop-filter: var(--glass-blur-heavy);
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
   border-bottom-color: rgba(15, 23, 42, 0.08);
   box-shadow: 
-    0 20px 60px -15px rgba(15, 23, 42, 0.15),
-    0 0 1px 1px rgba(255, 255, 255, 0.9) inset;
+    0 24px 64px -16px rgba(15, 23, 42, 0.16),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 1);
 }
 
-/* 4. Liquid Glass Pill (Botões e Badges) */
-.liquid-glass-pill {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  border-bottom-color: rgba(15, 23, 42, 0.06);
-  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.9), 0 2px 6px rgba(0, 0, 0, 0.03);
-  transition: all 0.2s var(--ease);
-}
-
-.liquid-glass-pill:hover {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: rgba(16, 185, 129, 0.3);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 1), 0 4px 12px rgba(10, 123, 62, 0.08);
-}
-
-/* 5. Liquid Glass Input Form Controls */
 .liquid-glass-input {
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(15, 23, 42, 0.1);
-  border-top-color: rgba(255, 255, 255, 0.8);
+  border-top-color: rgba(255, 255, 255, 0.9);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
   transition: all 0.2s var(--ease);
 }
 
 .liquid-glass-input:focus {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   border-color: #10B981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.9);
   outline: none;
 }
 
-/* 6. High-Tech Grid Mesh Pattern */
-.tech-grid-pattern {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
-}
-
-/* 7. Luminous Specular Sheen Glow */
-.glow-emerald {
-  box-shadow: 0 0 25px -4px rgba(21, 184, 92, 0.4);
-}
-
-/* ═══════════════════════════════════════════════
-   TIPOGRAFIA & TÍTULOS HIGH-TECH
-   ═══════════════════════════════════════════════ */
-
-.display {
-  font-family: var(--font-jakarta), system-ui, sans-serif;
-  font-size: clamp(2.4rem, 6vw, 4.8rem);
-  font-weight: 800;
-  line-height: 1.06;
-  letter-spacing: -0.035em;
-  color: var(--ink);
-}
-
-.display-white {
-  font-family: var(--font-jakarta), system-ui, sans-serif;
-  font-size: clamp(2.4rem, 6vw, 4.8rem);
-  font-weight: 800;
-  line-height: 1.06;
-  letter-spacing: -0.035em;
-  color: var(--ink-white);
-}
-
+/* 6. Typography & Gradients */
 .text-gradient {
   background: linear-gradient(110deg, #0A7B3E 0%, #15B85C 50%, #0D9E50 100%);
   -webkit-background-clip: text;
@@ -247,106 +257,54 @@ body {
   color: transparent;
 }
 
-.text-gradient-gold {
-  background: linear-gradient(110deg, #D97706 0%, #F59E0B 50%, #B45309 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
-.kicker {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--green);
-}
-
-/* ═══════════════════════════════════════════════
-   BOTÕES COM ESPECULARIDADE & MICRO-INTERAÇÃO
-   ═══════════════════════════════════════════════ */
-
+/* 7. Buttons */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  padding: 0.85rem 2rem;
+  padding: 0.8rem 1.8rem;
   background: linear-gradient(180deg, #0D9E50 0%, #0A7B3E 100%);
   color: #FFFFFF;
   font-family: var(--font-jakarta), system-ui, sans-serif;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   border-radius: var(--r-pill);
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-top-color: rgba(255, 255, 255, 0.4);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4), 0 4px 16px rgba(10, 123, 62, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-top-color: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4), 0 4px 16px rgba(10, 123, 62, 0.22);
   transition: all 0.25s var(--ease);
   text-decoration: none;
 }
 
 .btn-primary:hover {
   background: linear-gradient(180deg, #15B85C 0%, #0D9E50 100%);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.6), 0 8px 25px rgba(10, 123, 62, 0.35);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.6), 0 8px 24px rgba(10, 123, 62, 0.3);
   transform: translateY(-2px);
 }
 
 .btn-primary:active { transform: translateY(0); }
 
-.btn-glass {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  padding: 0.85rem 2rem;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: var(--ink);
-  font-family: var(--font-jakarta), system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 0.875rem;
-  border-radius: var(--r-pill);
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-bottom-color: rgba(15, 23, 42, 0.08);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 1), 0 4px 12px rgba(0, 0, 0, 0.04);
-  transition: all 0.25s var(--ease);
-  text-decoration: none;
+/* 8. Keyframes */
+@keyframes popUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-
-.btn-glass:hover {
-  background: #FFFFFF;
-  border-color: rgba(16, 185, 129, 0.4);
-  box-shadow: inset 0 1px 1px #FFF, 0 8px 20px rgba(10, 123, 62, 0.1);
-  transform: translateY(-2px);
-}
-
-/* ═══════════════════════════════════════════════
-   KEYFRAMES & ANIMAÇÕES
-   ═══════════════════════════════════════════════ */
 
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-@keyframes popUp {
-  from { opacity: 0; transform: translateY(20px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
+.animate-popUp  { animation: popUp 0.35s var(--ease) forwards; }
+.animate-fadeIn { animation: fadeIn 0.25s var(--ease) forwards; }
 
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50%      { opacity: 0.8; transform: scale(1.05); }
-}
-
-.animate-fadeIn   { animation: fadeIn 0.25s var(--ease) forwards; }
-.animate-popUp    { animation: popUp 0.35s var(--ease) forwards; }
-.animate-pulseGlow{ animation: pulseGlow 4s ease-in-out infinite; }
-
-/* ── Range Sliders ── */
+/* 9. Sliders */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -371,7 +329,3 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-
-/* ── Scrollbar Hide ── */
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

@@ -92,8 +92,7 @@ export default async function ColaboradoresPortalPage() {
 
   return (
     <>
-      <Navbar />
-      <main className="flex-1 bg-slate-50 text-slate-900 font-jakarta selection:bg-emerald-500 selection:text-white py-28 min-h-screen">
+      <main className="flex-1 bg-slate-50 text-slate-900 font-jakarta selection:bg-emerald-500 selection:text-white min-h-screen">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.04)_0%,transparent_60%)] pointer-events-none" />
         <PortalDashboard
           partnerName={session.nome}
@@ -103,7 +102,6 @@ export default async function ColaboradoresPortalPage() {
           initialCartas={cartas as any}
         />
       </main>
-      <Footer />
     </>
   );
 }
