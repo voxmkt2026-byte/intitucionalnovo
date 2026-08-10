@@ -247,6 +247,7 @@ async function runMigration() {
     await sql`ALTER TABLE afiliados ADD COLUMN IF NOT EXISTS quer_atuar_como TEXT`;
     await sql`ALTER TABLE afiliados ADD COLUMN IF NOT EXISTS aceita_receber_contatos BOOLEAN DEFAULT FALSE`;
     await sql`ALTER TABLE afiliados ADD COLUMN IF NOT EXISTS quantidade_colaboradores TEXT`;
+    await sql`ALTER TABLE afiliados ADD COLUMN IF NOT EXISTS senha_hash TEXT`;
 
     // 9. Criar Tabela afiliados_planilhas
     console.log("Criando tabela 'afiliados_planilhas'...");

@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { neon } from "@neondatabase/serverless";
+import bcrypt from "bcryptjs";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { sanitizeText } from "@/lib/sanitize";
 import { encryptField } from "@/lib/crypto";
 
 const cadastroSchema = z.object({
   nome: z.string().min(2, "Nome é obrigatório").max(150),
+  senha: z.string().min(6, "A senha deve ter no mínimo 6 caracteres").max(100),
   documento_cpf_cnpj: z.string().min(11, "Documento inválido").max(18),
   cpf: z.string().min(11, "CPF inválido").max(14),
   cnpj: z.string().max(18).default(""),
@@ -214,7 +216,10 @@ export async function POST(req: Request) {
       }
     }
 
-    // 5. Inserir colaborador no banco de dados
+    // 5. Hashear senha
+    const senhaHash = await bcrypt.hash(parsedData.senha, 10);
+
+    // 6. Inserir colaborador no banco de dados
     const result = await sql`
       INSERT INTO afiliados (
         nome, documento_cpf_cnpj, email, telefone, cidade, redes_sociais, chave_pix,
@@ -224,7 +229,7 @@ export async function POST(req: Request) {
         quantidade_indicacoes, quer_atuar_como, aceita_receber_contatos, quantidade_colaboradores,
         status_onboarding, codigo_ref, vende_consorcio, experiencia_administradoras,
         experiencia_volume, experiencia_segmentos, base_tamanho, base_canais,
-        base_ticket_medio, aceite_playbook, ip_assinatura, assinado_em
+        base_ticket_medio, aceite_playbook, ip_assinatura, assinado_em, senha_hash
       ) VALUES (
         ${validatedData.nome},
         ${validatedData.documento_cpf_cnpj},
@@ -262,7 +267,8 @@ export async function POST(req: Request) {
         ${validatedData.base_ticket_medio},
         ${validatedData.aceite_playbook},
         ${clientIp},
-        NOW()
+        NOW(),
+        ${senhaHash}
       ) RETURNING id, nome, codigo_ref, status_onboarding
     `;
 

@@ -248,7 +248,7 @@ export default function ColaboradoresPage() {
                 </span>
               </h2>
               <p className="text-slate-400 text-sm font-light leading-relaxed">
-                Preencha o formulário ao lado e entre para a rede de parceiros da Titanium. Cadastro 100% digital. Ativação em até 24h úteis.
+                Preencha o formulário rápido ao lado, crie sua senha de acesso e entre para a rede de parceiros da Titanium com dashboard exclusivo para acompanhar suas indicações e comissões.
               </p>
 
               <div className="space-y-3 pt-4 border-t border-slate-800">
@@ -258,7 +258,7 @@ export default function ColaboradoresPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                   </div>
-                  <span className="text-slate-300 text-xs font-medium">Sem taxa de adesão</span>
+                  <span className="text-slate-300 text-xs font-medium">Cadastro rápido em 3 etapas simples</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
@@ -266,7 +266,7 @@ export default function ColaboradoresPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                   </div>
-                  <span className="text-slate-300 text-xs font-medium">Contrato digital com validade jurídica</span>
+                  <span className="text-slate-300 text-xs font-medium">Acesso imediato com e-mail e senha</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
@@ -274,7 +274,7 @@ export default function ColaboradoresPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                   </div>
-                  <span className="text-slate-300 text-xs font-medium">Painel exclusivo com rastreamento de leads</span>
+                  <span className="text-slate-300 text-xs font-medium">Dashboard exclusivo com rastreamento de vendas</span>
                 </div>
               </div>
 

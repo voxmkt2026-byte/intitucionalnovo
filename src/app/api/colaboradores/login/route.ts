@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
+import bcrypt from "bcryptjs";
 import { signColaboradorToken } from "@/lib/colaborador-auth";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
@@ -11,11 +12,11 @@ function getDb() {
 
 export async function POST(request: Request) {
   try {
-    const { email, documento } = await request.json();
+    const { email, senha, documento } = await request.json();
 
-    if (!email || !documento) {
+    if (!email || (!senha && !documento)) {
       return NextResponse.json(
-        { error: "Email e documento (CPF/CNPJ) são obrigatórios" },
+        { error: "Informe seu e-mail e senha cadastrados para acessar." },
         { status: 400 }
       );
     }
@@ -24,10 +25,9 @@ export async function POST(request: Request) {
     
     // Clean inputs
     const cleanEmail = email.toLowerCase().trim();
-    const cleanDoc = documento.replace(/[^\d]/g, "").trim(); // apenas números
 
     const affiliates = await sql`
-      SELECT id, nome, email, documento_cpf_cnpj, status_onboarding, codigo_ref
+      SELECT id, nome, email, documento_cpf_cnpj, status_onboarding, codigo_ref, senha_hash
       FROM afiliados
       WHERE email = ${cleanEmail}
       LIMIT 1
@@ -41,14 +41,42 @@ export async function POST(request: Request) {
       );
     }
 
-    // Clean db document for comparison
-    const dbDoc = affiliate.documento_cpf_cnpj.replace(/[^\d]/g, "").trim();
-
-    if (cleanDoc !== dbDoc) {
-      return NextResponse.json(
-        { error: "Documento (CPF/CNPJ) incorreto." },
-        { status: 401 }
-      );
+    // Validar por senha se fornecida e usuário possui senha_hash
+    if (senha) {
+      if (affiliate.senha_hash) {
+        const isValid = await bcrypt.compare(senha, affiliate.senha_hash);
+        if (!isValid) {
+          return NextResponse.json(
+            { error: "E-mail ou senha incorretos." },
+            { status: 401 }
+          );
+        }
+      } else if (documento) {
+        // Fallback para conta legada sem senha_hash
+        const cleanDoc = documento.replace(/[^\d]/g, "").trim();
+        const dbDoc = affiliate.documento_cpf_cnpj.replace(/[^\d]/g, "").trim();
+        if (cleanDoc !== dbDoc) {
+          return NextResponse.json(
+            { error: "Documento (CPF/CNPJ) incorreto." },
+            { status: 401 }
+          );
+        }
+      } else {
+        return NextResponse.json(
+          { error: "Senha inválida para esta conta." },
+          { status: 401 }
+        );
+      }
+    } else if (documento) {
+      // Login direto por documento
+      const cleanDoc = documento.replace(/[^\d]/g, "").trim();
+      const dbDoc = affiliate.documento_cpf_cnpj.replace(/[^\d]/g, "").trim();
+      if (cleanDoc !== dbDoc) {
+        return NextResponse.json(
+          { error: "Documento (CPF/CNPJ) incorreto." },
+          { status: 401 }
+        );
+      }
     }
 
     if (affiliate.status_onboarding === "Bloqueado") {
