@@ -107,77 +107,6 @@ type SortKey = "valor_credito" | "entrada" | "parcelas" | "valor_parcela" | "adm
 
 /* ── Lead Capture / Detalhamento Modal ──────────────────────────────── */
 function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
-  const [form, setForm] = useState({ name: "", phone: "", email: "" });
-  const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState("");
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const cartaRef = `carta-${carta.id}-${carta.segmento}-${Math.round(carta.valor_credito / 1000)}k`;
-
-    const getCookie = (name: string) => {
-      if (typeof document === "undefined") return "";
-      const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
-      return match ? match[2] : "";
-    };
-
-    try {
-      const res = await fetch("/api/leads/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          segment: carta.segmento,
-          credit: String(Math.round(carta.valor_credito)),
-          months: carta.parcelas,
-          plan: "standard",
-          lp: "cartas-contempladas",
-          ref: cartaRef,
-          source_url: window.location.href,
-          utm_source: urlParams.get("utm_source") || "organico",
-          utm_medium: urlParams.get("utm_medium") || "cartas-page",
-          utm_campaign: urlParams.get("utm_campaign") || "cartas-contempladas",
-          utm_content: urlParams.get("utm_content") || carta.administradora,
-          utm_term: urlParams.get("utm_term") || "",
-          gclid: urlParams.get("gclid") || "",
-          fbc: getCookie("_fbc"),
-          fbp: getCookie("_fbp"),
-          carta_id: String(carta.id),
-          carta_administradora: carta.administradora,
-          carta_valor: String(carta.valor_credito),
-          carta_entrada: String(carta.entrada ?? ""),
-          carta_parcelas: String(carta.parcelas),
-          timestamp: new Date().toISOString(),
-        }),
-      });
-      if (res.ok) {
-        setSent(true);
-      } else {
-        setError("Erro ao enviar proposta. Tente novamente.");
-      }
-    } catch {
-      setError("Erro de conexão. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const inputStyle = {
-    border: "1px solid #E2E8F0",
-    backgroundColor: "#F8FAFC",
-    color: "#0F172A",
-    borderRadius: "10px",
-    padding: "10px 14px",
-    fontSize: "14px",
-    width: "100%",
-    outline: "none",
-  };
-
   const totalRestante = (carta.parcelas || 0) * (carta.valor_parcela || 0);
 
   return (
@@ -187,21 +116,35 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl flex flex-col my-8"
+        className="w-full max-w-md rounded-2xl overflow-hidden shadow-2xl flex flex-col my-8 transition-transform transform scale-100"
         style={{ backgroundColor: "#FFFFFF" }}
       >
         {/* Top Header Card */}
-        <div className="px-6 py-5 relative flex items-center justify-between border-b border-slate-100" style={{ backgroundColor: "#111827" }}>
+        <div className="px-6 py-5 relative flex items-center justify-between border-b border-slate-100 bg-slate-900">
           <div>
             <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-1">
               Ficha de Crédito Contemplado
             </span>
             <div className="flex items-center gap-3">
-              <span className="text-xl sm:text-2xl font-bold text-white">
+              <span className="text-xl font-bold text-white">
                 {formatBRL(carta.valor_credito)}
               </span>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${carta.segmento === "veiculos" ? "bg-blue-500/20 text-blue-400" : "bg-emerald-500/20 text-emerald-400"}`}>
-                {carta.segmento === "veiculos" ? "🚗 Veículos" : "🏠 Imóveis"}
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${carta.segmento === "veiculos" ? "bg-blue-500/20 text-blue-400" : "bg-emerald-500/20 text-emerald-400"}`}>
+                {carta.segmento === "veiculos" ? (
+                  <>
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.129-1.125V9.75M3.822 9.75h16.356M3.822 9.75c-.322 0-.615-.17-.774-.45l-1.48-2.584A1.125 1.125 0 012.538 5h18.924c.427 0 .812.241.996.627l1.48 2.584a1.127 1.127 0 01-.774.45M3.822 9.75L2.25 14.25m17.928-4.5l1.572 4.5m-19.5 0h19.5m-19.5 0v3.375c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125V14.25" />
+                    </svg>
+                    Veículos
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                    Imóveis
+                  </>
+                )}
               </span>
             </div>
           </div>
@@ -213,7 +156,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
             
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 cursor-pointer transition-opacity hover:opacity-75 text-gray-400 hover:text-white"
+              className="absolute top-5 right-5 cursor-pointer transition-opacity hover:opacity-75 text-gray-400 hover:text-white border-none bg-transparent"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -222,155 +165,81 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
           </div>
         </div>
 
-        {sent ? (
-          <div className="p-8 text-center space-y-4">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto bg-emerald-50 border border-emerald-100">
-              <svg className="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-bold text-slate-900">Solicitação de Reserva Registrada!</h3>
-            <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto">
-              Nossa equipe já recebeu os dados desta carta e entrará em contato para formalizar a transferência.
-            </p>
-            <div className="pt-4 flex flex-col sm:flex-row justify-center gap-3">
-              <button
-                onClick={() => triggerWhatsAppClick(carta)}
-                className="flex items-center justify-center gap-2 px-6 py-3 rounded-full text-xs font-bold text-white bg-[#0A7B3E] hover:bg-[#086332] shadow-md transition-all cursor-pointer"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-                </svg>
-                Chamar no WhatsApp Agora
-              </button>
-              <button
-                onClick={onClose}
-                className="px-6 py-3 rounded-full text-xs font-semibold text-slate-500 hover:bg-slate-100 transition-colors"
-              >
-                Voltar à Tabela
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-            {/* Left Column: Detalhamento Técnico Financeiro */}
-            <div className="p-6 space-y-4 bg-slate-50/50">
-              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Ficha Técnica do Consórcio
-              </h4>
-              
-              <div className="space-y-3">
-                <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center">
-                  <span className="text-xs text-slate-500">Crédito Contemplado</span>
-                  <span className="text-sm font-bold text-slate-900">{formatBRL(carta.valor_credito)}</span>
-                </div>
-
-                <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center">
-                  <span className="text-xs text-slate-500">Valor de Entrada</span>
-                  <span className="text-sm font-bold text-emerald-600">{formatBRL(carta.entrada)}</span>
-                </div>
-
-                <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center">
-                  <span className="text-xs text-slate-500">Parcelas Restantes</span>
-                  <span className="text-xs text-slate-900 font-semibold">{carta.parcelas}x de {formatBRL(carta.valor_parcela)}</span>
-                </div>
-
-                <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center">
-                  <span className="text-xs text-slate-500">Saldo Devedor Total</span>
-                  <span className="text-sm font-bold text-slate-900">{formatBRL(totalRestante)}</span>
-                </div>
-
-                <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center">
-                  <span className="text-xs text-slate-500">Taxa de Transferência</span>
-                  <span className="text-xs font-medium text-slate-700">
-                    {(!carta.taxa_transferencia || 
-                      carta.taxa_transferencia.trim() === "R$ 0,00" || 
-                      carta.taxa_transferencia.trim() === "0" || 
-                      carta.taxa_transferencia.trim() === "0,00" || 
-                      carta.taxa_transferencia.trim() === "R$ 0" || 
-                      carta.taxa_transferencia.trim() === "R$0,00"
-                    ) ? "Sob Consulta" : carta.taxa_transferencia}
-                  </span>
-                </div>
-
-                <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center">
-                  <span className="text-xs text-slate-500">Próximo Vencimento</span>
-                  <span className="text-xs font-medium text-slate-700">
-                    {formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento)}
-                  </span>
-                </div>
-
-                <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center">
-                  <span className="text-xs text-slate-500">Status</span>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
-                    {carta.observacoes || "Disponível"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Reserva WhatsApp & Captura */}
-            <div className="p-6 space-y-4">
-              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Reservar ou Tirar Dúvidas
-              </h4>
-
-              {/* Botão WhatsApp */}
-              <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-center space-y-3">
-                <p className="text-xs text-emerald-900 leading-snug">
-                  Fale agora com nosso especialista no WhatsApp para simular ou reservar esta carta.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => triggerWhatsAppClick(carta)}
-                  className="w-full flex items-center justify-center gap-2 font-bold py-3 rounded-full cursor-pointer text-xs uppercase tracking-wider text-white bg-[#0A7B3E] hover:bg-[#086332] shadow-md hover:shadow-emerald-900/10 transition-all"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-                  </svg>
-                  Tenho Interesse no WhatsApp
-                </button>
+        {/* Technical Details & Direct WhatsApp CTA */}
+        <div className="p-6 space-y-6">
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              Ficha Técnica do Consórcio
+            </h4>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                <span className="text-[10px] text-slate-400 font-semibold block uppercase">Crédito Contemplado</span>
+                <span className="text-base font-bold text-slate-900">{formatBRL(carta.valor_credito)}</span>
               </div>
 
-              {/* Formulário Tradicional */}
-              <form onSubmit={handleSubmit} className="space-y-3 pt-2">
-                <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">
-                  Ou solicite contato da equipe
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                <span className="text-[10px] text-slate-400 font-semibold block uppercase">Valor de Entrada</span>
+                <span className="text-base font-bold text-emerald-600">{formatBRL(carta.entrada)}</span>
+              </div>
+
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                <span className="text-[10px] text-slate-400 font-semibold block uppercase">Parcelas Restantes</span>
+                <span className="text-sm font-semibold text-slate-900">{carta.parcelas}x de {formatBRL(carta.valor_parcela)}</span>
+              </div>
+
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                <span className="text-[10px] text-slate-400 font-semibold block uppercase">Saldo Devedor Total</span>
+                <span className="text-sm font-bold text-slate-900">{formatBRL(totalRestante)}</span>
+              </div>
+
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                <span className="text-[10px] text-slate-400 font-semibold block uppercase">Taxa de Transferência</span>
+                <span className="text-xs font-semibold text-slate-700">
+                  {(!carta.taxa_transferencia || 
+                    carta.taxa_transferencia.trim() === "R$ 0,00" || 
+                    carta.taxa_transferencia.trim() === "0" || 
+                    carta.taxa_transferencia.trim() === "0,00" || 
+                    carta.taxa_transferencia.trim() === "R$ 0" || 
+                    carta.taxa_transferencia.trim() === "R$0,00"
+                  ) ? "Sob Consulta" : carta.taxa_transferencia}
                 </span>
-                <div>
-                  <input
-                    type="text"
-                    required
-                    value={form.name}
-                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                    placeholder="Seu nome completo"
-                    style={inputStyle}
-                  />
-                </div>
-                <div>
-                  <input
-                    type="tel"
-                    required
-                    value={form.phone}
-                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                    placeholder="Seu WhatsApp (Ex: 11 99999-9999)"
-                    style={inputStyle}
-                  />
-                </div>
+              </div>
 
-                {error && <p className="text-xs p-2.5 rounded-lg bg-red-50 text-red-600">{error}</p>}
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full font-bold py-2.5 rounded-xl cursor-pointer text-xs uppercase tracking-wider text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all disabled:opacity-60"
-                >
-                  {loading ? "Registrando..." : "Solicitar Contato por Ligação"}
-                </button>
-              </form>
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                <span className="text-[10px] text-slate-400 font-semibold block uppercase">Vencimento da Parcela</span>
+                <span className="text-xs font-semibold text-slate-700">
+                  {formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento)}
+                </span>
+              </div>
+            </div>
+            
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 flex justify-between items-center">
+              <span className="text-[10px] text-slate-400 font-semibold uppercase">Status de Disponibilidade</span>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                {carta.observacoes || "Disponível"}
+              </span>
             </div>
           </div>
-        )}
+
+          {/* WhatsApp Direct Action Banner */}
+          <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5 text-center space-y-4 shadow-sm">
+            <p className="text-xs text-emerald-900 leading-relaxed font-medium">
+              Fale agora com nosso especialista no WhatsApp para simular, tirar dúvidas ou solicitar a transferência imediata desta carta.
+            </p>
+            <button
+              type="button"
+              onClick={() => triggerWhatsAppClick(carta)}
+              className="w-full flex items-center justify-center gap-2 font-bold py-3.5 rounded-xl cursor-pointer text-xs uppercase tracking-wider text-white bg-[#0A7B3E] hover:bg-[#086332] shadow-md hover:shadow-emerald-900/10 transition-all border-none"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.534 4.055 1.475 5.77L0 24l6.407-1.453A11.957 11.957 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.497-5.22-1.367l-.375-.222-3.887.882.913-3.781-.244-.39A9.941 9.941 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+              </svg>
+              Tenho Interesse no WhatsApp
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

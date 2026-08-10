@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CadastroForm from "@/components/CadastroForm";
+import BeamsWrapper from "@/components/BeamsWrapper";
 
 export const metadata = {
   title: "Titanium Colaboradores | Programa de Parcerias",
@@ -11,135 +13,185 @@ export default function ColaboradoresPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-1 bg-[#0b0f19] text-[#f8f7f4] font-jakarta selection:bg-emerald-500 selection:text-white overflow-hidden">
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 flex flex-col items-center justify-center text-center px-4">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.08)_0%,transparent_70%)] pointer-events-none" />
-          <div className="max-w-4xl mx-auto space-y-6 relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wider uppercase">
-              Programa de Parcerias Titanium
-            </span>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-tight">
-              Monetize sua rede de contatos com <span className="text-emerald-400">cartas contempladas</span>
-            </h1>
-            <p className="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg md:text-xl font-light leading-relaxed">
-              Indique produtores rurais, empresários e investidores que precisam de crédito inteligente para expandir patrimônio sem pagar juros bancários.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-              <Link
-                href="/colaboradores/cadastro/"
-                className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl transition-all shadow-lg hover:shadow-emerald-500/20 hover:scale-[1.02] text-sm tracking-wide uppercase"
-              >
-                Quero me Cadastrar
-              </Link>
-              <Link
-                href="/colaboradores/portal/"
-                className="px-8 py-4 border border-gray-700 hover:border-gray-500 hover:bg-gray-800/30 text-white font-semibold rounded-xl transition-all text-sm tracking-wide"
-              >
-                Acessar meu Portal
-              </Link>
+      <main className="flex-1 bg-white text-slate-800 font-jakarta selection:bg-[#0A7B3E] selection:text-white overflow-hidden">
+        
+        {/* Hero Section with 3D Beams Background */}
+        <section className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden min-h-[90vh] flex items-center bg-[#0b0f19]">
+          {/* Beams Background Overlay */}
+          <div className="absolute inset-0 z-0 opacity-80">
+            <BeamsWrapper />
+          </div>
+          
+          {/* Dark overlay to ensure text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-[#0b0f19]/70 z-1 pointer-events-none" />
+
+          <div className="max-w-6xl mx-auto px-4 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Column: Copywriting & Value Prop */}
+            <div className="lg:col-span-6 space-y-6 text-left">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#15B85C]/10 border border-[#15B85C]/20 text-[#15B85C] text-[10px] font-bold tracking-wider uppercase">
+                Programa de Parcerias Titanium
+              </span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+                Monetize sua rede de contatos com <span className="text-[#15B85C] bg-gradient-to-r from-[#15B85C] to-[#0D9E50] bg-clip-text text-transparent">crédito inteligente</span>
+              </h1>
+              <p className="text-slate-300 text-sm sm:text-base font-light leading-relaxed max-w-xl">
+                Indique produtores rurais, empresários e investidores que necessitam de liquidez imediata para expandir patrimônio ou frotas, livre de juros bancários.
+              </p>
+              
+              <div className="space-y-3.5 pt-4 border-t border-slate-800">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-200 text-xs font-semibold">Comissão direta creditada na sua conta PIX</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-200 text-xs font-semibold">Blindagem de leads permanente vinculada ao seu ID</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#15B85C]/10 flex items-center justify-center text-[#15B85C] shrink-0">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <span className="text-slate-200 text-xs font-semibold">Kit de suporte comercial ativo e tabelas atualizadas</span>
+                </div>
+              </div>
+
+              <div className="pt-2 flex items-center gap-4">
+                <Link
+                  href="/colaboradores/portal/"
+                  className="px-6 py-3 border border-slate-700 hover:border-slate-500 hover:bg-slate-800/30 text-white font-bold rounded-xl transition-all text-xs tracking-wider uppercase cursor-pointer"
+                >
+                  Acessar meu Portal
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Multi-Step Registration Form Card */}
+            <div className="lg:col-span-6 w-full">
+              <CadastroForm />
             </div>
           </div>
         </section>
 
-        {/* Bento Grid: Como Funciona */}
-        <section className="max-w-6xl mx-auto px-4 py-16 border-t border-gray-800">
+        {/* Bento Grid: Como Funciona (Light Mode) */}
+        <section className="max-w-6xl mx-auto px-4 py-20 bg-white">
           <div className="text-center space-y-3 mb-16">
-            <h2 className="text-3xl font-bold text-white">Como Funciona a Parceria</h2>
-            <p className="text-gray-400 font-light">Uma esteira simples, transparente e sem burocracia para você comissionar.</p>
+            <span className="text-[10px] font-bold text-[#0A7B3E] uppercase tracking-widest bg-[#E8F5EE] px-3 py-1.5 rounded-full">
+              Etapas
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Como Funciona a Parceria</h2>
+            <p className="text-slate-500 font-light text-sm max-w-md mx-auto">Uma esteira simples, transparente e sem burocracia para você comissionar com segurança.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1 */}
-            <div className="p-8 rounded-2xl bg-gray-900/40 border border-gray-800/80 backdrop-blur-md space-y-4 hover:border-emerald-500/30 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-lg group-hover:scale-110 transition-transform">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 transition-all group">
+              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-bold text-sm group-hover:scale-105 transition-transform">
                 1
               </div>
-              <h3 className="text-xl font-semibold text-white">Cadastro Exclusivo</h3>
-              <p className="text-gray-400 text-sm font-light leading-relaxed">
-                Preencha o formulário operacional contendo seu perfil e valide o termo digitalmente em minutos.
+              <h3 className="text-lg font-bold text-slate-900">Cadastro Exclusivo</h3>
+              <p className="text-slate-500 text-xs font-light leading-relaxed">
+                Preencha o formulário operacional contendo seu perfil e dados bancários e assine digitalmente em minutos.
               </p>
             </div>
 
             {/* Card 2 */}
-            <div className="p-8 rounded-2xl bg-gray-900/40 border border-gray-800/80 backdrop-blur-md space-y-4 hover:border-emerald-500/30 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-lg group-hover:scale-110 transition-transform">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 transition-all group">
+              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-bold text-sm group-hover:scale-105 transition-transform">
                 2
               </div>
-              <h3 className="text-xl font-semibold text-white">Indique Clientes</h3>
-              <p className="text-gray-400 text-sm font-light leading-relaxed">
-                Utilize seu link exclusivo de indicação ou cadastre as oportunidades diretamente do seu painel do colaborador.
+              <h3 className="text-lg font-bold text-slate-900">Indique Clientes</h3>
+              <p className="text-slate-500 text-xs font-light leading-relaxed">
+                Insira as informações do cliente de interesse nas cartas disponíveis diretamente no seu painel para validação.
               </p>
             </div>
 
             {/* Card 3 */}
-            <div className="p-8 rounded-2xl bg-gray-900/40 border border-gray-800/80 backdrop-blur-md space-y-4 hover:border-emerald-500/30 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-lg group-hover:scale-110 transition-transform">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 transition-all group">
+              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-bold text-sm group-hover:scale-105 transition-transform">
                 3
               </div>
-              <h3 className="text-xl font-semibold text-white">Receba sua Comissão</h3>
-              <p className="text-gray-400 text-sm font-light leading-relaxed">
-                Acompanhe o fechamento das propostas. A comissão é calculada e creditada diretamente na sua conta PIX.
+              <h3 className="text-lg font-bold text-slate-900">Receba sua Comissão</h3>
+              <p className="text-slate-500 text-xs font-light leading-relaxed">
+                Acompanhe o fechamento das propostas. A comissão é apurada e creditada na sua conta PIX cadastrada.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Seção de Diferenciais */}
-        <section className="bg-gray-950/45 py-20 border-t border-gray-900">
+        {/* Seção de Diferenciais (Light Mode) */}
+        <section className="bg-slate-50/50 py-20 border-t border-slate-100">
           <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Benefícios */}
             <div className="space-y-6">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
-                Um ecossistema desenhado para <span className="text-emerald-400">proteger</span> o colaborador
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+                Um ecossistema desenhado para <span className="text-[#0A7B3E]">proteger</span> o colaborador
               </h2>
-              <p className="text-gray-400 font-light leading-relaxed">
-                Nós sabemos que a maior dor do consultor colaborador é a segurança de que o cliente indicado permanecerá em sua carteira. Criamos uma esteira que blinda seu cliente contra disputas comerciais.
+              <p className="text-slate-500 font-light text-sm leading-relaxed">
+                Nós blindamos sua indicação. Uma vez integrada, a Titanium garante que o lead permanecerá sob sua carteira, eliminando conflitos de concorrência ou disputas de atribuição.
               </p>
+              
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-emerald-400 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <div className="w-5 h-5 rounded-full bg-[#E8F5EE] flex items-center justify-center text-[#0A7B3E] shrink-0 mt-0.5">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-white text-sm">Integração de Origem Permanente</h4>
-                    <p className="text-gray-400 text-xs font-light">Seu ID é inserido permanentemente nos CRMs de vendas (Kommo e Agendor).</p>
+                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Origem Permanente</h4>
+                    <p className="text-slate-500 text-[11px] font-light leading-relaxed">Seu ID é gravado permanentemente nos CRMs de vendas corporativos (Kommo/Agendor).</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-emerald-400 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <div className="w-5 h-5 rounded-full bg-[#E8F5EE] flex items-center justify-center text-[#0A7B3E] shrink-0 mt-0.5">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-white text-sm">Transparência via Dashboard</h4>
-                    <p className="text-gray-400 text-xs font-light">Visualize em tempo real em qual etapa comercial sua indicação se encontra.</p>
+                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Transparência Total</h4>
+                    <p className="text-slate-500 text-[11px] font-light leading-relaxed">Acompanhe pelo painel cada etapa da negociação e o status da sua comissão em tempo real.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-emerald-400 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <div className="w-5 h-5 rounded-full bg-[#E8F5EE] flex items-center justify-center text-[#0A7B3E] shrink-0 mt-0.5">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
                   <div>
-                    <h4 className="font-semibold text-white text-sm">Kit de Vendas Atualizado</h4>
-                    <p className="text-gray-400 text-xs font-light">Tabelas comerciais de crédito atualizadas e roteiros para contornar objeções.</p>
+                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Kit Comercial Completo</h4>
+                    <p className="text-slate-500 text-[11px] font-light leading-relaxed">Acesso às propostas atualizadas, tabelas comerciais e scripts de abordagem prontos.</p>
                   </div>
                 </li>
               </ul>
             </div>
-            <div className="relative rounded-2xl border border-gray-800 bg-gray-900/60 p-8 shadow-2xl space-y-6">
-              <div className="absolute -top-3 -right-3 px-3 py-1 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-bold uppercase tracking-wider">
-                Exclusivo
+
+            {/* Compliance Box */}
+            <div className="relative rounded-2xl border border-slate-200 bg-white p-8 shadow-lg space-y-6">
+              <div className="absolute -top-3 -right-3 px-3 py-1.5 rounded-lg bg-[#0A7B3E] text-white text-[9px] font-bold uppercase tracking-wider shadow-sm">
+                Conformidade
               </div>
-              <h3 className="text-xl font-bold text-white border-b border-gray-800 pb-4">Assine e Comece Hoje</h3>
-              <p className="text-gray-400 text-sm font-light leading-relaxed">
-                Toda a operação comercial da Titanium segue as regras do Banco Central e as diretrizes do nosso playbook de compliance. Ao se cadastrar, você assina o Termo de Parceria e garante conformidade jurídica.
+              <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-4">Termo Jurídico & Playbook</h3>
+              <p className="text-slate-500 text-xs font-light leading-relaxed">
+                Todas as operações comerciais da Titanium Consultoria são reguladas conforme a legislação do Banco Central e as normas vigentes. Nosso compromisso é de integridade absoluta, sem taxas ocultas ou falsas promessas de contemplação acelerada.
               </p>
-              <div className="pt-4">
-                <Link
-                  href="/colaboradores/cadastro/"
-                  className="w-full inline-flex justify-center items-center px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl transition-all text-xs tracking-wider uppercase"
-                >
-                  Cadastre-se Agora
-                </Link>
+              <div className="bg-slate-50 p-4 border border-slate-200 rounded-xl">
+                <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wide mb-1">Dúvidas Frequentes?</span>
+                <p className="text-[11px] text-slate-500 leading-normal font-light">
+                  Nossos termos de parceria garantem a exclusividade e pagamento em contrato. Para suporte direto, fale com o suporte pelo WhatsApp no portal.
+                </p>
               </div>
             </div>
           </div>
