@@ -46,6 +46,15 @@ export default function CadastroForm() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [parceiroCriado, setParceiroCriado] = useState<any>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyCode = () => {
+    if (parceiroCriado?.codigo_ref) {
+      navigator.clipboard.writeText(parceiroCriado.codigo_ref);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -100,26 +109,34 @@ export default function CadastroForm() {
     <div className="bg-white border border-slate-200 shadow-xl rounded-2xl p-6 sm:p-8 relative text-slate-800">
       {/* Step Indicators */}
       {step < 4 && (
-        <div className="flex items-center justify-between border-b border-slate-200 pb-5 mb-5">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-5 mb-5 select-none">
           <div className="flex items-center gap-2">
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] ${step >= 1 ? "bg-[#0A7B3E] text-white" : "bg-slate-100 text-slate-400"}`}>
-              1
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] transition-all duration-300 ${step > 1 ? "bg-emerald-100 text-[#0A7B3E] border border-emerald-200" : step === 1 ? "bg-[#0A7B3E] text-white" : "bg-slate-100 text-slate-400"}`}>
+              {step > 1 ? (
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              ) : "1"}
             </div>
-            <span className={`hidden xs:inline text-[10px] font-bold uppercase tracking-wider ${step >= 1 ? "text-slate-900" : "text-slate-400"}`}>Identificação</span>
+            <span className={`hidden xs:inline text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${step >= 1 ? "text-slate-900" : "text-slate-400"}`}>Identificação</span>
           </div>
           <div className="flex-1 h-[1px] bg-slate-200 mx-2" />
           <div className="flex items-center gap-2">
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] ${step >= 2 ? "bg-[#0A7B3E] text-white" : "bg-slate-100 text-slate-400"}`}>
-              2
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] transition-all duration-300 ${step > 2 ? "bg-emerald-100 text-[#0A7B3E] border border-emerald-200" : step === 2 ? "bg-[#0A7B3E] text-white" : "bg-slate-100 text-slate-400"}`}>
+              {step > 2 ? (
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              ) : "2"}
             </div>
-            <span className={`hidden xs:inline text-[10px] font-bold uppercase tracking-wider ${step >= 2 ? "text-slate-900" : "text-slate-400"}`}>Perfil</span>
+            <span className={`hidden xs:inline text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${step >= 2 ? "text-slate-900" : "text-slate-400"}`}>Perfil</span>
           </div>
           <div className="flex-1 h-[1px] bg-slate-200 mx-2" />
           <div className="flex items-center gap-2">
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] ${step >= 3 ? "bg-[#0A7B3E] text-white" : "bg-slate-100 text-slate-400"}`}>
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] transition-all duration-300 ${step === 3 ? "bg-[#0A7B3E] text-white" : "bg-slate-100 text-slate-400"}`}>
               3
             </div>
-            <span className={`hidden xs:inline text-[10px] font-bold uppercase tracking-wider ${step >= 3 ? "text-slate-900" : "text-slate-400"}`}>Termos</span>
+            <span className={`hidden xs:inline text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${step >= 3 ? "text-slate-900" : "text-slate-400"}`}>Termos</span>
           </div>
         </div>
       )}
@@ -156,7 +173,7 @@ export default function CadastroForm() {
                   onChange={handleInputChange}
                   required
                   placeholder="Insira seu nome ou razão social"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                 />
               </div>
               <div className="space-y-1">
@@ -168,7 +185,7 @@ export default function CadastroForm() {
                   onChange={handleInputChange}
                   required
                   placeholder="Apenas números"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                 />
               </div>
             </div>
@@ -182,7 +199,7 @@ export default function CadastroForm() {
                   value={formData.cnpj}
                   onChange={handleInputChange}
                   placeholder="Apenas números"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                 />
               </div>
               <div className="space-y-1">
@@ -194,7 +211,7 @@ export default function CadastroForm() {
                   onChange={handleInputChange}
                   required
                   placeholder="DD/MM/AAAA"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                 />
               </div>
             </div>
@@ -209,7 +226,7 @@ export default function CadastroForm() {
                   onChange={handleInputChange}
                   required
                   placeholder="Insira seu RG"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                 />
               </div>
               <div className="space-y-1">
@@ -221,7 +238,7 @@ export default function CadastroForm() {
                   onChange={handleInputChange}
                   required
                   placeholder="Ex: São Paulo - SP"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                 />
               </div>
             </div>
@@ -235,7 +252,7 @@ export default function CadastroForm() {
                 onChange={handleInputChange}
                 required
                 placeholder="Ex: Av. Paulista, 1000 - Bela Vista - São Paulo - SP - CEP 01310-100"
-                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
               />
             </div>
 
@@ -249,7 +266,7 @@ export default function CadastroForm() {
                   onChange={handleInputChange}
                   required
                   placeholder="Ex: (11) 99999-9999"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                 />
               </div>
               <div className="space-y-1">
@@ -261,7 +278,7 @@ export default function CadastroForm() {
                   onChange={handleInputChange}
                   required
                   placeholder="Ex: colaborador@empresa.com"
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                 />
               </div>
             </div>
@@ -274,7 +291,7 @@ export default function CadastroForm() {
                 value={formData.redes_sociais}
                 onChange={handleInputChange}
                 placeholder="Ex: linkedin.com/in/seu-perfil"
-                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-all"
+                className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
               />
             </div>
 
@@ -309,7 +326,7 @@ export default function CadastroForm() {
                        setFormData((prev) => ({ ...prev, vende_consorcio: e.target.value === "Sim" }));
                      }}
                      required
-                     className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer font-semibold"
+                     className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all cursor-pointer font-semibold"
                   >
                     <option value="Não">Não</option>
                     <option value="Sim">Sim</option>
@@ -322,7 +339,7 @@ export default function CadastroForm() {
                     value={formData.principal_produto}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer font-semibold"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all cursor-pointer font-semibold"
                   >
                     <option value="">Selecione...</option>
                     <option value="Consórcio Imobiliário">Consórcio Imobiliário</option>
@@ -344,7 +361,7 @@ export default function CadastroForm() {
                     value={formData.trabalha_carta_contemplada}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer font-semibold"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all cursor-pointer font-semibold"
                   >
                     <option value="Não">Não</option>
                     <option value="Sim">Sim</option>
@@ -357,7 +374,7 @@ export default function CadastroForm() {
                     value={formData.principal_publico}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer font-semibold"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all cursor-pointer font-semibold"
                   >
                     <option value="">Selecione...</option>
                     <option value="Pessoa Física (PF)">Pessoa Física (PF)</option>
@@ -377,7 +394,7 @@ export default function CadastroForm() {
                     value={formData.quantidade_indicacoes}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer font-semibold"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all cursor-pointer font-semibold"
                   >
                     <option value="">Selecione...</option>
                     <option value="Atá 5 indicações">Até 5 indicações</option>
@@ -393,7 +410,7 @@ export default function CadastroForm() {
                     value={formData.quer_atuar_como}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer font-semibold"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all cursor-pointer font-semibold"
                   >
                     <option value="">Selecione...</option>
                     <option value="Indicador de Negócios">Indicador de Negócios</option>
@@ -412,7 +429,7 @@ export default function CadastroForm() {
                     value={formData.quantidade_colaboradores}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer font-semibold"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all cursor-pointer font-semibold"
                   >
                     <option value="">Selecione...</option>
                     <option value="Apenas eu">Apenas eu</option>
@@ -457,7 +474,7 @@ export default function CadastroForm() {
                     onChange={handleInputChange}
                     required
                     placeholder="Ex: Itaú, Bradesco, Nubank"
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                   />
                 </div>
                 <div className="space-y-1">
@@ -467,7 +484,7 @@ export default function CadastroForm() {
                     value={formData.tipo_conta}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2 text-xs focus:border-emerald-500 focus:outline-none transition-colors appearance-none cursor-pointer font-semibold"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all cursor-pointer font-semibold"
                   >
                     <option value="Corrente">Conta Corrente</option>
                     <option value="Poupança">Conta Poupança</option>
@@ -485,7 +502,7 @@ export default function CadastroForm() {
                     onChange={handleInputChange}
                     required
                     placeholder="0001"
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-2.5 py-1.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-2.5 py-2 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                   />
                 </div>
                 <div className="space-y-1">
@@ -497,7 +514,7 @@ export default function CadastroForm() {
                     onChange={handleInputChange}
                     required
                     placeholder="12345-6"
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-2.5 py-1.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-2.5 py-2 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                   />
                 </div>
                 <div className="space-y-1">
@@ -508,7 +525,7 @@ export default function CadastroForm() {
                     value={formData.operacao}
                     onChange={handleInputChange}
                     placeholder="Se houver"
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-2.5 py-1.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-2.5 py-2 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                   />
                 </div>
               </div>
@@ -523,7 +540,7 @@ export default function CadastroForm() {
                     onChange={handleInputChange}
                     required
                     placeholder="CPF, CNPJ, E-mail ou Pix Aleatório"
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                   />
                 </div>
                 <div className="space-y-1">
@@ -534,7 +551,7 @@ export default function CadastroForm() {
                     value={formData.titular_nome}
                     onChange={handleInputChange}
                     placeholder="Nome completo do titular"
-                    className="w-full bg-white border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-emerald-500 focus:outline-none transition-colors"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-3 py-2.5 text-xs focus:border-[#0A7B3E] focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:outline-none transition-all duration-200 placeholder:text-slate-400"
                   />
                 </div>
               </div>
@@ -575,7 +592,7 @@ export default function CadastroForm() {
           <div className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Termo de Parceria e Compliance Comercial</label>
-              <div className="h-44 overflow-y-auto bg-slate-50 p-4 border border-slate-200 rounded-xl text-[11px] text-slate-600 space-y-3 font-light leading-relaxed">
+              <div className="h-44 overflow-y-auto bg-slate-50 p-4 border border-slate-200 rounded-xl text-[11px] text-slate-600 space-y-3 font-light leading-relaxed scrollbar-thin scrollbar-thumb-slate-250 scrollbar-track-transparent">
                 <p className="font-semibold text-slate-800 text-center">TITANIUM CONSULTORIA FINANCEIRA - TERMO DE PARCERIA COMERCIAL</p>
                 <p>
                   <strong>1. OBJETO:</strong> O presente termo define as regras para a indicação de potenciais clientes para assessoria de consórcio e compra de cartas contempladas da Titanium Consultoria.
@@ -634,7 +651,7 @@ export default function CadastroForm() {
 
         {/* STEP 4: Sucesso */}
         {step === 4 && (
-          <div className="text-center py-6 space-y-5">
+          <div className="text-center py-6 space-y-6">
             <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-150 flex items-center justify-center text-emerald-600 mx-auto">
               <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -647,15 +664,27 @@ export default function CadastroForm() {
               </p>
             </div>
 
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 max-w-sm mx-auto text-left space-y-2">
-              <div>
-                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Seu código de indicação:</span>
-                <span className="font-mono text-xs text-emerald-600 font-bold">{parceiroCriado?.codigo_ref}</span>
+            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 max-w-sm mx-auto text-left space-y-3 shadow-inner">
+              <div className="flex items-center justify-between bg-white border border-slate-200/60 rounded-xl p-3">
+                <div>
+                  <span className="text-[9px] text-slate-450 font-bold uppercase tracking-wider block">Seu código de indicação</span>
+                  <span className="font-mono text-sm text-[#0A7B3E] font-bold">{parceiroCriado?.codigo_ref || "---"}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleCopyCode}
+                  className="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all duration-200 bg-[#E8F5EE] text-[#0A7B3E] border border-[#D1ECDD] hover:bg-[#D1ECDD] cursor-pointer"
+                >
+                  {copied ? "Copiado!" : "Copiar"}
+                </button>
               </div>
-              <div>
-                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Status atual:</span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                  {parceiroCriado?.status_onboarding}
+              <div className="flex items-center justify-between bg-white border border-slate-200/60 rounded-xl p-3">
+                <div>
+                  <span className="text-[9px] text-slate-450 font-bold uppercase tracking-wider block">Status do Onboarding</span>
+                  <span className="text-xs text-slate-800 font-bold">Análise de compliance</span>
+                </div>
+                <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[9px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200 uppercase tracking-wider">
+                  {parceiroCriado?.status_onboarding || "Pendente"}
                 </span>
               </div>
             </div>

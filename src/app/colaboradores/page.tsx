@@ -94,8 +94,8 @@ export default function ColaboradoresPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1 */}
-            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 transition-all group">
-              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-bold text-sm group-hover:scale-105 transition-transform">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-extrabold text-sm group-hover:scale-105 transition-transform shadow-sm">
                 1
               </div>
               <h3 className="text-lg font-bold text-slate-900">Cadastro Exclusivo</h3>
@@ -105,8 +105,8 @@ export default function ColaboradoresPage() {
             </div>
 
             {/* Card 2 */}
-            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 transition-all group">
-              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-bold text-sm group-hover:scale-105 transition-transform">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-extrabold text-sm group-hover:scale-105 transition-transform shadow-sm">
                 2
               </div>
               <h3 className="text-lg font-bold text-slate-900">Indique Clientes</h3>
@@ -116,8 +116,8 @@ export default function ColaboradoresPage() {
             </div>
 
             {/* Card 3 */}
-            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 transition-all group">
-              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-bold text-sm group-hover:scale-105 transition-transform">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/60 space-y-4 hover:border-[#0A7B3E]/30 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-extrabold text-sm group-hover:scale-105 transition-transform shadow-sm">
                 3
               </div>
               <h3 className="text-lg font-bold text-slate-900">Receba sua Comissão</h3>
