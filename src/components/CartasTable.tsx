@@ -403,7 +403,16 @@ export default function CartasTable() {
   const [dir, setDir] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Carta | null>(null);
-  const [active, setActive] = useState({ segmento: "", administradora: "", valorMin: "", valorMax: "" });
+  const [active, setActive] = useState<{
+    segmento: string;
+    administradora: string;
+    valorMin: string;
+    valorMax: string;
+    entradaMin?: string;
+    entradaMax?: string;
+    status?: string;
+    ordenacao?: string;
+  }>({ segmento: "", administradora: "", valorMin: "", valorMax: "" });
 
   const fetchCartas = useCallback(
     async (f = active, s = sort, d = dir, p = page) => {
@@ -413,8 +422,21 @@ export default function CartasTable() {
       if (f.administradora) params.set("administradora", f.administradora);
       if (f.valorMin) params.set("valor_min", f.valorMin);
       if (f.valorMax) params.set("valor_max", f.valorMax);
-      params.set("sort", s);
-      params.set("dir", d);
+      if (f.entradaMin) params.set("entrada_min", f.entradaMin);
+      if (f.entradaMax) params.set("entrada_max", f.entradaMax);
+      
+      // Parse ordenacao from modal if present
+      let finalSort = s;
+      let finalDir = d;
+      if (f.ordenacao) {
+        if (f.ordenacao === "credito_desc") { finalSort = "valor_credito"; finalDir = "desc"; }
+        else if (f.ordenacao === "credito_asc") { finalSort = "valor_credito"; finalDir = "asc"; }
+        else if (f.ordenacao === "entrada_asc") { finalSort = "entrada"; finalDir = "asc"; }
+        else if (f.ordenacao === "parcela_asc") { finalSort = "valor_parcela"; finalDir = "asc"; }
+      }
+
+      params.set("sort", finalSort);
+      params.set("dir", finalDir);
       params.set("page", String(p));
       try {
         const res = await fetch(`/api/cartas?${params}`);
@@ -449,7 +471,12 @@ export default function CartasTable() {
 
   return (
     <>
-      <CartaFilters segmentos={filters.segmentos} administradoras={filters.administradoras} onFilter={handleFilter} />
+      <CartaFilters
+        segmentos={filters.segmentos}
+        administradoras={filters.administradoras}
+        filteredCount={meta.total}
+        onFilter={handleFilter}
+      />
 
       {!loading && (
         <p className="text-xs font-semibold mb-4 text-gray-500">

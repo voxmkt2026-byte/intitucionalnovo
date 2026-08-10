@@ -40,6 +40,9 @@ export async function GET(request: Request) {
       queryFilters += ` AND administradora = $${params.length}`;
     }
 
+    const entradaMin     = parseFloat(searchParams.get("entrada_min") || "0") || 0;
+    const entradaMax     = parseFloat(searchParams.get("entrada_max") || "0") || 0;
+
     if (valorMin > 0) {
       params.push(valorMin);
       queryFilters += ` AND valor_credito >= $${params.length}`;
@@ -48,6 +51,16 @@ export async function GET(request: Request) {
     if (valorMax > 0) {
       params.push(valorMax);
       queryFilters += ` AND valor_credito <= $${params.length}`;
+    }
+
+    if (entradaMin > 0) {
+      params.push(entradaMin);
+      queryFilters += ` AND entrada >= $${params.length}`;
+    }
+
+    if (entradaMax > 0) {
+      params.push(entradaMax);
+      queryFilters += ` AND entrada <= $${params.length}`;
     }
 
     // 2. Query de contagem
