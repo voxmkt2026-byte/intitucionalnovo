@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 
-const BANK_RATE_ANNUAL = 0.189; // 18.9% ao ano (média Banco Central 2024)
+const BANK_RATE_ANNUAL = 0.189; // 18.9% ao ano (média Banco Central)
 
 export default function ParcelSimulator() {
   const [name, setName] = useState("");
@@ -61,145 +61,108 @@ export default function ParcelSimulator() {
     setContactError(null);
   };
 
-  // ── Google Sheets via server-side proxy (avoids CORS) ──
   const sendToGoogleSheets = (plan: string) => {
-    // Capture tracking identifiers for the data cycle
-    let ids: Record<string, string> = { ref: '' };
+    let ids: Record<string, string> = { ref: "" };
     try {
-      const getCk = (n: string) => { const m = document.cookie.match(new RegExp('(^| )' + n + '=([^;]+)')); return m ? decodeURIComponent(m[2]) : ''; };
+      const getCk = (n: string) => {
+        const m = document.cookie.match(new RegExp("(^| )" + n + "=([^;]+)"));
+        return m ? decodeURIComponent(m[2]) : "";
+      };
       const params = new URLSearchParams(window.location.search);
-      const fbclid = params.get('fbclid') || '';
+      const fbclid = params.get("fbclid") || "";
 
-      // Always re-read Facebook cookies (pixel loads async)
-      const freshFbc = getCk('_fbc') || (fbclid ? 'fb.1.' + Date.now() + '.' + fbclid : '');
-      const freshFbp = getCk('_fbp') || '';
+      const freshFbc = getCk("_fbc") || (fbclid ? "fb.1." + Date.now() + "." + fbclid : "");
+      const freshFbp = getCk("_fbp") || "";
 
-      const stored = sessionStorage.getItem('tf_ids');
+      const stored = sessionStorage.getItem("tf_ids");
       if (stored) {
         ids = JSON.parse(stored);
         if (freshFbc) ids.fbc = freshFbc;
         if (freshFbp) ids.fbp = freshFbp;
-        sessionStorage.setItem('tf_ids', JSON.stringify(ids));
+        sessionStorage.setItem("tf_ids", JSON.stringify(ids));
       } else {
         ids = {
-          ref: 'tf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          ref: "tf_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
           fbc: freshFbc,
           fbp: freshFbp,
-          gclid: params.get('gclid') || '',
-          utm_source: params.get('utm_source') || '',
-          utm_medium: params.get('utm_medium') || '',
-          utm_campaign: params.get('utm_campaign') || '',
-          utm_content: params.get('utm_content') || '',
-          lp: window.location.pathname.replace(/\//g, '') || 'home',
+          gclid: params.get("gclid") || "",
+          utm_source: params.get("utm_source") || "",
+          utm_medium: params.get("utm_medium") || "",
+          utm_campaign: params.get("utm_campaign") || "",
+          utm_content: params.get("utm_content") || "",
+          lp: window.location.pathname.replace(/\//g, "") || "home",
         };
-        sessionStorage.setItem('tf_ids', JSON.stringify(ids));
+        sessionStorage.setItem("tf_ids", JSON.stringify(ids));
       }
-    } catch { /* silent */ }
+    } catch {
+      /* silent */
+    }
 
     const payload = {
       name: name.trim(),
       email: email.trim(),
-      phone,
-      segment: segment === "imovel" ? "Imóvel" : "Veículo",
-      credit: Number(credit),
-      months: Number(months),
+      phone: phone.trim(),
+      segment,
+      credit: String(Number(credit) || 0),
+      months: String(Number(months) || 0),
       plan,
-      origin: typeof window !== "undefined" ? window.location.href : "simulador",
-      ref: ids.ref || '',
-      fbc: ids.fbc || '',
-      fbp: ids.fbp || '',
-      gclid: ids.gclid || '',
-      utm_source: ids.utm_source || '',
-      utm_medium: ids.utm_medium || '',
-      utm_campaign: ids.utm_campaign || '',
-      utm_content: ids.utm_content || '',
-      lp: ids.lp || '',
+      lp: "home-simulador",
+      ref: ids.ref || "",
+      source_url: typeof window !== "undefined" ? window.location.href : "",
     };
-    fetch("/api/leads", {
+
+    fetch("/api/leads/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-    }).catch(() => {/* silently ignore */});
+    }).catch(() => {});
   };
 
-  // ── Phase 1: Calculate — only validates credit inputs ──
+  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!name.trim() || !phone.trim() || phone.replace(/\D/g, "").length < 10) {
+      e.preventDefault();
+      setContactError("Por favor, preencha seu nome e telefone WhatsApp completo com DDD.");
+      return;
+    }
+    if (!consent) {
+      e.preventDefault();
+      setContactError("É necessário aceitar os termos para prosseguir.");
+      return;
+    }
+
+    sendToGoogleSheets(selectedPlan === "titanium" ? "Titanium" : "Conforto");
+  };
+
   const calculateScenarios = (e: React.FormEvent) => {
     e.preventDefault();
+    const c = Number(credit) || 0;
+    const m = Number(months) || 0;
+
+    if (c < minCredit || c > maxCredit) {
+      setError(`Valor de crédito para ${segment === "imovel" ? "Imóvel" : "Veículo"} deve ser entre R$ ${minCredit.toLocaleString("pt-BR")} e R$ ${maxCredit.toLocaleString("pt-BR")}.`);
+      return;
+    }
+    if (m < minMonths || m > maxMonths) {
+      setError(`Prazo deve ser entre ${minMonths} e ${maxMonths} meses.`);
+      return;
+    }
+
     setError(null);
-    const creditNum = Number(credit);
-    const monthsNum = Number(months);
-    if (!credit || isNaN(creditNum) || creditNum <= 0) { setError("Valor de crédito inválido."); return; }
-    if (!months || isNaN(monthsNum) || monthsNum <= 0) { setError("Prazo inválido."); return; }
     setHasCalculated(true);
-  };
-
-  // ── Phase 2: WhatsApp CTA — validates personal data ──
-  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    setContactError(null);
-    if (!name.trim()) { e.preventDefault(); setContactError("Por favor, preencha o seu nome completo."); return; }
-    if (!email.trim() || !email.includes("@")) { e.preventDefault(); setContactError("Por favor, insira um e-mail válido."); return; }
-    if (phone.length < 14) { e.preventDefault(); setContactError("Por favor, insira um telefone de contato válido."); return; }
-    if (!consent) { e.preventDefault(); setContactError("Você precisa aceitar o aviso de privacidade para continuar."); return; }
-
-    // ── Enhanced Conversions for Leads (Google Ads) ──
-    try {
-      const w = window as unknown as Record<string, unknown>;
-
-      // Lê o ref de rastreamento do sessionStorage (gravado pelo sendToGoogleSheets)
-      let eventRef = "";
-      try {
-        const stored = sessionStorage.getItem("tf_ids");
-        if (stored) eventRef = JSON.parse(stored).ref || "";
-      } catch { /* silent */ }
-
-      if (typeof w.gtag === "function") {
-        const gtag = w.gtag as (...args: unknown[]) => void;
-        gtag("set", "user_data", {
-          email: email.trim().toLowerCase(),
-          phone_number: "+55" + phone.replace(/\D/g, ""),
-        });
-        gtag("event", "conversion", {
-          send_to: "AW-18248652606/lead_simulador",
-          value: Number(credit) || 0,
-          currency: "BRL",
-        });
-      }
-      // Meta Pixel Lead event — eventID sincronizado com CAPI (deduplicação)
-      if (typeof w.fbq === "function") {
-        const fbq = w.fbq as (...args: unknown[]) => void;
-        fbq("track", "Lead", {
-          value: Number(credit) || 0,
-          currency: "BRL",
-          content_name: `Simulador - ${segment === "imovel" ? "Imóvel" : "Veículo"} - ${selectedPlan}`,
-        }, eventRef ? { eventID: eventRef } : undefined);  // ← deduplicação com CAPI
-      }
-    } catch { /* silent */ }
-
-    // All good — send lead to Google Sheets
-    sendToGoogleSheets(selectedPlan === "titanium" ? "Titanium" : "Conforto");
   };
 
   const creditNum = Number(credit) || 0;
   const monthsNum = Number(months) || 0;
 
-  // ── Consortium rates ──
-  let titaniumRate = 0, confortoRate = 0, confortoMonths = 0;
-  if (segment === "imovel") {
-    titaniumRate = monthsNum <= 120 ? 0.12 : monthsNum <= 180 ? 0.15 : 0.18;
-    confortoMonths = Math.min(240, Math.round(monthsNum * 1.5));
-    if (confortoMonths <= monthsNum) confortoMonths = 240;
-    confortoRate = confortoMonths <= 120 ? 0.12 : confortoMonths <= 180 ? 0.15 : 0.18;
-  } else {
-    titaniumRate = monthsNum <= 60 ? 0.15 : monthsNum <= 84 ? 0.18 : 0.22;
-    confortoMonths = Math.min(100, Math.round(monthsNum * 1.5));
-    if (confortoMonths <= monthsNum) confortoMonths = 100;
-    confortoRate = confortoMonths <= 60 ? 0.15 : confortoMonths <= 84 ? 0.18 : 0.22;
-  }
-
+  // Planos Consórcio
+  const titaniumRate = segment === "imovel" ? 0.16 : 0.14;
   const titaniumInstallment = monthsNum > 0 ? (creditNum * (1 + titaniumRate)) / monthsNum : 0;
+
+  const confortoRate = segment === "imovel" ? 0.20 : 0.18;
+  const confortoMonths = segment === "imovel" ? Math.min(monthsNum + 24, 240) : Math.min(monthsNum + 12, 100);
   const confortoInstallment = confortoMonths > 0 ? (creditNum * (1 + confortoRate)) / confortoMonths : 0;
 
-  // ── Bank comparison (Price + interest) ──
+  // Financiamento Bancário
   const monthlyBankRate = Math.pow(1 + BANK_RATE_ANNUAL, 1 / 12) - 1;
   const bankInstallment =
     monthsNum > 0 && monthlyBankRate > 0
@@ -216,11 +179,14 @@ export default function ParcelSimulator() {
     const seg = segment === "imovel" ? "Imóvel" : "Veículo";
     const fmtC = creditNum.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     const fmtI = inst.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    // Get ref from session for traceability
-    let ref = '';
-    try { const s = sessionStorage.getItem('tf_ids'); if (s) ref = JSON.parse(s).ref || ''; } catch {}
-    const refSuffix = ref ? `\n\nRef: ${ref}` : '';
-    const msg = `Olá, meu nome é ${name}. Simulei uma carta de ${fmtC} com parcelas de ${fmtI} (${seg} · Plano ${plan}). Quero saber mais.${refSuffix}`;
+    
+    let ref = "";
+    try {
+      const s = sessionStorage.getItem("tf_ids");
+      if (s) ref = JSON.parse(s).ref || "";
+    } catch {}
+    const refSuffix = ref ? `\n\nRef: ${ref}` : "";
+    const msg = `Olá, meu nome é ${name}. Fiz a simulação de crédito inteligente no valor de ${fmtC} com parcelas estimadas de ${fmtI} (${seg} · Plano ${plan}). Gostaria de receber a orientação consultiva da Titanium.${refSuffix}`;
     return `https://wa.me/5511930048940?text=${encodeURIComponent(msg)}`;
   };
 
@@ -229,148 +195,131 @@ export default function ParcelSimulator() {
   const isDisabled = credit === "" || months === "";
 
   return (
-    <section id="simulador" className="relative py-16 md:py-24" style={{ backgroundColor: "var(--bg-2)" }}>
-      <div className="max-w-[1140px] mx-auto px-6 md:px-10 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+    <section id="simulador" className="relative py-20 md:py-28 font-jakarta">
+      {/* Background Glows */}
+      <div className="absolute inset-0 tech-grid-pattern opacity-50 pointer-events-none" />
+      <div className="absolute top-1/3 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
-          {/* ── Esquerda: copy ── */}
-          <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-32">
-            <div className="flex items-center gap-3">
-              <span className="inline-block w-6 h-px" style={{ backgroundColor: "var(--green)" }} />
-              <span className="kicker">Simulador</span>
+      <div className="relative z-10 max-w-[1160px] mx-auto px-6 md:px-10 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* Esquerda: Copywriting */}
+          <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-28 text-left">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F5EE] border border-[#D1ECDD] text-[#0A7B3E] text-[10px] font-bold tracking-widest uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0A7B3E] animate-pulse" />
+              Simulador Financeiro Inteligente
             </div>
-            <h2
-              style={{
-                fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                fontSize: "clamp(1.7rem, 3.5vw, 2.6rem)",
-                fontWeight: 800,
-                lineHeight: 1.12,
-                letterSpacing: "-0.02em",
-                color: "var(--ink)",
-              }}
-            >
-              Quanto você economiza
-              <br />
-              <span className="text-gradient">com análise consultiva?</span>
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.12]">
+              Compare o custo real <br />
+              <span className="text-gradient">com o modelo tradicional</span>
             </h2>
-            <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "1rem", color: "var(--ink-soft)", lineHeight: 1.75 }}>
-              Compare o custo de um financiamento tradicional com a estruturação inteligente de uma carta de consórcio.
+
+            <p className="text-sm sm:text-base text-slate-600 font-light leading-relaxed">
+              Enquanto o financiamento bancário cobra juros sobre juros, a estruturação de cotas contempladas da Titanium permite economizar até 60% do custo final do seu patrimônio.
             </p>
 
-            {/* Trust badge */}
-            <div
-              className="p-5 rounded-xl space-y-3 mt-4"
-              style={{ backgroundColor: "var(--green-tint)", border: "1px solid var(--green-tint-2)" }}
-            >
-              {[
-                { icon: "🔒", text: "Regulamentado pelo Banco Central do Brasil" },
-                { icon: "✅", text: "Empresa ativa e regularizada desde 2022" },
-                { icon: "📋", text: "Nunca cobramos taxa de análise antecipada" },
-              ].map((item) => (
-                <div key={item.icon} className="flex items-center gap-3">
-                  <span className="text-base">{item.icon}</span>
-                  <span style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.8rem", color: "var(--green-deep)", fontWeight: 500 }}>
-                    {item.text}
-                  </span>
+            {/* Badges de Confiança */}
+            <div className="liquid-glass p-5 rounded-2xl space-y-3.5 border border-white/90 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 rounded-full bg-[#E8F5EE] flex items-center justify-center text-[#0A7B3E] shrink-0">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
-              ))}
+                <span className="text-xs font-semibold text-slate-700">Regulamentado pelo Banco Central do Brasil</span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 rounded-full bg-[#E8F5EE] flex items-center justify-center text-[#0A7B3E] shrink-0">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-700">Blindagem jurídica e contratual completa</span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 rounded-full bg-[#E8F5EE] flex items-center justify-center text-[#0A7B3E] shrink-0">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="text-xs font-semibold text-slate-700">Sem taxas ocultas ou cobranças antecipadas</span>
+              </div>
             </div>
           </div>
 
-          {/* ── Direita: widget ── */}
-          <div
-            className="lg:col-span-7 rounded-2xl p-8 md:p-10 space-y-8"
-            style={{ backgroundColor: "var(--bg-dark)" }}
-          >
-            {/* ══ PHASE 1: Credit inputs (no personal data required) ══ */}
+          {/* Direita: Simulador Liquid Glass Light */}
+          <div className="lg:col-span-7 rounded-3xl p-6 sm:p-10 space-y-8 liquid-glass border border-white/90 shadow-[0_20px_60px_-15px_rgba(15,23,42,0.08),inset_0_1px_2px_rgba(255,255,255,1)] text-left">
+            
             <form onSubmit={calculateScenarios} className="space-y-6">
-
-              {/* Segment toggle + sliders */}
+              
+              {/* Segment Toggle */}
               <div>
-                <label style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}>
-                  Tipo de carta
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
+                  Segmento de Aquisição
                 </label>
-                <div className="flex gap-2">
+                <div className="grid grid-cols-2 gap-2 bg-slate-100/70 p-1.5 rounded-2xl border border-slate-200/80">
                   {(["imovel", "veiculo"] as const).map((seg) => (
                     <button
                       key={seg}
                       type="button"
                       onClick={() => handleSegmentChange(seg)}
-                      className="flex-1 py-3 text-xs uppercase tracking-wider font-bold rounded-xl transition-all duration-200"
-                      style={{
-                        fontFamily: "var(--font-jakarta)",
-                        backgroundColor: segment === seg ? "var(--green)" : "rgba(255,255,255,0.08)",
-                        color: segment === seg ? "white" : "rgba(255,255,255,0.5)",
-                      }}
+                      className={`py-2.5 text-xs uppercase tracking-wider font-bold rounded-xl transition-all duration-200 cursor-pointer border ${
+                        segment === seg
+                          ? "bg-[#0A7B3E] text-white border-[#0A7B3E] shadow-sm"
+                          : "bg-transparent text-slate-600 border-transparent hover:text-slate-900"
+                      }`}
                     >
-                      {seg === "imovel" ? "Imóvel" : "Veículo"}
+                      {seg === "imovel" ? "Imóvel" : "Veículo / Frota"}
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* Sliders */}
-              <div className="pt-4 space-y-6" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="space-y-6 pt-2">
                 {/* Credit */}
-                <div>
-                  <div className="flex justify-between items-baseline mb-3">
-                    <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)" }}>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                       Valor do Crédito
                     </span>
-                    <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.2rem", color: "var(--green-vivid)" }}>
+                    <span className="text-lg sm:text-xl font-extrabold text-[#0A7B3E]">
                       {fmt(creditNum)}
                     </span>
                   </div>
-                  <div className="relative w-full h-6 flex items-center">
-                    <div className="absolute left-0 right-0 h-1.5 rounded-full" style={{ backgroundColor: "rgba(255,255,255,0.08)" }} />
-                    <div
-                      className="absolute left-0 h-1.5 rounded-full"
-                      style={{
-                        width: `${((Math.min(Math.max(creditNum, minCredit), maxCredit) - minCredit) / (maxCredit - minCredit)) * 100}%`,
-                        backgroundColor: "var(--green-vivid)",
-                      }}
-                    />
-                    <input
-                      type="range"
-                      min={minCredit}
-                      max={maxCredit}
-                      step={segment === "imovel" ? 50000 : 10000}
-                      value={Math.min(Math.max(creditNum, minCredit), maxCredit)}
-                      onChange={(e) => { setCredit(e.target.value); setHasCalculated(false); setError(null); }}
-                      className="simulator-range absolute w-full h-6 appearance-none bg-transparent cursor-pointer z-10"
-                    />
-                  </div>
+                  <input
+                    type="range"
+                    min={minCredit}
+                    max={maxCredit}
+                    step={segment === "imovel" ? 50000 : 10000}
+                    value={Math.min(Math.max(creditNum, minCredit), maxCredit)}
+                    onChange={(e) => { setCredit(e.target.value); setHasCalculated(false); setError(null); }}
+                    className="w-full"
+                  />
                 </div>
 
                 {/* Months */}
-                <div>
-                  <div className="flex justify-between items-baseline mb-3">
-                    <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)" }}>
-                      Prazo
+                <div className="space-y-2">
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                      Prazo Desejado
                     </span>
-                    <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.2rem", color: "var(--green-vivid)" }}>
-                      {months || "0"} <span style={{ fontSize: "0.8rem", fontWeight: 400, color: "rgba(255,255,255,0.4)" }}>meses</span>
+                    <span className="text-lg sm:text-xl font-extrabold text-[#0A7B3E]">
+                      {months || "0"} <span className="text-xs font-normal text-slate-400">meses</span>
                     </span>
                   </div>
-                  <div className="relative w-full h-6 flex items-center">
-                    <div className="absolute left-0 right-0 h-1.5 rounded-full" style={{ backgroundColor: "rgba(255,255,255,0.08)" }} />
-                    <div
-                      className="absolute left-0 h-1.5 rounded-full"
-                      style={{
-                        width: `${((Math.min(Math.max(Number(months) || 0, minMonths), maxMonths) - minMonths) / (maxMonths - minMonths)) * 100}%`,
-                        backgroundColor: "var(--green-vivid)",
-                      }}
-                    />
-                    <input
-                      type="range"
-                      min={minMonths}
-                      max={maxMonths}
-                      step={6}
-                      value={Math.min(Math.max(Number(months) || 0, minMonths), maxMonths)}
-                      onChange={(e) => { setMonths(e.target.value); setHasCalculated(false); setError(null); }}
-                      className="simulator-range absolute w-full h-6 appearance-none bg-transparent cursor-pointer z-10"
-                    />
-                  </div>
+                  <input
+                    type="range"
+                    min={minMonths}
+                    max={maxMonths}
+                    step={6}
+                    value={Math.min(Math.max(Number(months) || 0, minMonths), maxMonths)}
+                    onChange={(e) => { setMonths(e.target.value); setHasCalculated(false); setError(null); }}
+                    className="w-full"
+                  />
                 </div>
               </div>
 
@@ -378,192 +327,149 @@ export default function ParcelSimulator() {
                 type="submit"
                 disabled={isDisabled}
                 className={cn(
-                  "w-full py-4 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300",
-                  isDisabled ? "opacity-40 cursor-not-allowed" : "hover:brightness-110 hover:shadow-lg"
+                  "w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider text-white transition-all duration-300 cursor-pointer border-none bg-gradient-to-r from-[#0D9E50] to-[#0A7B3E] hover:from-[#15B85C] hover:to-[#0D9E50] shadow-md shadow-[#0A7B3E]/20",
+                  isDisabled && "opacity-40 cursor-not-allowed"
                 )}
-                style={{
-                  fontFamily: "var(--font-jakarta)",
-                  backgroundColor: "var(--green)",
-                  color: "white",
-                }}
               >
-                Simular e comparar com o banco →
+                Atualizar Comparativo →
               </button>
 
               {error && (
-                <div className="text-xs font-sans border p-3.5 rounded-xl" style={{ color: "var(--bad)", borderColor: "rgba(196,64,64,0.2)", backgroundColor: "rgba(196,64,64,0.08)" }}>
+                <div className="text-xs p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 font-semibold">
                   {error}
                 </div>
               )}
             </form>
 
-            {/* ══ PHASE 2: Results + personal data + WhatsApp CTA ══ */}
+            {/* Comparativo de Resultados */}
             {hasCalculated && (
-              <div className="pt-8 space-y-5" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-
-                {/* Comparação banco vs contemplada */}
+              <div className="space-y-6 pt-6 border-t border-slate-200/80">
+                
+                {/* Financiamento Tradicional */}
                 {bankInstallment > 0 && (
-                  <div className="p-4 rounded-xl" style={{ backgroundColor: "rgba(196,64,64,0.08)", border: "1px solid rgba(196,64,64,0.15)" }}>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: "4px" }}>
-                          Financiamento bancário ~18,9% a.a.
-                        </div>
-                        <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.4rem", color: "rgba(255,100,100,0.9)" }}>
-                          {fmtDec(bankInstallment)}<span style={{ fontSize: "0.75rem", fontWeight: 400, color: "rgba(255,255,255,0.35)", marginLeft: "4px" }}>/mês</span>
-                        </div>
-                      </div>
-                      <div style={{ textAlign: "right" }}>
-                        <div style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.7rem", color: "rgba(255,255,255,0.35)", marginBottom: "2px" }}>Total pago</div>
-                        <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.9rem", color: "rgba(255,100,100,0.8)" }}>{fmt(bankTotal)}</div>
-                      </div>
+                  <div className="p-5 rounded-2xl bg-rose-50/70 border border-rose-200/80 space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[11px] font-bold text-rose-800 uppercase tracking-wider">
+                        Financiamento Bancário (~18,9% a.a.)
+                      </span>
+                      <span className="text-xs text-rose-600 font-semibold">
+                        Total: {fmt(bankTotal)}
+                      </span>
+                    </div>
+                    <div className="text-2xl font-extrabold text-rose-700">
+                      {fmtDec(bankInstallment)} <span className="text-xs font-normal text-rose-500">/mês</span>
                     </div>
                   </div>
                 )}
 
-                {/* Planos contemplada */}
+                {/* Planos Titanium */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
-                    { id: "titanium" as const, label: "Plano Titanium", badge: "Menor custo", installment: titaniumInstallment, total: titaniumTotal, rate: titaniumRate, months: monthsNum },
-                    { id: "conforto" as const, label: "Plano Conforto", badge: "Maior prazo", installment: confortoInstallment, total: creditNum * (1 + confortoRate), rate: confortoRate, months: confortoMonths },
+                    { id: "titanium" as const, label: "Plano Titanium", badge: "Menor Custo Total", installment: titaniumInstallment, rate: titaniumRate, months: monthsNum },
+                    { id: "conforto" as const, label: "Plano Conforto", badge: "Parcela Reduzida", installment: confortoInstallment, rate: confortoRate, months: confortoMonths },
                   ].map((plan) => (
                     <button
                       key={plan.id}
                       type="button"
                       onClick={() => setSelectedPlan(plan.id)}
-                      className="text-left p-5 rounded-xl transition-all duration-300"
-                      style={{
-                        backgroundColor: selectedPlan === plan.id ? "var(--bg-white)" : "rgba(255,255,255,0.05)",
-                        border: selectedPlan === plan.id ? "2px solid var(--green)" : "2px solid transparent",
-                      }}
+                      className={`text-left p-5 rounded-2xl transition-all cursor-pointer border ${
+                        selectedPlan === plan.id
+                          ? "bg-white border-[#0A7B3E] shadow-md shadow-[#0A7B3E]/10"
+                          : "bg-slate-50/80 border-slate-200/80 hover:bg-white"
+                      }`}
                     >
-                      <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: selectedPlan === plan.id ? "var(--ink-mute)" : "rgba(255,255,255,0.4)", marginBottom: "2px" }}>
-                        {plan.label}
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-bold text-slate-800">{plan.label}</span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                          {plan.badge}
+                        </span>
                       </div>
-                      <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "0.6rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--green-vivid)", marginBottom: "10px" }}>
-                        {plan.badge}
+                      <div className="text-xl font-extrabold text-emerald-700 mb-2">
+                        {fmtDec(plan.installment)} <span className="text-[11px] font-normal text-slate-400">/mês</span>
                       </div>
-                      <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.5rem", color: selectedPlan === plan.id ? "var(--ink)" : "white", marginBottom: "8px" }}>
-                        {fmtDec(plan.installment)}<span style={{ fontSize: "0.7rem", fontWeight: 400, color: selectedPlan === plan.id ? "var(--ink-mute)" : "rgba(255,255,255,0.4)", marginLeft: "3px" }}>/mês</span>
-                      </div>
-                      <div className="space-y-1" style={{ fontSize: "0.72rem", fontFamily: "var(--font-jakarta)" }}>
-                        <div className="flex justify-between" style={{ color: selectedPlan === plan.id ? "var(--ink-soft)" : "rgba(255,255,255,0.4)" }}>
-                          <span>Prazo</span>
-                          <span style={{ fontWeight: 600, color: selectedPlan === plan.id ? "var(--ink)" : "white" }}>{plan.months} meses</span>
-                        </div>
-                        <div className="flex justify-between" style={{ color: selectedPlan === plan.id ? "var(--ink-soft)" : "rgba(255,255,255,0.4)" }}>
-                          <span>Taxa adm.</span>
-                          <span style={{ fontWeight: 600, color: selectedPlan === plan.id ? "var(--ink)" : "white" }}>{(plan.rate * 100).toFixed(1)}%</span>
-                        </div>
+                      <div className="text-[11px] text-slate-500 space-y-0.5">
+                        <div>Prazo: <strong className="text-slate-800">{plan.months} meses</strong></div>
+                        <div>Taxa adm: <strong className="text-slate-800">{(plan.rate * 100).toFixed(1)}% diluída</strong></div>
                       </div>
                     </button>
                   ))}
                 </div>
 
-                {/* Economia vs banco */}
+                {/* Card de Economia Estimada */}
                 {savings > 0 && (
-                  <div
-                    className="p-4 rounded-xl flex items-center justify-between"
-                    style={{ backgroundColor: "var(--green-tint)", border: "1px solid var(--green-tint-2)" }}
-                  >
+                  <div className="p-5 rounded-2xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-between">
                     <div>
-                      <div style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.7rem", fontWeight: 600, color: "var(--green)", marginBottom: "2px" }}>
-                        Você economiza em relação ao banco:
-                      </div>
-                      <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "1.4rem", color: "var(--green-deep)" }}>
-                        {fmt(savings)}
-                      </div>
+                      <span className="text-xs font-bold text-[#0A7B3E] block">Sua Economia Estimada vs. Banco:</span>
+                      <span className="text-2xl font-extrabold text-emerald-900">{fmt(savings)}</span>
                     </div>
-                    <div style={{ fontSize: "2rem" }}>💰</div>
+                    <div className="w-10 h-10 rounded-xl bg-white border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-bold">
+                      ✓
+                    </div>
                   </div>
                 )}
 
-                {/* ── Simulation disclaimer ── */}
-                <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.68rem", color: "rgba(255,255,255,0.25)", lineHeight: 1.6, fontStyle: "italic" }}>
-                  *Simulação ilustrativa. Valores reais podem variar conforme administradora, grupo e condições de mercado. Taxa administrativa de 12% a 22% conforme prazo e segmento.
-                </p>
-
-                {/* ── Personal data collection (after results) ── */}
-                <div className="pt-6 space-y-4" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                  <p style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.8rem", fontWeight: 600, color: "rgba(255,255,255,0.5)" }}>
-                    Gostou do resultado? Preencha seus dados para receber orientação personalizada:
+                {/* Formulário para Envio WhatsApp */}
+                <div className="space-y-4 pt-4 border-t border-slate-200/80">
+                  <p className="text-xs font-bold text-slate-700">
+                    Solicite o diagnóstico completo e a disponibilidade de cotas:
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {[
-                      { label: "Seu nome completo", value: name, onChange: (e: React.ChangeEvent<HTMLInputElement>) => { setName(e.target.value); setContactError(null); }, placeholder: "Ex: João da Silva", type: "text" },
-                      { label: "Seu melhor e-mail", value: email, onChange: (e: React.ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value); setContactError(null); }, placeholder: "Ex: joao@email.com", type: "email" },
-                    ].map((field) => (
-                      <div key={field.label}>
-                        <label
-                          style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}
-                        >
-                          {field.label}
-                        </label>
-                        <input
-                          type={field.type}
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder={field.placeholder}
-                          style={{ fontFamily: "var(--font-jakarta)" }}
-                          className="w-full bg-white/8 border border-white/10 px-4 py-3.5 text-white placeholder:text-white/25 text-sm rounded-xl focus:outline-none focus:border-green-500/50 transition-all"
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  <div>
-                    <label style={{ fontFamily: "var(--font-jakarta)", fontWeight: 600, fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "6px" }}>
-                      WhatsApp / Celular
-                    </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       type="text"
-                      value={phone}
-                      onChange={handlePhoneChange}
-                      placeholder="(11) 99999-9999"
-                      style={{ fontFamily: "var(--font-jakarta)" }}
-                      className="w-full bg-white/8 border border-white/10 px-4 py-3.5 text-white placeholder:text-white/25 text-sm rounded-xl focus:outline-none focus:border-green-500/50 transition-all"
+                      value={name}
+                      onChange={(e) => { setName(e.target.value); setContactError(null); }}
+                      placeholder="Seu Nome Completo"
+                      className="liquid-glass-input px-4 py-2.5 rounded-xl text-xs text-slate-800"
+                    />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); setContactError(null); }}
+                      placeholder="Seu E-mail (opcional)"
+                      className="liquid-glass-input px-4 py-2.5 rounded-xl text-xs text-slate-800"
                     />
                   </div>
 
-                  {/* Consent */}
-                  <div className="flex items-start gap-3 pt-1">
+                  <input
+                    type="text"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    placeholder="WhatsApp / Celular com DDD"
+                    className="w-full liquid-glass-input px-4 py-2.5 rounded-xl text-xs text-slate-800"
+                  />
+
+                  <div className="flex items-start gap-2 pt-1">
                     <input
                       type="checkbox"
-                      id="privacy-consent"
+                      id="privacy-consent-sim"
                       checked={consent}
                       onChange={(e) => setConsent(e.target.checked)}
-                      className="mt-0.5 w-4 h-4 rounded"
-                      style={{ accentColor: "var(--green-vivid)" }}
+                      className="mt-0.5 w-4 h-4 accent-[#0A7B3E]"
                     />
-                    <label htmlFor="privacy-consent" style={{ fontFamily: "var(--font-jakarta)", fontSize: "0.72rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.6, cursor: "pointer" }}>
-                      Concordo em fornecer os dados para simulação e atendimento. Seus dados estão protegidos pela LGPD.
+                    <label htmlFor="privacy-consent-sim" className="text-[11px] text-slate-500 cursor-pointer leading-tight">
+                      Concordo em receber a análise e diagnóstico patrimonial. Seus dados estão 100% seguros sob a LGPD.
                     </label>
                   </div>
 
                   {contactError && (
-                    <div className="text-xs font-sans border p-3.5 rounded-xl" style={{ color: "var(--bad)", borderColor: "rgba(196,64,64,0.2)", backgroundColor: "rgba(196,64,64,0.08)" }}>
+                    <div className="text-xs p-3 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 font-semibold">
                       {contactError}
                     </div>
                   )}
 
-                  {/* CTA WhatsApp */}
                   <a
                     href={getWhatsAppUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={handleWhatsAppClick}
-                    className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                    style={{
-                      fontFamily: "var(--font-jakarta)",
-                      backgroundColor: "var(--whatsapp)",
-                      color: "white",
-                    }}
+                    className="w-full py-3.5 px-6 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-[#0A7B3E] hover:bg-[#086332] shadow-md shadow-[#0A7B3E]/20 transition-all flex items-center justify-center gap-2 cursor-pointer text-decoration-none"
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.534 4.055 1.475 5.77L0 24l6.407-1.453A11.957 11.957 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.497-5.22-1.367l-.375-.222-3.887.882.913-3.781-.244-.39A9.941 9.941 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
                     </svg>
-                    Solicitar orientação gratuita
+                    Receber Orientação no WhatsApp
                   </a>
                 </div>
               </div>

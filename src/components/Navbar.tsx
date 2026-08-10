@@ -10,17 +10,16 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
-  const isLightPage = pathname.startsWith("/cartas-contempladas");
+  const isDarkHeroPage = pathname === "/" || pathname === "/colaboradores";
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 30);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -28,69 +27,67 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled || isLightPage
-          ? "bg-bg-dark/95 backdrop-blur-md border-b border-white/[0.08] py-4"
-          : "bg-transparent py-6"
+        scrolled
+          ? "py-3 px-4"
+          : "py-5 px-4 sm:px-6"
       }`}
-      style={{ backgroundColor: (scrolled || isLightPage) ? "rgba(10, 10, 10, 0.95)" : "transparent" }}
     >
-      <div className="max-w-[1140px] mx-auto px-6 flex items-center justify-between">
+      <div
+        className={`max-w-[1160px] mx-auto rounded-full transition-all duration-300 px-6 py-2.5 flex items-center justify-between ${
+          scrolled
+            ? "bg-white/85 backdrop-blur-xl border border-white/90 shadow-[0_10px_30px_-10px_rgba(15,23,42,0.08),inset_0_1px_1px_rgba(255,255,255,1)]"
+            : isDarkHeroPage
+            ? "bg-slate-900/40 backdrop-blur-md border border-white/10"
+            : "bg-white/70 backdrop-blur-lg border border-slate-200/60 shadow-xs"
+        }`}
+      >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 z-50">
           <Image
-            src="/img/logo-titanium-white.png"
+            src={scrolled || !isDarkHeroPage ? "/img/logo-titanium-dark.png" : "/img/logo-titanium-white.png"}
             alt="Titanium Consultoria"
-            width={320}
-            height={80}
-            className="h-20 w-auto object-contain"
+            width={180}
+            height={48}
+            className="h-10 sm:h-11 w-auto object-contain transition-opacity duration-300"
             priority
+            onError={(e) => {
+              // Fallback se a logo dark não existir
+              const target = e.target as HTMLImageElement;
+              target.src = "/img/logo-titanium-white.png";
+            }}
           />
         </Link>
 
         {/* Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-10">
-          <Link
-            href="/"
-            className="text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
-          >
-            Início
-          </Link>
-          <a
-            href="/#sobre"
-            className="text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
-          >
-            Sobre
-          </a>
-          <a
-            href="/#simulador"
-            className="text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
-          >
-            Simulação
-          </a>
-          <a
-            href="#contato"
-            className="text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
-          >
-            Contato
-          </a>
-          <Link
-            href="/colaboradores"
-            className="text-sm font-semibold tracking-wider text-white/80 hover:text-green-vivid transition-colors uppercase font-[family-name:var(--font-montserrat)]"
-          >
-            Colaboradores
-          </Link>
+        <nav className="hidden md:flex items-center gap-8">
+          {[
+            { label: "Início", href: "/" },
+            { label: "Sobre", href: "/#sobre" },
+            { label: "Simulação", href: "/#simulador" },
+            { label: "Contato", href: "/#contato" },
+            { label: "Parceiros", href: "/colaboradores" },
+          ].map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`text-xs font-bold uppercase tracking-wider transition-colors ${
+                scrolled || !isDarkHeroPage
+                  ? "text-slate-700 hover:text-[#0A7B3E]"
+                  : "text-slate-200 hover:text-emerald-400"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         {/* Right CTA Button (Desktop) */}
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-3">
           <Link
             href="/cartas-contempladas"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
-            style={{
-              backgroundColor: "var(--green-vivid)",
-              color: "#ffffff",
-            }}
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#0D9E50] to-[#0A7B3E] hover:from-[#15B85C] hover:to-[#0D9E50] shadow-md shadow-[#0A7B3E]/20 hover:shadow-lg hover:shadow-[#0A7B3E]/30 transition-all hover:scale-[1.02] active:scale-[0.98] border border-white/25"
           >
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             Cartas Contempladas
           </Link>
         </div>
@@ -100,66 +97,64 @@ export default function Navbar() {
           onClick={() => setIsOpen(!isOpen)}
           aria-expanded={isOpen}
           aria-label="Menu Principal"
-          className="block md:hidden text-white focus:outline-none p-2 z-50 cursor-pointer"
+          className={`block md:hidden focus:outline-none p-2 z-50 cursor-pointer ${
+            scrolled || !isDarkHeroPage ? "text-slate-800" : "text-white"
+          }`}
         >
-          <div className="w-6 h-5 relative flex flex-col justify-between">
-            <span className={`h-[2px] w-full bg-white rounded-full transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-[9px]" : ""}`} />
-            <span className={`h-[2px] w-full bg-white rounded-full transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
-            <span className={`h-[2px] w-full bg-white rounded-full transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-[9px]" : ""}`} />
+          <div className="w-5 h-4 relative flex flex-col justify-between">
+            <span className={`h-[2px] w-full rounded-full transition-transform duration-300 ${scrolled || !isDarkHeroPage ? "bg-slate-800" : "bg-white"} ${isOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
+            <span className={`h-[2px] w-full rounded-full transition-opacity duration-300 ${scrolled || !isDarkHeroPage ? "bg-slate-800" : "bg-white"} ${isOpen ? "opacity-0" : ""}`} />
+            <span className={`h-[2px] w-full rounded-full transition-transform duration-300 ${scrolled || !isDarkHeroPage ? "bg-slate-800" : "bg-white"} ${isOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
           </div>
         </button>
 
         {/* Mobile Menu Overlay */}
         <div
-          className={`fixed inset-0 bg-[#0A0A0A]/98 z-40 flex flex-col justify-center items-center gap-8 transition-all duration-300 md:hidden ${
-            isOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"
+          className={`fixed inset-0 bg-slate-900/95 backdrop-blur-2xl z-40 flex flex-col justify-center items-center gap-6 transition-all duration-300 md:hidden ${
+            isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
           }`}
         >
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
-            className="text-lg font-semibold tracking-widest text-white hover:text-green-vivid transition-colors uppercase"
+            className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
             Início
           </Link>
           <a
             href="/#sobre"
             onClick={() => setIsOpen(false)}
-            className="text-lg font-semibold tracking-widest text-white hover:text-green-vivid transition-colors uppercase"
+            className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
             Sobre
           </a>
           <a
             href="/#simulador"
             onClick={() => setIsOpen(false)}
-            className="text-lg font-semibold tracking-widest text-white hover:text-green-vivid transition-colors uppercase"
+            className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
             Simulação
           </a>
           <a
-            href="#contato"
+            href="/#contato"
             onClick={() => setIsOpen(false)}
-            className="text-lg font-semibold tracking-widest text-white hover:text-green-vivid transition-colors uppercase"
+            className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
             Contato
           </a>
           <Link
             href="/colaboradores"
             onClick={() => setIsOpen(false)}
-            className="text-lg font-semibold tracking-widest text-white hover:text-green-vivid transition-colors uppercase"
+            className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
-            Colaboradores
+            Parceiros
           </Link>
           <Link
             href="/cartas-contempladas"
             onClick={() => setIsOpen(false)}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300"
-            style={{
-              backgroundColor: "var(--green-vivid)",
-              color: "#ffffff",
-            }}
+            className="px-6 py-3 rounded-full bg-[#0A7B3E] text-white text-xs font-bold uppercase tracking-wider shadow-lg"
           >
-            Cartas Contempladas
+            Ver Cartas Contempladas
           </Link>
         </div>
       </div>

@@ -9,28 +9,28 @@ const propositions = [
     tagline: "Diagnóstico de perfil",
     headline: "Avaliação do seu objetivo, prazo, entrada disponível e capacidade de parcela.",
     description:
-      "Antes de qualquer recomendação, entendemos seu momento financeiro. Mapeamos metas, prazos e limites para que a orientação seja personalizada — não genérica.",
+      "Antes de qualquer recomendação, entendemos seu momento financeiro. Mapeamos metas, prazos e limites para que a orientação seja personalizada — sem pressão comercial.",
   },
   {
     num: "02",
     tagline: "Comparativo de alternativas",
     headline: "Consórcio novo, carta contemplada, financiamento ou aguardar melhor momento.",
     description:
-      "Nem sempre carta contemplada é a melhor opção. Comparamos custos, prazos e riscos de cada alternativa para que você decida com clareza.",
+      "Nem sempre carta contemplada é a melhor opção. Comparamos custos, prazos e riscos de cada alternativa para que você decida com clareza matemática.",
   },
   {
     num: "03",
     tagline: "Curadoria de cartas disponíveis",
-    headline: "Somente quando houver disponibilidade real e com validação.",
+    headline: "Somente quando houver disponibilidade real e com validação prévia.",
     description:
-      "Se fizer sentido, apresentamos cartas contempladas disponíveis no mercado — cada uma verificada pela nossa equipe antes de chegar até você.",
+      "Se fizer sentido para o seu caso, apresentamos cotas contempladas disponíveis no mercado secundário — cada uma auditada pela nossa mesa jurídica antes de chegar até você.",
   },
   {
     num: "04",
     tagline: "Orientação sobre riscos",
     headline: "Transferência, aprovação, garantias, saldo devedor, taxas e documentação.",
     description:
-      "Explicamos cada etapa, risco e custo envolvido. Transferência de titularidade, aprovação da administradora, taxas, documentação e o que pode dar errado.",
+      "Explicamos cada etapa, risco e custo envolvido: transferência de titularidade, aprovação da administradora, taxas, documentação e garantias exigidas pelo BACEN.",
   },
 ] as const;
 
@@ -49,65 +49,48 @@ export default function ValueProps() {
   return (
     <section
       id="diferenciais"
-      className="relative py-16 md:py-24 overflow-hidden"
-      style={{ backgroundColor: "var(--bg)" }}
+      className="relative py-20 md:py-28 overflow-hidden font-jakarta"
     >
-      {/* Divisor de topo */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(to right, transparent, var(--bg-3), transparent)" }}
-      />
+      {/* Glow e Grid de Fundo */}
+      <div className="absolute inset-0 tech-grid-pattern opacity-60 pointer-events-none" />
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="mx-auto max-w-[1140px] px-6 md:px-10 lg:px-12">
+      <div className="relative z-10 mx-auto max-w-[1160px] px-6 md:px-10 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          
           {/* Esquerda: Intro */}
-          <div className="lg:col-span-5 space-y-6 lg:pr-8">
-            <div className="flex items-center gap-3">
-              <span className="inline-block w-6 h-px" style={{ backgroundColor: "var(--green)" }} />
-              <span className="kicker">Análise consultiva</span>
+          <div className="lg:col-span-5 space-y-6 lg:pr-6 text-left">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8F5EE] border border-[#D1ECDD] text-[#0A7B3E] text-[10px] font-bold tracking-widest uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0A7B3E] animate-pulse" />
+              Análise Consultiva Titanium
             </div>
-            <h2
-              style={{
-                fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                fontSize: "clamp(1.7rem, 3.5vw, 2.6rem)",
-                fontWeight: 800,
-                lineHeight: 1.12,
-                letterSpacing: "-0.02em",
-                color: "var(--ink)",
-              }}
-            >
-              O que você recebe
-              <br />
-              <span className="text-gradient">na análise consultiva</span>
+
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.12]">
+              O que você recebe <br />
+              <span className="text-gradient">na nossa esteira</span>
             </h2>
-            <p
-              style={{
-                fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                fontSize: "clamp(1rem, 1.4vw, 1.1rem)",
-                color: "var(--ink-soft)",
-                lineHeight: 1.75,
-              }}
-            >
-              Antes de qualquer recomendação, fazemos um diagnóstico completo do seu perfil, objetivo e possibilidades. Você recebe orientação — não pressão de venda.
+
+            <p className="text-sm sm:text-base text-slate-600 font-light leading-relaxed">
+              Antes de qualquer recomendação, fazemos um diagnóstico completo do seu perfil, objetivo e possibilidades. Você recebe dados concretos e inteligência patrimonial.
             </p>
+
             <div className="pt-2">
               <a
                 href="#simulador"
-                className="btn-primary inline-flex"
+                className="btn-primary inline-flex items-center gap-2"
               >
-                Solicitar análise gratuita
+                <span>Solicitar Análise Gratuita</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
               </a>
             </div>
           </div>
 
-          {/* Direita: Carousel (Desktop & Mobile) */}
+          {/* Direita: Liquid Glass Interactive Card */}
           <div className="lg:col-span-7 w-full flex flex-col items-center">
             <div
-              className="relative w-full overflow-hidden rounded-2xl min-h-[360px] sm:min-h-[400px] flex shadow-md group"
-              style={{
-                backgroundColor: "var(--bg-white)",
-                border: "1px solid var(--bg-3)",
-              }}
+              className="relative w-full overflow-hidden rounded-3xl min-h-[380px] sm:min-h-[420px] flex liquid-glass border border-white/80 shadow-[0_20px_50px_-15px_rgba(15,23,42,0.07),inset_0_1px_1px_rgba(255,255,255,1)] group"
               onMouseEnter={() => setPaused(true)}
               onMouseLeave={() => setPaused(false)}
             >
@@ -115,7 +98,7 @@ export default function ValueProps() {
                 <div
                   key={prop.num}
                   className={cn(
-                    "absolute inset-0 w-full h-full p-8 sm:p-12 transition-all duration-700 ease-in-out flex flex-col justify-between select-none",
+                    "absolute inset-0 w-full h-full p-8 sm:p-12 transition-all duration-700 ease-in-out flex flex-col justify-between select-none text-left",
                     idx === active
                       ? "opacity-100 translate-x-0 scale-100 pointer-events-auto z-10"
                       : idx < active
@@ -123,101 +106,53 @@ export default function ValueProps() {
                       : "opacity-0 translate-x-full scale-95 pointer-events-none z-0"
                   )}
                 >
-                  {/* Gradiente de fundo sutil */}
-                  <div
-                    className="absolute inset-0 z-0 pointer-events-none"
-                    style={{
-                      background:
-                        "linear-gradient(160deg, rgba(10,123,62,0.03) 0%, rgba(21,184,92,0.01) 50%, transparent 100%)",
-                    }}
-                  />
-                  <div
-                    className="absolute bottom-0 left-0 right-0 h-32 z-0 pointer-events-none"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(232,245,238,0.25), transparent)",
-                    }}
-                  />
-
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-6">
-                      <span
-                        style={{
-                          fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                          fontWeight: 800,
-                          fontSize: "0.75rem",
-                          color: "var(--green-vivid)",
-                          letterSpacing: "0.1em",
-                        }}
-                      >
-                        #{prop.num}
+                  <div className="relative z-10 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <span className="w-9 h-9 rounded-xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E] font-extrabold text-xs shadow-xs">
+                        {prop.num}
                       </span>
-                      <span
-                        style={{
-                          fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                          fontWeight: 600,
-                          fontSize: "0.68rem",
-                          letterSpacing: "0.08em",
-                          textTransform: "uppercase",
-                          color: "var(--ink-mute)",
-                        }}
-                      >
+                      <span className="text-xs font-bold text-[#0A7B3E] uppercase tracking-widest">
                         {prop.tagline}
                       </span>
                     </div>
-                    <h3
-                      style={{
-                        fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                        fontWeight: 800,
-                        fontSize: "clamp(1.4rem, 2.3vw, 2.1rem)",
-                        color: "var(--ink)",
-                        lineHeight: 1.25,
-                        letterSpacing: "-0.01em",
-                      }}
-                    >
+
+                    <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug tracking-tight">
                       {prop.headline}
                     </h3>
+
+                    <p className="text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
+                      {prop.description}
+                    </p>
                   </div>
-                  <p
-                    className="relative z-10 mt-6 sm:mt-auto pr-6 pl-6 sm:px-0"
-                    style={{
-                      fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                      fontSize: "clamp(0.92rem, 1.2vw, 1.05rem)",
-                      color: "var(--ink-soft)",
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    {prop.description}
-                  </p>
+
+                  {/* Barra de Progresso Liquid */}
+                  <div className="relative z-10 pt-6">
+                    <div className="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-[#0A7B3E] to-[#15B85C] h-full rounded-full transition-all duration-300"
+                        style={{ width: `${((active + 1) / propositions.length) * 100}%` }}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between mt-3 text-[11px] font-semibold text-slate-400">
+                      <span>Etapa {active + 1} de {propositions.length}</span>
+                      <div className="flex gap-1.5">
+                        {propositions.map((_, i) => (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={() => setActive(i)}
+                            className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
+                              i === active ? "bg-[#0A7B3E] scale-125" : "bg-slate-300 hover:bg-slate-400"
+                            }`}
+                            aria-label={`Ir para etapa ${i + 1}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
-
-              {/* Lateral arrow buttons (Instagram-style) */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActive((prev) => (prev - 1 + propositions.length) % propositions.length);
-                }}
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 hover:bg-white text-ink border border-bg-3 hover:text-green flex items-center justify-center shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 active:scale-90"
-                aria-label="Slide anterior"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-              </button>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActive((prev) => (prev + 1) % propositions.length);
-                }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 hover:bg-white text-ink border border-bg-3 hover:text-green flex items-center justify-center shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 active:scale-90"
-                aria-label="Próximo slide"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-              </button>
             </div>
           </div>
         </div>
