@@ -5,8 +5,11 @@ interface AdministradoraLogoProps {
   className?: string;
 }
 
-export default function AdministradoraLogo({ name, className = "h-6 max-w-[120px] object-contain inline-block" }: AdministradoraLogoProps) {
-  if (!name) return <span className="text-gray-400 font-light italic text-xs">Sem admin</span>;
+export default function AdministradoraLogo({
+  name,
+  className = "h-10 sm:h-12 max-w-[150px] sm:max-w-[180px] object-contain inline-block transition-transform hover:scale-105 filter drop-shadow-2xs",
+}: AdministradoraLogoProps) {
+  if (!name) return <span className="text-slate-400 font-light italic text-xs">Sem admin</span>;
 
   // Normalização do texto para correspondência de arquivo
   const normalized = name
@@ -55,7 +58,7 @@ export default function AdministradoraLogo({ name, className = "h-6 max-w-[120px
   if (knownSlugs.includes(slug)) {
     const logoSrc = `/images/logos/${slug}.png`;
     return (
-      <div className="inline-flex items-center">
+      <div className="inline-flex items-center min-h-[44px]">
         <img
           src={logoSrc}
           alt={name}
@@ -70,7 +73,7 @@ export default function AdministradoraLogo({ name, className = "h-6 max-w-[120px
             }
           }}
         />
-        <span className="fallback-text hidden text-[10px] font-bold text-gray-700 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded-md uppercase tracking-wider whitespace-nowrap">
+        <span className="fallback-text hidden text-xs font-extrabold text-slate-800 bg-slate-100 border border-slate-200 px-3 py-1 rounded-xl uppercase tracking-wider whitespace-nowrap shadow-2xs">
           {name}
         </span>
       </div>
@@ -79,7 +82,7 @@ export default function AdministradoraLogo({ name, className = "h-6 max-w-[120px
 
   // Administradora desconhecida ou customizada
   return (
-    <span className="text-[10px] font-bold text-gray-700 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded-md uppercase tracking-wider whitespace-nowrap">
+    <span className="text-xs font-extrabold text-slate-800 bg-slate-100 border border-slate-200 px-3 py-1 rounded-xl uppercase tracking-wider whitespace-nowrap shadow-2xs">
       {name}
     </span>
   );
