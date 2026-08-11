@@ -2,8 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import AdministradoraLogo from "@/components/AdministradoraLogo";
+import Dialog from "@/design-system/primitives/Dialog";
+import type { CartaDTO } from "@/features/cartas/domain/types";
+import { normalizarTexto, rotuloSegmento } from "@/features/cartas/domain/segmento";
 
-interface Lead {
+export interface PortalLead {
   id: number;
   name: string;
   phone: string;
@@ -14,7 +17,7 @@ interface Lead {
   created_at: string;
 }
 
-interface Comissao {
+export interface PortalComissao {
   id: number;
   cliente_nome: string;
   valor_credito: number;
@@ -23,23 +26,13 @@ interface Comissao {
   criado_em: string;
 }
 
-interface Carta {
-  id: number;
-  segmento: string;
-  administradora: string;
-  valor_credito: number | string;
-  entrada: number | string;
-  parcelas: number;
-  valor_parcela: number | string;
-  proximo_vencimento: string | null;
-  disponivel: boolean;
-}
+type Carta = CartaDTO;
 
 interface PortalDashboardProps {
   partnerName: string;
   partnerRef: string;
-  initialLeads: Lead[];
-  initialComissoes: Comissao[];
+  initialLeads: PortalLead[];
+  initialComissoes: PortalComissao[];
   initialCartas: Carta[];
 }
 
@@ -61,9 +54,9 @@ export default function PortalDashboard({
   initialComissoes,
   initialCartas,
 }: PortalDashboardProps) {
-  const [clients, setClients] = useState<Lead[]>(initialLeads);
-  const [comissoes] = useState<Comissao[]>(initialComissoes);
-  const [cartas] = useState<Carta[]>(initialCartas);
+  const [clients, setClients] = useState<PortalLead[]>(initialLeads);
+  const [comissoes] = useState<PortalComissao[]>(initialComissoes);
+  const [cartas, setCartas] = useState<Carta[]>(initialCartas);
   
   // Navigation tab & scroll state
   const [activeNav, setActiveNav] = useState<"dashboard" | "cartas" | "clientes" | "extrato" | "scripts">("dashboard");
@@ -75,12 +68,12 @@ export default function PortalDashboard({
   const extratoRef = useRef<HTMLDivElement>(null);
 
   // Saudação Dinâmica
-  const [greeting, setGreeting] = useState("Olá");
+  const greeting = "Olá";
   const [referralCopied, setReferralCopied] = useState(false);
 
   // Client-side search and filters for Available Letters
   const [cartasSearch, setCartasSearch] = useState("");
-  const [selectedSegment, setSelectedSegment] = useState("Todos");
+  const [selectedSegment, setSelectedSegment] = useState("todos");
 
   // Modals & Lateral Chat States
   const [isScriptsOpen, setIsScriptsOpen] = useState(false);
@@ -92,16 +85,25 @@ export default function PortalDashboard({
   const [selectedCarta, setSelectedCarta] = useState<Carta | null>(null);
 
   // AI Copilot State
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    const firstName = partnerName ? partnerName.split(" ")[0] : "Parceiro";
+    return [{
+      id: "welcome-1",
+      sender: "assistant",
+      text: `Olá, ${firstName}! Sou seu Copiloto Titanium AI. Estou aqui para tirar dúvidas técnicas sobre consórcios, prazos de faturamento, comissões no PIX e estratégias para seus clientes. Como posso te apoiar?`,
+      timestamp: "Agora",
+    }];
+  });
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const chatBottomRef = useRef<HTMLDivElement>(null);
+  const localClientIdRef = useRef(-1);
+  const chatMessageIdRef = useRef(1);
 
   // Form State para CADASTRO OBRIGATÓRIO DE CLIENTE & RESERVA DE COTA
   const [clientForm, setClientForm] = useState({
     name: "",
     phone: "",
-    doc: "",      // CPF ou CNPJ do comprador
     email: "",
     city: "",     // Cidade / UF
     segment: "Imóveis",
@@ -148,27 +150,6 @@ export default function PortalDashboard({
     }
   };
 
-  // Calcular saudação baseada na hora do dia
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setGreeting("Bom dia");
-    else if (hour >= 12 && hour < 18) setGreeting("Boa tarde");
-    else setGreeting("Boa noite");
-  }, []);
-
-  // Inicializar primeira mensagem do Chat de IA
-  useEffect(() => {
-    const firstName = partnerName ? partnerName.split(" ")[0] : "Parceiro";
-    setMessages([
-      {
-        id: "welcome-1",
-        sender: "assistant",
-        text: `Olá, ${firstName}! Sou seu Copiloto Titanium AI. Estou aqui para tirar dúvidas técnicas sobre consórcios, prazos de faturamento, comissões no PIX e estratégias para seus clientes. Como posso te apoiar?`,
-        timestamp: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
-      },
-    ]);
-  }, [partnerName]);
-
   useEffect(() => {
     if (isAIChatOpen) {
       chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -212,19 +193,27 @@ export default function PortalDashboard({
       : "A definir";
 
     try {
-      // 1. Grava no banco de dados via API /api/leads
-      const response = await fetch("/api/leads", {
+      // Reserva e lead são gravados atomicamente quando uma cota foi selecionada.
+      const response = await fetch(
+        activeCarta ? `/api/colaboradores/cartas/${activeCarta.id}/reservar` : "/api/leads",
+        {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        body: JSON.stringify(activeCarta ? {
+          name: clientForm.name,
+          phone: clientForm.phone,
+          email: clientForm.email,
+          city: clientForm.city,
+          obs: clientForm.obs,
+        } : {
           name: clientForm.name,
           phone: clientForm.phone,
           email: clientForm.email,
           segment: clientForm.segment,
-          credit: String(activeCarta?.valor_credito || clientForm.credit || "0"),
-          plan: activeCarta ? `${activeCarta.administradora} (Entrada: ${formattedEntrada})` : "Cadastrado no Portal",
+          credit: String(clientForm.credit || "0"),
+          plan: "Cadastrado no Portal",
           ref: partnerRef,
-          origin: "Portal do Colaborador - Cadastro de Cliente & Reserva",
+          origin: "Portal do Colaborador - Cadastro de Cliente",
           lp: "portal",
           source_url: window.location.href,
         }),
@@ -237,8 +226,8 @@ export default function PortalDashboard({
       }
 
       // 2. Adiciona o cliente na lista local do CRM
-      const newClientObj: Lead = {
-        id: result.id || Math.random(),
+      const newClientObj: PortalLead = {
+        id: result.reserva?.lead_id || result.id || localClientIdRef.current--,
         name: clientForm.name,
         phone: clientForm.phone,
         email: clientForm.email,
@@ -249,6 +238,9 @@ export default function PortalDashboard({
       };
 
       setClients((prev) => [newClientObj, ...prev]);
+      if (activeCarta) {
+        setCartas((prev) => prev.filter((carta) => carta.id !== activeCarta.id));
+      }
       setClientSuccess("Cliente cadastrado com sucesso e blindado sob seu ID no CRM!");
 
       // 3. Constrói a mensagem profissional formatada para o WhatsApp da Mesa de Afiliados
@@ -259,7 +251,7 @@ export default function PortalDashboard({
 📋 DADOS DO CLIENTE ADQUIRENTE:
 • Nome: ${clientForm.name}
 • WhatsApp: ${clientForm.phone}
-${clientForm.doc ? `• CPF/CNPJ: ${clientForm.doc}\n` : ""}${clientForm.city ? `• Cidade/UF: ${clientForm.city}\n` : ""}${clientForm.email ? `• E-mail: ${clientForm.email}\n` : ""}
+${clientForm.city ? `• Cidade/UF: ${clientForm.city}\n` : ""}${clientForm.email ? `• E-mail: ${clientForm.email}\n` : ""}
 ${
   activeCarta
     ? `🎯 COTA SELECIONADA PARA O CLIENTE:
@@ -284,7 +276,6 @@ Por favor, registrar a blindagem deste cliente no meu REF ID e iniciar a valida�
         setClientForm({
           name: "",
           phone: "",
-          doc: "",
           email: "",
           city: "",
           segment: "Imóveis",
@@ -295,8 +286,8 @@ Por favor, registrar a blindagem deste cliente no meu REF ID e iniciar a valida�
         setSelectedCarta(null);
       }, 1000);
 
-    } catch (err: any) {
-      setClientError(err.message || "Erro de conexão com o servidor.");
+    } catch (err: unknown) {
+      setClientError(err instanceof Error ? err.message : "Erro de conexão com o servidor.");
     } finally {
       setClientLoading(false);
     }
@@ -314,7 +305,7 @@ Por favor, registrar a blindagem deste cliente no meu REF ID e iniciar a valida�
     if (!message.trim()) return;
 
     const userMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
+      id: `user-${chatMessageIdRef.current++}`,
       sender: "user",
       text: message,
       timestamp: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
@@ -347,7 +338,7 @@ Por favor, registrar a blindagem deste cliente no meu REF ID e iniciar a valida�
       }
 
       const assistantMsg: ChatMessage = {
-        id: `assist-${Date.now()}`,
+        id: `assist-${chatMessageIdRef.current++}`,
         sender: "assistant",
         text: replyText,
         timestamp: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
@@ -431,9 +422,10 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
 
   // Filters calculation
   const filteredCartas = cartas.filter((c) => {
-    const matchesSearch = c.administradora.toLowerCase().includes(cartasSearch.toLowerCase()) || 
-                          c.segmento.toLowerCase().includes(cartasSearch.toLowerCase());
-    const matchesSegment = selectedSegment === "Todos" || c.segmento.toLowerCase() === selectedSegment.toLowerCase();
+    const search = normalizarTexto(cartasSearch);
+    const matchesSearch = normalizarTexto(c.administradora).includes(search) ||
+                          normalizarTexto(c.segmento_original).includes(search);
+    const matchesSegment = selectedSegment === "todos" || c.segmento === selectedSegment;
     return matchesSearch && matchesSegment;
   });
 
@@ -775,17 +767,23 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
               </div>
 
               <div className="flex gap-1.5 flex-wrap">
-                {["Todos", "Imóveis", "Veículos", "Agro"].map((seg) => (
+                {[
+                  { key: "todos", label: "Todos" },
+                  { key: "imoveis", label: "Imóveis" },
+                  { key: "veiculos", label: "Veículos" },
+                  { key: "agro", label: "Agro" },
+                  { key: "outros", label: "Outros" },
+                ].map((seg) => (
                   <button
-                    key={seg}
-                    onClick={() => setSelectedSegment(seg)}
+                    key={seg.key}
+                    onClick={() => setSelectedSegment(seg.key)}
                     className={`px-3 py-1 rounded-xl text-[10px] font-bold transition-all cursor-pointer border ${
-                      selectedSegment === seg
+                      selectedSegment === seg.key
                         ? "bg-slate-900 text-white border-slate-900"
                         : "bg-slate-50 text-slate-600 border-slate-200/80 hover:bg-slate-100"
                     }`}
                   >
-                    {seg}
+                    {seg.label}
                   </button>
                 ))}
               </div>
@@ -835,7 +833,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                             ? "crm-tag-peach"
                             : "crm-tag-mint"
                         }`}>
-                          {carta.segmento}
+                          {rotuloSegmento(carta.segmento)}
                         </span>
                       </td>
 
@@ -850,6 +848,13 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                       </td>
                     </tr>
                   ))}
+                  {filteredCartas.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-3 py-10 text-center text-sm text-slate-500">
+                        Nenhuma cota encontrada para os filtros selecionados.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -986,8 +991,13 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
       )}
 
       {/* Pop-up Lateral / Floating Drawer */}
-      {isAIChatOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[400px] max-h-[560px] h-[80vh] rounded-3xl liquid-glass-modal shadow-2xl flex flex-col border border-white/95 overflow-hidden animate-popUp text-left">
+      <Dialog
+        open={isAIChatOpen}
+        onClose={() => setIsAIChatOpen(false)}
+        title="Copiloto Titanium AI"
+        description="Assistente consultivo de vendas."
+        panelClassName="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 w-[min(400px,calc(100vw-2rem))] max-h-[560px] h-[80vh] rounded-3xl liquid-glass-modal shadow-2xl flex flex-col border border-white/95 overflow-hidden animate-popUp text-left"
+      >
           
           <div className="p-4 bg-[#0C130F] text-white flex items-center justify-between border-b border-slate-800">
             <div className="flex items-center gap-2.5">
@@ -1081,15 +1091,18 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
               </svg>
             </button>
           </form>
-        </div>
-      )}
+      </Dialog>
 
       {/* ═══════════════════════════════════════════════════════
           MODAL DE SCRIPTS DE VENDAS HORMOZI
       ═══════════════════════════════════════════════════════ */}
-      {isScriptsOpen && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl max-h-[85vh] overflow-hidden shadow-2xl flex flex-col text-left">
+      <Dialog
+        open={isScriptsOpen}
+        onClose={() => setIsScriptsOpen(false)}
+        title="Scripts de Venda"
+        description="Scripts consultivos para atendimento por WhatsApp."
+        panelClassName="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl max-h-[85vh] overflow-hidden shadow-2xl flex flex-col text-left"
+      >
             <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-2xl bg-[#E8F5EE] border border-[#D1ECDD] flex items-center justify-center text-[#0A7B3E]">
@@ -1145,16 +1158,21 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 Fechar
               </button>
             </div>
-          </div>
-        </div>
-      )}
+      </Dialog>
 
       {/* ═══════════════════════════════════════════════════════
           MODAL DE CADASTRO OBRIGATÓRIO DE CLIENTE & RESERVA DE COTA
       ═══════════════════════════════════════════════════════ */}
-      {isNewClientOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-white border border-slate-200 rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-hidden shadow-2xl flex flex-col text-left">
+      <Dialog
+        open={isNewClientOpen}
+        onClose={() => {
+          setIsNewClientOpen(false);
+          setSelectedCarta(null);
+        }}
+        title="Cadastro de cliente e reserva"
+        description="Cadastre o cliente para reservar a cota selecionada."
+        panelClassName="bg-white border border-slate-200 rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-hidden shadow-2xl flex flex-col text-left"
+      >
             
             {/* Modal Header */}
             <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
@@ -1278,16 +1296,6 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                     />
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">CPF ou CNPJ do Cliente</label>
-                    <input
-                      type="text"
-                      placeholder="Ex: 123.456.789-00"
-                      value={clientForm.doc}
-                      onChange={(e) => setClientForm({ ...clientForm, doc: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:border-emerald-500 focus:bg-white focus:outline-none transition-colors text-slate-800"
-                    />
-                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1398,9 +1406,7 @@ Estruturamos operações sob medida para investidores de alto volume. Gostaria d
                 🔒 Ao clicar em Gravar, o lead é blindado sob seu ID #{partnerRef} e o payload oficial é formatado para a mesa.
               </p>
             </form>
-          </div>
-        </div>
-      )}
+      </Dialog>
     </div>
   );
 }

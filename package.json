@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/migrate.mjs && next build",
+    "build": "next build",
+    "build:with-migrations": "npm run db:migrate && next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "node --no-warnings --test --experimental-strip-types tests/*.test.mjs",
     "db:migrate": "node scripts/migrate.mjs",
     "sanitize-images": "python scripts/strip-metadata.py"
   },

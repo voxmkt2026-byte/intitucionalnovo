@@ -1,0 +1,38 @@
+:root {
+  --layer-base: 0;
+  --layer-sticky: 20;
+  --layer-navigation: 40;
+  --layer-popover: 60;
+  --layer-backdrop: 80;
+  --layer-modal: 90;
+  --layer-toast: 100;
+  --motion-fast: 140ms;
+  --motion-normal: 240ms;
+  --focus-ring: 0 0 0 3px rgba(21, 184, 92, 0.3);
+}
+
+body[data-overlay-open="true"] [data-site-navigation],
+body:has([data-site-overlay]) [data-site-navigation] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--green-vivid, #15b85c);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

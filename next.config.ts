@@ -2,6 +2,20 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   trailingSlash: true,
+  async redirects() {
+    return [
+      {
+        source: "/colaboradores",
+        destination: "/representante/",
+        permanent: true,
+      },
+      {
+        source: "/colaboradores/:path*",
+        destination: "/representante/:path*/",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

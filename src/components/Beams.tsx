@@ -1,7 +1,7 @@
-/* eslint-disable react/no-unknown-property */
+/* eslint-disable @typescript-eslint/no-explicit-any -- shader uniforms are assembled dynamically from Three.js ShaderLib */
 "use client";
 
-import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo } from 'react';
+import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
@@ -60,8 +60,8 @@ function extendMaterial(BaseMaterial: any, cfg: any) {
   return mat;
 }
 
-const CanvasWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Canvas dpr={[1, 2]} frameloop="always" className="beams-container">
+const CanvasWrapper = ({ children, active }: { children: React.ReactNode; active: boolean }) => (
+  <Canvas dpr={[1, 1.5]} frameloop={active ? 'always' : 'demand'} className="beams-canvas">
     {children}
   </Canvas>
 );
@@ -162,6 +162,34 @@ const Beams = ({
   rotation = 0
 }: BeamsProps) => {
   const meshRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [pageVisible, setPageVisible] = useState(() =>
+    typeof document === 'undefined' ? true : document.visibilityState === 'visible'
+  );
+  const [reduceMotion, setReduceMotion] = useState(() =>
+    typeof window === 'undefined' ? false : window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+
+  useEffect(() => {
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleMotionChange = (event: MediaQueryListEvent) => setReduceMotion(event.matches);
+    const handleVisibilityChange = () => setPageVisible(document.visibilityState === 'visible');
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: '120px' }
+    );
+
+    motionQuery.addEventListener('change', handleMotionChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    if (containerRef.current) observer.observe(containerRef.current);
+
+    return () => {
+      motionQuery.removeEventListener('change', handleMotionChange);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      observer.disconnect();
+    };
+  }, []);
   const beamMaterial = useMemo(
     () =>
       extendMaterial(THREE.MeshStandardMaterial, {
@@ -219,16 +247,24 @@ const Beams = ({
     [speed, noiseIntensity, scale]
   );
 
+  const active = isVisible && pageVisible;
+
   return (
-    <CanvasWrapper>
-      <group rotation={[0, 0, degToRad(rotation)]}>
-        <PlaneNoise ref={meshRef} material={beamMaterial} count={beamNumber} width={beamWidth} height={beamHeight} />
-        <DirLight color={lightColor} position={[0, 3, 10]} />
-      </group>
-      <ambientLight intensity={1} />
-      <color attach="background" args={['#0b0f19']} />
-      <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={30} />
-    </CanvasWrapper>
+    <div ref={containerRef} className="beams-container" aria-hidden="true">
+      {reduceMotion ? (
+        <div className="beams-static" />
+      ) : (
+        <CanvasWrapper active={active}>
+          <group rotation={[0, 0, degToRad(rotation)]}>
+            <PlaneNoise ref={meshRef} material={beamMaterial} count={beamNumber} width={beamWidth} height={beamHeight} />
+            <DirLight color={lightColor} position={[0, 3, 10]} />
+          </group>
+          <ambientLight intensity={1} />
+          <color attach="background" args={['#0b0f19']} />
+          <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={30} />
+        </CanvasWrapper>
+      )}
+    </div>
   );
 };
 

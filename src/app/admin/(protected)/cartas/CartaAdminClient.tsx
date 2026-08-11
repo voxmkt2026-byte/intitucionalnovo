@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import AdminCartaForm from "@/components/AdminCartaForm";
 import { parseSpreadsheetToCartas, exportCartasToCSV, formatVencimentoDate, ParsedCartaRow } from "@/lib/excel-parser";
 import AdministradoraLogo from "@/components/AdministradoraLogo";
+import Dialog from "@/design-system/primitives/Dialog";
 
 export interface Carta {
   id: number;
@@ -81,6 +82,7 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- admin data is loaded after session validation
     fetchCartas();
   }, []);
 
@@ -634,12 +636,13 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
       </div>
 
       {/* ── POP-UP EXCLUSIVO DE FILTROS DO ADMIN (MODAL) ── */}
-      {showFilterModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn"
-          onClick={(e) => e.target === e.currentTarget && setShowFilterModal(false)}
-        >
-          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-hidden shadow-2xl flex flex-col my-auto text-left">
+      <Dialog
+        open={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        title="Filtros avançados"
+        description="Refine a listagem por administradora, valores e status."
+        panelClassName="bg-white border border-slate-200 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-hidden shadow-2xl flex flex-col text-left"
+      >
             
             {/* Modal Header */}
             <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
@@ -815,9 +818,7 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
                 Aplicar Filtros ({cartasFiltradas.length})
               </button>
             </div>
-          </div>
-        </div>
-      )}
+      </Dialog>
 
       {/* Modal Formulário Individual */}
       {showForm && (
@@ -829,9 +830,12 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
       )}
 
       {/* Modal de Prévia de Upload de Planilha */}
-      {showUploadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl max-h-[85vh] overflow-y-auto space-y-4">
+      <Dialog
+        open={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        title="Confirmar importação de planilha"
+        panelClassName="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl max-h-[85vh] overflow-y-auto space-y-4"
+      >
             <h2 className="text-lg font-bold text-slate-900">Confirmar Importação de Planilha</h2>
             <p className="text-xs text-slate-500">
               Encontramos <strong>{parsedRows.length} cartas</strong> na planilha.
@@ -922,14 +926,16 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
                 {uploading ? "Importando..." : "Confirmar e Publicar Planilha"}
               </button>
             </div>
-          </div>
-        </div>
-      )}
+      </Dialog>
 
       {/* Modal de Confirmação para Excluir Todas as Cartas */}
-      {showDeleteAllModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl text-center space-y-4">
+      <Dialog
+        open={showDeleteAllModal}
+        onClose={() => setShowDeleteAllModal(false)}
+        title="Excluir todas as cartas"
+        description="Confirmação de exclusão permanente do estoque."
+        panelClassName="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl text-center space-y-4"
+      >
             <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polyline points="3 6 5 6 21 6" />
@@ -956,9 +962,7 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
                 {uploading ? "Excluindo..." : "Sim, Excluir Todas"}
               </button>
             </div>
-          </div>
-        </div>
-      )}
+      </Dialog>
     </main>
   );
 }

@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     const affiliates = await sql`
-      SELECT id, nome, email, status_onboarding, codigo_ref, senha_hash
+      SELECT id, nome, email, status_onboarding, codigo_ref, senha_hash, sessao_versao
       FROM afiliados
       WHERE LOWER(email) = ${email}
       LIMIT 1
@@ -75,6 +75,7 @@ export async function POST(request: Request) {
       email: affiliate.email,
       nome: affiliate.nome,
       codigo_ref: affiliate.codigo_ref,
+      sessao_versao: Number(affiliate.sessao_versao ?? 0),
     });
     const response = NextResponse.json(
       { ok: true, nome: affiliate.nome, codigo_ref: affiliate.codigo_ref },

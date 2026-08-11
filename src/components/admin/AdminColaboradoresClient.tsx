@@ -3,7 +3,7 @@
 import { useState } from "react";
 import * as XLSX from "xlsx";
 
-interface Partner {
+export interface Partner {
   id: number;
   nome: string;
   documento_cpf_cnpj: string;
@@ -27,7 +27,7 @@ interface Partner {
   criado_em: string;
 }
 
-interface Planilha {
+export interface Planilha {
   id: number;
   filename: string;
   linhas_processadas: number;
@@ -36,7 +36,7 @@ interface Planilha {
   criado_em: string;
 }
 
-interface Comissao {
+export interface Comissao {
   id: number;
   cliente_nome: string;
   valor_credito: number;
@@ -53,20 +53,38 @@ interface AdminColaboradoresClientProps {
   initialComissoes: Comissao[];
 }
 
+type ParsedRow = {
+  cliente_nome: string | number;
+  valor_credito: string | number;
+  comissao_valor: string | number;
+  codigo_ref_ou_doc: string | number;
+  data_fechamento: string | number;
+};
+
+function firstCell(
+  row: Record<string, unknown>,
+  keys: string[],
+  fallback: string | number
+): string | number {
+  for (const key of keys) {
+    const value = row[key];
+    if (typeof value === "string" || typeof value === "number") return value;
+  }
+  return fallback;
+}
+
 export default function AdminColaboradoresClient({
   initialPartners,
-  initialPlanilhas,
   initialComissoes,
 }: AdminColaboradoresClientProps) {
   const [partners, setPartners] = useState<Partner[]>(initialPartners);
-  const [planilhas, setPlanilhas] = useState<Planilha[]>(initialPlanilhas);
-  const [comissoes, setComissoes] = useState<Comissao[]>(initialComissoes);
+  const comissoes = initialComissoes;
 
   const [activeTab, setActiveTab] = useState<"candidatos" | "ativos" | "importar" | "extrato">("candidatos");
   
   // Sheet parsing states
   const [filename, setFilename] = useState("");
-  const [parsedRows, setParsedRows] = useState<any[]>([]);
+  const [parsedRows, setParsedRows] = useState<ParsedRow[]>([]);
   const [importStatus, setImportStatus] = useState({ type: "", text: "" });
   const [importLoading, setImportLoading] = useState(false);
 
@@ -84,8 +102,8 @@ export default function AdminColaboradoresClient({
       setPartners((prev) =>
         prev.map((p) => (p.id === id ? { ...p, status_onboarding: newStatus } : p))
       );
-    } catch (e: any) {
-      alert(e.message);
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Falha ao atualizar o colaborador.");
     }
   };
 
@@ -104,19 +122,19 @@ export default function AdminColaboradoresClient({
         const wb = XLSX.read(bstr, { type: "binary" });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws) as any[];
+        const data = XLSX.utils.sheet_to_json<Record<string, unknown>>(ws);
 
         if (data.length === 0) {
           setImportStatus({ type: "error", text: "A planilha está vazia." });
           return;
         }
 
-        const mapped = data.map((row: any) => {
-          const cliente_nome = row["nome"] || row["cliente"] || row["Cliente"] || row["Nome"] || "";
-          const valor_credito = row["credito"] || row["valor"] || row["valor_credito"] || row["Valor"] || 0;
-          const comissao_valor = row["comissão"] || row["comissao"] || row["comissao_valor"] || row["Comissao"] || 0;
-          const codigo_ref_ou_doc = row["codigo"] || row["ref"] || row["indicador"] || row["cpf"] || row["cnpj"] || row["Parceiro"] || "";
-          const data_fechamento = row["data"] || row["data_fechamento"] || row["Data"] || "";
+        const mapped = data.map((row) => {
+          const cliente_nome = firstCell(row, ["nome", "cliente", "Cliente", "Nome"], "");
+          const valor_credito = firstCell(row, ["credito", "valor", "valor_credito", "Valor"], 0);
+          const comissao_valor = firstCell(row, ["comissão", "comissao", "comissao_valor", "Comissao"], 0);
+          const codigo_ref_ou_doc = firstCell(row, ["codigo", "ref", "indicador", "cpf", "cnpj", "Parceiro"], "");
+          const data_fechamento = firstCell(row, ["data", "data_fechamento", "Data"], "");
 
           return { cliente_nome, valor_credito, comissao_valor, codigo_ref_ou_doc, data_fechamento };
         });
@@ -126,8 +144,9 @@ export default function AdminColaboradoresClient({
           type: "info",
           text: `Planilha lida com sucesso! Encontradas ${mapped.length} comissões prontas para importação.`,
         });
-      } catch (err: any) {
-        setImportStatus({ type: "error", text: `Falha ao ler o arquivo: ${err.message}` });
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "arquivo inválido";
+        setImportStatus({ type: "error", text: `Falha ao ler o arquivo: ${message}` });
       }
     };
     reader.readAsBinaryString(file);
@@ -157,8 +176,11 @@ export default function AdminColaboradoresClient({
       if (data.success) {
         window.location.reload();
       }
-    } catch (e: any) {
-      setImportStatus({ type: "error", text: e.message });
+    } catch (error: unknown) {
+      setImportStatus({
+        type: "error",
+        text: error instanceof Error ? error.message : "Falha ao importar a planilha.",
+      });
     } finally {
       setImportLoading(false);
     }
@@ -194,6 +216,8 @@ export default function AdminColaboradoresClient({
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Download de arquivo: âncora é intencional; não é navegação de página. */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a
             href="/api/admin/colaboradores/importar-planilha"
             className="crm-pill bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 cursor-pointer shadow-2xs"

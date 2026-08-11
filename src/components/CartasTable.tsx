@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import CartaFilters, { FilterState } from "@/components/CartaFilters";
 import { formatVencimentoDate } from "@/lib/excel-parser";
 import AdministradoraLogo from "@/components/AdministradoraLogo";
+import Dialog from "@/design-system/primitives/Dialog";
 
 export interface Carta {
   id: number;
@@ -110,13 +111,13 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
   const totalRestante = (carta.parcelas || 0) * (carta.valor_parcela || 0);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-slate-900/60 backdrop-blur-md animate-fadeIn"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+    <Dialog
+      open
+      onClose={onClose}
+      title={`Carta contemplada de ${formatBRL(carta.valor_credito)}`}
+      description="Detalhes da carta e contato com um especialista."
+      panelClassName="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl flex flex-col liquid-glass-modal text-left animate-popUp"
     >
-      <div
-        className="w-full max-w-md rounded-3xl overflow-hidden shadow-2xl flex flex-col my-8 liquid-glass-modal text-left animate-popUp"
-      >
         {/* Top Header Card */}
         <div className="px-6 py-5 relative flex items-center justify-between border-b border-slate-800 bg-slate-900 text-white">
           <div>
@@ -223,8 +224,7 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
             </button>
           </div>
         </div>
-      </div>
-    </div>
+    </Dialog>
   );
 }
 
@@ -373,8 +373,8 @@ export default function CartasTable() {
   const [meta, setMeta] = useState<Meta>({ total: 0, page: 1, pages: 1, limit: 20 });
   const [filters, setFilters] = useState<Filters>({ segmentos: [], administradoras: [] });
   const [loading, setLoading] = useState(true);
-  const [sort, setSort] = useState<SortKey>("valor_credito");
-  const [dir, setDir] = useState<"asc" | "desc">("asc");
+  const [sort] = useState<SortKey>("valor_credito");
+  const [dir] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Carta | null>(null);
   const [active, setActive] = useState<FilterState>({ segmento: "", administradora: "", valorMin: "", valorMax: "" });
@@ -418,7 +418,10 @@ export default function CartasTable() {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial client-side API hydration
     fetchCartas();
+    // The remaining requests are explicit in filter and pagination handlers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleFilter(f: FilterState) {

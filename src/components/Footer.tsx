@@ -9,6 +9,7 @@ const navLinks = [
   { label: "Segmentos", href: "/#segmentos" },
   { label: "Simulador", href: "/#simulador" },
   { label: "Sobre Nós", href: "/#sobre" },
+  { label: "Representante", href: "/representante" },
   { label: "Trajetória", href: "/trajetoria" },
   { label: "Missão & Valores", href: "/missao-visao-valores" },
 ];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Dialog from "@/design-system/primitives/Dialog";
 
 interface Carta {
   id?: number;
@@ -65,7 +66,7 @@ export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFor
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function update(field: string, val: any) {
+  function update<Field extends keyof typeof form>(field: Field, val: (typeof form)[Field]) {
     setForm((prev) => ({ ...prev, [field]: val }));
   }
 
@@ -114,8 +115,13 @@ export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFor
     "w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-xs text-gray-900 focus:bg-white focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <Dialog
+      open
+      onClose={onClose}
+      title={isEdit ? "Editar carta" : "Criar carta"}
+      description="Formulário de gestão do estoque de cartas."
+      panelClassName="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl"
+    >
         {/* Top Header */}
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
           <div>
@@ -322,7 +328,6 @@ export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFor
             </button>
           </div>
         </form>
-      </div>
-    </div>
+    </Dialog>
   );
 }

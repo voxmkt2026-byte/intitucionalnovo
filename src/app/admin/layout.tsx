@@ -1,5 +1,4 @@
 import AdminThemeProvider from "@/components/admin/AdminThemeProvider";
-import AdminNavbar from "@/components/admin/AdminNavbar";
 
 // ─── Design tokens — light (default) and dark ────────────────────────────────
 const ADMIN_CSS = `
@@ -71,8 +70,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Inject theme CSS variables */}
       <style dangerouslySetInnerHTML={{ __html: ADMIN_CSS }} />
       <AdminThemeProvider>
-        {/* Shared navbar across ALL admin pages */}
-        <AdminNavbar />
         {children}
       </AdminThemeProvider>
     </>

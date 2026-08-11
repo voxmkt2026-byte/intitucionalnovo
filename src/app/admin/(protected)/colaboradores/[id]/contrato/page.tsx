@@ -10,6 +10,37 @@ export const metadata = {
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
 
+type ColaboradorContrato = {
+  aceita_receber_contatos: boolean;
+  agencia: string | null;
+  assinado_em: string | Date | null;
+  banco: string | null;
+  chave_pix: string | null;
+  cnpj: string | null;
+  codigo_ref: string;
+  conta: string | null;
+  cpf: string | null;
+  data_nascimento: string | null;
+  documento_cpf_cnpj: string | null;
+  email: string;
+  endereco_completo: string | null;
+  ip_assinatura: string | null;
+  nome: string;
+  operacao: string | null;
+  principal_produto: string | null;
+  principal_publico: string | null;
+  quantidade_colaboradores: string | null;
+  quantidade_indicacoes: string | null;
+  quer_atuar_como: string | null;
+  redes_sociais: string | null;
+  rg: string | null;
+  telefone: string;
+  tipo_conta: string | null;
+  titular_nome: string | null;
+  trabalha_carta_contemplada: string | null;
+  vende_consorcio: boolean;
+};
+
 async function getColaboradorData(id: number) {
   if (!DATABASE_URL) return null;
   const sql = neon(DATABASE_URL);
@@ -26,7 +57,7 @@ async function getColaboradorData(id: number) {
       WHERE id = ${id}
       LIMIT 1
     `;
-    const partner: any = result[0];
+    const partner = result[0] as unknown as ColaboradorContrato | undefined;
     if (!partner) return null;
 
     return {
@@ -37,7 +68,7 @@ async function getColaboradorData(id: number) {
       agencia: decryptField(partner.agencia),
       conta: decryptField(partner.conta),
       chave_pix: decryptField(partner.chave_pix),
-    } as any;
+    };
   } catch (err) {
     console.error("Erro ao carregar colaborador para contrato:", err);
     return null;

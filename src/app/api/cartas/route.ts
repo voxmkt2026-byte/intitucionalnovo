@@ -1,117 +1,66 @@
 import { NextResponse } from "next/server";
-import { neon } from "@neondatabase/serverless";
+import { listarCartasDisponiveis } from "@/features/cartas/data/repository";
+import { normalizarSegmento, normalizarTexto } from "@/features/cartas/domain/segmento";
+import type { CartaDTO } from "@/features/cartas/domain/types";
 
-const DATABASE_URL = process.env.DATABASE_URL || "";
+const PAGE_SIZE = 20;
 
-async function getDb() {
-  if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
-  return neon(DATABASE_URL);
+type SortField = "valor_credito" | "entrada" | "parcelas" | "valor_parcela" | "administradora";
+
+function numberParam(params: URLSearchParams, key: string): number {
+  const value = Number(params.get(key));
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+function compare(field: SortField, direction: "asc" | "desc") {
+  const multiplier = direction === "desc" ? -1 : 1;
+  return (left: CartaDTO, right: CartaDTO) => {
+    const a = left[field] ?? 0;
+    const b = right[field] ?? 0;
+    if (typeof a === "string" && typeof b === "string") return a.localeCompare(b, "pt-BR") * multiplier;
+    return (Number(a) - Number(b)) * multiplier;
+  };
 }
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const segmento       = searchParams.get("segmento")       || "";
-    const administradora = searchParams.get("administradora") || "";
-    const valorMin       = parseFloat(searchParams.get("valor_min") || "0")  || 0;
-    const valorMax       = parseFloat(searchParams.get("valor_max") || "0")  || 0;
-    const sortParam      = searchParams.get("sort") || "valor_credito";
-    const dirParam       = searchParams.get("dir")  === "desc" ? "DESC" : "ASC";
-    const page           = Math.max(1, parseInt(searchParams.get("page") || "1"));
-    const limit          = 20;
-    const offset         = (page - 1) * limit;
+    const params = new URL(request.url).searchParams;
+    const segmento = params.get("segmento") || "";
+    const administradora = normalizarTexto(params.get("administradora"));
+    const valorMin = numberParam(params, "valor_min");
+    const valorMax = numberParam(params, "valor_max");
+    const entradaMin = numberParam(params, "entrada_min");
+    const entradaMax = numberParam(params, "entrada_max");
+    const page = Math.max(1, Number.parseInt(params.get("page") || "1", 10) || 1);
+    const requestedSort = params.get("sort") || "valor_credito";
+    const allowedSort: SortField[] = ["valor_credito", "entrada", "parcelas", "valor_parcela", "administradora"];
+    const sort = allowedSort.includes(requestedSort as SortField) ? requestedSort as SortField : "valor_credito";
+    const direction = params.get("dir") === "desc" ? "desc" : "asc";
 
-    const allowedSort = ["valor_credito","entrada","parcelas","valor_parcela","administradora","criado_em"];
-    const safeSort = allowedSort.includes(sortParam) ? sortParam : "valor_credito";
+    const all = await listarCartasDisponiveis();
+    const filtered = all.filter((carta) => {
+      if (segmento && carta.segmento !== normalizarSegmento(segmento)) return false;
+      if (administradora && normalizarTexto(carta.administradora) !== administradora) return false;
+      if (valorMin && carta.valor_credito < valorMin) return false;
+      if (valorMax && carta.valor_credito > valorMax) return false;
+      if (entradaMin && (carta.entrada ?? 0) < entradaMin) return false;
+      if (entradaMax && (carta.entrada ?? 0) > entradaMax) return false;
+      return true;
+    }).sort(compare(sort, direction));
 
-    const sql = await getDb();
-
-    // 1. Construir query dinâmica com parâmetros posicionais seguros
-    const params: any[] = [];
-    let queryFilters = "WHERE disponivel = true";
-
-    if (segmento) {
-      params.push(segmento);
-      queryFilters += ` AND segmento = $${params.length}`;
-    }
-
-    if (administradora) {
-      params.push(administradora);
-      queryFilters += ` AND administradora = $${params.length}`;
-    }
-
-    const entradaMin     = parseFloat(searchParams.get("entrada_min") || "0") || 0;
-    const entradaMax     = parseFloat(searchParams.get("entrada_max") || "0") || 0;
-
-    if (valorMin > 0) {
-      params.push(valorMin);
-      queryFilters += ` AND valor_credito >= $${params.length}`;
-    }
-
-    if (valorMax > 0) {
-      params.push(valorMax);
-      queryFilters += ` AND valor_credito <= $${params.length}`;
-    }
-
-    if (entradaMin > 0) {
-      params.push(entradaMin);
-      queryFilters += ` AND entrada >= $${params.length}`;
-    }
-
-    if (entradaMax > 0) {
-      params.push(entradaMax);
-      queryFilters += ` AND entrada <= $${params.length}`;
-    }
-
-    // 2. Query de contagem
-    const countQuery = `SELECT COUNT(*)::int as total FROM cartas_contempladas ${queryFilters}`;
-    const countRows = await runQuery(sql, countQuery, params);
-    const total = Number(countRows[0]?.total ?? 0);
-
-    // 3. Adicionar ordenação whitelisted (100% segura contra SQLi)
-    // E paginação (adicionando limit/offset como parâmetros)
-    params.push(limit);
-    const limitPlaceholder = `$${params.length}`;
-    params.push(offset);
-    const offsetPlaceholder = `$${params.length}`;
-
-    const selectQuery = `
-      SELECT id, segmento, administradora, valor_credito, entrada, parcelas, valor_parcela, proximo_vencimento, disponivel
-      FROM cartas_contempladas
-      ${queryFilters}
-      ORDER BY ${safeSort} ${dirParam}
-      LIMIT ${limitPlaceholder} OFFSET ${offsetPlaceholder}
-    `;
-
-    const rows = await runQuery(sql, selectQuery, params);
-
-    // Opções de filtro disponíveis
-    const segmentos = await sql`SELECT DISTINCT segmento FROM cartas_contempladas WHERE disponivel = true ORDER BY segmento`;
-    const admins    = await sql`SELECT DISTINCT administradora FROM cartas_contempladas WHERE disponivel = true ORDER BY administradora`;
+    const total = filtered.length;
+    const offset = (page - 1) * PAGE_SIZE;
+    const data = filtered.slice(offset, offset + PAGE_SIZE);
+    const segmentos = Array.from(new Set(all.map((carta) => carta.segmento))).sort();
+    const administradoras = Array.from(new Set(all.map((carta) => carta.administradora))).sort((a, b) => a.localeCompare(b, "pt-BR"));
 
     return NextResponse.json({
-      data: rows,
-      meta: { total, page, limit, pages: Math.ceil(total / limit) },
-      filters: {
-        segmentos:       segmentos.map((r) => r.segmento),
-        administradoras: admins.map((r) => r.administradora),
-      },
+      data,
+      meta: { total, page, limit: PAGE_SIZE, pages: Math.max(1, Math.ceil(total / PAGE_SIZE)) },
+      filters: { segmentos, administradoras },
     });
-  } catch (err) {
-    console.error("[/api/cartas] erro:", err);
+  } catch (error) {
+    console.error("[/api/cartas] erro:", error);
     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
-}
-
-// Auxiliar para executar queries dinâmicas de forma segura com template literals do Neon
-async function runQuery(sql: any, queryText: string, params: any[]) {
-  if (params.length === 0) {
-    const arr = [queryText] as any;
-    arr.raw = [queryText];
-    return await sql(arr as TemplateStringsArray);
-  }
-  const parts = queryText.split(/\$\d+/);
-  const arr = parts as any;
-  arr.raw = parts;
-  return await sql(arr as TemplateStringsArray, ...params);
 }

@@ -1,0 +1,8 @@
+.venv/
+whatsapp-profile/
+input/*
+!input/COLOQUE_A_PLANILHA_AQUI.txt
+output/*
+!output/.gitkeep
+__pycache__/
+*.pyc

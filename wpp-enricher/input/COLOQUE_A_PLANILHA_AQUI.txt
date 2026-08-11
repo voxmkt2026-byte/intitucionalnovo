@@ -1,0 +1,3 @@
+Coloque nesta pasta um arquivo .xlsx, .xls ou .csv com uma coluna de telefone/WhatsApp.
+
+Depois, volte uma pasta e execute INICIAR.bat.

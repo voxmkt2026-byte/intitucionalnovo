@@ -36,9 +36,9 @@ export default function PortalLogin() {
     <div className="max-w-md w-full bg-[#0b0f19]/90 border border-slate-800 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-2xl relative z-10 font-jakarta">
       <div className="text-center space-y-2 mb-6">
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#15B85C]/10 border border-[#15B85C]/20 text-[#15B85C] text-[10px] font-bold tracking-wider uppercase">
-          Área do Parceiro
+          Área do Representante
         </span>
-        <h2 className="text-2xl font-bold text-white tracking-tight">Portal do Colaborador</h2>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Portal do Representante</h2>
         <p className="text-slate-400 font-light text-xs leading-relaxed">
           Acesse seu painel com e-mail e senha para acompanhar seus clientes, indicações e comissões.
         </p>
@@ -60,7 +60,7 @@ export default function PortalLogin() {
             onChange={(event) => setEmail(event.target.value)}
             required
             autoComplete="email"
-            placeholder="Ex: consultor@empresa.com"
+            placeholder="Ex: representante@empresa.com"
             className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-xs focus:border-[#15B85C] focus:ring-2 focus:ring-[#15B85C]/20 focus:outline-none transition-all text-white placeholder:text-slate-600"
           />
         </div>
@@ -68,7 +68,7 @@ export default function PortalLogin() {
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <label htmlFor="portal-senha" className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">Sua senha</label>
-            <Link href="/colaboradores/esqueci-senha" className="text-[11px] font-semibold text-[#15B85C] hover:underline">
+            <Link href="/representante/esqueci-senha" className="text-[11px] font-semibold text-[#15B85C] hover:underline">
               Esqueci minha senha
             </Link>
           </div>
@@ -108,8 +108,8 @@ export default function PortalLogin() {
 
       <div className="mt-6 text-center pt-4 border-t border-slate-800/80">
         <p className="text-xs text-slate-400 font-light">
-          Ainda não é parceiro Titanium?{" "}
-          <Link href="/colaboradores#cadastro" className="text-[#15B85C] hover:underline font-semibold">
+          Ainda não é representante Titanium?{" "}
+          <Link href="/representante#cadastro" className="text-[#15B85C] hover:underline font-semibold">
             Cadastre-se aqui
           </Link>
         </p>

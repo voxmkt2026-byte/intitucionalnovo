@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
-  const isDarkHeroPage = pathname === "/" || pathname === "/colaboradores";
+  const isDarkHeroPage = pathname === "/" || pathname === "/representante" || pathname === "/representante/" || pathname === "/colaboradores";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,17 +20,15 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      data-site-navigation
+      className={`fixed top-0 left-0 right-0 transition-all duration-300 ${
         scrolled
           ? "py-3 px-4"
           : "py-5 px-4 sm:px-6"
       }`}
+      style={{ zIndex: "var(--layer-navigation)" }}
     >
       <div
         className={`max-w-[1160px] mx-auto rounded-full transition-all duration-300 px-6 py-2.5 flex items-center justify-between ${
@@ -42,7 +40,7 @@ export default function Navbar() {
         }`}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 z-50">
+        <Link href="/" className="flex items-center gap-2 z-10">
           <Image
             src={scrolled || !isDarkHeroPage ? "/img/logo-titanium-dark.png" : "/img/logo-titanium-white.png"}
             alt="Titanium Consultoria"
@@ -65,7 +63,7 @@ export default function Navbar() {
             { label: "Sobre", href: "/#sobre" },
             { label: "Simulação", href: "/#simulador" },
             { label: "Contato", href: "/#contato" },
-            { label: "Parceiros", href: "/colaboradores" },
+            { label: "Representante", href: "/representante" },
           ].map((item) => (
             <Link
               key={item.label}
@@ -97,7 +95,7 @@ export default function Navbar() {
           onClick={() => setIsOpen(!isOpen)}
           aria-expanded={isOpen}
           aria-label="Menu Principal"
-          className={`block md:hidden focus:outline-none p-2 z-50 cursor-pointer ${
+          className={`block md:hidden focus:outline-none p-2 z-10 cursor-pointer ${
             scrolled || !isDarkHeroPage ? "text-slate-800" : "text-white"
           }`}
         >
@@ -110,7 +108,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Overlay */}
         <div
-          className={`fixed inset-0 bg-slate-900/95 backdrop-blur-2xl z-40 flex flex-col justify-center items-center gap-6 transition-all duration-300 md:hidden ${
+          className={`fixed inset-0 bg-slate-900/95 backdrop-blur-2xl z-[1] flex flex-col justify-center items-center gap-6 transition-all duration-300 md:hidden ${
             isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
           }`}
         >
@@ -121,33 +119,33 @@ export default function Navbar() {
           >
             Início
           </Link>
-          <a
+          <Link
             href="/#sobre"
             onClick={() => setIsOpen(false)}
             className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
             Sobre
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#simulador"
             onClick={() => setIsOpen(false)}
             className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
             Simulação
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#contato"
             onClick={() => setIsOpen(false)}
             className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
             Contato
-          </a>
+          </Link>
           <Link
-            href="/colaboradores"
+            href="/representante"
             onClick={() => setIsOpen(false)}
             className="text-base font-bold tracking-widest text-white hover:text-emerald-400 transition-colors uppercase"
           >
-            Parceiros
+            Representante
           </Link>
           <Link
             href="/cartas-contempladas"

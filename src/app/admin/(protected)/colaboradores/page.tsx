@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { verifyAdminSession } from "@/lib/admin-auth";
 import { neon } from "@neondatabase/serverless";
 import AdminColaboradoresClient from "@/components/admin/AdminColaboradoresClient";
+import type { Comissao, Partner, Planilha } from "@/components/admin/AdminColaboradoresClient";
 
 export const metadata = {
   title: "Gestão de Colaboradores | Titanium Admin",
@@ -88,9 +89,9 @@ export default async function AdminColaboradoresPage() {
       </div>
 
       <AdminColaboradoresClient
-        initialPartners={data.partners as any}
-        initialPlanilhas={data.planilhas as any}
-        initialComissoes={data.comissoes as any}
+        initialPartners={data.partners as unknown as Partner[]}
+        initialPlanilhas={data.planilhas as unknown as Planilha[]}
+        initialComissoes={data.comissoes as unknown as Comissao[]}
       />
     </div>
   );

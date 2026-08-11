@@ -1,6 +1,15 @@
 import { cookies } from "next/headers";
-import { jwtVerify, SignJWT } from "jose";
+import { jwtVerify, SignJWT, type JWTPayload } from "jose";
 import type { NextRequest } from "next/server";
+import { neon } from "@neondatabase/serverless";
+
+interface ColaboradorSession extends JWTPayload {
+  id: string;
+  email: string;
+  nome: string;
+  codigo_ref: string;
+  sessao_versao: number;
+}
 
 const getSecret = () => {
   const secret = process.env.JWT_SECRET;
@@ -17,7 +26,7 @@ const JWT_OPTIONS = {
 };
 
 /** Gera o token JWT para sessões de colaboradores */
-export async function signColaboradorToken(payload: { id: string; email: string; nome: string; codigo_ref: string }): Promise<string> {
+export async function signColaboradorToken(payload: ColaboradorSession): Promise<string> {
   const secret = getSecret();
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
@@ -29,7 +38,27 @@ export async function signColaboradorToken(payload: { id: string; email: string;
 }
 
 /** Para Server Components e Server Actions */
-export async function verifyColaboradorSession(): Promise<{ id: string; email: string; nome: string; codigo_ref: string } | null> {
+async function validateSessionVersion(payload: ColaboradorSession): Promise<ColaboradorSession | null> {
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl || !payload.id) return null;
+  const sql = neon(databaseUrl);
+  const rows = await sql`
+    SELECT sessao_versao, email, nome, codigo_ref, status_onboarding
+    FROM afiliados WHERE id = ${Number(payload.id)} LIMIT 1
+  `;
+  const affiliate = rows[0];
+  if (!affiliate || ["Pendente", "Bloqueado"].includes(String(affiliate.status_onboarding))) return null;
+  if (Number(affiliate.sessao_versao ?? 0) !== Number(payload.sessao_versao ?? 0)) return null;
+  return {
+    id: payload.id,
+    email: String(affiliate.email),
+    nome: String(affiliate.nome),
+    codigo_ref: String(affiliate.codigo_ref),
+    sessao_versao: Number(affiliate.sessao_versao ?? 0),
+  };
+}
+
+export async function verifyColaboradorSession(): Promise<ColaboradorSession | null> {
   try {
     const store = await cookies();
     // Suporta ambos os cookies para não deslogar usuários antigos imediatamente
@@ -39,14 +68,14 @@ export async function verifyColaboradorSession(): Promise<{ id: string; email: s
       // Fallback para audience antiga de afiliados
       return jwtVerify(token, getSecret(), { ...JWT_OPTIONS, audience: "titanium-afiliado" });
     });
-    return payload as { id: string; email: string; nome: string; codigo_ref: string };
+    return validateSessionVersion(payload as unknown as ColaboradorSession);
   } catch {
     return null;
   }
 }
 
 /** Para API Route Handlers e Proxy (lê do request) */
-export async function verifyColaboradorRequest(req: NextRequest | Request): Promise<{ id: string; email: string; nome: string; codigo_ref: string } | null> {
+export async function verifyColaboradorRequest(req: NextRequest | Request): Promise<ColaboradorSession | null> {
   try {
     const cookie = (req as NextRequest).cookies?.get?.("colaborador_token")?.value
       ?? (req as NextRequest).cookies?.get?.("afiliado_token")?.value
@@ -57,7 +86,7 @@ export async function verifyColaboradorRequest(req: NextRequest | Request): Prom
       // Fallback para audience antiga de afiliados
       return jwtVerify(cookie, getSecret(), { ...JWT_OPTIONS, audience: "titanium-afiliado" });
     });
-    return payload as { id: string; email: string; nome: string; codigo_ref: string };
+    return validateSessionVersion(payload as unknown as ColaboradorSession);
   } catch {
     return null;
   }

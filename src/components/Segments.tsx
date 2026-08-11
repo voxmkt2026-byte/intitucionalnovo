@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import WebGLErrorBoundary from "./WebGLErrorBoundary";
+import Dialog from "@/design-system/primitives/Dialog";
 
 const InfiniteMenu = dynamic(() => import("./InfiniteMenu"), { ssr: false });
 
@@ -266,18 +267,19 @@ export default function Segments() {
 
       {/* ── Modal ── */}
       {activeSeg && popupIndex !== null && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          onClick={closePopup}
+        <Dialog
+          open
+          onClose={closePopup}
+          title={activeSeg.title}
+          description={activeSeg.description}
+          panelClassName="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl animate-popUp"
         >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-fadeIn" />
           <div
-            className="relative z-10 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-popUp"
+            className="overflow-hidden rounded-2xl"
             style={{
               backgroundColor: "var(--bg-dark)",
               border: "1px solid rgba(255,255,255,0.1)",
             }}
-            onClick={(e) => e.stopPropagation()}
           >
             {/* Close */}
             <button
@@ -371,7 +373,7 @@ export default function Segments() {
               </a>
             </div>
           </div>
-        </div>
+        </Dialog>
       )}
     </section>
   );

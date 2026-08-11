@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Dialog from "@/design-system/primitives/Dialog";
 
 export interface FilterState {
   segmento: string;
@@ -231,12 +232,13 @@ export default function CartaFilters({
       )}
 
       {/* ── POP-UP EXCLUSIVO DE FILTROS (MODAL) ── */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn"
-          onClick={(e) => e.target === e.currentTarget && setIsModalOpen(false)}
-        >
-          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-hidden shadow-2xl flex flex-col my-auto text-left">
+      <Dialog
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Filtros de Cartas Contempladas"
+        description="Refine por segmento, valor, administradora e prazos."
+        panelClassName="bg-white border border-slate-200 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-hidden shadow-2xl flex flex-col my-auto text-left"
+      >
             
             {/* Modal Header */}
             <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
@@ -255,6 +257,7 @@ export default function CartaFilters({
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
+                aria-label="Fechar filtros"
                 className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors cursor-pointer border-none font-bold text-sm"
               >
                 ✕
@@ -448,9 +451,7 @@ export default function CartaFilters({
                 )}
               </button>
             </div>
-          </div>
-        </div>
-      )}
+      </Dialog>
     </div>
   );
 }

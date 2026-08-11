@@ -248,6 +248,7 @@ async function runMigration() {
     await sql`ALTER TABLE afiliados ADD COLUMN IF NOT EXISTS aceita_receber_contatos BOOLEAN DEFAULT FALSE`;
     await sql`ALTER TABLE afiliados ADD COLUMN IF NOT EXISTS quantidade_colaboradores TEXT`;
     await sql`ALTER TABLE afiliados ADD COLUMN IF NOT EXISTS senha_hash TEXT`;
+    await sql`ALTER TABLE afiliados ADD COLUMN IF NOT EXISTS sessao_versao INTEGER NOT NULL DEFAULT 0`;
 
     // 9. Criar Tabela afiliados_planilhas
     console.log("Criando tabela 'afiliados_planilhas'...");
@@ -309,6 +310,24 @@ async function runMigration() {
     await sql`CREATE INDEX IF NOT EXISTS idx_afiliados_senha_token ON afiliados_senha_redefinicoes(token_hash)`;
     await sql`CREATE INDEX IF NOT EXISTS idx_afiliados_senha_afiliado ON afiliados_senha_redefinicoes(afiliado_id)`;
     await sql`DELETE FROM afiliados_senha_redefinicoes WHERE expira_em < NOW() - INTERVAL '1 day'`;
+
+    console.log("Criando tabela 'cartas_reservas'...");
+    await sql`
+      CREATE TABLE IF NOT EXISTS cartas_reservas (
+        id SERIAL PRIMARY KEY,
+        carta_id INTEGER NOT NULL UNIQUE REFERENCES cartas_contempladas(id) ON DELETE RESTRICT,
+        afiliado_id INTEGER NOT NULL REFERENCES afiliados(id) ON DELETE RESTRICT,
+        lead_id INTEGER NOT NULL REFERENCES leads(id) ON DELETE RESTRICT,
+        cliente_nome TEXT NOT NULL,
+        cliente_telefone TEXT NOT NULL,
+        cliente_email TEXT,
+        cliente_cidade TEXT,
+        observacoes TEXT,
+        status TEXT NOT NULL DEFAULT 'reservada',
+        criado_em TIMESTAMPTZ DEFAULT NOW()
+      )
+    `;
+    await sql`CREATE INDEX IF NOT EXISTS idx_cartas_reservas_afiliado ON cartas_reservas(afiliado_id, criado_em DESC)`;
 
     // Limpar entradas antigas (janela máxima usada no app é de algumas horas)
     await sql`DELETE FROM rate_limits WHERE criado_em < NOW() - INTERVAL '1 day'`;

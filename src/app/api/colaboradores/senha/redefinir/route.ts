@@ -53,7 +53,7 @@ export async function POST(request: Request) {
         RETURNING afiliado_id
       )
       UPDATE afiliados
-      SET senha_hash = ${passwordHash}, atualizado_em = NOW()
+      SET senha_hash = ${passwordHash}, sessao_versao = sessao_versao + 1, atualizado_em = NOW()
       WHERE id = (SELECT afiliado_id FROM token_consumido)
       RETURNING id
     `;

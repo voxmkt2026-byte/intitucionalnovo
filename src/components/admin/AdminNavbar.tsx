@@ -103,8 +103,6 @@ export default function AdminNavbar() {
   const [loggingOut, setLoggingOut] = useState(false);
   const isDark = theme === 'dark';
 
-  if (pathname.startsWith('/admin/login')) return null;
-
   async function handleLogout() {
     if (loggingOut) return;
     setLoggingOut(true);
@@ -138,8 +136,8 @@ export default function AdminNavbar() {
         }
       `}</style>
 
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 50,
+      <nav data-site-navigation style={{
+        position: 'sticky', top: 0, zIndex: 'var(--layer-navigation)',
         backgroundColor: 'var(--admin-nav-bg)',
         backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
         borderBottom: '1px solid var(--admin-nav-border)',

@@ -102,8 +102,8 @@ export default async function DashboardPage() {
   let dbError: string | null = null;
   try {
     stats = await fetchAdminStats();
-  } catch (err: any) {
-    dbError = err.message || "Falha ao carregar dados do Neon Postgres.";
+  } catch (err: unknown) {
+    dbError = err instanceof Error ? err.message : "Falha ao carregar dados do Neon Postgres.";
     stats = {
       hoje: 0,
       semana: 0,
