@@ -402,6 +402,7 @@ export default function CartasTable() {
       params.set("sort", finalSort);
       params.set("dir", finalDir);
       params.set("page", String(p));
+      params.set("limit", "200");
       try {
         const res = await fetch(`/api/cartas?${params}`);
         const json = await res.json();

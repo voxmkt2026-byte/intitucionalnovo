@@ -3,7 +3,7 @@ import { listarCartasDisponiveis } from "@/features/cartas/data/repository";
 import { normalizarSegmento, normalizarTexto } from "@/features/cartas/domain/segmento";
 import type { CartaDTO } from "@/features/cartas/domain/types";
 
-const PAGE_SIZE = 20;
+const DEFAULT_LIMIT = 200;
 
 type SortField = "valor_credito" | "entrada" | "parcelas" | "valor_parcela" | "administradora";
 
@@ -32,6 +32,7 @@ export async function GET(request: Request) {
     const entradaMin = numberParam(params, "entrada_min");
     const entradaMax = numberParam(params, "entrada_max");
     const page = Math.max(1, Number.parseInt(params.get("page") || "1", 10) || 1);
+    const limit = Math.max(1, Number.parseInt(params.get("limit") || String(DEFAULT_LIMIT), 10) || DEFAULT_LIMIT);
     const requestedSort = params.get("sort") || "valor_credito";
     const allowedSort: SortField[] = ["valor_credito", "entrada", "parcelas", "valor_parcela", "administradora"];
     const sort = allowedSort.includes(requestedSort as SortField) ? requestedSort as SortField : "valor_credito";
@@ -49,14 +50,14 @@ export async function GET(request: Request) {
     }).sort(compare(sort, direction));
 
     const total = filtered.length;
-    const offset = (page - 1) * PAGE_SIZE;
-    const data = filtered.slice(offset, offset + PAGE_SIZE);
+    const offset = (page - 1) * limit;
+    const data = filtered.slice(offset, offset + limit);
     const segmentos = Array.from(new Set(all.map((carta) => carta.segmento))).sort();
     const administradoras = Array.from(new Set(all.map((carta) => carta.administradora))).sort((a, b) => a.localeCompare(b, "pt-BR"));
 
     return NextResponse.json({
       data,
-      meta: { total, page, limit: PAGE_SIZE, pages: Math.max(1, Math.ceil(total / PAGE_SIZE)) },
+      meta: { total, page, limit, pages: Math.max(1, Math.ceil(total / limit)) },
       filters: { segmentos, administradoras },
     });
   } catch (error) {
