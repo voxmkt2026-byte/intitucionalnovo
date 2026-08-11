@@ -82,14 +82,14 @@ export async function POST(request: Request) {
       { status: 200 }
     );
 
-    response.cookies.set("colaborador_token", token, {
+    response.cookies.set("representante_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 24 * 60 * 60,
       path: "/",
     });
-    response.cookies.set("representante_token", token, {
+    response.cookies.set("colaborador_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
@@ -98,14 +98,14 @@ export async function POST(request: Request) {
     });
     return response;
   } catch (err) {
-    console.error("[colaboradores/login] falha na autenticação:", err);
+    console.error("[representante/login] falha na autenticação:", err);
     return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });
   }
 }
 
 export async function DELETE() {
   const response = NextResponse.json({ ok: true });
-  response.cookies.set("colaborador_token", "", { maxAge: 0, path: "/" });
   response.cookies.set("representante_token", "", { maxAge: 0, path: "/" });
+  response.cookies.set("colaborador_token", "", { maxAge: 0, path: "/" });
   return response;
 }

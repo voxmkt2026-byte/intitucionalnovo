@@ -157,7 +157,7 @@ export default function PortalDashboard({
   }, [messages, isAIChatOpen]);
 
   const handleLogout = async () => {
-    await fetch("/api/colaboradores/login", { method: "DELETE" });
+    await fetch("/api/representante/login", { method: "DELETE" });
     window.location.reload();
   };
 

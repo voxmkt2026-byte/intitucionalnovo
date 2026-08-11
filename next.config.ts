@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/colaboradores/:path*",
-        destination: "/representante/:path*/",
+        destination: "/representante/:path*",
         permanent: true,
       },
     ];
