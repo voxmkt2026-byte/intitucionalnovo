@@ -27,7 +27,7 @@ const leadSchema = z.object({
   lp: z.string().max(100).default(""),
   source_url: z.string().max(500).default(""),
   timestamp: z.string().max(50).default(""),
-}).strict();
+}).passthrough();
 
 type LeadData = z.infer<typeof leadSchema>;
 
