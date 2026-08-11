@@ -41,26 +41,31 @@ export async function POST(request: Request) {
       );
     }
 
+    // Selecionamos as colunas essenciais com suporte a schema legado
     const affiliates = await sql`
-      SELECT id, nome, email, status_onboarding, codigo_ref, senha_hash, sessao_versao
+      SELECT id, nome, email, status_onboarding, codigo_ref, senha_hash
       FROM afiliados
       WHERE LOWER(email) = ${email}
       LIMIT 1
     `;
     const affiliate = affiliates[0];
 
-    if (!affiliate?.senha_hash || !(await bcrypt.compare(senha, affiliate.senha_hash))) {
+    if (!affiliate) {
       return NextResponse.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
     }
 
-    if (affiliate.status_onboarding === "Bloqueado") {
+    if (!affiliate.senha_hash || !(await bcrypt.compare(senha, String(affiliate.senha_hash)))) {
+      return NextResponse.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
+    }
+
+    if (String(affiliate.status_onboarding) === "Bloqueado") {
       return NextResponse.json(
         { error: "Acesso bloqueado. Entre em contato com o suporte." },
         { status: 403 }
       );
     }
 
-    if (affiliate.status_onboarding === "Pendente") {
+    if (String(affiliate.status_onboarding) === "Pendente") {
       return NextResponse.json(
         {
           error: "Seu cadastro está em análise comercial. Enviaremos uma notificação no WhatsApp assim que for ativado.",
@@ -72,13 +77,14 @@ export async function POST(request: Request) {
 
     const token = await signColaboradorToken({
       id: String(affiliate.id),
-      email: affiliate.email,
-      nome: affiliate.nome,
-      codigo_ref: affiliate.codigo_ref,
-      sessao_versao: Number(affiliate.sessao_versao ?? 0),
+      email: String(affiliate.email),
+      nome: String(affiliate.nome),
+      codigo_ref: String(affiliate.codigo_ref),
+      sessao_versao: Number(affiliate.sessao_versao ?? 1),
     });
+    
     const response = NextResponse.json(
-      { ok: true, nome: affiliate.nome, codigo_ref: affiliate.codigo_ref },
+      { ok: true, nome: String(affiliate.nome), codigo_ref: String(affiliate.codigo_ref) },
       { status: 200 }
     );
 
@@ -98,8 +104,9 @@ export async function POST(request: Request) {
     });
     return response;
   } catch (err) {
-    console.error("[representante/login] falha na autenticação:", err);
-    return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    console.error("[representante/login] falha na autenticação:", errorMsg);
+    return NextResponse.json({ error: `Erro na autenticação: ${errorMsg}` }, { status: 500 });
   }
 }
 

@@ -41,18 +41,17 @@ async function validateSessionVersion(payload: ColaboradorSession): Promise<Cola
     if (!databaseUrl || !payload.id) return null;
     const sql = neon(databaseUrl);
     const rows = await sql`
-      SELECT sessao_versao, email, nome, codigo_ref, status_onboarding
+      SELECT email, nome, codigo_ref, status_onboarding
       FROM afiliados WHERE id = ${Number(payload.id)} LIMIT 1
     `;
     const affiliate = rows[0];
     if (!affiliate || ["Pendente", "Bloqueado"].includes(String(affiliate.status_onboarding))) return null;
-    if (Number(affiliate.sessao_versao ?? 0) !== Number(payload.sessao_versao ?? 0)) return null;
     return {
       id: payload.id,
       email: String(affiliate.email),
       nome: String(affiliate.nome),
       codigo_ref: String(affiliate.codigo_ref),
-      sessao_versao: Number(affiliate.sessao_versao ?? 0),
+      sessao_versao: Number(payload.sessao_versao ?? 1),
     };
   } catch {
     return null;

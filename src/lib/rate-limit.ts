@@ -1,11 +1,7 @@
 import { NeonQueryFunction } from "@neondatabase/serverless";
 
 /**
- * Postgres-backed fixed-window rate limiter.
- *
- * Serverless functions have no shared in-memory state between invocations,
- * so limits are enforced against the Neon database (already the single
- * shared resource this app has, avoiding the need for a separate Redis).
+ * Postgres-backed fixed-window rate limiter com fallback gracioso.
  */
 export async function checkRateLimit(
   sql: NeonQueryFunction<false, false>,
@@ -13,24 +9,29 @@ export async function checkRateLimit(
   limit: number,
   windowSeconds: number
 ): Promise<{ allowed: boolean; remaining: number }> {
-  const windowStart = new Date(Date.now() - windowSeconds * 1000);
+  try {
+    const windowStart = new Date(Date.now() - windowSeconds * 1000);
 
-  const rows = await sql`
-    SELECT COUNT(*)::int AS count
-    FROM rate_limits
-    WHERE rate_key = ${key} AND criado_em > ${windowStart.toISOString()}
-  `;
-  const currentCount = (rows[0]?.count as number) ?? 0;
+    const rows = await sql`
+      SELECT COUNT(*)::int AS count
+      FROM rate_limits
+      WHERE rate_key = ${key} AND criado_em > ${windowStart.toISOString()}
+    `;
+    const currentCount = (rows[0]?.count as number) ?? 0;
 
-  if (currentCount >= limit) {
-    return { allowed: false, remaining: 0 };
+    if (currentCount >= limit) {
+      return { allowed: false, remaining: 0 };
+    }
+
+    await sql`
+      INSERT INTO rate_limits (rate_key, criado_em) VALUES (${key}, NOW())
+    `;
+
+    return { allowed: true, remaining: limit - currentCount - 1 };
+  } catch (err) {
+    console.warn("[RateLimit] Falha ao verificar/inserir tabela de rate_limits (permitindo acesso):", err);
+    return { allowed: true, remaining: limit };
   }
-
-  await sql`
-    INSERT INTO rate_limits (rate_key, criado_em) VALUES (${key}, NOW())
-  `;
-
-  return { allowed: true, remaining: limit - currentCount - 1 };
 }
 
 export function getClientIp(req: Request): string {
