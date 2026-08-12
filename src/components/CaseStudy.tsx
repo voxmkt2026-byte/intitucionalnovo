@@ -133,12 +133,12 @@ export default function CaseStudy() {
           <h2
             style={{
               fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-              fontSize: "clamp(1.5rem, 3.5vw, 2.4rem)",
+              fontSize: "clamp(1.4rem, 3vw, 2.2rem)",
               fontWeight: 800,
-              lineHeight: 1.15,
+              lineHeight: 1.25,
               letterSpacing: "-0.02em",
               color: "var(--ink-white)",
-              maxWidth: "720px",
+              maxWidth: "800px",
             }}
           >
             Como o Wellington saiu de R$&nbsp;2.700/mês de aluguel para carro
@@ -170,28 +170,32 @@ export default function CaseStudy() {
               alignSelf: "start",
             }}
           >
-            {/* Avatar */}
+            {/* Avatar Compliance Initials */}
             <div
               style={{
-                width: 72,
-                height: 72,
+                width: 64,
+                height: 64,
                 borderRadius: "50%",
-                overflow: "hidden",
+                background: "linear-gradient(135deg, var(--green-vivid), var(--green-deep))",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 marginBottom: "1.25rem",
-                border: "2px solid var(--green)",
-                boxShadow: "0 4px 12px rgba(10,123,62,0.3)",
+                border: "2px solid var(--green-vivid)",
+                boxShadow: "0 4px 16px rgba(21,184,92,0.3)",
               }}
             >
-              <img
-                src="/img/wellington.jpg"
-                alt="Wellington S."
+              <span
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "center top",
+                  fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+                  fontWeight: 800,
+                  fontSize: "1.3rem",
+                  color: "white",
+                  lineHeight: 1,
                 }}
-              />
+              >
+                WS
+              </span>
             </div>
 
             <h3

@@ -205,9 +205,9 @@ export default function Hero() {
               <h1
                 style={{
                   fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-                  fontSize: "clamp(2.4rem, 6.5vw, 5.2rem)",
+                  fontSize: "clamp(2.2rem, 5vw, 4.2rem)",
                   fontWeight: 800,
-                  lineHeight: 1.05,
+                  lineHeight: 1.08,
                   letterSpacing: "-0.025em",
                   color: "var(--ink-white)",
                 }}

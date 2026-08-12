@@ -8,6 +8,10 @@
    ═══════════════════════════════════════════════ */
 
 :root {
+  /* ── Structural Layout Tokens ── */
+  --wrap:         1160px;
+  --pad:          1.5rem;
+
   /* ── Backgrounds & Canvas (Luminous Light Theme) ── */
   --bg:           #F4F7F5;   /* Canvas principal suave e elegante */
   --bg-2:         #EAEFEA;   /* Seções alternadas translúcidas */
@@ -72,6 +76,12 @@
   --green-bright:  var(--green-vivid);
   --white-pure:    var(--bg-white);
   --white-bg:      var(--bg);
+}
+
+@media (max-width: 640px) {
+  :root {
+    --pad: 1rem;
+  }
 }
 
 @theme inline {

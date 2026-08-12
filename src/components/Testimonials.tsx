@@ -15,8 +15,7 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    initial: "W",
-    image: "/img/wellington.jpg",
+    initial: "WS",
     name: "Wellington S.",
     role: "Motorista de app · São Paulo",
     quote:
@@ -24,8 +23,7 @@ const testimonials: Testimonial[] = [
     badge: "Economia de R$ 1.710/mês*",
   },
   {
-    initial: "R",
-    image: "/img/rodrigo.jpg",
+    initial: "RA",
     name: "Dr. Rodrigo A.",
     role: "Cirurgião-Dentista · Campinas",
     quote:
@@ -33,8 +31,7 @@ const testimonials: Testimonial[] = [
     badge: "R$ 90 mil economizados*",
   },
   {
-    initial: "P",
-    image: "/img/patricia.jpg",
+    initial: "PS",
     name: "Patrícia S.",
     role: "Investidora · Belo Horizonte",
     quote:
