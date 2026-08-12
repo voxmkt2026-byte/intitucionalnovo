@@ -15,10 +15,11 @@ async function getDb() {
   const sql = neon(DATABASE_URL);
   
   try {
-    // Migration: garantir colunas das 7 colunas da planilha
+    // Migration: garantir colunas das 7 colunas da planilha e status_cota
     await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS taxa_transferencia TEXT`;
     await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS vencimento_parcela TEXT`;
     await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS observacoes TEXT`;
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS status_cota TEXT`;
     await sql`ALTER TABLE cartas_contempladas ALTER COLUMN proximo_vencimento TYPE TEXT USING proximo_vencimento::text`;
   } catch (mErr) {
     console.warn("[admin/cartas getDb migration warning]", mErr);
@@ -27,7 +28,7 @@ async function getDb() {
   return sql;
 }
 
-// GET — lista todas as cartas com as 7 colunas completas
+// GET — lista todas as cartas com as 7 colunas completas + status_cota
 export async function GET() {
   try {
     await verifyAdmin();
@@ -36,7 +37,7 @@ export async function GET() {
       SELECT 
         id, segmento, administradora, valor_credito, entrada,
         parcelas, valor_parcela, proximo_vencimento, disponivel,
-        taxa_transferencia, vencimento_parcela, observacoes, criado_em
+        taxa_transferencia, vencimento_parcela, observacoes, status_cota, criado_em
       FROM cartas_contempladas
       ORDER BY id DESC
     `;
@@ -76,19 +77,20 @@ export async function POST(request: Request) {
           const valor_parcela = parseBRLNumber(item.valor_parcela ?? item.parcela);
           const taxa_transferencia = String(item.taxa_transferencia || "R$ 0,00");
           const vencimento_parcela = String(item.vencimento_parcela || item.proximo_vencimento || "Dia 10");
-          const observacoes = String(item.observacoes || (item.disponivel === false ? "Reservada" : "Disponível"));
-          const disponivel = item.disponivel !== false && !observacoes.toLowerCase().includes("reservad");
+          const status_cota = item.status_cota || (item.disponivel === false ? "reservado" : "disponivel");
+          const observacoes = String(item.observacoes || "");
+          const disponivel = status_cota === "disponivel";
 
           if (valor_credito > 0) {
             await sql`
               INSERT INTO cartas_contempladas (
                 segmento, administradora, valor_credito, entrada,
                 parcelas, valor_parcela, proximo_vencimento, disponivel,
-                taxa_transferencia, vencimento_parcela, observacoes
+                taxa_transferencia, vencimento_parcela, observacoes, status_cota
               ) VALUES (
                 ${segmento}, ${administradora}, ${valor_credito}, ${entrada},
                 ${parcelas}, ${valor_parcela}, ${vencimento_parcela}, ${disponivel},
-                ${taxa_transferencia}, ${vencimento_parcela}, ${observacoes}
+                ${taxa_transferencia}, ${vencimento_parcela}, ${observacoes}, ${status_cota}
               )
             `;
             insertedCount++;
@@ -104,8 +106,9 @@ export async function POST(request: Request) {
     // Inserção individual
     const {
       segmento = "imoveis", administradora, valor_credito, entrada,
-      parcelas, valor_parcela, proximo_vencimento, disponivel = true,
-      taxa_transferencia = "R$ 0,00", vencimento_parcela = "Dia 10", observacoes = "Disponível"
+      parcelas, valor_parcela, proximo_vencimento,
+      taxa_transferencia = "R$ 0,00", vencimento_parcela = "Dia 10", observacoes = "",
+      status_cota = "disponivel", disponivel = true
     } = body;
 
     if (!administradora || !valor_credito || !parcelas || !valor_parcela) {
@@ -117,19 +120,22 @@ export async function POST(request: Request) {
     const parsedParcela = parseBRLNumber(valor_parcela);
     const parsedCount = parseInt(String(parcelas), 10) || 60;
     const vencStr = String(vencimento_parcela || proximo_vencimento || "Dia 10");
+    const isDisponivel = status_cota === "disponivel";
 
     const result = await sql`
       INSERT INTO cartas_contempladas (
         segmento, administradora, valor_credito, entrada,
         parcelas, valor_parcela, proximo_vencimento, disponivel,
-        taxa_transferencia, vencimento_parcela, observacoes
+        taxa_transferencia, vencimento_parcela, observacoes, status_cota
       ) VALUES (
         ${segmento}, ${administradora}, ${parsedCredito}, ${parsedEntrada},
-        ${parsedCount}, ${parsedParcela}, ${vencStr}, ${disponivel},
-        ${taxa_transferencia}, ${vencStr}, ${observacoes}
+        ${parsedCount}, ${parsedParcela}, ${vencStr}, ${isDisponivel},
+        ${taxa_transferencia}, ${vencStr}, ${observacoes}, ${status_cota}
       )
       RETURNING *
     `;
+
+    return NextResponse.json({ data: result[0] }, { status: 201 });
 
     return NextResponse.json({ data: result[0] }, { status: 201 });
   } catch (err) {

@@ -13,5 +13,6 @@ export interface CartaDTO {
   taxa_transferencia: string | null;
   vencimento_parcela: string | null;
   observacoes: string | null;
+  status_cota?: string | null;
   disponivel: boolean;
 }

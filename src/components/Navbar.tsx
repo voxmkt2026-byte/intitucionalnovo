@@ -7,15 +7,29 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
   const isDarkHeroPage = pathname === "/" || pathname === "/representante" || pathname === "/representante/" || pathname === "/colaboradores";
 
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      const currentScrollY = window.scrollY;
+
+      setScrolled(currentScrollY > 30);
+
+      if (currentScrollY > 60 && currentScrollY > lastScrollY) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+
+      lastScrollY = currentScrollY;
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -23,7 +37,9 @@ export default function Navbar() {
   return (
     <header
       data-site-navigation
-      className={`fixed top-0 left-0 right-0 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 transition-all duration-500 ease-in-out ${
+        visible ? "translate-y-0 opacity-100 pointer-events-auto" : "-translate-y-full opacity-0 pointer-events-none"
+      } ${
         scrolled
           ? "py-3 px-4"
           : "py-5 px-4 sm:px-6"

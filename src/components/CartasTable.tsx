@@ -18,6 +18,7 @@ export interface Carta {
   taxa_transferencia?: string | null;
   vencimento_parcela?: string | null;
   observacoes?: string | null;
+  status_cota?: string | null;
   disponivel: boolean;
 }
 
@@ -200,10 +201,41 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
             
             <div className="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80 flex justify-between items-center">
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Status da Cota</span>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-[#E8F5EE] text-[#0A7B3E] border border-[#D1ECDD]">
-                {carta.observacoes || "Disponível para Transferência"}
-              </span>
+              {(() => {
+                const statusRaw = (carta.status_cota || (carta.disponivel === false ? ((carta.observacoes || "").toLowerCase().includes("vendid") ? "vendido" : "reservado") : "disponivel")).toLowerCase();
+                const isVendido = statusRaw.includes("vendid");
+                const isReservado = !isVendido && (statusRaw.includes("reservad") || !carta.disponivel);
+                
+                const label = isVendido ? "Vendido" : isReservado ? "Reservado" : "Disponível";
+                const badgeCls = isVendido
+                  ? "bg-slate-100 text-slate-700 border-slate-300"
+                  : isReservado
+                  ? "bg-rose-50 text-rose-700 border-rose-200"
+                  : "bg-[#E8F5EE] text-[#0A7B3E] border-[#D1ECDD]";
+
+                return (
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${badgeCls}`}>
+                    {label}
+                  </span>
+                );
+              })()}
             </div>
+
+            {/* Observações da Cota (Exibidas EXCLUSIVAMENTE dentro do Modal ao clicar na carta) */}
+            {(() => {
+              const customObs = carta.observacoes && !["disponível", "disponivel", "reservada", "reservado", "vendida", "vendido"].includes(carta.observacoes.trim().toLowerCase()) ? carta.observacoes : "";
+              if (!customObs) return null;
+              return (
+                <div className="bg-amber-50/80 p-3.5 rounded-2xl border border-amber-200/80 text-xs text-left">
+                  <span className="text-[10px] text-amber-800 font-bold block uppercase tracking-wider mb-1">
+                    Observações da Cota
+                  </span>
+                  <span className="text-slate-800 font-medium leading-relaxed block">
+                    {customObs}
+                  </span>
+                </div>
+              );
+            })()}
           </div>
 
           {/* WhatsApp Direct Action Banner */}
@@ -230,8 +262,17 @@ function LeadModal({ carta, onClose }: { carta: Carta; onClose: () => void }) {
 
 /* ── Carta Row (Desktop - Spreadsheet Columns) ──────────────────────── */
 function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
-  const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
-  const isReservada = obs.toLowerCase().includes("reservad") || !carta.disponivel;
+  const statusRaw = (carta.status_cota || (carta.disponivel === false ? ((carta.observacoes || "").toLowerCase().includes("vendid") ? "vendido" : "reservado") : "disponivel")).toLowerCase();
+  const isVendido = statusRaw.includes("vendid");
+  const isReservado = !isVendido && (statusRaw.includes("reservad") || !carta.disponivel);
+  
+  const statusLabel = isVendido ? "Vendido" : isReservado ? "Reservado" : "Disponível";
+  const badgeCls = isVendido
+    ? "bg-slate-100 text-slate-700 border-slate-300"
+    : isReservado
+    ? "bg-rose-50 text-rose-700 border-rose-200"
+    : "bg-[#E8F5EE] text-[#0A7B3E] border-[#D1ECDD]";
+
   const vencimentoFormatted = formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento);
 
   return (
@@ -283,16 +324,10 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
         {vencimentoFormatted}
       </td>
 
-      {/* Observações / Status */}
+      {/* Status da Cota (Disponível, Reservado, Vendido) */}
       <td className="px-4 py-4 whitespace-nowrap">
-        <span
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-semibold text-[10px] ${
-            isReservada
-              ? "bg-amber-50 text-amber-700 border border-amber-200"
-              : "bg-[#E8F5EE] text-[#0A7B3E] border border-[#D1ECDD]"
-          }`}
-        >
-          {obs}
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-bold text-[10px] border ${badgeCls}`}>
+          {statusLabel}
         </span>
       </td>
 
@@ -311,7 +346,17 @@ function CartaRow({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
 
 /* ── Carta Mobile Card Liquid Glass ────────────────────────────────── */
 function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) {
-  const obs = carta.observacoes || (carta.disponivel ? "Disponível" : "Reservada");
+  const statusRaw = (carta.status_cota || (carta.disponivel === false ? ((carta.observacoes || "").toLowerCase().includes("vendid") ? "vendido" : "reservado") : "disponivel")).toLowerCase();
+  const isVendido = statusRaw.includes("vendid");
+  const isReservado = !isVendido && (statusRaw.includes("reservad") || !carta.disponivel);
+  
+  const statusLabel = isVendido ? "Vendido" : isReservado ? "Reservado" : "Disponível";
+  const badgeCls = isVendido
+    ? "bg-slate-100 text-slate-700 border-slate-300"
+    : isReservado
+    ? "bg-rose-50 text-rose-700 border-rose-200"
+    : "bg-[#E8F5EE] text-[#0A7B3E] border-[#D1ECDD]";
+
   const vencimentoFormatted = formatVencimentoDate(carta.vencimento_parcela || carta.proximo_vencimento);
 
   return (
@@ -325,8 +370,8 @@ function CartaMobileCard({ carta, onCTA }: { carta: Carta; onCTA: () => void }) 
           <AdministradoraLogo name={carta.administradora} />
         </span>
 
-        <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#E8F5EE] text-[#0A7B3E] border border-[#D1ECDD]">
-          {obs}
+        <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${badgeCls}`}>
+          {statusLabel}
         </span>
       </div>
 

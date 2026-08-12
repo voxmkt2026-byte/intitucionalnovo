@@ -31,6 +31,7 @@ function toCartaDTO(row: Record<string, unknown>): CartaDTO {
     taxa_transferencia: nullableText(row.taxa_transferencia),
     vencimento_parcela: nullableText(row.vencimento_parcela),
     observacoes: nullableText(row.observacoes),
+    status_cota: nullableText(row.status_cota),
     disponivel: Boolean(row.disponivel),
   };
 }
@@ -41,9 +42,8 @@ export async function listarCartasDisponiveis(): Promise<CartaDTO[]> {
   const rows = await sql`
     SELECT id, segmento, administradora, valor_credito, entrada, parcelas,
            valor_parcela, proximo_vencimento, taxa_transferencia,
-           vencimento_parcela, observacoes, disponivel
+           vencimento_parcela, observacoes, status_cota, disponivel
     FROM cartas_contempladas
-    WHERE disponivel = true
     ORDER BY valor_credito DESC, id ASC
   `;
   return rows.map((row) => toCartaDTO(row as Record<string, unknown>));

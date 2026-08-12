@@ -9,6 +9,8 @@ export interface Carta {
   parcelas: number;
   valor_parcela: number;
   proximo_vencimento: string | null;
+  status_cota?: string | null;
+  observacoes?: string | null;
   disponivel: boolean;
 }
 
@@ -41,6 +43,17 @@ interface Props {
 }
 
 export default function CartaCard({ carta }: Props) {
+  const statusRaw = (carta.status_cota || (carta.disponivel === false ? ((carta.observacoes || "").toLowerCase().includes("vendid") ? "vendido" : "reservado") : "disponivel")).toLowerCase();
+  const isVendido = statusRaw.includes("vendid");
+  const isReservado = !isVendido && (statusRaw.includes("reservad") || !carta.disponivel);
+
+  const label = isVendido ? "Vendido" : isReservado ? "Reservado" : "Disponível";
+  const badgeCls = isVendido
+    ? "bg-gray-100 text-gray-700 border-gray-300"
+    : isReservado
+    ? "bg-red-50 text-red-700 border-red-200"
+    : "bg-green-50 text-green-700 border-green-200";
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow duration-200">
       {/* Header */}
@@ -52,11 +65,8 @@ export default function CartaCard({ carta }: Props) {
             <p className="text-xs text-gray-500">{carta.administradora}</p>
           </div>
         </div>
-        <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs font-medium px-3 py-1 rounded-full border border-green-200">
-          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
-          Disponível
+        <span className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 rounded-full border ${badgeCls}`}>
+          {label}
         </span>
       </div>
 

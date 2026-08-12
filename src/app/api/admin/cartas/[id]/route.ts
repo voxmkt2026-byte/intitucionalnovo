@@ -25,10 +25,12 @@ export async function PUT(
     const {
       segmento, administradora, valor_credito, entrada,
       parcelas, valor_parcela, proximo_vencimento, disponivel,
-      taxa_transferencia, vencimento_parcela, observacoes,
+      taxa_transferencia, vencimento_parcela, observacoes, status_cota,
     } = body;
 
     const sql = await getDb();
+    const finalDisponivel = status_cota ? status_cota === "disponivel" : (disponivel != null ? disponivel : null);
+
     const result = await sql`
       UPDATE cartas_contempladas SET
         segmento           = COALESCE(${segmento ?? null},           segmento),
@@ -41,7 +43,8 @@ export async function PUT(
         taxa_transferencia = COALESCE(${taxa_transferencia ?? null}, taxa_transferencia),
         vencimento_parcela = COALESCE(${vencimento_parcela ?? proximo_vencimento ?? null}, vencimento_parcela),
         observacoes        = COALESCE(${observacoes ?? null},        observacoes),
-        disponivel         = COALESCE(${disponivel != null ? disponivel : null},   disponivel),
+        status_cota        = COALESCE(${status_cota ?? null},         status_cota),
+        disponivel         = COALESCE(${finalDisponivel},             disponivel),
         atualizado_em      = NOW()
       WHERE id = ${parseInt(id)}
       RETURNING *

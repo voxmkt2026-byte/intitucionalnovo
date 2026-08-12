@@ -47,10 +47,29 @@ export interface Comissao {
   codigo_ref: string;
 }
 
+export interface ClienteColaborador {
+  lead_id: number;
+  cliente_nome: string;
+  cliente_telefone: string;
+  cliente_email: string;
+  segmento: string;
+  valor_credito: string;
+  detalhes_plano: string;
+  codigo_ref: string;
+  status_reserva: string;
+  data_cadastro: string;
+  afiliado_id: number | null;
+  afiliado_nome: string | null;
+  afiliado_email: string | null;
+  afiliado_telefone: string | null;
+  observacoes_reserva: string | null;
+}
+
 interface AdminColaboradoresClientProps {
   initialPartners: Partner[];
   initialPlanilhas: Planilha[];
   initialComissoes: Comissao[];
+  initialClientes?: ClienteColaborador[];
 }
 
 type ParsedRow = {
@@ -76,11 +95,14 @@ function firstCell(
 export default function AdminColaboradoresClient({
   initialPartners,
   initialComissoes,
+  initialClientes = [],
 }: AdminColaboradoresClientProps) {
   const [partners, setPartners] = useState<Partner[]>(initialPartners);
+  const [clientes, setClientes] = useState<ClienteColaborador[]>(initialClientes);
+  const [clientSearch, setClientSearch] = useState("");
   const comissoes = initialComissoes;
 
-  const [activeTab, setActiveTab] = useState<"candidatos" | "ativos" | "importar" | "extrato">("candidatos");
+  const [activeTab, setActiveTab] = useState<"candidatos" | "ativos" | "clientes" | "importar" | "extrato">("candidatos");
   
   // Sheet parsing states
   const [filename, setFilename] = useState("");
@@ -461,6 +483,7 @@ export default function AdminColaboradoresClient({
           {[
             { id: "candidatos" as const, label: `Candidatos Onboarding (${pendingPartners.length})` },
             { id: "ativos" as const, label: `Colaboradores Ativos (${activePartners.length})` },
+            { id: "clientes" as const, label: `Clientes dos Colaboradores (${clientes.length})` },
             { id: "importar" as const, label: "Importar Planilha de Comissões" },
             { id: "extrato" as const, label: "Histórico & Lançamentos" },
           ].map((tab) => (
@@ -594,6 +617,93 @@ export default function AdminColaboradoresClient({
                 </tbody>
               </table>
             </div>
+          </div>
+        )}
+
+        {/* TAB 3: CLIENTES DOS COLABORADORES (REMARKETING) */}
+        {activeTab === "clientes" && (
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-extrabold text-slate-900">Clientes Cadastrados por Colaboradores</h3>
+                <p className="text-xs text-slate-400 font-light">Leads e dados dos clientes finais informados pelos representantes para remarketing.</p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Buscar cliente ou parceiro..."
+                  value={clientSearch}
+                  onChange={(e) => setClientSearch(e.target.value)}
+                  className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+            </div>
+
+            {clientes.length === 0 ? (
+              <div className="py-12 text-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                <p className="text-xs font-bold text-slate-700">Nenhum cliente cadastrado por colaboradores até o momento</p>
+                <p className="text-[11px] text-slate-400 font-light mt-1">Conforme os afiliados reservarem cotas para seus clientes no portal, os dados aparecerão aqui para remarketing.</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs min-w-[800px]">
+                  <thead>
+                    <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                      <th className="py-3 px-3">Cliente Final</th>
+                      <th className="py-3 px-3">Contato Cliente</th>
+                      <th className="py-3 px-3">Colaborador Responsável</th>
+                      <th className="py-3 px-3">Crédito / Segmento</th>
+                      <th className="py-3 px-3">Data de Cadastro</th>
+                      <th className="py-3 px-3 text-right">Status Reserva</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {clientes
+                      .filter((cl) => {
+                        if (!clientSearch.trim()) return true;
+                        const q = clientSearch.toLowerCase();
+                        return (
+                          (cl.cliente_nome || "").toLowerCase().includes(q) ||
+                          (cl.cliente_telefone || "").includes(q) ||
+                          (cl.afiliado_nome || "").toLowerCase().includes(q) ||
+                          (cl.codigo_ref || "").toLowerCase().includes(q)
+                        );
+                      })
+                      .map((cl) => (
+                        <tr key={cl.lead_id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="py-3.5 px-3">
+                            <div className="font-bold text-slate-900">{cl.cliente_nome || "Cliente sem nome"}</div>
+                            <div className="text-[10px] text-slate-400 font-mono">Lead ID: #{cl.lead_id}</div>
+                          </td>
+                          <td className="py-3.5 px-3">
+                            <div className="font-medium text-slate-800">{cl.cliente_telefone || "—"}</div>
+                            <div className="text-[10px] text-slate-400">{cl.cliente_email || "—"}</div>
+                          </td>
+                          <td className="py-3.5 px-3">
+                            <div className="font-bold text-[#0A7B3E]">
+                              {cl.afiliado_nome || `Afiliado #${cl.codigo_ref}`}
+                            </div>
+                            <div className="text-[10px] text-slate-400 font-mono">REF: #{cl.codigo_ref}</div>
+                          </td>
+                          <td className="py-3.5 px-3">
+                            <div className="font-extrabold text-slate-900">{cl.valor_credito || "—"}</div>
+                            <div className="text-[10px] text-slate-400 uppercase">{cl.segmento || "—"}</div>
+                          </td>
+                          <td className="py-3.5 px-3 text-slate-500">
+                            {cl.data_cadastro ? new Date(cl.data_cadastro).toLocaleDateString("pt-BR") : "—"}
+                          </td>
+                          <td className="py-3.5 px-3 text-right">
+                            <span className="crm-tag-mint text-[9px] px-2.5 py-0.5 rounded-full font-bold">
+                              {cl.status_reserva || "Reserva Confirmada"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 

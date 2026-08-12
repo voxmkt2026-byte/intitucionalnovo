@@ -15,6 +15,7 @@ interface Carta {
   taxa_transferencia?: string | null;
   vencimento_parcela?: string | null;
   observacoes?: string | null;
+  status_cota?: string | null;
   disponivel: boolean;
 }
 
@@ -50,6 +51,13 @@ const ADMINISTRADORAS = [
 export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFormProps) {
   const isEdit = Boolean(carta?.id);
 
+  // Determinar o status inicial (disponivel, reservado, vendido)
+  const initialStatus = carta?.status_cota || (
+    carta?.disponivel === false
+      ? ((carta?.observacoes || "").toLowerCase().includes("vendid") ? "vendido" : "reservado")
+      : "disponivel"
+  );
+
   const [form, setForm] = useState({
     segmento: carta?.segmento || "imoveis",
     administradora: carta?.administradora || "Caixa Consórcios",
@@ -59,8 +67,8 @@ export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFor
     valor_parcela: carta?.valor_parcela ? String(carta.valor_parcela) : "",
     taxa_transferencia: carta?.taxa_transferencia || "R$ 0,00",
     vencimento_parcela: carta?.vencimento_parcela || carta?.proximo_vencimento || "15/08/2026",
-    observacoes: carta?.observacoes || "Disponível",
-    disponivel: carta?.disponivel ?? true,
+    status_cota: initialStatus,
+    observacoes: (carta?.observacoes && !["disponível", "disponivel", "reservada", "reservado", "vendida", "vendido"].includes(carta.observacoes.trim().toLowerCase())) ? carta.observacoes : "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -75,6 +83,8 @@ export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFor
     setError("");
     setLoading(true);
 
+    const isDisponivel = form.status_cota === "disponivel";
+
     const payload = {
       segmento: form.segmento,
       administradora: form.administradora,
@@ -84,8 +94,9 @@ export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFor
       valor_parcela: parseFloat(form.valor_parcela) || 0,
       taxa_transferencia: form.taxa_transferencia,
       vencimento_parcela: form.vencimento_parcela,
+      status_cota: form.status_cota,
       observacoes: form.observacoes,
-      disponivel: form.disponivel,
+      disponivel: isDisponivel,
     };
 
     try {
@@ -279,32 +290,34 @@ export default function AdminCartaForm({ carta, onClose, onSave }: AdminCartaFor
             </div>
           </div>
 
-          {/* Observações / Status & Disponibilidade */}
+          {/* Status da Cota (Dropdown 3 Opções) & Observações Manuais */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                Observações / Status
+                Status da Cota *
+              </label>
+              <select
+                value={form.status_cota}
+                onChange={(e) => update("status_cota", e.target.value)}
+                className={inputCls}
+                required
+              >
+                <option value="disponivel">Disponível</option>
+                <option value="reservado">Reservado</option>
+                <option value="vendido">Vendido</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
+                Observações (Exibidas no Modal)
               </label>
               <input
                 type="text"
                 value={form.observacoes}
                 onChange={(e) => update("observacoes", e.target.value)}
                 className={inputCls}
-                placeholder="Ex: Disponível, Reservada..."
+                placeholder="Ex: Junção de cotas, regras..."
               />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-                Disponibilidade na Vitrine
-              </label>
-              <select
-                value={form.disponivel ? "true" : "false"}
-                onChange={(e) => update("disponivel", e.target.value === "true")}
-                className={inputCls}
-              >
-                <option value="true">Disponível (Ativa)</option>
-                <option value="false">Reservada / Indisponível</option>
-              </select>
             </div>
           </div>
 

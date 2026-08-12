@@ -18,6 +18,7 @@ export interface Carta {
   taxa_transferencia?: string | null;
   vencimento_parcela?: string | null;
   observacoes?: string | null;
+  status_cota?: string | null;
   disponivel: boolean;
   criado_em?: string;
 }
@@ -585,15 +586,34 @@ export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClien
 
                       {/* Observações / Status */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-semibold text-[11px] ${
-                            isReservada
-                              ? "bg-amber-50 text-amber-700 border border-amber-200"
-                              : "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                          }`}
-                        >
-                          {obs}
-                        </span>
+                        {(() => {
+                          const statusRaw = (c.status_cota || (c.disponivel === false ? ((c.observacoes || "").toLowerCase().includes("vendid") ? "vendido" : "reservado") : "disponivel")).toLowerCase();
+                          const isVendido = statusRaw.includes("vendid");
+                          const isReservado = !isVendido && (statusRaw.includes("reservad") || !c.disponivel);
+                          const isDisponivel = !isVendido && !isReservado;
+
+                          const label = isVendido ? "Vendido" : isReservado ? "Reservado" : "Disponível";
+                          const badgeCls = isVendido
+                            ? "bg-slate-100 text-slate-700 border-slate-300"
+                            : isReservado
+                            ? "bg-rose-50 text-rose-700 border-rose-200"
+                            : "bg-emerald-50 text-emerald-700 border-emerald-200";
+
+                          const customObs = c.observacoes && !["disponível", "disponivel", "reservada", "reservado", "vendida", "vendido"].includes(c.observacoes.trim().toLowerCase()) ? c.observacoes : "";
+
+                          return (
+                            <div className="flex flex-col gap-0.5">
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-bold text-[11px] w-fit ${badgeCls}`}>
+                                {label}
+                              </span>
+                              {customObs && (
+                                <span className="text-[10px] text-slate-400 font-medium truncate max-w-[150px]" title={customObs}>
+                                  {customObs}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </td>
 
                       {/* Ações */}
