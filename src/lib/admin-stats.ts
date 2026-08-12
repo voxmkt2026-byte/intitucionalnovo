@@ -53,14 +53,14 @@ export async function fetchAdminStats(): Promise<AdminStats> {
       sql`SELECT COALESCE(NULLIF(lp,''),'direto') AS lp, COUNT(*)::text AS count FROM leads GROUP BY lp ORDER BY count DESC LIMIT 8`,
       sql`SELECT COALESCE(NULLIF(segment,''),'outros') AS seg, COUNT(*)::text AS count FROM leads GROUP BY segment ORDER BY count DESC LIMIT 6`,
       sql`SELECT id, name, phone, segment, credit, utm_source, lp, COALESCE(status,'Novo') AS status, created_at FROM leads ORDER BY created_at DESC LIMIT 10`,
-      sql`SELECT AVG(CAST(NULLIF(REGEXP_REPLACE(COALESCE(credit,'0'),'[^0-9]','','g'),'') AS NUMERIC))::text AS avg FROM leads WHERE COALESCE(status,'') = 'Vendido'`,
+      sql`SELECT AVG(CAST(NULLIF(REGEXP_REPLACE(COALESCE(credit,'0'),'[^0-9]','','g'),'') AS NUMERIC))::text AS avg FROM leads WHERE LOWER(COALESCE(status,'')) = 'vendido'`,
     ]);
 
     const total   = parseInt(String((totalRows[0]   as {count:string}).count ?? "0"), 10);
     const hoje    = parseInt(String((hojeRows[0]    as {count:string}).count ?? "0"), 10);
     const semana  = parseInt(String((semanaRows[0]  as {count:string}).count ?? "0"), 10);
     const mes     = parseInt(String((mesRows[0]     as {count:string}).count ?? "0"), 10);
-    const vendidos = parseInt(String((porStatusRows as {status:string;count:string}[]).find(r=>r.status==="Vendido")?.count ?? "0"), 10);
+    const vendidos = parseInt(String((porStatusRows as {status:string;count:string}[]).find(r=> (r.status || "").toLowerCase() === "vendido")?.count ?? "0"), 10);
     const taxaConversao     = total > 0 ? Math.round((vendidos / total) * 1000) / 10 : 0;
     const ticketMedioVendido = Math.round(parseFloat(String((ticketRows[0] as {avg:string|null})?.avg ?? "0")) || 0);
 

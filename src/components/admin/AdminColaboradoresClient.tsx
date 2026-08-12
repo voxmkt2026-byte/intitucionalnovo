@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 
 export interface Partner {
@@ -208,9 +208,51 @@ export default function AdminColaboradoresClient({
     }
   };
 
-  const pendingPartners = partners.filter((p) => p.status_onboarding === "Pendente" || p.status_onboarding === "Em Análise");
-  const activePartners = partners.filter((p) => p.status_onboarding === "Ativo" || p.status_onboarding === "Verificado");
-  const blockedPartners = partners.filter((p) => p.status_onboarding === "Bloqueado");
+  const [refreshing, setRefreshing] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState<string>(new Date().toLocaleTimeString("pt-BR"));
+
+  const fetchFreshData = async () => {
+    setRefreshing(true);
+    try {
+      const [resP, resC] = await Promise.all([
+        fetch("/api/admin/colaboradores"),
+        fetch("/api/admin/colaboradores/clientes"),
+      ]);
+      if (resP.ok) {
+        const dataP = await resP.json();
+        if (Array.isArray(dataP)) setPartners(dataP);
+      }
+      if (resC.ok) {
+        const dataC = await resC.json();
+        if (dataC.clientes && Array.isArray(dataC.clientes)) setClientes(dataC.clientes);
+      }
+      setLastRefreshed(new Date().toLocaleTimeString("pt-BR"));
+    } catch (e) {
+      console.error("[fetchFreshData] Erro ao atualizar:", e);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      fetchFreshData();
+    }, 30000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const pendingPartners = partners.filter((p) => {
+    const st = (p.status_onboarding || "").toLowerCase();
+    return st === "pendente" || st === "em análise" || st === "em analise" || !st;
+  });
+  const activePartners = partners.filter((p) => {
+    const st = (p.status_onboarding || "").toLowerCase();
+    return st === "ativo" || st === "verificado" || st === "aprovado";
+  });
+  const blockedPartners = partners.filter((p) => {
+    const st = (p.status_onboarding || "").toLowerCase();
+    return st === "bloqueado" || st === "inativo";
+  });
 
   // Calculations for Pie/Donut charts
   const totalPartnersCount = partners.length || 1;
@@ -237,9 +279,23 @@ export default function AdminColaboradoresClient({
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Download de arquivo: âncora é intencional; não é navegação de página. */}
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Live Refresh Status */}
+          <button
+            onClick={fetchFreshData}
+            disabled={refreshing}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold hover:bg-emerald-100 transition-all cursor-pointer"
+            title="Clique para atualizar os dados ao vivo do banco de dados"
+          >
+            <span className={`w-2 h-2 rounded-full ${refreshing ? "bg-amber-500 animate-ping" : "bg-emerald-500"}`} />
+            <span>{refreshing ? "Atualizando..." : `Ao Vivo (${lastRefreshed})`}</span>
+            <svg className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M160 80v48l40-40M80 160v-48l-40 40" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 12a8 8 0 0114.93-4M20 12a8 8 0 01-14.93 4" />
+            </svg>
+          </button>
+
+          {/* Download de arquivo */}
           <a
             href="/api/admin/colaboradores/importar-planilha"
             className="crm-pill bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 cursor-pointer shadow-2xs"
