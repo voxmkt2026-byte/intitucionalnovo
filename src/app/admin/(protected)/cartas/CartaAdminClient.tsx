@@ -27,9 +27,11 @@ interface CartaAdminClientProps {
   initialCartas?: Carta[];
 }
 
-function formatBRL(v: number | null | undefined) {
-  if (v == null || isNaN(v)) return "—";
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+function formatBRL(v: number | string | null | undefined) {
+  if (v == null) return "—";
+  const num = typeof v === "number" ? v : parseFloat(String(v));
+  if (isNaN(num)) return "—";
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(num);
 }
 
 export default function CartaAdminClient({ initialCartas = [] }: CartaAdminClientProps) {

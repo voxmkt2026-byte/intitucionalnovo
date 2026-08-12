@@ -16,6 +16,25 @@ function nullableText(value: unknown): string | null {
   return String(value);
 }
 
+let schemaChecked = false;
+
+async function ensureSchema(sql: any) {
+  if (schemaChecked) return;
+  try {
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS status_cota TEXT`;
+  } catch {}
+  try {
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS taxa_transferencia TEXT`;
+  } catch {}
+  try {
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS vencimento_parcela TEXT`;
+  } catch {}
+  try {
+    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS observacoes TEXT`;
+  } catch {}
+  schemaChecked = true;
+}
+
 function toCartaDTO(row: Record<string, unknown>): CartaDTO {
   const rawSegmento = String(row.segmento ?? "");
   return {
@@ -32,19 +51,34 @@ function toCartaDTO(row: Record<string, unknown>): CartaDTO {
     vencimento_parcela: nullableText(row.vencimento_parcela),
     observacoes: nullableText(row.observacoes),
     status_cota: nullableText(row.status_cota),
-    disponivel: Boolean(row.disponivel),
+    disponivel: row.disponivel != null ? Boolean(row.disponivel) : true,
   };
 }
 
 export async function listarCartasDisponiveis(): Promise<CartaDTO[]> {
   if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
   const sql = neon(DATABASE_URL);
-  const rows = await sql`
-    SELECT id, segmento, administradora, valor_credito, entrada, parcelas,
-           valor_parcela, proximo_vencimento, taxa_transferencia,
-           vencimento_parcela, observacoes, status_cota, disponivel
-    FROM cartas_contempladas
-    ORDER BY valor_credito DESC, id ASC
-  `;
+  
+  await ensureSchema(sql);
+
+  let rows: Record<string, unknown>[];
+  try {
+    rows = await sql`
+      SELECT id, segmento, administradora, valor_credito, entrada, parcelas,
+             valor_parcela, proximo_vencimento, taxa_transferencia,
+             vencimento_parcela, observacoes, status_cota, disponivel
+      FROM cartas_contempladas
+      ORDER BY valor_credito DESC, id ASC
+    `;
+  } catch {
+    rows = await sql`
+      SELECT id, segmento, administradora, valor_credito, entrada, parcelas,
+             valor_parcela, proximo_vencimento, taxa_transferencia,
+             vencimento_parcela, observacoes, disponivel
+      FROM cartas_contempladas
+      ORDER BY valor_credito DESC, id ASC
+    `;
+  }
+
   return rows.map((row) => toCartaDTO(row as Record<string, unknown>));
 }

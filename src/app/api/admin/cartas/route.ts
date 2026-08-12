@@ -14,15 +14,17 @@ async function getDb() {
   if (!DATABASE_URL) throw new Error("DATABASE_URL not configured");
   const sql = neon(DATABASE_URL);
   
-  try {
-    // Migration: garantir colunas das 7 colunas da planilha e status_cota
-    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS taxa_transferencia TEXT`;
-    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS vencimento_parcela TEXT`;
-    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS observacoes TEXT`;
-    await sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS status_cota TEXT`;
-    await sql`ALTER TABLE cartas_contempladas ALTER COLUMN proximo_vencimento TYPE TEXT USING proximo_vencimento::text`;
-  } catch (mErr) {
-    console.warn("[admin/cartas getDb migration warning]", mErr);
+  const migrations = [
+    sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS taxa_transferencia TEXT`,
+    sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS vencimento_parcela TEXT`,
+    sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS observacoes TEXT`,
+    sql`ALTER TABLE cartas_contempladas ADD COLUMN IF NOT EXISTS status_cota TEXT`,
+  ];
+
+  for (const m of migrations) {
+    try {
+      await m;
+    } catch {}
   }
 
   return sql;
@@ -33,15 +35,40 @@ export async function GET() {
   try {
     await verifyAdmin();
     const sql = await getDb();
-    const rows = await sql`
-      SELECT 
-        id, segmento, administradora, valor_credito, entrada,
-        parcelas, valor_parcela, proximo_vencimento, disponivel,
-        taxa_transferencia, vencimento_parcela, observacoes, status_cota, criado_em
-      FROM cartas_contempladas
-      ORDER BY id DESC
-    `;
-    return NextResponse.json({ data: rows });
+    
+    let rows: any[];
+    try {
+      rows = await sql`
+        SELECT 
+          id, segmento, administradora, valor_credito, entrada,
+          parcelas, valor_parcela, proximo_vencimento, disponivel,
+          taxa_transferencia, vencimento_parcela, observacoes, status_cota, criado_em
+        FROM cartas_contempladas
+        ORDER BY id DESC
+      `;
+    } catch {
+      rows = await sql`
+        SELECT 
+          id, segmento, administradora, valor_credito, entrada,
+          parcelas, valor_parcela, proximo_vencimento, disponivel,
+          taxa_transferencia, vencimento_parcela, observacoes, criado_em
+        FROM cartas_contempladas
+        ORDER BY id DESC
+      `;
+    }
+
+    const data = rows.map((r: any) => ({
+      ...r,
+      id: Number(r.id),
+      valor_credito: typeof r.valor_credito === "number" ? r.valor_credito : parseFloat(String(r.valor_credito || 0)),
+      entrada: r.entrada != null ? (typeof r.entrada === "number" ? r.entrada : parseFloat(String(r.entrada))) : null,
+      parcelas: typeof r.parcelas === "number" ? r.parcelas : parseInt(String(r.parcelas || 0), 10),
+      valor_parcela: typeof r.valor_parcela === "number" ? r.valor_parcela : parseFloat(String(r.valor_parcela || 0)),
+      disponivel: r.disponivel != null ? Boolean(r.disponivel) : true,
+      status_cota: r.status_cota || (r.disponivel === false ? "reservado" : "disponivel"),
+    }));
+
+    return NextResponse.json({ data });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Erro interno";
     if (msg === "Unauthorized") return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
@@ -134,8 +161,6 @@ export async function POST(request: Request) {
       )
       RETURNING *
     `;
-
-    return NextResponse.json({ data: result[0] }, { status: 201 });
 
     return NextResponse.json({ data: result[0] }, { status: 201 });
   } catch (err) {
