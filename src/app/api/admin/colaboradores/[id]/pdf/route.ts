@@ -61,12 +61,20 @@ export async function GET(
 
     // Lazy-load puppeteer/chromium: keeps this heavy dependency out of the
     // bundle for every other route and avoids cold-start cost elsewhere.
-    const chromium = (await import("@sparticuz/chromium")).default;
     const puppeteer = await import("puppeteer-core");
 
+    let executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    let launchArgs = ["--no-sandbox", "--disable-setuid-sandbox"];
+
+    if (!executablePath) {
+      const chromium = (await import("@sparticuz/chromium")).default;
+      executablePath = await chromium.executablePath();
+      launchArgs = chromium.args;
+    }
+
     const browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(),
+      args: launchArgs,
+      executablePath,
       headless: true,
     });
 

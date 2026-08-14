@@ -1,0 +1,12 @@
+.git
+.github
+.next
+.vercel
+node_modules
+npm-debug.log*
+.env*
+*.pem
+coverage
+auditoria-capturas
+PROMPT-CAPTURAS-AUDITORIA.md
+BRIEF-IMAGENS.md

@@ -1,0 +1,35 @@
+#!/bin/sh
+set -eu
+
+secret_names="
+ADMIN_SECRET
+DATABASE_URL
+GOOGLE_ADS_CLIENT_ID
+GOOGLE_ADS_CLIENT_SECRET
+GOOGLE_ADS_CUSTOMER_ID
+GOOGLE_ADS_DEVELOPER_TOKEN
+GOOGLE_ADS_REFRESH_TOKEN
+JWT_SECRET
+KOMMO_ACCESS_TOKEN
+META_ACCESS_TOKEN
+META_ACCESS_TOKEN_2
+META_CAPI_ACCESS_TOKEN
+META_CAPI_ACCESS_TOKEN_2
+META_INSIGHTS_TOKEN_2
+META_MARKETING_ACCESS_TOKEN
+META_MARKETING_ACCESS_TOKEN_2
+META_PIXEL_ID
+META_PIXEL_ID_2
+N8N_KOMMO_WEBHOOK_URL
+SHEETS_WEBHOOK_URL
+"
+
+for secret_name in $secret_names; do
+  secret_file="/run/secrets/$secret_name"
+  if [ -f "$secret_file" ]; then
+    secret_value=$(cat "$secret_file")
+    export "$secret_name=$secret_value"
+  fi
+done
+
+exec "$@"
