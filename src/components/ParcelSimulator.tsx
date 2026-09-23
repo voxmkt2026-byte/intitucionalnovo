@@ -1,18 +1,43 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import type { SimulationValues } from "@/features/prospects/domain/types";
 import { cn } from "@/lib/utils";
 
 const BANK_RATE_ANNUAL = 0.189; // 18.9% ao ano (média Banco Central)
 
-export default function ParcelSimulator() {
-  const [name, setName] = useState("");
+export type ParcelSimulatorProps = {
+  initialSegment?: "imovel" | "veiculo";
+  initialCredit?: number;
+  initialMonths?: number;
+  initialPlan?: "titanium" | "conforto";
+  initialName?: string;
+  prospectToken?: string;
+  whatsappNumber?: string;
+  hideContactFields?: boolean;
+  onValuesChange?: (values: SimulationValues) => void;
+};
+
+export default function ParcelSimulator({
+  initialSegment = "imovel", initialCredit = 500000, initialMonths = 180,
+  initialPlan = "titanium", initialName = "", prospectToken,
+  whatsappNumber = "5511930048940", hideContactFields = false, onValuesChange,
+}: ParcelSimulatorProps = {}) {
+  const initialCreditValue = Math.min(Math.max(
+    Number.isFinite(initialCredit) ? initialCredit : 500000,
+    initialSegment === "imovel" ? 100000 : 30000,
+  ), initialSegment === "imovel" ? 2000000 : 300000);
+  const initialMonthsValue = Math.min(Math.max(
+    Number.isFinite(initialMonths) ? initialMonths : 180,
+    initialSegment === "imovel" ? 60 : 36,
+  ), initialSegment === "imovel" ? 240 : 100);
+  const [name, setName] = useState(initialName);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [segment, setSegment] = useState<"imovel" | "veiculo">("imovel");
-  const [credit, setCredit] = useState<string>("500000");
-  const [months, setMonths] = useState<string>("180");
-  const [selectedPlan, setSelectedPlan] = useState<"titanium" | "conforto">("titanium");
+  const [segment, setSegment] = useState<"imovel" | "veiculo">(initialSegment);
+  const [credit, setCredit] = useState<string>(String(initialCreditValue));
+  const [months, setMonths] = useState<string>(String(initialMonthsValue));
+  const [selectedPlan, setSelectedPlan] = useState<"titanium" | "conforto">(initialPlan);
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [contactError, setContactError] = useState<string | null>(null);
@@ -62,6 +87,7 @@ export default function ParcelSimulator() {
   };
 
   const sendToGoogleSheets = (plan: string) => {
+    if (prospectToken !== undefined || hideContactFields) return;
     let ids: Record<string, string> = { ref: "" };
     try {
       const getCk = (n: string) => {
@@ -104,10 +130,18 @@ export default function ParcelSimulator() {
       phone: phone.trim(),
       segment,
       credit: String(Number(credit) || 0),
-      months: String(Number(months) || 0),
+      months: Number(months) || 0,
       plan,
       lp: "home-simulador",
       ref: ids.ref || "",
+      fbc: ids.fbc || "",
+      fbp: ids.fbp || "",
+      gclid: ids.gclid || "",
+      utm_source: ids.utm_source || "",
+      utm_medium: ids.utm_medium || "",
+      utm_campaign: ids.utm_campaign || "",
+      utm_content: ids.utm_content || "",
+      origin: window.location.href,
       source_url: typeof window !== "undefined" ? window.location.href : "",
     };
 
@@ -119,6 +153,7 @@ export default function ParcelSimulator() {
   };
 
   const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (hideContactFields) return;
     if (!name.trim() || !phone.trim() || phone.replace(/\D/g, "").length < 10) {
       e.preventDefault();
       setContactError("Por favor, preencha seu nome e telefone WhatsApp completo com DDD.");
@@ -162,6 +197,15 @@ export default function ParcelSimulator() {
   const confortoMonths = segment === "imovel" ? Math.min(monthsNum + 24, 240) : Math.min(monthsNum + 12, 100);
   const confortoInstallment = confortoMonths > 0 ? (creditNum * (1 + confortoRate)) / confortoMonths : 0;
 
+  const currentInstallment = selectedPlan === "titanium" ? titaniumInstallment : confortoInstallment;
+  const currentMonths = selectedPlan === "titanium" ? monthsNum : confortoMonths;
+  useEffect(() => {
+    onValuesChange?.({
+      segment, credit: creditNum, months: currentMonths,
+      plan: selectedPlan, installment: currentInstallment,
+    });
+  }, [onValuesChange, segment, creditNum, monthsNum, currentMonths, selectedPlan, currentInstallment]);
+
   // Financiamento Bancário
   const monthlyBankRate = Math.pow(1 + BANK_RATE_ANNUAL, 1 / 12) - 1;
   const bankInstallment =
@@ -187,7 +231,7 @@ export default function ParcelSimulator() {
     } catch {}
     const refSuffix = ref ? `\n\nRef: ${ref}` : "";
     const msg = `Olá, meu nome é ${name}. Fiz a simulação de crédito inteligente no valor de ${fmtC} com parcelas estimadas de ${fmtI} (${seg} · Plano ${plan}). Gostaria de receber a orientação consultiva da Titanium.${refSuffix}`;
-    return `https://wa.me/5511930048940?text=${encodeURIComponent(msg)}`;
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
   };
 
   const fmt = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
@@ -409,6 +453,7 @@ export default function ParcelSimulator() {
                 )}
 
                 {/* Formulário para Envio WhatsApp */}
+                {!hideContactFields && (
                 <div className="space-y-4 pt-4 border-t border-slate-200/80">
                   <p className="text-xs font-bold text-slate-700">
                     Solicite o diagnóstico completo e a disponibilidade de cotas:
@@ -472,6 +517,7 @@ export default function ParcelSimulator() {
                     Receber Orientação no WhatsApp
                   </a>
                 </div>
+                )}
               </div>
             )}
           </div>

@@ -1,0 +1,77 @@
+{
+  "checkedAt": "2026-09-23T15:30:28.065Z",
+  "results": [
+    {
+      "route": "caminhao",
+      "status": 200,
+      "url": "https://titaniumconsultorias.com.br/caminhao/",
+      "links": [
+        {
+          "label": "Análise para frotista",
+          "href": "https://wa.me/5511930048940?text=%5Blp_caminhao%5D%20Ol%C3%A1!%20Quero%20saber%20sobre%20cr%C3%A9dito%20veicular%20para%20caminh%C3%A3o%0A%0ARef%3A%20tf_1790177423111_llvlf",
+          "message": "[lp_caminhao] Olá! Quero saber sobre crédito veicular para caminhão\n\nRef: tf_1790177423111_llvlf"
+        },
+        {
+          "label": "WhatsApp",
+          "href": "https://wa.me/5511930048940?text=Ol%C3%A1!%20Ref%3A%20tf_1790177423111_llvlf",
+          "message": "Olá! Ref: tf_1790177423111_llvlf"
+        }
+      ],
+      "refPresent": true
+    },
+    {
+      "route": "maquinas-agricolas",
+      "status": 200,
+      "url": "https://titaniumconsultorias.com.br/maquinas-agricolas/",
+      "links": [
+        {
+          "label": "Análise para produtor",
+          "href": "https://wa.me/5511930048940?text=%5Blp_maquinas_agricolas%5D%20Ol%C3%A1!%20Quero%20saber%20sobre%20cr%C3%A9dito%20agr%C3%ADcola%20para%20m%C3%A1quinas%20agr%C3%ADcolas%0A%0ARef%3A%20tf_1790177424830_jr7q3",
+          "message": "[lp_maquinas_agricolas] Olá! Quero saber sobre crédito agrícola para máquinas agrícolas\n\nRef: tf_1790177424830_jr7q3"
+        },
+        {
+          "label": "WhatsApp",
+          "href": "https://wa.me/5511930048940?text=Ol%C3%A1!%20Ref%3A%20tf_1790177424830_jr7q3",
+          "message": "Olá! Ref: tf_1790177424830_jr7q3"
+        }
+      ],
+      "refPresent": true
+    },
+    {
+      "route": "empresario",
+      "status": 200,
+      "url": "https://titaniumconsultorias.com.br/empresario/",
+      "links": [
+        {
+          "label": "Análise empresarial",
+          "href": "https://wa.me/5511930048940?text=%5Blp_empresario%5D%20Ol%C3%A1!%20Sou%20empres%C3%A1rio%20e%20quero%20expandir%20sem%20pagar%20juros%20de%20banco%0A%0ARef%3A%20tf_1790177426064_hueqe",
+          "message": "[lp_empresario] Olá! Sou empresário e quero expandir sem pagar juros de banco\n\nRef: tf_1790177426064_hueqe"
+        },
+        {
+          "label": "WhatsApp",
+          "href": "https://wa.me/5511930048940?text=Ol%C3%A1!%20Ref%3A%20tf_1790177426064_hueqe",
+          "message": "Olá! Ref: tf_1790177426064_hueqe"
+        }
+      ],
+      "refPresent": true
+    },
+    {
+      "route": "carta-contemplada",
+      "status": 200,
+      "url": "https://titaniumconsultorias.com.br/carta-contemplada/",
+      "links": [
+        {
+          "label": "Verificar disponibilidade",
+          "href": "https://wa.me/5511930048940?text=%5Blp_carta_contemplada%5D%20Ol%C3%A1!%20Quero%20saber%20sobre%20cr%C3%A9dito%20contemplado%0A%0ARef%3A%20tf_1790177427095_bokvk",
+          "message": "[lp_carta_contemplada] Olá! Quero saber sobre crédito contemplado\n\nRef: tf_1790177427095_bokvk"
+        },
+        {
+          "label": "WhatsApp",
+          "href": "https://wa.me/5511930048940?text=Ol%C3%A1!%20Ref%3A%20tf_1790177427095_bokvk",
+          "message": "Olá! Ref: tf_1790177427095_bokvk"
+        }
+      ],
+      "refPresent": true
+    }
+  ]
+}

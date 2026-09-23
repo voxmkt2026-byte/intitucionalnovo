@@ -1,0 +1,22 @@
+--- a/src/components/ParcelSimulator.tsx
++++ b/src/components/ParcelSimulator.tsx
+@@ -104,10 +104,18 @@
+       phone: phone.trim(),
+       segment,
+       credit: String(Number(credit) || 0),
+-      months: String(Number(months) || 0),
++      months: Number(months) || 0,
+       plan,
+       lp: "home-simulador",
+       ref: ids.ref || "",
++      fbc: ids.fbc || "",
++      fbp: ids.fbp || "",
++      gclid: ids.gclid || "",
++      utm_source: ids.utm_source || "",
++      utm_medium: ids.utm_medium || "",
++      utm_campaign: ids.utm_campaign || "",
++      utm_content: ids.utm_content || "",
++      origin: window.location.href,
+       source_url: typeof window !== "undefined" ? window.location.href : "",
+     };
+ 

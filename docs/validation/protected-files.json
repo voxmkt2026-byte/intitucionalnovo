@@ -1,0 +1,12 @@
+{
+  "existingFilesChecked": 620,
+  "changedExistingFiles": [
+    "src/app/robots.ts",
+    "src/components/ParcelSimulator.tsx",
+    "scripts/migrate.mjs"
+  ],
+  "missingExistingFiles": [],
+  "protectedFilesUnchanged": true,
+  "authorizedAdditionalAsset": "public/img/logo-titanium-dark.png",
+  "assetIsExactCopy": true
+}

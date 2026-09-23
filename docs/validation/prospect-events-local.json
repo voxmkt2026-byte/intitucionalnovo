@@ -1,0 +1,51 @@
+{
+  "environment": "PGlite/PostgreSQL local em memória, dados fictícios; nenhuma conexão a produção",
+  "checkedAt": "2026-09-23T15:31:57.626Z",
+  "expiredInactiveMissingTokens": "passed",
+  "invalidPageFallback": "passed",
+  "leadsWritten": 0,
+  "events": [
+    {
+      "tipo": "abertura",
+      "payload": {
+        "credito": 200000,
+        "segmento": "veiculo",
+        "prazo_meses": 80
+      },
+      "ip": "192.0.2.1",
+      "user_agent": "local-validation"
+    },
+    {
+      "tipo": "whatsapp_click",
+      "payload": {
+        "plano": "titanium",
+        "prazo": 80,
+        "credito": 200000,
+        "segmento": "veiculo"
+      },
+      "ip": "192.0.2.1",
+      "user_agent": "local-validation"
+    },
+    {
+      "tipo": "recalculo",
+      "payload": {
+        "plano": "titanium",
+        "prazo": 80,
+        "credito": 220000,
+        "segmento": "veiculo"
+      },
+      "ip": "192.0.2.1",
+      "user_agent": "local-validation"
+    },
+    {
+      "tipo": "contato_form",
+      "payload": {
+        "nome": "Ana Teste",
+        "horario": "Tarde",
+        "telefone": "45999999999"
+      },
+      "ip": "192.0.2.1",
+      "user_agent": "local-validation"
+    }
+  ]
+}

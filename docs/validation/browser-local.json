@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-09-23T15:41:16.543Z",
+  "environment": "Build Next de produção local + Neon HTTP simulado sobre PostgreSQL/PGlite em memória",
+  "validStatus": 200,
+  "invalidStatus": 200,
+  "cards": 3,
+  "mobileOverflow": false,
+  "whatsappMessage": "Oi Eduardo, vi a simulação da Transportadora Exemplo para carta de Veículo de R$ 200.000,00 em 80x (Titanium). Código: ABCDEFGH",
+  "leadsRequests": 0,
+  "errors": [],
+  "events": [
+    {
+      "tipo": "abertura",
+      "payload": {
+        "credito": 200000,
+        "segmento": "veiculo",
+        "prazo_meses": 80
+      }
+    },
+    {
+      "tipo": "abertura",
+      "payload": {
+        "credito": 200000,
+        "segmento": "veiculo",
+        "prazo_meses": 80
+      }
+    },
+    {
+      "tipo": "whatsapp_click",
+      "payload": {
+        "plano": "titanium",
+        "prazo": 80,
+        "credito": 200000,
+        "segmento": "veiculo"
+      }
+    },
+    {
+      "tipo": "contato_form",
+      "payload": {
+        "nome": "Ana",
+        "horario": "Tarde",
+        "telefone": "45999999999"
+      }
+    },
+    {
+      "tipo": "abertura",
+      "payload": {
+        "credito": 200000,
+        "segmento": "veiculo",
+        "prazo_meses": 80
+      }
+    }
+  ],
+  "leads": 0
+}
